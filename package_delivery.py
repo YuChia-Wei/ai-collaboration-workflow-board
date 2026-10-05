@@ -35,7 +35,7 @@ def main():
         assert z.testzip() is None
         for f in manifest['files']:assert hashlib.sha256(z.read(f['path'])).hexdigest()==f['sha256']
         for p in z.namelist():
-            if p.endswith(('.json','.log','.md','.py','.html')):assert b'h4227' not in z.read(p),p
+            if p.endswith(('.json','.log','.md','.py','.html')):assert Path.home().name.encode() not in z.read(p),p
     proof={'zip':OUTPUT.name,'bytes':OUTPUT.stat().st_size,'sha256':hashlib.sha256(OUTPUT.read_bytes()).hexdigest(),'manifest_files_verified':len(manifest['files']),'source_commit':manifest['source_sha'],'prototype_commit':manifest['prototype_sha']}
     (EVIDENCE/'delivery-proof.json').write_text(json.dumps(proof,indent=2),encoding='utf-8');print(json.dumps(proof))
 if __name__=='__main__':main()
