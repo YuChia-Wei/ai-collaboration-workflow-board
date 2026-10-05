@@ -166,6 +166,17 @@ is provided. Only this restore's temporary files are cleaned up.
 
 ## Reproduce acceptance
 
+The delivery ZIP includes tracked source and `../prototype.bundle`, without a
+host `.git` directory. Before running tests, restore the isolated local history
+from inside `prototype` (no network or remote is configured):
+
+```powershell
+git init
+git config core.autocrlf false
+git fetch ../prototype.bundle main
+git reset --mixed FETCH_HEAD
+```
+
 ```powershell
 python test_acceptance.py
 python test_review_regressions.py
@@ -198,5 +209,9 @@ cover their specific counterexamples (including process interruption and receipt
 insert failure). Author test success is not independent review acceptance. The
 updated report identifies the fixed immutable subject and second-review status.
 Second review closed R1-R7 and found R8 (required archive trapped an active
-workflow). Regression 15 now tests the explicit archive rejection over actual
+workflow). Regression 15 tests the explicit archive rejection over actual
 HTTP, continued completion, optional tombstones and exact export/restore.
+Focused independent verification of `f031223` closed R8, with six separate
+scenarios plus an independent rerun of regression 15. These are distinct from
+the author's 15 regression and 10 integration scenarios. Final packaging changes
+only this README and the packager; runtime behavior remains the reviewed version.
