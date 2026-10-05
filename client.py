@@ -30,17 +30,24 @@ def submit(base,token,command,outbox,max_attempts=3,drop=False):
         tmp=path.with_suffix('.tmp'); tmp.write_text(canonical(entries),encoding='utf-8'); tmp.replace(path)
     save()
     if entry['status'] in {'accepted','conflict','rejected'}: return entry
+    def reconcile():
+        status,result=request(base,token,'/v1/operations/'+quote(oid,safe='')+'?namespace='+quote(command['namespace'],safe=''))
+        entry['observations'].append({'kind':'operation_query','status':status})
+        if status==200:
+            entry.update(status='accepted' if result.get('payload_hash')==digest(command) else 'conflict',result=result)
+            entry.pop('retry_exhausted',None);save();return True
+        if status in {401,403}:entry.update(status='rejected',result=result);save();return True
+        if status!=404:raise URLError('operation lookup unavailable')
+        save();return False
+    if entry['attempts']>=max_attempts:
+        try:reconcile()
+        except (OSError,URLError) as e:entry['observations'].append({'kind':'reconcile_network_error','class':type(e).__name__});save()
+        return entry
     while entry['attempts']<max_attempts:
         attempted_write=False
         # Always reconcile before resend. Retry has a lifetime bound, persisted across sessions.
         try:
-            status,result=request(base,token,'/v1/operations/'+quote(oid,safe='')+'?namespace='+quote(command['namespace'],safe=''))
-            entry['observations'].append({'kind':'operation_query','status':status})
-            if status==200:
-                entry.update(status='accepted' if result.get('payload_hash')==digest(command) else 'conflict',result=result)
-                save(); return entry
-            if status in {401,403}: entry.update(status='rejected',result=result); save(); return entry
-            if status!=404: raise URLError('operation lookup unavailable')
+            if reconcile():return entry
             entry['attempts']+=1; save()
             attempted_write=True
             status,result=request(base,token,'/v1/commands',command,{'X-Test-Drop-Response':'once'} if drop and entry['attempts']==1 else {})
@@ -54,6 +61,11 @@ def submit(base,token,command,outbox,max_attempts=3,drop=False):
             # An unsuccessful lookup also spends a retry; avoid an infinite lookup loop.
             if not attempted_write: entry['attempts']+=1
             save()
+    # The final POST can commit and lose its response. One bounded read-only lookup
+    # remains even when the write budget is exhausted; never spend another POST.
+    try:
+        if reconcile():return entry
+    except (OSError,URLError) as e:entry['observations'].append({'kind':'reconcile_network_error','class':type(e).__name__})
     entry['status']='pending'; entry['retry_exhausted']=True; save(); return entry
 
 def main():

@@ -1,29 +1,35 @@
 """Portable synthetic-only workflow record service. No external side effects."""
-import argparse, base64, hashlib, json, os, sqlite3, threading, uuid
+import argparse, base64, hashlib, json, os, sqlite3, threading, uuid, tempfile, copy
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from contextlib import contextmanager
+from validation import Fault,require,STATES,COMMANDS,ROLES,text_value,integer,string_list,validate_evidence,validate_workflow
 
 def canonical(x): return json.dumps(x, ensure_ascii=False, sort_keys=True, separators=(',', ':'))
 def digest(x): return hashlib.sha256(x if isinstance(x, bytes) else canonical(x).encode()).hexdigest()
 def now(): return datetime.now(timezone.utc).isoformat()
-class Fault(Exception):
-    def __init__(self, status, code, **details): self.status=status; self.body={'error':code, **details}
-def require(ok, code, status=422, **details):
-    if not ok: raise Fault(status, code, **details)
 
 SCHEMA='''
 CREATE TABLE IF NOT EXISTS workflows(id TEXT PRIMARY KEY,namespace TEXT NOT NULL,body TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS operations(namespace TEXT, id TEXT, principal TEXT, payload_hash TEXT, result TEXT, PRIMARY KEY(namespace,id));
 CREATE TABLE IF NOT EXISTS events(seq INTEGER PRIMARY KEY AUTOINCREMENT,namespace TEXT, workflow_id TEXT, operation_id TEXT, body TEXT);
 CREATE TABLE IF NOT EXISTS blobs(hash TEXT PRIMARY KEY, data BLOB NOT NULL);
+CREATE TABLE IF NOT EXISTS role_history(namespace TEXT, principal TEXT, roles TEXT, PRIMARY KEY(namespace,principal));
 '''
 class Store:
     def __init__(self,path,bindings):
         self.path=Path(path); self.path.parent.mkdir(parents=True,exist_ok=True)
         self.bindings=bindings; self.lock=threading.RLock()
-        with self.db() as db: db.executescript(SCHEMA)
+        with self.db() as db:
+            db.execute('PRAGMA journal_mode=WAL')
+            db.executescript(SCHEMA)
+            # Descriptive historical role mappings never authorize current calls.
+            for b in bindings.values():
+                for ns,roles in b.get('namespaces',{}).items():
+                    row=db.execute('SELECT roles FROM role_history WHERE namespace=? AND principal=?',(ns,b['principal'])).fetchone()
+                    merged=sorted(set(roles)|set(json.loads(row[0]) if row else []))
+                    db.execute('INSERT OR REPLACE INTO role_history VALUES(?,?,?)',(ns,b['principal'],canonical(merged)))
     @contextmanager
     def db(self):
         db=sqlite3.connect(self.path,timeout=10); db.row_factory=sqlite3.Row
@@ -42,6 +48,7 @@ class Store:
     def context(self,token,ns,wid):
         self.auth(token,ns)
         with self.db() as db:
+            db.execute('BEGIN')
             w=self.load(db,wid,ns)
             events=[json.loads(r[0]) for r in db.execute('SELECT body FROM events WHERE namespace=? AND workflow_id=? ORDER BY seq',(ns,wid))]
         # No truncation: all retained revisions and evidence are present.
@@ -56,7 +63,7 @@ class Store:
         ns=c.get('namespace'); typ=c.get('type'); oid=c.get('operation_id')
         require(isinstance(ns,str) and bool(ns) and isinstance(oid,str) and bool(oid),'missing_namespace_or_operation_id')
         principal=self.auth(token,ns,'approve' if typ=='approve' else 'write')
-        require(typ in {'create_workflow','update_workflow','add_step','update_step','document','log','handoff','evidence','approve'},'unsupported_command',403)
+        require(typ in COMMANDS,'unsupported_command',403)
         ph=digest(c); wid=c.get('workflow_id')
         with self.lock, self.db() as db:
             db.execute('BEGIN IMMEDIATE')
@@ -79,10 +86,7 @@ class Store:
             if typ=='update_workflow':
                 require(set(p)<= {'next_step','next_owner','limitations','required_documents','blockers','status'},'invalid_workflow_fields')
                 if 'status' in p:
-                    require(p['status'] in {'planned':['active'],'active':['blocked','completed'],'blocked':['active'],'completed':[]}[w['status']],'illegal_transition')
-                    if p['status']=='completed':
-                        require(bool(w['steps']) and all(s['status']=='completed' for s in w['steps'].values()),'incomplete_steps')
-                        require(all(d in w['documents'] and not w['documents'][d]['deleted'] for d in w['required_documents']),'missing_required_documents')
+                    require(p['status'] in STATES.get(w['status'],[]),'illegal_transition')
                 w.update(p)
             elif typ=='add_step':
                 sid=p.get('id'); require(isinstance(sid,str) and sid not in w['steps'],'invalid_or_duplicate_step')
@@ -93,10 +97,7 @@ class Store:
                 require(set(p)<= {'id','status','blockers','result','evidence_ids'},'invalid_step_fields')
                 s=w['steps'][sid]
                 if 'status' in p:
-                    require(p['status'] in {'planned':['active'],'active':['blocked','completed'],'blocked':['active'],'completed':[]}[s['status']],'illegal_transition')
-                    if p['status']=='completed':
-                        ids=p.get('evidence_ids',s['evidence_ids'])
-                        require(bool(ids) and all(i in w['evidence'] for i in ids) and bool(p.get('result',s['result'])),'missing_required_evidence')
+                    require(p['status'] in STATES.get(s['status'],[]),'illegal_transition')
                 s.update(p)
             elif typ=='document':
                 did=p.get('id'); action=p.get('action'); require(isinstance(did,str) and bool(did),'missing_document_id')
@@ -118,6 +119,7 @@ class Store:
                 require(all(k in p for k in ('next_step','next_owner','blockers','failures','limitations')),'incomplete_handoff')
                 w['handoffs'].append({**p,'at':now()}); w['next_step']=p['next_step']; w['next_owner']=p['next_owner']
             elif typ=='evidence':
+                validate_evidence(p)
                 eid=p.get('id'); require(isinstance(eid,str) and eid not in w['evidence'],'invalid_or_duplicate_evidence')
                 require(all(k in p for k in ('command','result','outcome','source_commit','environment')),'incomplete_evidence')
                 try: blob=base64.b64decode(p.get('blob_base64',''),validate=True)
@@ -130,6 +132,7 @@ class Store:
                 d=w['documents'][p['document_id']]; require(d['revisions'] and d['revisions'][-1]['final'],'not_final')
                 require(not db.execute('SELECT 1 FROM events WHERE namespace=? AND workflow_id=? AND json_extract(body,\'$.principal\')=? AND json_extract(body,\'$.command.type\')=\'document\'',(ns,wid,principal)).fetchone(),'independent_approval_required',403)
                 w.setdefault('approvals',[]).append({'document_id':d['id'],'revision':d['revisions'][-1]['revision'],'principal':principal,'at':now()})
+            validate_workflow(w)
             w['revision']=before+1
             event={'workflow_id':wid,'namespace':ns,'operation_id':oid,'principal':principal,'client':c.get('client','unknown'),'session':c.get('session','unknown'),'identity_source':'local synthetic bearer binding; client/session self-declared','before_revision':before,'after_revision':w['revision'],'at':now(),'command':c}
             cur=db.execute('INSERT INTO events(namespace,workflow_id,operation_id,body) VALUES(?,?,?,?)',(ns,wid,oid,canonical(event))); event['seq']=cur.lastrowid
@@ -147,11 +150,11 @@ class Store:
             ops=[dict(r) for r in db.execute('SELECT * FROM operations WHERE namespace=? ORDER BY id',(ns,))]
             hashes={e['blob_hash'] for w in workflows for e in w['evidence'].values()}
             blobs={h:base64.b64encode(db.execute('SELECT data FROM blobs WHERE hash=?',(h,)).fetchone()[0]).decode() for h in sorted(hashes)}
-        roles=[{'principal':v['principal'],'roles':v['namespaces'][ns]} for v in self.bindings.values() if ns in v['namespaces']]
+            roles=[{'principal':r['principal'],'roles':json.loads(r['roles'])} for r in db.execute('SELECT principal,roles FROM role_history WHERE namespace=? ORDER BY principal',(ns,))]
         payload={'workflows':workflows,'events':events,'operations':ops,'blobs':blobs,'role_mapping':roles}
         return {'manifest':{'format':'workflow-portable','version':1,'schema_version':1,'namespace':ns,'cutoff_seq':max([e['seq'] for e in events],default=0),'exported_at':now(),'payload_sha256':digest(payload),'counts':{k:len(v) for k,v in payload.items()},'secrets_included':False,'identity_rebinding_required':True,'external_effects_enabled':False},'payload':payload}
 
-def preflight(pack):
+def _preflight(pack):
     require(isinstance(pack,dict) and set(pack)=={'manifest','payload'},'invalid_package')
     m=pack['manifest']; p=pack['payload']
     require(m.get('format')=='workflow-portable' and m.get('version')==1 and m.get('schema_version')==1,'unsupported_schema')
@@ -159,21 +162,34 @@ def preflight(pack):
     require(digest(p)==m.get('payload_sha256'),'package_hash_mismatch')
     require(set(p)=={'workflows','events','operations','blobs','role_mapping'},'invalid_payload_tables')
     require(m['counts']=={k:len(v) for k,v in p.items()},'count_mismatch')
+    require(all(isinstance(p[k],list) for k in ('workflows','events','operations','role_mapping')) and isinstance(p['blobs'],dict),'invalid_payload_types')
+    require(text_value(m.get('namespace')) and integer(m.get('cutoff_seq')),'invalid_manifest_fields')
+    principals={}
+    for r in p['role_mapping']:
+        require(isinstance(r,dict) and text_value(r.get('principal')) and string_list(r.get('roles')) and set(r['roles'])<=ROLES,'invalid_role_mapping')
+        require(r['principal'] not in principals,'duplicate_principal_mapping');principals[r['principal']]=r['roles']
     ns=m['namespace']; ws={w['id']:w for w in p['workflows']}; require(len(ws)==len(p['workflows']),'duplicate_workflow')
     ops={(o['namespace'],o['id']):o for o in p['operations']}; require(len(ops)==len(p['operations']),'duplicate_operation')
     seqs=set(); revisions={wid:0 for wid in ws}
     for e in p['events']:
+        require(isinstance(e,dict) and integer(e.get('seq')) and e['seq']>0 and integer(e.get('before_revision')) and integer(e.get('after_revision')) and text_value(e.get('at')),'invalid_event_fields')
         require(e['namespace']==ns and e['workflow_id'] in ws and e['seq'] not in seqs,'invalid_event_relationship')
         require(e['seq']>max(seqs,default=0),'event_order'); seqs.add(e['seq'])
         require(e['before_revision']==revisions[e['workflow_id']] and e['after_revision']==e['before_revision']+1,'event_revision_gap'); revisions[e['workflow_id']]=e['after_revision']
         op=ops.get((ns,e['operation_id'])); require(op is not None and op['payload_hash']==digest(e['command']) and op['principal']==e['principal'],'invalid_operation_relationship')
-        result=json.loads(op['result']); require(result['event_seq']==e['seq'] and result['revision']==e['after_revision'] and result['workflow_id']==e['workflow_id'],'invalid_operation_result')
+        c=e['command'];require(isinstance(c,dict) and c.get('type') in COMMANDS and isinstance(c.get('payload'),dict),'invalid_historical_command')
+        require(c.get('namespace')==ns and c.get('workflow_id')==e['workflow_id'] and c.get('operation_id')==e['operation_id'] and type(c.get('expected_revision')) is int and c['expected_revision']==e['before_revision'],'invalid_command_relationship')
+        require(e['principal'] in principals and ('approve' if c['type']=='approve' else 'write') in principals[e['principal']],'missing_historical_role')
+        result=json.loads(op['result'])
+        expected={'accepted':True,'event_seq':e['seq'],'revision':e['after_revision'],'workflow_id':e['workflow_id'],'operation_id':e['operation_id'],'payload_hash':op['payload_hash'],'principal':op['principal']}
+        require(isinstance(result,dict) and set(result)==set(expected) and result==expected and result['accepted'] is True and type(result['revision']) is int and type(result['event_seq']) is int,'invalid_operation_result')
     require(len(seqs)==len(ops) and m['cutoff_seq']==max(seqs,default=0),'operation_event_count_mismatch')
     for h,b in p['blobs'].items():
         try: data=base64.b64decode(b,validate=True)
         except Exception: raise Fault(422,'invalid_blob')
         require(digest(data)==h,'blob_hash_mismatch')
     for w in ws.values():
+        validate_workflow(w)
         require(w['namespace']==ns and w['revision']==revisions[w['id']],'invalid_workflow_revision')
         for sid,s in w['steps'].items():
             require(sid==s['id'] and all(x in w['evidence'] for x in s['evidence_ids']),'invalid_step_relationship')
@@ -181,22 +197,74 @@ def preflight(pack):
             require(did==d['id'] and (d['step_id'] is None or d['step_id'] in w['steps']),'invalid_document_relationship')
             for i,r in enumerate(d['revisions'],1): require(r['revision']==i and r['previous']==(i-1 or None) and hashlib.sha256(r['content'].encode()).hexdigest()==r['hash'],'revision_hash_or_chain_mismatch')
         for eid,e in w['evidence'].items(): require(e['id']==eid and e['blob_hash'] in p['blobs'],'invalid_blob_relationship')
+    validate_history(p,ns,principals)
     return {'valid':True,'counts':m['counts'],'payload_sha256':m['payload_sha256'],'identity_rebinding_required':True,'external_effects_enabled':False}
+
+def semantic_workflow(w):
+    # Remove only service-generated timestamp fields; preserve every authored value.
+    w=copy.deepcopy(w)
+    for x in w['logs']+w['handoffs']+w.get('approvals',[]):x.pop('at',None)
+    for d in w['documents'].values():
+        d.pop('deleted_at',None)
+        for r in d['revisions']:r.pop('created_at',None)
+    for e in w['evidence'].values():e.pop('observed_at',None)
+    return w
+
+def validate_history(p,ns,principals):
+    """Replay only local record reducers in isolated RAM; never restore/replay external effects."""
+    db=sqlite3.connect(':memory:');db.row_factory=sqlite3.Row;db.executescript(SCHEMA)
+    s=Store.__new__(Store);s.path=Path(':memory:');s.lock=threading.RLock()
+    s.bindings={principal:{'principal':principal,'namespaces':{ns:roles}} for principal,roles in principals.items()}
+    @contextmanager
+    def memory_db():
+        with db:yield db
+    s.db=memory_db
+    try:
+        for e in p['events']:s.command(e['principal'],e['command'])
+        for w in p['workflows']:
+            actual=s.load(db,w['id'],ns)
+            require(semantic_workflow(actual)==semantic_workflow(w),'history_snapshot_mismatch')
+        actual_blobs={r['hash']:base64.b64encode(r['data']).decode() for r in db.execute('SELECT hash,data FROM blobs')}
+        require(actual_blobs==p['blobs'],'history_blob_mismatch')
+    finally:db.close()
+
+def preflight(pack):
+    try:return _preflight(pack)
+    except Fault:raise
+    except (KeyError,TypeError,ValueError,AttributeError,OverflowError,sqlite3.Error):raise Fault(422,'invalid_package_structure')
 
 def restore(pack,path,bindings):
     proof=preflight(pack); target=Path(path)
     require(not target.exists(),'restore_requires_new_store',409)
     ns=pack['manifest']['namespace']
     require(any('write' in b.get('namespaces',{}).get(ns,[]) for b in bindings.values()),'explicit_rebinding_required')
-    store=Store(path,bindings); p=pack['payload']
+    target.parent.mkdir(parents=True,exist_ok=True)
+    fd,temp_name=tempfile.mkstemp(prefix='.restore-',suffix='.sqlite',dir=target.parent);os.close(fd)
+    temporary=Path(temp_name);p=pack['payload']
     try:
+        store=Store(temporary,bindings)
         with store.db() as db:
             for w in p['workflows']: db.execute('INSERT INTO workflows VALUES(?,?,?)',(w['id'],ns,canonical(w)))
             for e in p['events']: db.execute('INSERT INTO events VALUES(?,?,?,?,?)',(e['seq'],ns,e['workflow_id'],e['operation_id'],canonical(e)))
             for o in p['operations']: db.execute('INSERT INTO operations VALUES(?,?,?,?,?)',tuple(o[k] for k in ('namespace','id','principal','payload_hash','result')))
             for h,b in p['blobs'].items(): db.execute('INSERT INTO blobs VALUES(?,?)',(h,base64.b64decode(b)))
-    except Exception:
-        target.unlink(missing_ok=True); raise
+            for r in p['role_mapping']:
+                old=db.execute('SELECT roles FROM role_history WHERE namespace=? AND principal=?',(ns,r['principal'])).fetchone()
+                roles=sorted(set(r['roles'])|set(json.loads(old[0]) if old else []))
+                db.execute('INSERT OR REPLACE INTO role_history VALUES(?,?,?)',(ns,r['principal'],canonical(roles)))
+        token=next(t for t,b in bindings.items() if 'write' in b.get('namespaces',{}).get(ns,[]))
+        # Validate durable bytes before publication, without requiring export permission.
+        with store.db() as db:
+            imported=[json.loads(r[0]) for r in db.execute('SELECT body FROM workflows ORDER BY id')]
+            require(sorted(imported,key=lambda w:w['id'])==sorted(p['workflows'],key=lambda w:w['id']),'restore_verification_failed')
+            db.execute('PRAGMA wal_checkpoint(TRUNCATE)')
+        with temporary.open('r+b') as f:f.flush();os.fsync(f.fileno())
+        try:os.link(temporary,target) # Atomic no-overwrite publication; same-directory volume.
+        except FileExistsError:raise Fault(409,'restore_requires_new_store')
+    finally:
+        # Never remove target, including when another process wins the publication race.
+        temporary.unlink(missing_ok=True)
+        for suffix in ('-wal','-shm'):Path(str(temporary)+suffix).unlink(missing_ok=True)
     return proof
 
 class Handler(BaseHTTPRequestHandler):
