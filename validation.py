@@ -33,6 +33,9 @@ def validate_workflow(w):
         require(isinstance(s.get('blockers'),list) and all(text_value(x) for x in s['blockers']),'invalid_step_blockers')
         require(s.get('result') is None or isinstance(s['result'],str),'invalid_step_result')
         if s['status']=='completed':require(text_value(s['result']) and bool(s['evidence_ids']),'missing_required_evidence')
+    if w['status']=='completed':
+        require(bool(w['steps']) and all(s['status']=='completed' for s in w['steps'].values()),'incomplete_steps')
+        require(all(d in w['documents'] and not w['documents'][d]['deleted'] for d in w['required_documents']),'missing_required_documents')
     for did,d in w['documents'].items():
         require(isinstance(d,dict) and text_value(did) and did==d.get('id') and text_value(d.get('name')) and text_value(d.get('kind')),'invalid_document_identity')
         require(type(d.get('deleted')) is bool and type(d.get('required')) is bool and (d.get('step_id') is None or d['step_id'] in w['steps']),'invalid_document_relationship')
@@ -53,7 +56,4 @@ def validate_workflow(w):
     for a in w.get('approvals',[]):
         require(isinstance(a,dict) and text_value(a.get('principal')) and text_value(a.get('at')) and a.get('document_id') in w['documents'] and type(a.get('revision')) is int,'invalid_approval')
         d=w['documents'][a['document_id']];require(0<a['revision']<=len(d['revisions']) and d['revisions'][a['revision']-1]['final'],'invalid_approval_revision')
-    if w['status']=='completed':
-        require(bool(w['steps']) and all(s['status']=='completed' for s in w['steps'].values()),'incomplete_steps')
-        require(all(d in w['documents'] and not w['documents'][d]['deleted'] for d in w['required_documents']),'missing_required_documents')
     return w
