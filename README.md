@@ -57,7 +57,9 @@ python client.py operation sample-log-001
 
 Outbox files are rejected if inside **any Git tree**. Statuses are `pending`,
 `accepted`, `conflict`, `rejected`. A lifetime bound of three attempts persists
-across sessions; exhausted entries remain visibly pending. Before retry, the CLI
+across sessions; exhausted entries remain visibly pending until a bounded read-only
+receipt reconciliation confirms acceptance. Exhaustion never permits another POST.
+Before retry, the CLI
 queries operation receipt; a mismatched command hash becomes a conflict. Permission
 denials stop retries. There is no fallback to Git or a different identity.
 
@@ -89,6 +91,17 @@ checked **before** revision CAS. A same-ID different payload or principal fails.
 Rejected operations leave no accepted event/receipt. The whole workflow revision
 is the concurrency unit, including independent documents/steps. This simplifies
 correctness at the cost of more conflicts under high concurrency.
+
+Every command validates the merged candidate aggregate, including already
+completed records. Terminal workflows may receive valid logs and document
+addenda, but cannot gain unfinished steps or lose required documents/results/
+evidence. Evidence needs nonblank command/result/source provenance, a recognized
+outcome (`passed`, `failed`, `interrupted`, `blocked`) and a nonempty scalar-valued
+environment. Valid failure evidence remains eligible for a completed investigation
+whose result explicitly records that failure. Empty shells cannot satisfy completion.
+CAS revisions are integers (booleans are rejected). Context reads state and events
+from one SQLite read transaction; WAL allows a concurrent writer to commit without
+mixing the reader's two snapshots.
 
 The new prototype lifecycle is explicitly `planned → active → completed`, with
 `active ↔ blocked`; completed is terminal. Completed steps require a nonempty
@@ -134,10 +147,28 @@ into a new SQLite file, compares all durable data, rejects old tokens, and appen
 a new event on the replacement. Role rebinding intentionally changes credentials.
 This demonstrates a clean portable local store, not D1 or PostgreSQL portability.
 
+Preflight also verifies complete receipt identity/hash/accepted state against its
+operation and event, command relationships, historical role mappings, lifecycle,
+completion invariants, and approvals. It applies the local-only reducers in an
+isolated in-memory SQLite store to compare authored semantic state and blobs with
+the supplied snapshot; this validation does not replay external side effects or
+write the target. Service-generated timestamps are retained in the package but
+excluded from the semantic replay comparison. Historical role descriptions are
+preserved across restore/export and never authorize current tokens.
+
+Restore builds a unique same-directory `.restore-*.sqlite` file, imports and checks
+all durable tables, closes/checkpoints/flushes it, and atomically publishes with
+`os.link` without overwriting an existing target. Interrupted preparation can leave
+an identifiable temporary orphan, but cannot publish an empty final target; retries
+create a new temporary file. A target publication race preserves the other owner's
+file. Unsupported hard-link filesystems fail closed; no unsafe overwrite fallback
+is provided. Only this restore's temporary files are cleaned up.
+
 ## Reproduce acceptance
 
 ```powershell
 python test_acceptance.py
+python test_review_regressions.py
 ```
 
 Use a clean source commit. Output/logs/SQLite/outbox/export artifacts go into
@@ -151,3 +182,9 @@ There are no external executor claims, deployments, sharing, real account login,
 company data, real workflow migration or deletion. AC08 requires P2 authorization;
 AC09 is N/A; AC10 is a synthetic rehearsal, with real migration deferred to P3.
 See `PLATFORM-CONTRACT.md` for Sites preparation and remaining approval boundaries.
+
+The original 10 passing scenarios did not discover all defects. Independent review
+of `3fd0902` found R1-R7; the 14 review-derived regression/control scenarios now
+cover their specific counterexamples (including process interruption and receipt
+insert failure). Author test success is not independent review acceptance. The
+updated report identifies the fixed immutable subject and second-review status.
