@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Workflow portable export v1",
+  "type": "object",
+  "required": ["manifest", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "manifest": {
+      "type": "object",
+      "required": ["format", "version", "schema_version", "namespace", "cutoff_seq", "payload_sha256", "counts", "secrets_included", "identity_rebinding_required", "external_effects_enabled"],
+      "properties": {
+        "format": {"const": "workflow-portable"},
+        "version": {"const": 1},
+        "schema_version": {"const": 1},
+        "namespace": {"type": "string", "minLength": 1},
+        "cutoff_seq": {"type": "integer", "minimum": 0},
+        "payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "counts": {"type": "object"},
+        "secrets_included": {"const": false},
+        "identity_rebinding_required": {"const": true},
+        "external_effects_enabled": {"const": false}
+      }
+    },
+    "payload": {
+      "type": "object",
+      "required": ["workflows", "events", "operations", "blobs", "role_mapping"],
+      "additionalProperties": false,
+      "properties": {
+        "workflows": {"type": "array", "items": {"type": "object"}},
+        "events": {"type": "array", "items": {"type": "object"}},
+        "operations": {"type": "array", "items": {"type": "object"}},
+        "blobs": {"type": "object", "additionalProperties": {"type": "string", "contentEncoding": "base64"}},
+        "role_mapping": {"type": "array", "items": {"type": "object"}}
+      }
+    }
+  },
+  "$comment": "Structural envelope only; executable preflight in service.py additionally validates counts, hashes, revision chains, ID relationships and operation/event correspondence."
+}
