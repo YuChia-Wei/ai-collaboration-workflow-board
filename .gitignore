@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+state/
+*.sqlite*
+*.zip
+bindings.local.json
+outbox*.json
+
