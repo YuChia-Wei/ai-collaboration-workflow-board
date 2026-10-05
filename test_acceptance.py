@@ -43,8 +43,19 @@ class Acceptance(unittest.TestCase):
         a=subprocess.run([sys.executable,str(ROOT/'client.py'),'--base',self.base,'submit',str(f),'--outbox',str(RUN/'cli-outbox.json')],env=env,capture_output=True,text=True,encoding='utf-8',timeout=10)
         self.assertEqual(a.returncode,0,a.stderr);self.assertEqual(json.loads(a.stdout)['status'],'accepted')
         messages=[{'jsonrpc':'2.0','id':1,'method':'initialize','params':{'protocolVersion':'2025-03-26','capabilities':{},'clientInfo':{'name':'p1-mcp-protocol-client-B','version':'1'}}},{'jsonrpc':'2.0','method':'notifications/initialized'},{'jsonrpc':'2.0','id':2,'method':'tools/list'},{'jsonrpc':'2.0','id':3,'method':'tools/call','params':{'name':'workflow_context','arguments':{'namespace':'demo','workflow_id':'synthetic-416'}}}]
-        b=subprocess.run([sys.executable,str(ROOT/'mcp_bridge.py'),'--base',self.base],input='\n'.join(map(canonical,messages))+'\n',env={**env,'WORKFLOW_TOKEN':READER},capture_output=True,text=True,encoding='utf-8',timeout=10)
-        self.assertEqual(b.returncode,0,b.stderr); responses=[json.loads(x) for x in b.stdout.splitlines()];context=json.loads(responses[-1]['result']['content'][0]['text'])['data']
+        b=subprocess.Popen([sys.executable,str(ROOT/'mcp_bridge.py'),'--base',self.base],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env,text=True,encoding='utf-8')
+        responses=[]
+        try:
+            for msg in messages:
+                b.stdin.write(canonical(msg)+'\n');b.stdin.flush()
+                if 'id' in msg:responses.append(json.loads(b.stdout.readline()))
+            context=json.loads(responses[-1]['result']['content'][0]['text'])['data']
+            continuation={'jsonrpc':'2.0','id':4,'method':'tools/call','params':{'name':'workflow_command','arguments':{'command':{'namespace':'demo','workflow_id':'synthetic-416','type':'log','operation_id':str(uuid.uuid4()),'expected_revision':context['workflow']['revision'],'client':'mcp-protocol-client-B','session':'fresh-session-B','payload':{'text':'Actual MCP client B continued from CLI A context after A exited.'}}}}}
+            messages.append(continuation);b.stdin.write(canonical(continuation)+'\n');b.stdin.flush();responses.append(json.loads(b.stdout.readline()))
+            accepted=json.loads(responses[-1]['result']['content'][0]['text']);self.assertEqual(accepted['status'],200);self.assertEqual(accepted['data']['revision'],context['workflow']['revision']+1)
+            b.stdin.close();b.wait(timeout=5);self.assertEqual(b.returncode,0,b.stderr.read())
+        finally:
+            if b.poll() is None:b.kill();b.wait()
         self.assertTrue(context['complete']);self.assertEqual(len(context['workflow']['steps']),50);self.assertIn('missing-required',context['missing_required_documents']);self.assertTrue(any('subprocess A' in l['text'] for l in context['workflow']['logs']))
         self.assertTrue(context['workflow']['handoffs']);self.assertTrue(context['workflow']['evidence']['E-failure']);self.assertEqual(context['workflow']['source']['commit'],'a66957e00aa447be887258fa9b55fd89e39e96dd')
         self.assertEqual(context['workflow']['steps']['T1']['status'],'completed');self.assertEqual(context['workflow']['steps']['T2']['status'],'planned')

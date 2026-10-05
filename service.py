@@ -105,6 +105,7 @@ class Store:
                 if action=='create':
                     require(d is None,'document_exists'); require(p.get('step_id') is None or p['step_id'] in w['steps'],'step_not_found')
                     d={'id':did,'name':p.get('name',did),'kind':p.get('kind','markdown'),'step_id':p.get('step_id'),'required':p.get('required',False),'deleted':False,'revisions':[]}; w['documents'][did]=d
+                    if d['required'] and did not in w['required_documents']: w['required_documents'].append(did)
                 else: require(d is not None and not d['deleted'],'document_not_found')
                 if action=='rename': require(isinstance(p.get('name'),str),'missing_name'); d['name']=p['name']
                 if action=='archive': d['deleted']=True; d['deleted_at']=now()
@@ -224,6 +225,13 @@ class Handler(BaseHTTPRequestHandler):
             elif u.path=='/v1/events':
                 s.auth(self.token(),ns); after=int(parse_qs(u.query).get('after',['0'])[0])
                 with s.db() as db: result=[json.loads(r[0]) for r in db.execute('SELECT body FROM events WHERE namespace=? AND seq>? ORDER BY seq',(ns,after))]
+            elif len(parts)==3 and parts[:2]==['v1','blobs']:
+                s.auth(self.token(),ns); h=parts[2]
+                with s.db() as db:
+                    ws=[json.loads(r[0]) for r in db.execute('SELECT body FROM workflows WHERE namespace=?',(ns,))]
+                    require(any(e['blob_hash']==h for w in ws for e in w['evidence'].values()),'not_found',404)
+                    row=db.execute('SELECT data FROM blobs WHERE hash=?',(h,)).fetchone();require(row is not None,'not_found',404)
+                    result={'hash':h,'blob_base64':base64.b64encode(row[0]).decode()}
             elif u.path=='/v1/export': result=s.export(self.token(),ns)
             else: raise Fault(404,'not_found')
             self.output(200,result)
