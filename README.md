@@ -183,8 +183,20 @@ company data, real workflow migration or deletion. AC08 requires P2 authorizatio
 AC09 is N/A; AC10 is a synthetic rehearsal, with real migration deferred to P3.
 See `PLATFORM-CONTRACT.md` for Sites preparation and remaining approval boundaries.
 
+Required document retirement: archive is rejected with HTTP 422
+`required_document_archive_forbidden` while the document ID is in the workflow's
+current `required_documents` index, in every lifecycle state. The rejection keeps
+the document, revisions, workflow, events and receipts unchanged; the required
+document remains usable and the workflow can complete normally. This prototype
+does not support retiring a document created with `required: true`; no new
+restore/replacement API is implied. Optional documents can still be revised and
+archived, retaining their tombstone and every revision through export/restore.
+
 The original 10 passing scenarios did not discover all defects. Independent review
 of `3fd0902` found R1-R7; the 14 review-derived regression/control scenarios now
 cover their specific counterexamples (including process interruption and receipt
 insert failure). Author test success is not independent review acceptance. The
 updated report identifies the fixed immutable subject and second-review status.
+Second review closed R1-R7 and found R8 (required archive trapped an active
+workflow). Regression 15 now tests the explicit archive rejection over actual
+HTTP, continued completion, optional tombstones and exact export/restore.

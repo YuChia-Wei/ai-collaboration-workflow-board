@@ -111,7 +111,9 @@ class Store:
                     if d['required'] and did not in w['required_documents']: w['required_documents'].append(did)
                 else: require(d is not None and not d['deleted'],'document_not_found')
                 if action=='rename': require(isinstance(p.get('name'),str),'missing_name'); d['name']=p['name']
-                if action=='archive': d['deleted']=True; d['deleted_at']=now()
+                if action=='archive':
+                    require(did not in w['required_documents'],'required_document_archive_forbidden',document_id=did)
+                    d['deleted']=True; d['deleted_at']=now()
                 if action in {'create','revise'}:
                     require(isinstance(p.get('content'),str),'missing_content')
                     if d['revisions'] and d['revisions'][-1]['final']: require(p.get('relation') in {'erratum','addendum','successor'},'final_requires_successor')

@@ -1,4 +1,4 @@
-"""14 regression/control scenarios derived from immutable independent review R1-R7."""
+"""15 regression/control scenarios derived from immutable independent review R1-R8."""
 import base64,copy,json,os,sqlite3,subprocess,sys,threading,time,unittest,uuid
 from pathlib import Path
 from unittest.mock import patch
@@ -37,7 +37,7 @@ class ReviewRegressions(unittest.TestCase):
         self.reject(self.c('update_workflow',{'status':'completed','required_documents':['new-missing']}),'missing_required_documents')
         self.write('update_workflow',{'status':'completed','required_documents':['plan']});self.proof('R2',candidate_validated=True)
     def test_04_every_command_preserves_terminal_workflow(self):
-        self.complete();self.reject(self.c('document',{'id':'plan','action':'archive'}),'missing_required_documents')
+        self.complete();self.reject(self.c('document',{'id':'plan','action':'archive'}),'required_document_archive_forbidden')
         self.reject(self.c('add_step',{'id':'T-after-complete','title':'unfinished','order':2,'owner_skill':'synthetic'}),'incomplete_steps')
         self.reject(self.c('update_workflow',{'required_documents':['new-missing']}),'missing_required_documents')
         self.write('log',{'text':'terminal annotation allowed'})
@@ -160,6 +160,42 @@ class ReviewRegressions(unittest.TestCase):
             self.proof('R7',crash_did_not_publish_target=True,fresh_retry_succeeded=True,temporary_orphan_retained_for_evidence=True)
         finally:
             if p.poll() is None:p.terminate();p.wait(timeout=5)
+    def test_15_required_archive_admission_and_optional_tombstone_roundtrip(self):
+        h=server(self.s,0);threading.Thread(target=h.serve_forever,daemon=True).start();base=f'http://127.0.0.1:{h.server_port}';transcript=[]
+        def write(typ,p,status=200):
+            c=self.c(typ,p);code,r=client.request(base,TOKEN,'/v1/commands',c)
+            transcript.append({'command':c,'status':code,'result':r});self.assertEqual(code,status);return r
+        try:
+            write('update_workflow',{'status':'active','required_documents':['plan']})
+            before=self.s.export(TOKEN,'demo')['payload']
+            r=write('document',{'id':'plan','action':'archive'},422)
+            self.assertEqual(r['error'],'required_document_archive_forbidden')
+            self.assertEqual(before,self.s.export(TOKEN,'demo')['payload'])
+            # Membership controls admission even when the document.required flag is false.
+            write('document',{'id':'indexed-only','action':'create','content':'required by index','required':False})
+            write('update_workflow',{'required_documents':['plan','indexed-only']})
+            r=write('document',{'id':'indexed-only','action':'archive'},422)
+            self.assertEqual(r['error'],'required_document_archive_forbidden')
+            write('update_workflow',{'required_documents':['plan']})
+            write('document',{'id':'indexed-only','action':'archive'})
+            write('document',{'id':'optional','action':'create','content':'original optional revision'})
+            write('document',{'id':'optional','action':'revise','content':'second optional revision'})
+            original=copy.deepcopy(self.s.context(TOKEN,'demo','synthetic-416')['workflow']['documents']['optional']['revisions'])
+            write('document',{'id':'optional','action':'archive'})
+            # The rejected archive left the required original usable; completion needs no rescue or DB edit.
+            write('document',{'id':'plan','action':'revise','content':'# Required plan survives rejection','final':True,'relation':'addendum'})
+            write('update_workflow',{'status':'completed'})
+            pack=self.s.export(TOKEN,'demo');self.assertTrue(preflight(pack)['valid'])
+            target=RUN/'r8-clean.restore.sqlite';self.assertTrue(restore(pack,target,bindings())['valid'])
+            restored=Store(target,bindings());self.assertEqual(pack['payload'],restored.export(TOKEN,'demo')['payload'])
+            w=restored.context(TOKEN,'demo','synthetic-416')['workflow']
+            self.assertEqual(w['status'],'completed');self.assertFalse(w['documents']['plan']['deleted'])
+            self.assertTrue(w['documents']['optional']['deleted']);self.assertTrue(w['documents']['optional']['deleted_at'])
+            self.assertEqual(w['documents']['optional']['revisions'],original)
+            (RUN/'r8-http-transcript.json').write_text(canonical(transcript),encoding='utf-8')
+            (RUN/'r8-export.json').write_text(canonical(pack),encoding='utf-8')
+            self.proof('R8',required_archive_rejected_atomically=True,index_membership_checked=True,workflow_completed=True,optional_tombstones_and_all_revisions_roundtrip=True)
+        finally:h.shutdown();h.server_close()
 if __name__=='__main__':
     result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(ReviewRegressions))
     (RUN/'regression-results.json').write_text(canonical({'at':now(),'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'successful':result.wasSuccessful(),'checks':PROOFS}),encoding='utf-8');print('EVIDENCE='+str(RUN));sys.exit(0 if result.wasSuccessful() else 1)
