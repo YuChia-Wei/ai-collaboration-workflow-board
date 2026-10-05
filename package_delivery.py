@@ -20,7 +20,7 @@ def main():
     for f in (ROOT/'.git').rglob('*'):
         if f.is_file() and not any(x in {'logs','hooks'} for x in f.relative_to(ROOT/'.git').parts) and f.name not in {'COMMIT_EDITMSG'}:files['prototype/'+f.relative_to(ROOT).as_posix()]=f.read_bytes()
     files['prototype.bundle']=bundle.read_bytes()
-    for name in ['REPORT.md','issue.json','comments.json','ui-context.json','ui-proof.json','source/manifest.json','test-attempt-1.log','test-attempt-2.log','test-attempt-3.log','final-provenance.json']:
+    for name in ['REPORT.md','issue.json','comments.json','ui-context.json','ui-proof.json','source/manifest.json','test-attempt-1.log','test-attempt-2.log','test-attempt-3.log','portable-check.log','portable-proof.json','final-provenance.json']:
         f=EVIDENCE/name
         if f.exists():files['evidence/'+name]=redact(f.read_bytes())
     for run in sorted(EVIDENCE.glob('run-*')):
