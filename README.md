@@ -6,6 +6,10 @@ issues, publishes a site, runs arbitrary SQL, or executes evidence commands.
 Python 3.13 and Git are sufficient; there are no package dependencies. Docker is
 not required. Binding is strictly `127.0.0.1`.
 
+For this installed checkout, follow [LOCAL-SETUP.md](LOCAL-SETUP.md) for its
+dedicated sibling state directory and port 8767. The paths below are generic
+examples; do not initialize Git again in this clone.
+
 ## Start on Windows / PowerShell
 
 From this repository directory:
