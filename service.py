@@ -3,6 +3,7 @@ import argparse, base64, hashlib, json, os, sqlite3, threading, uuid
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from contextlib import contextmanager
 
 def canonical(x): return json.dumps(x, ensure_ascii=False, sort_keys=True, separators=(',', ':'))
 def digest(x): return hashlib.sha256(x if isinstance(x, bytes) else canonical(x).encode()).hexdigest()
@@ -23,8 +24,12 @@ class Store:
         self.path=Path(path); self.path.parent.mkdir(parents=True,exist_ok=True)
         self.bindings=bindings; self.lock=threading.RLock()
         with self.db() as db: db.executescript(SCHEMA)
+    @contextmanager
     def db(self):
-        db=sqlite3.connect(self.path,timeout=10); db.row_factory=sqlite3.Row; return db
+        db=sqlite3.connect(self.path,timeout=10); db.row_factory=sqlite3.Row
+        try:
+            with db: yield db
+        finally: db.close()
     def auth(self,token,ns,permission='read'):
         identity=self.bindings.get(token)
         require(identity is not None,'unauthenticated',401)
@@ -239,7 +244,7 @@ class Handler(BaseHTTPRequestHandler):
 def server(store,port=8765,fault_injection=False):
     h=ThreadingHTTPServer(('127.0.0.1',port),Handler); h.store=store; h.fault_injection=fault_injection; return h
 def main():
-    p=argparse.ArgumentParser(); p.add_argument('--db',default='state/records.sqlite'); p.add_argument('--bindings',required=True); p.add_argument('--port',type=int,default=8765); p.add_argument('--restore'); p.add_argument('--preflight'); p.add_argument('--fault-injection',action='store_true'); a=p.parse_args()
+    p=argparse.ArgumentParser(); p.add_argument('--db',default='../runtime/records.sqlite'); p.add_argument('--bindings',required=True); p.add_argument('--port',type=int,default=8765); p.add_argument('--restore'); p.add_argument('--preflight'); p.add_argument('--fault-injection',action='store_true'); a=p.parse_args()
     b=json.loads(Path(a.bindings).read_text(encoding='utf-8'))
     if a.preflight: print(canonical(preflight(json.loads(Path(a.preflight).read_text(encoding='utf-8'))))); return
     if a.restore: print(canonical(restore(json.loads(Path(a.restore).read_text(encoding='utf-8')),a.db,b))); return

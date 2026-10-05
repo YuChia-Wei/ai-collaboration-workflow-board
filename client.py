@@ -31,6 +31,7 @@ def submit(base,token,command,outbox,max_attempts=3,drop=False):
     save()
     if entry['status'] in {'accepted','conflict','rejected'}: return entry
     while entry['attempts']<max_attempts:
+        attempted_write=False
         # Always reconcile before resend. Retry has a lifetime bound, persisted across sessions.
         try:
             status,result=request(base,token,'/v1/operations/'+quote(oid,safe='')+'?namespace='+quote(command['namespace'],safe=''))
@@ -41,6 +42,7 @@ def submit(base,token,command,outbox,max_attempts=3,drop=False):
             if status in {401,403}: entry.update(status='rejected',result=result); save(); return entry
             if status!=404: raise URLError('operation lookup unavailable')
             entry['attempts']+=1; save()
+            attempted_write=True
             status,result=request(base,token,'/v1/commands',command,{'X-Test-Drop-Response':'once'} if drop and entry['attempts']==1 else {})
             if status==200: entry.update(status='accepted',result=result)
             elif status==409: entry.update(status='conflict',result=result)
@@ -50,8 +52,7 @@ def submit(base,token,command,outbox,max_attempts=3,drop=False):
         except (OSError,URLError) as e:
             entry['observations'].append({'kind':'network_error','class':type(e).__name__})
             # An unsuccessful lookup also spends a retry; avoid an infinite lookup loop.
-            if not entry.get('last_network_attempt')==entry['attempts']: entry['last_network_attempt']=entry['attempts']
-            else: entry['attempts']+=1
+            if not attempted_write: entry['attempts']+=1
             save()
     entry['status']='pending'; entry['retry_exhausted']=True; save(); return entry
 
