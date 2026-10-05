@@ -71,6 +71,8 @@ class Store:
             if old:
                 require(old['principal']==principal and old['payload_hash']==ph,'idempotency_payload_mismatch',409)
                 return json.loads(old['result'])
+            require(integer(c.get('expected_revision')),'invalid_expected_revision')
+            require(text_value(c.get('client','unknown')) and text_value(c.get('session','unknown')),'invalid_client_metadata')
             p=c.get('payload',{}); require(isinstance(p,dict),'invalid_payload')
             if typ=='create_workflow':
                 require(isinstance(wid,str) and bool(wid),'missing_workflow_id')
@@ -178,6 +180,7 @@ def _preflight(pack):
         require(e['before_revision']==revisions[e['workflow_id']] and e['after_revision']==e['before_revision']+1,'event_revision_gap'); revisions[e['workflow_id']]=e['after_revision']
         op=ops.get((ns,e['operation_id'])); require(op is not None and op['payload_hash']==digest(e['command']) and op['principal']==e['principal'],'invalid_operation_relationship')
         c=e['command'];require(isinstance(c,dict) and c.get('type') in COMMANDS and isinstance(c.get('payload'),dict),'invalid_historical_command')
+        require(text_value(e.get('client')) and text_value(e.get('session')) and e['client']==c.get('client','unknown') and e['session']==c.get('session','unknown'),'invalid_event_client_metadata')
         require(c.get('namespace')==ns and c.get('workflow_id')==e['workflow_id'] and c.get('operation_id')==e['operation_id'] and type(c.get('expected_revision')) is int and c['expected_revision']==e['before_revision'],'invalid_command_relationship')
         require(e['principal'] in principals and ('approve' if c['type']=='approve' else 'write') in principals[e['principal']],'missing_historical_role')
         result=json.loads(op['result'])
@@ -252,11 +255,13 @@ def restore(pack,path,bindings):
                 old=db.execute('SELECT roles FROM role_history WHERE namespace=? AND principal=?',(ns,r['principal'])).fetchone()
                 roles=sorted(set(r['roles'])|set(json.loads(old[0]) if old else []))
                 db.execute('INSERT OR REPLACE INTO role_history VALUES(?,?,?)',(ns,r['principal'],canonical(roles)))
-        token=next(t for t,b in bindings.items() if 'write' in b.get('namespaces',{}).get(ns,[]))
         # Validate durable bytes before publication, without requiring export permission.
         with store.db() as db:
             imported=[json.loads(r[0]) for r in db.execute('SELECT body FROM workflows ORDER BY id')]
             require(sorted(imported,key=lambda w:w['id'])==sorted(p['workflows'],key=lambda w:w['id']),'restore_verification_failed')
+            require([json.loads(r[0]) for r in db.execute('SELECT body FROM events ORDER BY seq')]==p['events'],'restore_event_verification_failed')
+            require([dict(r) for r in db.execute('SELECT * FROM operations ORDER BY id')]==sorted(p['operations'],key=lambda o:o['id']),'restore_operation_verification_failed')
+            require({r['hash']:base64.b64encode(r['data']).decode() for r in db.execute('SELECT hash,data FROM blobs')}==p['blobs'],'restore_blob_verification_failed')
             db.execute('PRAGMA wal_checkpoint(TRUNCATE)')
         with temporary.open('r+b') as f:f.flush();os.fsync(f.fileno())
         try:os.link(temporary,target) # Atomic no-overwrite publication; same-directory volume.

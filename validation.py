@@ -13,14 +13,14 @@ def string_list(x):return isinstance(x,list) and all(text_value(v) for v in x) a
 def validate_evidence(e):
     require(isinstance(e,dict),'invalid_evidence')
     require(all(text_value(e.get(k)) for k in ('id','command','result','source_commit')),'invalid_evidence_content')
-    require(e.get('outcome') in {'passed','failed','interrupted','blocked'},'invalid_evidence_outcome')
+    require(text_value(e.get('outcome')) and e['outcome'] in {'passed','failed','interrupted','blocked'},'invalid_evidence_outcome')
     require(isinstance(e.get('environment'),dict) and bool(e['environment']),'invalid_evidence_environment')
     require(all(text_value(k) and isinstance(v,(str,int,float,bool)) and v is not None and (not isinstance(v,str) or text_value(v)) for k,v in e['environment'].items()),'invalid_evidence_environment')
 def validate_workflow(w):
     require(isinstance(w,dict),'invalid_workflow')
     for k in ('id','namespace','title','goal','authorized_scope','policy_version','template_version','next_step','next_owner'):require(text_value(w.get(k)),'invalid_workflow_field',field=k)
     require(isinstance(w.get('source'),dict) and all(text_value(w['source'].get(k)) for k in ('repo','commit','branch')),'invalid_source_provenance')
-    require(w.get('status') in STATES and integer(w.get('revision')),'invalid_workflow_lifecycle')
+    require(text_value(w.get('status')) and w['status'] in STATES and integer(w.get('revision')),'invalid_workflow_lifecycle')
     require(string_list(w.get('required_documents')),'invalid_required_documents')
     require(isinstance(w.get('legacy_mapping'),dict) and isinstance(w.get('external_links'),list),'invalid_source_mapping')
     require(isinstance(w.get('steps'),dict) and isinstance(w.get('documents'),dict) and isinstance(w.get('evidence'),dict),'invalid_record_collections')
@@ -28,7 +28,7 @@ def validate_workflow(w):
         validate_evidence(e);require(eid==e['id'] and text_value(e.get('blob_hash')) and text_value(e.get('observed_at')),'invalid_evidence_relationship')
     for sid,s in w['steps'].items():
         require(isinstance(s,dict) and text_value(sid) and sid==s.get('id'),'invalid_step_identity')
-        require(s.get('status') in STATES and integer(s.get('order')) and all(text_value(s.get(k)) for k in ('title','owner_skill')),'invalid_step_fields')
+        require(text_value(s.get('status')) and s['status'] in STATES and integer(s.get('order')) and all(text_value(s.get(k)) for k in ('title','owner_skill')),'invalid_step_fields')
         require(string_list(s.get('evidence_ids')) and all(i in w['evidence'] for i in s['evidence_ids']),'invalid_step_relationship')
         require(isinstance(s.get('blockers'),list) and all(text_value(x) for x in s['blockers']),'invalid_step_blockers')
         require(s.get('result') is None or isinstance(s['result'],str),'invalid_step_result')

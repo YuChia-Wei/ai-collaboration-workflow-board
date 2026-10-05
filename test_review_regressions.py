@@ -57,12 +57,14 @@ class ReviewRegressions(unittest.TestCase):
         p=copy.deepcopy(original);p['payload']['role_mapping']=[];p['manifest']['counts']['role_mapping']=0;self.tamper_reject(p,'missing-roles')
         p=copy.deepcopy(original);p['payload']['workflows'][0]['approvals']=[{'document_id':'plan','revision':1,'principal':'forged-admin','at':now()}];self.tamper_reject(p,'forged-approval')
         p=copy.deepcopy(original);p['payload']['workflows'][0]['next_step']='forged but structurally valid snapshot';self.tamper_reject(p,'history-divergent-snapshot')
+        p=copy.deepcopy(original);p['payload']['events'][0]['client']='forged-event-client';self.tamper_reject(p,'event-client-mismatch')
         self.proof('R3',contradictory_receipts_commands_roles_approvals_snapshot_rejected=True)
     def test_06_restore_rejects_invalid_lifecycle_and_types(self):
         original=self.s.export(TOKEN,'demo')
         for k,v in [('status','not-a-lifecycle-state'),('status',{'invalid':'type'}),('revision',True),('required_documents',None)]:
             p=copy.deepcopy(original);p['payload']['workflows'][0][k]=v;self.tamper_reject(p,'lifecycle-'+k+str(type(v).__name__))
         p=copy.deepcopy(original);p['payload']['workflows'][0]['steps']['T1']['status']='invented';self.tamper_reject(p,'invalid-step-state')
+        c=self.c('log',{'text':'typed CAS contract'});c['expected_revision']=True;self.reject(c,'invalid_expected_revision')
         self.proof('R3',invalid_pack_does_not_create_target=True)
     def test_07_null_evidence_and_whitespace_cannot_complete(self):
         self.reject(self.c('evidence',{'id':'empty','command':None,'result':None,'outcome':None,'source_commit':None,'environment':None}),'invalid_evidence_content')
