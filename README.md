@@ -177,6 +177,11 @@ git fetch ../prototype.bundle main
 git reset --mixed FETCH_HEAD
 ```
 
+Delivery history uses a synthetic author/committer for privacy; commit IDs differ
+from the original reviewed repository, but every source tree is unchanged. The
+manifest distinguishes `prototype_sha` from `portable_history_sha` and records
+their identical trees. Original local history is retained without rewriting.
+
 ```powershell
 python test_acceptance.py
 python test_review_regressions.py
