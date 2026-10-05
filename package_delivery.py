@@ -22,6 +22,7 @@ def main():
         f=EVIDENCE/name
         if f.exists():files['evidence/'+name]=redact(f.read_bytes())
     for run in sorted(EVIDENCE.glob('run-*')):
+        if run.name!='run-20261005T174839Z':continue
         for name in ['proofs.json','test-summary.json','cross-client-transcript.json','export.json','final-export.json','replacement-after-continuation.json','loss-outbox.json','offline-outbox.json','rejected-outbox.json']:
             f=run/name
             if f.exists():files['evidence/'+run.name+'/'+name]=redact(f.read_bytes())
