@@ -1,1 +1,21 @@
-{"name":"workflow-records-sites","private":true,"type":"module","scripts":{"build":"node scripts/build.mjs","validate":"node scripts/validate-artifact.mjs","db:generate":"drizzle-kit generate","test":"node --experimental-sqlite tests/contracts.mjs"},"devDependencies":{"drizzle-kit":"0.31.4","drizzle-orm":"0.44.5"}}
+{
+  "name": "workflow-records-sites",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate-artifact.mjs",
+    "db:generate": "drizzle-kit generate",
+    "test": "node --experimental-sqlite tests/contracts.mjs && node --experimental-sqlite tests/board.mjs"
+  },
+  "devDependencies": {
+    "drizzle-kit": "0.31.4",
+    "drizzle-orm": "0.44.5",
+    "esbuild": "0.28.2"
+  },
+  "dependencies": {
+    "dompurify": "3.4.16",
+    "marked": "18.1.0",
+    "yaml": "2.9.1"
+  }
+}

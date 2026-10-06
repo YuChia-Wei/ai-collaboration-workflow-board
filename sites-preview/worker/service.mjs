@@ -1,15 +1,14 @@
-export class Fault extends Error{constructor(status,error,details={}){super(error);Object.assign(this,{status,error,details});}}
-const demand=(v,error,status=422,details={})=>{if(!v)throw new Fault(status,error,details)};
+import {Fault,demand,nonempty,hash,json,bytes} from './common.mjs';
+import {boardCommand,boardDetail,boardDocument,PROFILE} from './board.mjs';
+import catalog from '../data/source-catalog.json' with {type:'json'};
+export {Fault,hash} from './common.mjs';
+let page='';
+export function setPage(html){page=html;}
 const states={planned:['active'],active:['blocked','completed'],blocked:['active'],completed:[]};
-const nonempty=x=>typeof x==='string'&&!!x.trim();
-const canonical=x=>JSON.stringify(x,Object.keys(x||{}).sort());
-export async function hash(x){const raw=typeof x==='string'?x:stable(x);return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(raw)))].map(v=>v.toString(16).padStart(2,'0')).join('');}
-function stable(x){return x===null||typeof x!=='object'?JSON.stringify(x):Array.isArray(x)?'['+x.map(stable).join(',')+']':'{'+Object.keys(x).sort().map(k=>JSON.stringify(k)+':'+stable(x[k])).join(',')+'}';}
-const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'}});
 export function validate(w){
  demand(w&&nonempty(w.title)&&nonempty(w.goal)&&nonempty(w.next_step)&&nonempty(w.next_owner),'missing_workflow_fields');
- demand(w.status in states,'invalid_status');demand(Array.isArray(w.required_documents),'invalid_required_documents');
- for(const s of Object.values(w.steps)){demand(s.status in states&&nonempty(s.title),'invalid_step');demand(Array.isArray(s.evidence_ids)&&s.evidence_ids.every(id=>w.evidence[id]),'invalid_evidence_reference');if(s.status==='completed')demand(nonempty(s.result)&&s.evidence_ids.length>0,'missing_required_evidence');}
+ demand(Object.hasOwn(states,w.status),'invalid_status');demand(Array.isArray(w.required_documents),'invalid_required_documents');
+ for(const s of Object.values(w.steps)){demand(Object.hasOwn(states,s.status)&&nonempty(s.title),'invalid_step');demand(Array.isArray(s.evidence_ids)&&s.evidence_ids.every(id=>Object.hasOwn(w.evidence,id)),'invalid_evidence_reference');if(s.status==='completed')demand(nonempty(s.result)&&s.evidence_ids.length>0,'missing_required_evidence');}
  for(const d of Object.values(w.documents)){if(d.required)demand(w.required_documents.includes(d.id),'required_index_mismatch');demand(d.revisions.length>0,'missing_document_revision');}
  if(w.status==='completed'){demand(Object.keys(w.steps).length>0&&Object.values(w.steps).every(s=>s.status==='completed'),'incomplete_steps');demand(w.required_documents.every(id=>w.documents[id]&&!w.documents[id].deleted),'missing_required_documents');}
  return w;
@@ -33,11 +32,11 @@ export async function command(db,owner,c){
   demand(Object.keys(p).every(k=>['title','goal','next_step','next_owner','status','required_documents'].includes(k)),'invalid_fields');
   if('status'in p)demand(states[w.status].includes(p.status),'illegal_transition');Object.assign(w,p);
  }else if(t==='add_step'){
-  demand(nonempty(p.id)&&!w.steps[p.id]&&nonempty(p.title),'invalid_step');w.steps[p.id]={id:p.id,title:p.title,order:Object.keys(w.steps).length+1,owner_skill:p.owner_skill||'本人',status:'planned',result:null,evidence_ids:[],blockers:[]};
+  demand(nonempty(p.id)&&/^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$/.test(p.id)&&!Object.hasOwn(w.steps,p.id)&&nonempty(p.title),'invalid_step');w.steps[p.id]={id:p.id,title:p.title,order:Object.keys(w.steps).length+1,owner_skill:p.owner_skill||'本人',status:'planned',result:null,evidence_ids:[],blockers:[]};
  }else if(t==='update_step'){
-  demand(w.steps[p.id],'step_not_found');demand(Object.keys(p).every(k=>['id','status','result','evidence_ids','blockers'].includes(k)),'invalid_fields');const s=w.steps[p.id];if('status'in p)demand(states[s.status].includes(p.status),'illegal_transition');Object.assign(s,p);
+  demand(Object.hasOwn(w.steps,p.id),'step_not_found');demand(Object.keys(p).every(k=>['id','status','result','evidence_ids','blockers'].includes(k)),'invalid_fields');const s=w.steps[p.id];if('status'in p)demand(states[s.status].includes(p.status),'illegal_transition');Object.assign(s,p);
  }else if(t==='document'){
-  demand(nonempty(p.id)&&['create','revise','rename','archive'].includes(p.action),'invalid_document_action');let d=w.documents[p.id];
+  demand(nonempty(p.id)&&/^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$/.test(p.id)&&['create','revise','rename','archive'].includes(p.action),'invalid_document_action');let d=Object.hasOwn(w.documents,p.id)?w.documents[p.id]:null;
   if(p.action==='create'){demand(!d,'document_exists');d={id:p.id,name:p.name||'未命名文件',kind:'markdown',required:!!p.required,deleted:false,revisions:[]};w.documents[p.id]=d;if(d.required)w.required_documents.push(d.id);}
   else demand(d&&!d.deleted,'document_not_found');
   if(p.action==='archive'){demand(!w.required_documents.includes(d.id),'required_document_archive_forbidden');d.deleted=true;d.deleted_at=time;}
@@ -137,14 +136,61 @@ export async function handle(request,env){
   if(url.pathname==='/api/source-import')throw new Fault(403,'import_forbidden');
   const owner=request.headers.get('oai-authenticated-user-id');demand(nonempty(owner),'signin_required',401);
   demand(env.DB,'storage_unavailable',503);const db=env.DB;
-  if(request.method==='POST'){demand(!request.headers.get('Origin')||request.headers.get('Origin')===url.origin,'origin_forbidden',403);if(url.pathname==='/api/commands'){demand(Number(request.headers.get('Content-Length')||'0')<=500000,'request_too_large',413);return json(await command(db,owner,await request.json()));}}
+  if(request.method==='GET'&&url.pathname==='/api/source-status'){
+   const active=await db.prepare('SELECT value FROM source_state WHERE key=?').bind('active').first();
+   const [records,documents]=await Promise.all([
+    db.prepare('SELECT workflow_id,hash FROM source_records WHERE dataset=? ORDER BY workflow_id').bind(active?.value||'').all(),
+    db.prepare('SELECT workflow_id,document_id,hash FROM source_documents WHERE dataset=? ORDER BY workflow_id,document_id').bind(active?.value||'').all()
+   ]);
+   return json({dataset:active?.value||null,workflow_count:records.results.length,document_count:documents.results.length,row_hash_manifest_sha256:await hash({records:records.results,documents:documents.results}),projection_available:active?.value===catalog.source_commit});
+  }
+  if(request.method==='POST'){demand(!request.headers.get('Origin')||request.headers.get('Origin')===url.origin,'origin_forbidden',403);if(url.pathname==='/api/commands'){
+   const raw=await request.text();demand(bytes(raw)<=300000,'request_too_large',413);let c;try{c=JSON.parse(raw);}catch{throw new Fault(422,'invalid_command');}
+   if(c.service_contract_version===PROFILE)return json(await boardCommand(db,owner,c));
+   demand(c.type!=='create_workflow','legacy_creation_disabled',403);return json(await command(db,owner,c));
+  }}
   if(request.method==='GET'&&url.pathname==='/api/workflows'){
-   const r=await db.prepare('SELECT body FROM workflows WHERE owner=? ORDER BY rowid DESC').bind(owner).all();
-   const s=await db.prepare('SELECT body FROM source_records WHERE dataset=(SELECT value FROM source_state WHERE key=?) ORDER BY workflow_id DESC').bind('active').all();
-   return json([...s.results,...r.results].map(x=>{const w=JSON.parse(x.body);return {...w,documents:{},document_count:Object.keys(w.documents).length,source:{...w.source,metadata:undefined}}}));
+   const active=await db.prepare('SELECT value FROM source_state WHERE key=?').bind('active').first();
+   const [native,legacy,counts,docCounts]=await Promise.all([
+    db.prepare('SELECT body FROM board_workflows WHERE owner=? ORDER BY updated_at DESC LIMIT 5000').bind(owner).all(),
+    db.prepare('SELECT body FROM workflows WHERE owner=? ORDER BY rowid DESC LIMIT 5000').bind(owner).all(),
+    db.prepare('SELECT workflow_id,status,COUNT(*) AS count FROM board_tasks WHERE owner=? GROUP BY workflow_id,status').bind(owner).all(),
+    db.prepare('SELECT workflow_id,COUNT(*) AS count FROM board_documents WHERE owner=? GROUP BY workflow_id').bind(owner).all()
+   ]);
+   const sources=active?.value===catalog.source_commit?Object.values(catalog.workflows).sort((a,b)=>b.id.localeCompare(a.id)):[];
+   const nativeRecords=native.results.map(r=>{const w=JSON.parse(r.body),tasks=counts.results.filter(x=>x.workflow_id===w.id);return {...w,record_mode:'board',task_count:tasks.reduce((n,x)=>n+x.count,0),task_counts:Object.fromEntries(tasks.map(x=>[x.status,x.count])),document_count:docCounts.results.find(x=>x.workflow_id===w.id)?.count||0};});
+   const all=[...nativeRecords,...sources,...legacy.results.map(r=>({...JSON.parse(r.body),record_mode:'legacy'}))].map(summarize);
+   const facets={kinds:[...new Set(all.map(w=>w.workflow_kind).filter(Boolean))].sort(),owners:[...new Set(all.map(w=>w.owner_skill).filter(Boolean))].sort(),statuses:[...new Set(all.map(w=>w.status||'unrecorded'))].sort()};
+   const q=(url.searchParams.get('q')||'').slice(0,200).toLowerCase(),status=url.searchParams.get('status'),kind=url.searchParams.get('kind'),skill=url.searchParams.get('owner_skill'),mode=url.searchParams.get('mode');
+   const filtered=all.filter(w=>(!status||(w.status||'unrecorded')===status)&&(!kind||w.workflow_kind===kind)&&(!skill||w.owner_skill===skill)&&(!mode||w.record_mode===mode)&&(!q||[w.id,w.title,w.goal,w.owner_skill,w.workflow_kind,...w.work_items.map(x=>x.url),...(w.referenced_work_items||[]).map(x=>x.url)].join(' ').toLowerCase().includes(q)));
+   const offset=Math.max(0,Number.parseInt(url.searchParams.get('offset')||'0',10)||0),limit=Math.min(50,Math.max(1,Number.parseInt(url.searchParams.get('limit')||'30',10)||30));
+   return json({items:filtered.slice(offset,offset+limit),total:filtered.length,all_total:all.length,offset,limit,has_more:offset+limit<filtered.length,facets,source_commit:active?.value||null,source_projection_available:active?.value===catalog.source_commit});
+  }
+  const documentMatch=url.pathname.match(/^\/api\/workflows\/([^/]+)\/documents\/([^/]+)$/);
+  if(request.method==='GET'&&documentMatch){const id=decodeURIComponent(documentMatch[1]),docId=decodeURIComponent(documentMatch[2]),rev=Number(url.searchParams.get('revision')||0),mode=url.searchParams.get('mode');
+   demand(Number.isInteger(rev)&&rev>=0,'invalid_revision');
+   if(mode==='board')return json(await boardDocument(db,owner,id,docId,rev));
+   if(mode==='source_snapshot'){
+    demand(rev===0||rev===1,'revision_not_found',404);
+    const row=await db.prepare('SELECT body FROM source_documents WHERE workflow_id=? AND document_id=? AND dataset=(SELECT value FROM source_state WHERE key=?)').bind(id,docId,'active').first();demand(row,'document_not_found',404);
+    const d=JSON.parse(row.body);return json({document:{...d,revisions:undefined},revision:{...d.revisions.at(-1),snapshot:true,created_at:null,final:null}});
+   }
+   throw new Fault(404,'document_not_found');
   }
   const match=url.pathname.match(/^\/api\/workflows\/([^/]+)$/);
-  if(request.method==='GET'&&match){const id=decodeURIComponent(match[1]);let w=await sourceDetail(db,id);if(!w){const row=await db.prepare('SELECT body FROM workflows WHERE id=? AND owner=?').bind(id,owner).first();demand(row,'not_found',404);w=JSON.parse(row.body);}return json({workflow:w,missing_required_documents:w.required_documents.filter(id=>!w.documents[id]||w.documents[id].deleted)});}
+  if(request.method==='GET'&&match){const id=decodeURIComponent(match[1]),mode=url.searchParams.get('mode')||'auto';let w=null;
+   if(['board','auto'].includes(mode))w=await boardDetail(db,owner,id);
+   if(!w&&['source_snapshot','auto'].includes(mode)){
+    const row=await db.prepare('SELECT dataset,body FROM source_records WHERE workflow_id=? AND dataset=(SELECT value FROM source_state WHERE key=?)').bind(id,'active').first();
+    if(row&&row.dataset===catalog.source_commit&&catalog.workflows[id])w=structuredClone(catalog.workflows[id]);
+    else if(row){w=JSON.parse(row.body);w.projection_notes=['此來源版本尚未建立共通欄位投影，請查閱原始文件。'];w.status=w.source_status==='unrecorded'?null:w.source_status;w.documents={};}
+   }
+   if(!w&&['legacy','auto'].includes(mode)){const row=await db.prepare('SELECT body FROM workflows WHERE id=? AND owner=?').bind(id,owner).first();if(row)w={...JSON.parse(row.body),record_mode:'legacy'};}
+   demand(w,'not_found',404);return json({workflow:w,missing_required_documents:(w.required_documents||[]).filter(id=>!w.documents[id]||w.documents[id].deleted)});
+  }
+  const operation=url.pathname.match(/^\/api\/operations\/([^/]+)$/);
+  if(request.method==='GET'&&operation){const row=await db.prepare('SELECT receipt FROM operations WHERE owner=? AND id=?').bind(owner,decodeURIComponent(operation[1])).first();demand(row,'operation_not_found',404);return json(JSON.parse(row.receipt));}
   throw new Fault(404,'not_found');
  }catch(e){if(e instanceof Fault)return json({error:e.error,...e.details},e.status);console.error('workflow request failed',String(e));return json({error:'storage_unavailable'},503);}
 }
+export function summarize(w){const tasks=Object.values(w.steps||{}),counts=w.task_counts||{};if(!w.task_counts)for(const t of tasks)counts[t.status||'unrecorded']=(counts[t.status||'unrecorded']||0)+1;return {id:w.id,title:w.title,goal:w.goal,record_mode:w.record_mode,namespace:w.namespace||'personal',status:w.status??null,workflow_kind:w.workflow_kind||null,owner_skill:w.owner_skill||null,current_phase:w.current_phase||null,updated_at:w.updated_at||null,revision:w.revision,task_count:w.task_count??tasks.length,task_counts:counts,document_count:w.document_count??Object.keys(w.documents||{}).length,unparsed_task_count:w.unparsed_task_documents?.length||0,work_items:w.work_items||[],referenced_work_items:w.referenced_work_items||[],source:{repo:w.source?.repo,commit:w.source?.commit},lifecycle_contract:w.lifecycle_contract||null};}
