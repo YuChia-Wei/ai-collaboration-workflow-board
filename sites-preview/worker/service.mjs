@@ -133,10 +133,8 @@ export async function handle(request,env){
   const url=new URL(request.url);
   if(url.pathname==='/')return new Response(page,{headers:{'content-type':'text/html;charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'}});
   demand(url.pathname.startsWith('/api/'),'not_found',404);
-  if(url.pathname==='/api/source-import'){
-   demand(nonempty(env.FRAMEWORK_IMPORT_KEY)&&request.headers.get('X-Framework-Import-Key')===env.FRAMEWORK_IMPORT_KEY,'import_forbidden',403);
-   demand(env.DB,'storage_unavailable',503);return await sourceImport(request,env.DB);
-  }
+  // Completed one-time import: reject even a previously valid runtime secret.
+  if(url.pathname==='/api/source-import')throw new Fault(403,'import_forbidden');
   const owner=request.headers.get('oai-authenticated-user-id');demand(nonempty(owner),'signin_required',401);
   demand(env.DB,'storage_unavailable',503);const db=env.DB;
   if(request.method==='POST'){demand(!request.headers.get('Origin')||request.headers.get('Origin')===url.origin,'origin_forbidden',403);if(url.pathname==='/api/commands'){demand(Number(request.headers.get('Content-Length')||'0')<=500000,'request_too_large',413);return json(await command(db,owner,await request.json()));}}

@@ -6,7 +6,7 @@
 
 不再自動建立合成範例。此次匯入保留指定 Git tree 的目前文件；更早的 Git 修訂未匯入。二進位附件保留固定版本來源連結與 hash，附件實體仍在 Git。此匯入不是原 repo 工作流程的權威切換，也不包含本機 coding agent 或 MCP plugin 接入。
 
-來源紀錄與文件分表保存，避免大型 workflow 超過 D1 單列限制。匯入經持久 staging、完整 row hash 核對後，以同一交易切換可見資料並只移除三個已知合成流程。網站原有其他紀錄保留；清理前另有 repo 外備份。暫時匯入端點需要 Sites runtime secret；完成後移除該 secret 停用存取。
+來源紀錄與文件分表保存，避免大型 workflow 超過 D1 單列限制。匯入經持久 staging、完整 row hash 核對後，以同一交易切換可見資料並只移除三個已知合成流程。網站原有其他紀錄保留；清理前另有 repo 外備份。完成後移除暫時 runtime secret，且服務程式固定拒絕一次性匯入端點；即使舊 runtime 仍提供該 secret，也不能使用。
 
 ## 本地驗證
 
