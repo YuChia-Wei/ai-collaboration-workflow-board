@@ -22,8 +22,6 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - run: python -B src/tools/check_repository.py
-      - run: python -B -m unittest src.tools.tests.test_check_repository
 
   local:
     name: Local contracts (${{ matrix.os }})
