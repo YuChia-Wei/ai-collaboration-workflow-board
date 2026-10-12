@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
-import {createApplication} from '../application/services.mjs';
-import {createHttpHandler} from '../adapters/inbound/http/handler.mjs';
-import {httpFailure,httpContractFailure} from '../adapters/inbound/http/errors.mjs';
-import {mcpFailure} from '../adapters/inbound/mcp/errors.mjs';
-import {Fault} from '../domain/errors.mjs';
-import {PROFILE} from '../domain/board-workflow.mjs';
+import {createApplication} from '../backend/application/services.mjs';
+import {createHttpHandler} from '../backend/adapters/inbound/http/handler.mjs';
+import {httpFailure,httpContractFailure} from '../backend/adapters/inbound/http/errors.mjs';
+import {mcpFailure} from '../backend/adapters/inbound/mcp/errors.mjs';
+import {Fault} from '../backend/domain/errors.mjs';
+import {PROFILE} from '../backend/domain/board-workflow.mjs';
 
 let passed=0;
 async function test(name,run){await run();passed++;console.log('PASS '+name);}

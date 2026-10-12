@@ -2,22 +2,23 @@ import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
 import {resolve,relative,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {applyBoardCommand,PROFILE} from '../domain/board-workflow.mjs';
-import {applyLegacyCommand} from '../domain/legacy-workflow.mjs';
-import {boardCommand} from '../application/board.mjs';
-import {hash} from '../domain/values.mjs';
+import {applyBoardCommand,PROFILE} from '../backend/domain/board-workflow.mjs';
+import {applyLegacyCommand} from '../backend/domain/legacy-workflow.mjs';
+import {boardCommand} from '../backend/application/board.mjs';
+import {hash} from '../backend/domain/values.mjs';
 
 const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
+const backend=resolve(root,'backend');
 async function modules(folder){
  const entries=await readdir(folder,{withFileTypes:true});
  return (await Promise.all(entries.map(entry=>entry.isDirectory()?modules(resolve(folder,entry.name)):[resolve(folder,entry.name)]))).flat().filter(path=>path.endsWith('.mjs'));
 }
 for(const layer of ['domain','application']){
- for(const path of await modules(resolve(root,layer))){
+ for(const path of await modules(resolve(backend,layer))){
   const source=await readFile(path,'utf8');
   for(const imported of source.matchAll(/\b(?:import|export)\s+[^;]*?\bfrom\s*['"]([^'"]+)['"]/g)){
    assert.ok(imported[1].startsWith('.'),`${relative(root,path)} must not import runtime libraries`);
-   const target=relative(root,resolve(dirname(path),imported[1])).replaceAll('\\','/');
+   const target=relative(backend,resolve(dirname(path),imported[1])).replaceAll('\\','/');
    assert.ok(target.startsWith('domain/')||(layer==='application'&&target.startsWith('application/')),`${relative(root,path)} must depend inward: ${target}`);
   }
   assert.doesNotMatch(source,/\b(?:db|repository)\.prepare\s*\(/,`${relative(root,path)} must not contain D1 SQL access`);
@@ -26,6 +27,22 @@ for(const layer of ['domain','application']){
  }
 }
 console.log('PASS domain and application imports depend inward; SQL remains in outbound adapters');
+
+for(const side of ['frontend','backend']){
+ for(const path of await modules(resolve(root,side))){
+  const source=await readFile(path,'utf8');
+  // Static imports/re-exports and literal dynamic imports must respect the
+  // source boundary even though Sites packages both sides in one Worker.
+  const imports=[...source.matchAll(/\bfrom\s*['"]([^'"]+)['"]|\bimport\s*(?:\(\s*)?['"]([^'"]+)['"]/g)];
+  for(const imported of imports){
+   const specifier=imported[1]??imported[2];
+   if(!specifier.startsWith('.'))continue;
+   const target=relative(root,resolve(dirname(path),specifier)).replaceAll('\\','/');
+   assert.ok(target.startsWith(side+'/')||target.startsWith('contracts/'),`${relative(root,path)} crosses the ${side} source boundary: ${target}`);
+  }
+ }
+}
+console.log('PASS frontend and backend depend only on their own source or portable contracts');
 
 const time='2026-10-07T00:00:00.000Z';
 const command={service_contract_version:PROFILE,workflow_id:'pure-domain',operation_id:'create',expected_revision:0,type:'create_workflow',payload:{title:'人工測試',goal:'純領域',workflow_kind:'review',owner_skill:'owner',authorized_scope:'local',next_step:'加入任務',next_owner:'owner'}};

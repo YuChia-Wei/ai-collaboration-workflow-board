@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import Ajv2020 from 'ajv/dist/2020.js';
-import {createCollaborationCommands} from '../application/collaboration.mjs';
-import {COLLABORATION_PROFILE,applyCollaborationCommand,taskReady,taskClaimable} from '../domain/collaboration-workflow.mjs';
-import {contentDigest} from '../domain/collaboration-values.mjs';
+import {createCollaborationCommands} from '../backend/application/collaboration.mjs';
+import {COLLABORATION_PROFILE,applyCollaborationCommand,taskReady,taskClaimable} from '../backend/domain/collaboration-workflow.mjs';
+import {contentDigest} from '../backend/domain/collaboration-values.mjs';
 import {memoryCollaborationRepository} from './fixtures/collaboration-memory.mjs';
 
 const schema=JSON.parse(readFileSync(new URL('../contracts/collaboration-v1/schema.json',import.meta.url),'utf8'));

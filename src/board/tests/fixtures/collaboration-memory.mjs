@@ -1,5 +1,5 @@
-import {Fault} from '../../domain/errors.mjs';
-import {canonicalJson} from '../../domain/collaboration-values.mjs';
+import {Fault} from '../../backend/domain/errors.mjs';
+import {canonicalJson} from '../../backend/domain/collaboration-values.mjs';
 
 const clone=value=>structuredClone(value);
 /** Synthetic atomic port implementation. It makes no D1/provider guarantee. */

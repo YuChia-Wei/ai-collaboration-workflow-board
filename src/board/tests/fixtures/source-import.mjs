@@ -1,7 +1,7 @@
 // Historical one-time import test fixture; never bundled into the runtime.
-import {demand} from '../../domain/errors.mjs';
-import {nonempty,hash} from '../../domain/values.mjs';
-import {json} from '../../adapters/inbound/http/responses.mjs';
+import {demand} from '../../backend/domain/errors.mjs';
+import {nonempty,hash} from '../../backend/domain/values.mjs';
+import {json} from '../../backend/adapters/inbound/http/responses.mjs';
 export async function sourceImport(request,db){
  const url=new URL(request.url);
  if(request.method==='GET'){

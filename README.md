@@ -4,7 +4,7 @@
 
 | 路徑 | 用途 |
 | --- | --- |
-| `src/board/` | 既有 ChatGPT Sites 網站：繁體中文 UI、Worker API、D1 repository、schema 與 migrations |
+| `src/board/` | 單一 Sites 系統；`frontend/` 放瀏覽器程式，`backend/` 放 Worker／領域／D1，`contracts/` 放可攜訊息契約 |
 | `src/local/` | Python 本機紀錄服務：SQLite、HTTP CLI、MCP stdio、可攜匯出／還原與合成資料測試 |
 | `src/tools/` | Repository 原始碼與建置產物政策檢查 |
 | `.github/workflows/ci.yml` | GitHub Actions 測試、建置、產物保存 |

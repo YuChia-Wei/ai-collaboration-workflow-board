@@ -26,23 +26,25 @@ npm run validate
 
 ## 程式邊界
 
-`src/board` 是 Node／Worker 專案根目錄，按工作流程領域、使用案例與技術介面分類：
+`src/board` 保留一套 package、建置及部署。來源分為 `frontend/`、`backend/` 與 `contracts/`；後端內部再按領域、使用案例與技術介面分類：
 
 | 路徑 | 責任 |
 | --- | --- |
-| `domain/board-workflow.mjs` | 人工 workflow／task 的狀態、完成條件、文件修訂及 reducer |
-| `domain/legacy-workflow.mjs` | 既有紀錄的相容規則與 reducer |
-| `domain/collaboration-workflow.mjs`、`collaboration-values.mjs` | 新協作 aggregate、DAG、承接世代、plan／decision 規則與可攜編碼 |
+| `backend/domain/board-workflow.mjs` | 人工 workflow／task 的狀態、完成條件、文件修訂及 reducer |
+| `backend/domain/legacy-workflow.mjs` | 既有紀錄的相容規則與 reducer |
+| `backend/domain/collaboration-workflow.mjs`、`collaboration-values.mjs` | 新協作 aggregate、DAG、承接世代、plan／decision 規則與可攜編碼 |
 | `contracts/collaboration-v1/` | 新 profile 的 JSON Schema、範例、跨語言向量與版本契約 |
-| `domain/errors.mjs`、`values.mjs`、`summary.mjs` | 契約錯誤、值驗證、hash 與摘要投影 |
-| `application/` | 命令、防重放、revision 衝突處理與查詢；`ports.mjs` 定義儲存契約 |
-| `adapters/inbound/http/` | 路由、HTTP 請求／回應與受信任的身分來源 |
-| `adapters/outbound/d1/` | D1 SQL、owner 隔離、CAS 與 guarded atomic batch |
-| `index.mjs` | 組裝 application、D1 adapter 與 HTTP adapter 的 composition root |
-| `web/` | 瀏覽器介面與 Markdown 清理 |
-| `schema/schema.ts`、`schema/migrations/` | Drizzle schema 與可版本管理的 SQL migrations |
-| `data/source-catalog.json` | 固定 Git tree 的唯讀來源投影，屬來源資料而非建置成品 |
+| `backend/domain/errors.mjs`、`values.mjs`、`summary.mjs` | 契約錯誤、值驗證、hash 與摘要投影 |
+| `backend/application/` | 命令、防重放、revision 衝突處理與查詢；`ports.mjs` 定義儲存契約 |
+| `backend/adapters/inbound/http/` | 路由、HTTP 請求／回應與受信任的身分來源 |
+| `backend/adapters/outbound/d1/` | D1 SQL、owner 隔離、CAS 與 guarded atomic batch |
+| `backend/index.mjs` | 組裝 application、D1 adapter 與 HTTP adapter 的 composition root |
+| `frontend/` | 瀏覽器介面與 Markdown 清理 |
+| `backend/schema/schema.ts`、`backend/schema/migrations/` | Drizzle schema 與可版本管理的 SQL migrations |
+| `backend/data/source-catalog.json` | 固定 Git tree 的唯讀來源投影，屬來源資料而非建置成品 |
 | `scripts/`、`tests/` | 建置／驗證工具與契約測試；歷史匯入工具只放在 test fixtures |
+
+前後端透過 HTTP／DTO 溝通，不相互 import 原始碼。Build script 將前端產物注入後端頁面入口，仍輸出同一個 Sites Worker；目錄分離不代表分開部署。
 
 Domain 不依賴 HTTP 或資料庫；application 使用 repository ports，D1 adapter 實作交易。新增紀錄及既有紀錄保有各自的契約和儲存格式。HTTP adapter 不執行 SQL，composition root 負責選擇平台身分來源。領域 reducer 可在沒有 D1、HTTP 或網路的環境執行。
 
@@ -52,7 +54,7 @@ Domain 不依賴 HTTP 或資料庫；application 使用 repository ports，D1 ad
 
 來源快照與線上人工紀錄有不同 namespace。畫面按來源 workflow ID 顯示最近紀錄，支援名稱、ID、Issue／PR、kind、owner skill、status 及來源篩選，API 分頁回傳最多 50 筆摘要。文件按需載入，不把所有原文混入詳情回應。Markdown 支援表格、程式碼區塊及連結，渲染後清理 HTML；同 workflow 的相對連結開啟保存的來源文件。
 
-`data/source-catalog.json` 是既有匯入 Git tree 的唯讀欄位投影，固定來源 `a66957e00aa447be887258fa9b55fd89e39e96dd`（v0.19.0）。201 workflows、1752 文件、559 個可辨識任務。`scripts/project-source.mjs <framework-import-folder>` 可從匯入備份及其 manifest 重建；先核對每份輸入 hash，再讀原始 JSON／YAML，canonical tasks 優先。舊版沒有 locator 的状态保持未知，deferred／done 原值保留。metadata 宣告的 work_items 與全文發現的參考連結分開。投影不是新的歷史驗證判定，領域欄位仍在原文；資料集 SHA 不一致時不使用這份投影。
+`backend/data/source-catalog.json` 是既有匯入 Git tree 的唯讀欄位投影，固定來源 `a66957e00aa447be887258fa9b55fd89e39e96dd`（v0.19.0）。201 workflows、1752 文件、559 個可辨識任務。`scripts/project-source.mjs <framework-import-folder>` 可從匯入備份及其 manifest 重建；先核對每份輸入 hash，再讀原始 JSON／YAML，canonical tasks 優先。舊版沒有 locator 的状态保持未知，deferred／done 原值保留。metadata 宣告的 work_items 與全文發現的參考連結分開。投影不是新的歷史驗證判定，領域欄位仍在原文；資料集 SHA 不一致時不使用這份投影。
 
 人工新建紀錄使用 `service_contract_version: framework-board/1`、`execution_kind: human` 與 framework 共通欄位，採明確 `lifecycle_contract: 1.0`。人工 model／effort 不適用，不宣稱已成為 framework Git 流程的寫入來源。進行中恰好一個進行中任務；完成任務需摘要與已處理的 findings 結論，無通用證據數量門檻；完成 workflow 要所有 task 完成。延期保留理由及恢復條件。task 完成與下一個 task／workflow 狀態一同提交，避免中間違反契約。
 

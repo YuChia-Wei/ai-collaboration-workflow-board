@@ -5,19 +5,20 @@
 ```text
 src/
   board/
-    domain/                    workflow 規則、值、錯誤與摘要
-    application/               commands、queries 與 repository ports
+    frontend/                  瀏覽器 HTML、樣式、互動與 HTTP client
+    backend/
+      domain/                  workflow 規則、值、錯誤與摘要
+      application/             commands、queries 與 repository ports
+      adapters/inbound/http/   Request、Response、路由與 Sites 身分入口
+      adapters/inbound/mcp/    共用 domain 錯誤映射；尚無協作 transport
+      adapters/inbound/shared/ 嚴格 JSON wire parser
+      adapters/outbound/d1/    D1 SQL、持久資料、交易 batch
+      adapters/outbound/runtime/ 系統時鐘 adapter
+      adapters/outbound/static/  固定來源 catalog adapter
+      index.mjs                後端依賴組裝入口
+      schema/migrations/       資料庫版本與 Drizzle metadata
+      data/                    固定來源版本的唯讀 catalog
     contracts/collaboration-v1/ JSON schemas、跨語言向量及接受協定
-    adapters/inbound/http/      Request、Response、路由與 Sites 身分入口
-    adapters/inbound/mcp/       共用 domain 錯誤映射；尚無協作 transport
-    adapters/inbound/shared/    嚴格 JSON wire parser
-    adapters/outbound/d1/       D1 SQL、持久資料、交易 batch
-    adapters/outbound/runtime/  系統時鐘 adapter
-    adapters/outbound/static/   固定來源 catalog adapter
-    index.mjs                  依賴組裝入口
-    web/                       瀏覽器 UI
-    schema/migrations/         資料庫版本與 Drizzle metadata
-    data/                      固定來源版本的唯讀 catalog
     scripts/                   建置、產物驗證與本機 preview 工具
     tests/                     契約與 adapter 測試
   local/
@@ -34,6 +35,10 @@ src/
 ```
 
 Domain 不知道 HTTP 或 D1／SQLite。應用層描述用例，adapter 處理平台協定與持久化細節；入口負責組合依賴。Node runtime 的一次性匯入與合成 seed 不提供線上入口，保留在測試 fixture 中。
+
+Board 保留單一 package、版本、CI 與 Sites 部署。Frontend 只處理呈現、瀏覽器狀態與 HTTP 呼叫，不 import backend；backend 不 import frontend 原始碼。`contracts/` 只放可攜訊息規範與向量，不成為共用 domain 實作或雜項工具目錄。架構測試檢查雙向來源依賴邊界。
+
+`scripts/build.mjs` 是部署組裝點：先編譯 frontend，再將產生的 HTML／JS 注入 backend 的頁面供應入口，最後輸出一個 Worker ESM。原始碼分區不要求分開部署。未來拆成前後端服務時，從此組裝點與前端 HTTP client 調整資源供應、API origin、認證及跨來源策略，後端 domain／application 與 wire contracts 可保留；這些未來部署能力目前未宣稱已驗證。
 
 Board 的內層只接收 plain DTO、已解碼 records、語意錯誤及注入的 clock／source projection。HTTP status、URLSearchParams、D1 results 與 JSON row decoding 由 adapters 處理。架構檢查及替代 ports 的行為測試約束此方向。
 

@@ -19,7 +19,7 @@ async function files(folder) {
   return (await Promise.all(entries.map(entry => entry.isDirectory()
     ? files(resolve(folder,entry.name)) : [resolve(folder,entry.name)]))).flat();
 }
-const schemaRoot=resolve(projectRoot,"schema/migrations");
+const schemaRoot=resolve(projectRoot,"backend/schema/migrations");
 const migrations=await files(schemaRoot);
 assert.ok(migrations.some(path=>path.endsWith(".sql")), "Migration package must contain SQL migrations");
 assert.ok(migrations.some(path=>path.endsWith("_journal.json")), "Migration package must contain the Drizzle journal");

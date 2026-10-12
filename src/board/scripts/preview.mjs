@@ -5,7 +5,7 @@ import {createServer} from 'node:http';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 const sql=new DatabaseSync(':memory:');
-for(const file of (await readdir('schema/migrations')).filter(f=>f.endsWith('.sql')).sort())sql.exec(await readFile('schema/migrations/'+file,'utf8'));
+for(const file of (await readdir('backend/schema/migrations')).filter(f=>f.endsWith('.sql')).sort())sql.exec(await readFile('backend/schema/migrations/'+file,'utf8'));
 const fixture=resolve(process.argv[2]||'../../framework-import');const manifest=JSON.parse(await readFile(fixture+'/manifest.json','utf8'));
 for(const row of manifest.records){const w=JSON.parse(await readFile(fixture+'/'+row.file,'utf8'));for(const d of Object.values(w.documents))sql.prepare('INSERT INTO source_documents(key,dataset,workflow_id,document_id,body,hash) VALUES(?,?,?,?,?,?)').run(manifest.source_commit+':'+w.id+':'+d.id,manifest.source_commit,w.id,d.id,JSON.stringify(d),'local-preview');w.documents={};sql.prepare('INSERT INTO source_records(key,dataset,workflow_id,body,hash) VALUES(?,?,?,?,?)').run(manifest.source_commit+':'+w.id,manifest.source_commit,w.id,JSON.stringify(w),'local-preview');}
 sql.prepare('INSERT INTO source_state(key,value) VALUES(?,?)').run('active',manifest.source_commit);

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import Ajv2020 from 'ajv/dist/2020.js';
-import {canonicalJson,contentDigest,valueDigest,requestDigest,operationKey} from '../domain/collaboration-values.mjs';
-import {parseContractJson} from '../adapters/inbound/shared/strict-json.mjs';
+import {canonicalJson,contentDigest,valueDigest,requestDigest,operationKey} from '../backend/domain/collaboration-values.mjs';
+import {parseContractJson} from '../backend/adapters/inbound/shared/strict-json.mjs';
 
 const read=name=>JSON.parse(readFileSync(new URL('../contracts/collaboration-v1/'+name,import.meta.url),'utf8'));
 const schema=read('schema.json'),examples=read('examples.json'),vectors=read('vectors.json');

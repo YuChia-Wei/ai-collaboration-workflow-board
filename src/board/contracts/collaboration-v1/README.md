@@ -9,7 +9,7 @@
 - [schema.json](schema.json) 是 JSON Schema 2020-12；根節點驗證 command，其他型別由 `#/$defs/<name>` 取得。
 - [examples.json](examples.json) 是各種獨立訊息的合成形狀範例，不是一串可直接依序執行的 workflow。文件 hash 對應範例原文；其他引用的存在、權限、狀態及版本仍由 application/domain 驗證。
 - [vectors.json](vectors.json) 是固定跨語言編碼向量，包含正例、拒絕例、文件 hash 與綁定可信身分的 request digest。
-- [目前 ports](../../application/ports.mjs) 已供人工／legacy application 使用；[協作 ports](../../application/collaboration-ports.mjs) 定義 command repository、identity、clock、ID 與 query 語意；[application](../../application/collaboration.mjs) 及 [domain reducer](../../domain/collaboration-workflow.mjs) 已實作命令接受流程。
+- [目前 ports](../../backend/application/ports.mjs) 已供人工／legacy application 使用；[協作 ports](../../backend/application/collaboration-ports.mjs) 定義 command repository、identity、clock、ID 與 query 語意；[application](../../backend/application/collaboration.mjs) 及 [domain reducer](../../backend/domain/collaboration-workflow.mjs) 已實作命令接受流程。
 - 本次有實作：移除內層 HTTP status、URLSearchParams、D1 results／序列化 row、直接系統時間及固定 catalog 依賴；提供編碼器、嚴格 JSON parser、HTTP／MCP error mapping、新協作命令核心與行為驗證。
 - 後續交付：新 profile 的 query handlers、認證、context snapshot、D1 儲存、HTTP／MCP transport、Web UI 及 hosted 驗證。不得在這些能力完成前將 profile 列入 capabilities。
 
