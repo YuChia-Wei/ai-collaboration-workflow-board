@@ -1,0 +1,488 @@
+{
+  "manifest_kind": "specification-source-inventory",
+  "version": 1,
+  "source_commit": "3e7ee13cda8de27c8a069a062ffd0d289584722e",
+  "captured_on": "2026-10-13",
+  "authority_note": "Issue snapshots are read-only captured sources; current GitHub Issues/Projects remain work authority. File hashes identify source inputs, not proof every line has been reviewed or product acceptance.",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "398210bdbf9c2e47cba30b91167ac213eac7cd8c7beefe5715926aee74e042aa"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "7a1b04133e571f051fe700ec5778eeac1043111f3a5bcbaa3963699f69664135"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "sha256": "d23df746a99f847e8453a7f4d383f932a20435832dbc07dc5b5a253c8e9d9162"
+    },
+    {
+      "path": "DEPLOYMENT.md",
+      "sha256": "509f3373a7014f3b063d37749f417f226aa522cb375550eb9583f857f8ebe9d8"
+    },
+    {
+      "path": "FRAMEWORK-INSTALLATION.md",
+      "sha256": "877ecaf1fdaa4dd1ddfe6e0a807aa8184d0e04d5e8a381402893b608b944c073"
+    },
+    {
+      "path": "LOCAL-SETUP.md",
+      "sha256": "855fea6a238f1f3ee7423000c2656c0c4285eb7f34aff3488c89c0d720cbe514"
+    },
+    {
+      "path": "PLATFORM-CONTRACT.md",
+      "sha256": "904d3f62ce6e0beb3748a2e00b664b767758010147a56ab200b5822318b3e2ff"
+    },
+    {
+      "path": "README.md",
+      "sha256": "0fb05bd64c06a67851a4a8b0cf12542457c2114ac57ca0eba728de13286c7be6"
+    },
+    {
+      "path": "src/board/.gitignore",
+      "sha256": "90a786980991a71476f6a080aa0bfd5a4cc16008ba83a02a1aff2c1bafef40d0"
+    },
+    {
+      "path": "src/board/.openai/hosting.json",
+      "sha256": "a12178f8f840f455d58a26e5ac14e339853ec6de7031e5386757669a789c483b"
+    },
+    {
+      "path": "src/board/README.md",
+      "sha256": "ab0f412fad850388fc1323df439ce284dafb7078e7414ffa8e39bfe63ada1f95"
+    },
+    {
+      "path": "src/board/backend/README.md",
+      "sha256": "9b127db66fca592333948e8e2945291cd408d2e03007d0d7d8776354977cb853"
+    },
+    {
+      "path": "src/board/backend/adapters/inbound/http/errors.mjs",
+      "sha256": "dcdb385f81a60eb8085dd059edb85d26c1f9ebe53deec653ef973f2f38885d15"
+    },
+    {
+      "path": "src/board/backend/adapters/inbound/http/handler.mjs",
+      "sha256": "63bcf0095e788976a4de9cac622820a3699ce21083b6318d33cf35361e6bf43c"
+    },
+    {
+      "path": "src/board/backend/adapters/inbound/http/queries.mjs",
+      "sha256": "aa119f90639297ab4aa27cd0a7b3aec490733eb0661edf448f44a6ab8f14a93d"
+    },
+    {
+      "path": "src/board/backend/adapters/inbound/http/responses.mjs",
+      "sha256": "eecaacbb5840671dad2fa0b9bb4db24d9664ec5e0f1a484377c7eaa155238b49"
+    },
+    {
+      "path": "src/board/backend/adapters/inbound/http/sites-identity.mjs",
+      "sha256": "5862bd9e6663a5ee4c23e9cb64d2c6f90fec6fe94a7a5ea9c9ea52bb7c28a489"
+    },
+    {
+      "path": "src/board/backend/adapters/inbound/mcp/errors.mjs",
+      "sha256": "ce98ae40cc6b073709f1609a82900f8c9dd3713df5b48a6f5094592f0cc60fa3"
+    },
+    {
+      "path": "src/board/backend/adapters/inbound/shared/strict-json.mjs",
+      "sha256": "33c907384fdbedf81bb7f5d8d40b1dc759c46fed801dc28d4dd94a8bd8fdcf38"
+    },
+    {
+      "path": "src/board/backend/adapters/outbound/d1/board-repository.mjs",
+      "sha256": "f01295176486d7e9997c32ba572035e864666e41a14bde46f49e3d7a08c1a95f"
+    },
+    {
+      "path": "src/board/backend/adapters/outbound/d1/legacy-repository.mjs",
+      "sha256": "1ae82f01cfe6ea4eda5391b16e0a33b2349a97155b3d501e67586dc6611a6f3f"
+    },
+    {
+      "path": "src/board/backend/adapters/outbound/d1/repositories.mjs",
+      "sha256": "fd8739599820edad1dd9ccc28e4f06c9ad0e34636c5eff2e3ce0b7d517d3deac"
+    },
+    {
+      "path": "src/board/backend/adapters/outbound/d1/source-repository.mjs",
+      "sha256": "c3c320be2de7403ac339cd27bab9d1f150898b1ee4c994a9a625d4537412f87f"
+    },
+    {
+      "path": "src/board/backend/adapters/outbound/runtime/clock.mjs",
+      "sha256": "922d0490fecc0c510bf9f9489c26f4145cc6d974d1ae0366cd8044cfbb3182c6"
+    },
+    {
+      "path": "src/board/backend/adapters/outbound/static/source-projection.mjs",
+      "sha256": "41fd531e7fe3da822601a8f5aaf6245c11076bff5e1dbd55240a5a42e351faf0"
+    },
+    {
+      "path": "src/board/backend/application/board.mjs",
+      "sha256": "1946fcdc06ebf98ce64299ef89b34e64912a4009820a6e39dac393b33c2b6b6b"
+    },
+    {
+      "path": "src/board/backend/application/collaboration-ports.mjs",
+      "sha256": "c695c8ca23ca0f6a4f8fd1ea55530edc119e602d7f401b942105cedf7cfc3822"
+    },
+    {
+      "path": "src/board/backend/application/collaboration.mjs",
+      "sha256": "25d55de8f6f32da4315e61ef422c4f988c18e9bc8cca888be9ff3e12ce8a5139"
+    },
+    {
+      "path": "src/board/backend/application/legacy.mjs",
+      "sha256": "47b9605d01e4d7bdaaf935d0e8eb99ca264f202f6c9b2921e2106503f854ec90"
+    },
+    {
+      "path": "src/board/backend/application/ports.mjs",
+      "sha256": "3b746f9fb9414e68af0be923fde56a0ef91271313359b96e5034a66f807b71c9"
+    },
+    {
+      "path": "src/board/backend/application/queries.mjs",
+      "sha256": "f8dbab2932055424b71beea0c00c4b97f0e74528ca38006bb52723a73885f895"
+    },
+    {
+      "path": "src/board/backend/application/services.mjs",
+      "sha256": "67a160022f190e383581d64caa2c09ba093c5d8091d0cf317d3a2441cb23d636"
+    },
+    {
+      "path": "src/board/backend/data/source-catalog.json",
+      "sha256": "a541605993ec4eedf163730cbf2a15b23c2428ac7a85e5424ac3e0fe809d03fd"
+    },
+    {
+      "path": "src/board/backend/domain/board-workflow.mjs",
+      "sha256": "1037211241882c72949938d79a51b68049a7e3999975bc7a6f263577205fa9a1"
+    },
+    {
+      "path": "src/board/backend/domain/collaboration-values.mjs",
+      "sha256": "18eec0356a2261c07c7bd7b81fa2c3b5eb974bf94cfc3e33634bc280e340a6ba"
+    },
+    {
+      "path": "src/board/backend/domain/collaboration-workflow.mjs",
+      "sha256": "0a1d32bd04fc9808487f64d7aed130baee95a7e01227756bfbbbfa19c02c55c5"
+    },
+    {
+      "path": "src/board/backend/domain/errors.mjs",
+      "sha256": "fea829d5f16b89f6dbe145840b88ee8f466401d01dcc19ec49496b0bd323750a"
+    },
+    {
+      "path": "src/board/backend/domain/legacy-workflow.mjs",
+      "sha256": "5ce5cab73c3975a96056bb1fde0d7350f533fa47833afc84002fb494f6f2828c"
+    },
+    {
+      "path": "src/board/backend/domain/summary.mjs",
+      "sha256": "0cac8c7297941c488d5481e83412431548d89545009a674643fb558c95c0d3aa"
+    },
+    {
+      "path": "src/board/backend/domain/values.mjs",
+      "sha256": "74c528bb8a9e07841f27ea5fba7f6bbb53c67a659d2f050af7f2796869b3e7ea"
+    },
+    {
+      "path": "src/board/backend/index.mjs",
+      "sha256": "1db61a456fd7e6b46ac984be1ebf805357512d4a07e4dfb22b873661a3638932"
+    },
+    {
+      "path": "src/board/backend/schema/migrations/0000_jittery_ezekiel_stane.sql",
+      "sha256": "a8611079519478ac4dacfa79467ac38f69cf2f9bf3cb263a6625203f6464b75e"
+    },
+    {
+      "path": "src/board/backend/schema/migrations/0001_noisy_redwing.sql",
+      "sha256": "3e04021f85024e9770d0dd4c81bab5b947a8e4ff805cfafc9b4744016f6da212"
+    },
+    {
+      "path": "src/board/backend/schema/migrations/0002_curly_dreadnoughts.sql",
+      "sha256": "750f916dfb755f549400861ddcf57a779b82f51210e7befd67fd041ecb488706"
+    },
+    {
+      "path": "src/board/backend/schema/migrations/meta/0000_snapshot.json",
+      "sha256": "71e49b11c71a91f6013a4aa59a4572cffdcd6d735b973616ed52e164fce3fc62"
+    },
+    {
+      "path": "src/board/backend/schema/migrations/meta/0001_snapshot.json",
+      "sha256": "da6b212330f8ed5ce02a4c9d0541c2be791b77638433d3bae9ed992f0d2003a5"
+    },
+    {
+      "path": "src/board/backend/schema/migrations/meta/0002_snapshot.json",
+      "sha256": "8a753a8c31d9606a0ae3e9a1461befe8a53c888655efcfe9e3eb3f0f9fcc3522"
+    },
+    {
+      "path": "src/board/backend/schema/migrations/meta/_journal.json",
+      "sha256": "93e9c83baa4b3daecaba96489ab792732878dd458269cc42368ec73a3ed4f2d1"
+    },
+    {
+      "path": "src/board/backend/schema/schema.ts",
+      "sha256": "cb3b8e2f3d4751e3d7490f9fd018b9aea0348e5404d19a10c613398cae0b72ef"
+    },
+    {
+      "path": "src/board/contracts/collaboration-v1/README.md",
+      "sha256": "066b6bc628b239ccc91bb6c4ff3625f3a7bfdf6710920cfffc70f82cf54b4702"
+    },
+    {
+      "path": "src/board/contracts/collaboration-v1/examples.json",
+      "sha256": "ab602e159a1af9969cb44350f963c23a249fae10a0d12c8c2427af1ba0253925"
+    },
+    {
+      "path": "src/board/contracts/collaboration-v1/schema.json",
+      "sha256": "163f3a1b00000743b86292702b9ac83901c66e508d948e21230f9e4450829fbb"
+    },
+    {
+      "path": "src/board/contracts/collaboration-v1/vectors.json",
+      "sha256": "5129d0f85fbd9650675bcfd38ea8f4d40c60c46003f0a96947b1968521405098"
+    },
+    {
+      "path": "src/board/drizzle.config.ts",
+      "sha256": "f6d6b558e612afad88b20ba2622c65ca110bf9657169371b0ffeac0dada26938"
+    },
+    {
+      "path": "src/board/frontend/README.md",
+      "sha256": "d79bf97acc597f92aae905dc7b07b7bc3aa90e6b80d25f48a70c1bc66c6977ac"
+    },
+    {
+      "path": "src/board/frontend/app.mjs",
+      "sha256": "d45384c5bbe1b6b1e9836b3c7c1b46eab3d25f7d20d74c68fb49d716d4d0e863"
+    },
+    {
+      "path": "src/board/frontend/index.html",
+      "sha256": "9083adcfb931405177850f66f577c8462920ea1b9f2499306f18386dc5651b69"
+    },
+    {
+      "path": "src/board/package-lock.json",
+      "sha256": "142f723909c9ba7243ba614dff07fd352e1b8ba4e153c01c8d5ec88d9e45e058"
+    },
+    {
+      "path": "src/board/package.json",
+      "sha256": "af92c15776d9d2af19dc489c7ff3b93079b34845559c54c0e863eb3e9d57a783"
+    },
+    {
+      "path": "src/board/scripts/build.mjs",
+      "sha256": "e69137c215b9bb9a8a322862dd47c00e5429e1112ded3bd1a933c91b16958ce2"
+    },
+    {
+      "path": "src/board/scripts/build.sh",
+      "sha256": "61044e2dd1fe34b6eb03a974d3baf830af219521bde2bff4157506ec726e7a8f"
+    },
+    {
+      "path": "src/board/scripts/preview.mjs",
+      "sha256": "37e8b3ae06edd55ef78dd7818917cf7faf103ad10ad92cccf4d5bd962fc3037a"
+    },
+    {
+      "path": "src/board/scripts/project-source.mjs",
+      "sha256": "20523bbe16b54ca37bafe1b88cd7ba0354ccb9dd1d30b325fbebca92ffa95daa"
+    },
+    {
+      "path": "src/board/scripts/validate-artifact.mjs",
+      "sha256": "286dd0ded08f53f5a218e1b2b0d7d5f283a7197e844e168a9e2df457af617ae6"
+    },
+    {
+      "path": "src/board/tests/architecture.mjs",
+      "sha256": "0d5ce59b2a781785ec2e84800b0bf73e267157f41ee10efcb3e962d1db008fff"
+    },
+    {
+      "path": "src/board/tests/board.mjs",
+      "sha256": "be7ac306c3fd6b961b84cfdf1bfa508dd3088bda85b0313c78221866d77d602e"
+    },
+    {
+      "path": "src/board/tests/collaboration.mjs",
+      "sha256": "047b0274f41712fbddf2f1ea1377b63f202aedcbaf15ca97f8c4147a32e8e9a1"
+    },
+    {
+      "path": "src/board/tests/contracts.mjs",
+      "sha256": "bbdbb04faf16e8b57a35f08c9306463d944c6f8b903bfadad66cbab8a60a2b17"
+    },
+    {
+      "path": "src/board/tests/fixtures/collaboration-memory.mjs",
+      "sha256": "69d29b745da73ca97fd5c859bb1bfbb5671fb33eb9850324cfd330346c3847a0"
+    },
+    {
+      "path": "src/board/tests/fixtures/seed.mjs",
+      "sha256": "7e695fe35466c455cf27eddbd1eb5d44b608276c53a4fe9d5cd2b9f8a141fffd"
+    },
+    {
+      "path": "src/board/tests/fixtures/source-import.mjs",
+      "sha256": "8705a891f67bb9cada995f2062ef0192255206f35fdfb04965903e4a5989145a"
+    },
+    {
+      "path": "src/board/tests/platform-ports.mjs",
+      "sha256": "61556244d4f2f023b030f3ae195f1b14f13a64597b1f406b8308c7ad4158ef63"
+    },
+    {
+      "path": "src/board/tests/portable-contract.mjs",
+      "sha256": "13f1bc4f175b1616e86e1c56e383eb1aa9bf02b82f2fb8ab7364e360cd69bc28"
+    },
+    {
+      "path": "src/board/tests/portable-vectors.py",
+      "sha256": "543638064424899c69b2de05b36a8cf0e20746bab9796ff0bf934fa9c8f37da7"
+    },
+    {
+      "path": "src/local/README.md",
+      "sha256": "988deb3c7cdc6be31f141577a01447d4353a4874c6c1e47fa48d41f88109786b"
+    },
+    {
+      "path": "src/local/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/local/adapters/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/local/adapters/inbound/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/local/adapters/inbound/cli.py",
+      "sha256": "9371857f443f81edc359c983392fc9875e72400ab23094b970b60355ef5ee1c4"
+    },
+    {
+      "path": "src/local/adapters/inbound/http.py",
+      "sha256": "cd718ca78e8defa302c065a2fe002701a9c6a30e1a42b2da922cfa139aa6f7e2"
+    },
+    {
+      "path": "src/local/adapters/inbound/mcp.py",
+      "sha256": "b9811082cc69d43d6311fcad7246780aadefe82ba3b61209b2dc1f3512835078"
+    },
+    {
+      "path": "src/local/adapters/outbound/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/local/adapters/outbound/http_client.py",
+      "sha256": "6f508d91c0abcdc79df729edf243eb22df50f7f2798173c228b26b542054f719"
+    },
+    {
+      "path": "src/local/adapters/outbound/portable_sqlite.py",
+      "sha256": "ef4f1edaeabfb99fdfc13a44e2b6f15a8432efd4191ac34b05009d58ee96f4fe"
+    },
+    {
+      "path": "src/local/adapters/outbound/sqlite.py",
+      "sha256": "56b0013081276384affeab46da1c7911f467622e5a245d82ca317d78bf295772"
+    },
+    {
+      "path": "src/local/application/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/local/application/portable.py",
+      "sha256": "33b7fc74aa139cba67b570e5b8be5ef1ebdd264e01064d9830d4815635fe4ea5"
+    },
+    {
+      "path": "src/local/application/ports.py",
+      "sha256": "adac9220f7ef9609cc54a1c5a3cb70172e8d78a4556411401f5cb4e0aa7fda2d"
+    },
+    {
+      "path": "src/local/application/workflows.py",
+      "sha256": "065232917c01c20bc42bb2c3bd758d1b109214ccb6a238f003f1edb746ebf494"
+    },
+    {
+      "path": "src/local/assets/export-schema.json",
+      "sha256": "38782b66dffe0b0735fabe8217f33a960a6ea252bdae1e7d10db83ec8aabe616"
+    },
+    {
+      "path": "src/local/assets/ui.html",
+      "sha256": "5f7d18e8b663fd9ec9e56ada5a7a24777954ae3f9cf01ffa75191f257a34a5ae"
+    },
+    {
+      "path": "src/local/client.py",
+      "sha256": "91b22fcf4abc75439f29541674c628a929bb54529d21a09565768a1c954b244e"
+    },
+    {
+      "path": "src/local/demo.py",
+      "sha256": "67b50e99eb6a5286ef50fe14df0cb6b726d19cb1dc844c664392aa58845672c5"
+    },
+    {
+      "path": "src/local/domain/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/local/domain/serialization.py",
+      "sha256": "8a449c4c8ebc4d737e2601746cad2987e1ea5a482d41f1a9c5926eb8a988969f"
+    },
+    {
+      "path": "src/local/domain/validation.py",
+      "sha256": "e407c24544bdaf5ef099e61782f71073ed6a99858dfec312b1c78432dd1f19c7"
+    },
+    {
+      "path": "src/local/domain/workflow.py",
+      "sha256": "be718e5ca3127f024bbb9c33d00da3fd83ce6fa71c662c71bce9a7c53148b321"
+    },
+    {
+      "path": "src/local/mcp_bridge.py",
+      "sha256": "42031ad801fa2e58e1e941d9c4c47036e079ad7c42e6873393724ae9d9d47c80"
+    },
+    {
+      "path": "src/local/package_delivery.py",
+      "sha256": "9a505d8f725bf19aebaa9473799faa6b23ac71608660437305706cbf06cfe0fc"
+    },
+    {
+      "path": "src/local/service.py",
+      "sha256": "3385c3458db140e2be32abbd93edc3e6e158f45ec90cc7eb9c774da2f8b584da"
+    },
+    {
+      "path": "src/local/tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/local/tests/test_acceptance.py",
+      "sha256": "a2c3e9aaf59b99d5e489b3b2f7169b1b4cbc1fc55ddc6796cdc1e1dbd756bc4b"
+    },
+    {
+      "path": "src/local/tests/test_layout.py",
+      "sha256": "dc9a386a8909970e693ab38ed93b0ba7dbea2f7ac87f97140ede401c1f92c9d2"
+    },
+    {
+      "path": "src/local/tests/test_review_regressions.py",
+      "sha256": "b8529f51b746fb2f826058c64231558dbe09ba67670e1deb8003833830bfe5de"
+    },
+    {
+      "path": "src/local/tools/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/local/tools/demo.py",
+      "sha256": "209fb6e6f288a16304b19dfc704f4726cafb57e6adc349305ce53578af5f493b"
+    },
+    {
+      "path": "src/local/tools/package_delivery.py",
+      "sha256": "79692a310b810abd0b22ed15052b43b675cfcc482b3a952f415fecd40a070679"
+    }
+  ],
+  "issues": [
+    {
+      "path": "sources/issue-2.json",
+      "url": "https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/2",
+      "updated_at": "2026-10-12T05:47:48Z",
+      "state": "CLOSED",
+      "sha256": "f970802a02b15ba0c851f0a17c1ae2b7e17af01709735ffb5c2ebf6a05686a51"
+    },
+    {
+      "path": "sources/issue-3.json",
+      "url": "https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/3",
+      "updated_at": "2026-10-12T13:28:04Z",
+      "state": "CLOSED",
+      "sha256": "97e5e24e0a917535a26eab094143d943e3749e1cc4166a2c592d0459f561fcfc"
+    },
+    {
+      "path": "sources/issue-4.json",
+      "url": "https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/4",
+      "updated_at": "2026-10-12T15:28:32Z",
+      "state": "CLOSED",
+      "sha256": "dddfbe53853c429db89b1f4fa52fc7942f360516e156af06f4fa8b974fc4f5f2"
+    },
+    {
+      "path": "sources/issue-5.json",
+      "url": "https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/5",
+      "updated_at": "2026-10-11T15:19:22Z",
+      "state": "OPEN",
+      "sha256": "f95ee72ac399d3e17a70a90d3f0d0d8d1149d5f16456fdcf20d110c14292ceb8"
+    },
+    {
+      "path": "sources/issue-6.json",
+      "url": "https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/6",
+      "updated_at": "2026-10-11T15:19:29Z",
+      "state": "OPEN",
+      "sha256": "618e4e8e5a0ee78f52072931f423132688101ee695aba17849d689dac370a880"
+    },
+    {
+      "path": "sources/issue-7.json",
+      "url": "https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/7",
+      "updated_at": "2026-10-11T15:19:35Z",
+      "state": "OPEN",
+      "sha256": "3dbc568133a38d225180d7f6cdae1b5c3a2937e94a9db400c96ab89f4cd75c39"
+    },
+    {
+      "path": "sources/issue-8.json",
+      "url": "https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/8",
+      "updated_at": "2026-10-11T15:19:41Z",
+      "state": "OPEN",
+      "sha256": "d0cecd7beee0552d9771eefe60366e3170f5b19ae817384849c5c3e350489e50"
+    }
+  ]
+}
