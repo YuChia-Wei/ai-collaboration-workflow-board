@@ -1,0 +1,458 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "problem-frame.cbf 1.0.0 snapshot",
+  "description": "Closed CBF snapshot shape. The owning reader additionally enforces byte limits, duplicate keys, exact identifiers, uniqueness and typed local references. Structure is not semantic or runtime compliance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "schema_version",
+    "id",
+    "frame_key",
+    "title",
+    "derived_from",
+    "sources",
+    "statements",
+    "scenarios",
+    "open_questions"
+  ],
+  "properties": {
+    "family": {
+      "const": "problem-frame.cbf",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "type": "string"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^cbf-[0-9a-f]{32}(?![\\s\\S])"
+    },
+    "frame_key": {
+      "$ref": "#/$defs/text"
+    },
+    "title": {
+      "$ref": "#/$defs/text"
+    },
+    "derived_from": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 1,
+      "maxItems": 1024
+    },
+    "statements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/statement"
+      },
+      "minItems": 1,
+      "maxItems": 1024
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/scenario"
+      },
+      "minItems": 1,
+      "maxItems": 1024
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/question"
+      },
+      "minItems": 0,
+      "maxItems": 1024
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16384,
+      "pattern": "\\S"
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,95}(?![\\s\\S])"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "reference",
+        "revision",
+        "locator",
+        "sha256",
+        "authority",
+        "authority_reference"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "kind": {
+          "enum": [
+            "requirement",
+            "specification",
+            "decision",
+            "code",
+            "test",
+            "legacy-frame",
+            "other"
+          ]
+        },
+        "reference": {
+          "$ref": "#/$defs/text"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "locator": {
+          "$ref": "#/$defs/text"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "authority": {
+          "enum": [
+            "normative",
+            "proposed",
+            "observation",
+            "unknown"
+          ]
+        },
+        "authority_reference": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "authority": {
+                "const": "normative"
+              }
+            },
+            "required": [
+              "authority"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authority_reference": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "category",
+        "text",
+        "basis",
+        "source_ids"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "category": {
+          "enum": [
+            "actor",
+            "command",
+            "controlled-domain",
+            "input",
+            "behavior",
+            "precondition",
+            "postcondition",
+            "invariant",
+            "outcome",
+            "error",
+            "event",
+            "constraint",
+            "concern",
+            "external-boundary",
+            "fact"
+          ]
+        },
+        "text": {
+          "$ref": "#/$defs/text"
+        },
+        "basis": {
+          "enum": [
+            "stated",
+            "observed",
+            "inferred",
+            "unresolved"
+          ]
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          },
+          "minItems": 0,
+          "maxItems": 1024,
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "basis": {
+                "enum": [
+                  "stated",
+                  "observed",
+                  "inferred"
+                ]
+              }
+            },
+            "required": [
+              "basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/identifier"
+                },
+                "minItems": 1,
+                "maxItems": 1024,
+                "uniqueItems": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text",
+        "basis",
+        "source_ids",
+        "statement_ids"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "text": {
+          "$ref": "#/$defs/text"
+        },
+        "basis": {
+          "enum": [
+            "stated",
+            "observed",
+            "inferred",
+            "unresolved"
+          ]
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          },
+          "minItems": 0,
+          "maxItems": 1024,
+          "uniqueItems": true
+        },
+        "statement_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          },
+          "minItems": 1,
+          "maxItems": 1024,
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "basis": {
+                "enum": [
+                  "stated",
+                  "observed",
+                  "inferred"
+                ]
+              }
+            },
+            "required": [
+              "basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/identifier"
+                },
+                "minItems": 1,
+                "maxItems": 1024,
+                "uniqueItems": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference",
+        "locator"
+      ],
+      "properties": {
+        "reference": {
+          "$ref": "#/$defs/text"
+        },
+        "locator": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "source_ids",
+        "given",
+        "when",
+        "then",
+        "tests_anchor"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          },
+          "minItems": 1,
+          "maxItems": 1024,
+          "uniqueItems": true
+        },
+        "given": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "minItems": 1,
+          "maxItems": 1024
+        },
+        "when": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "minItems": 1,
+          "maxItems": 1024
+        },
+        "then": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assertion"
+          },
+          "minItems": 1,
+          "maxItems": 1024
+        },
+        "tests_anchor": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/anchor"
+          },
+          "minItems": 0,
+          "maxItems": 1024
+        }
+      }
+    },
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text",
+        "related_ids"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "text": {
+          "$ref": "#/$defs/text"
+        },
+        "related_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          },
+          "minItems": 0,
+          "maxItems": 1024,
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

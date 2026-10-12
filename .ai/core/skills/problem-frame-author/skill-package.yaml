@@ -1,0 +1,194 @@
+metadata_version: 3
+id: problem-frame-author
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read selected instructions and source evidence
+  for_operations:
+  - draft
+  - review-draft
+  on_missing: unavailable
+- id: python
+  version: '>=3.11,<4'
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - validate
+  - render
+  on_missing: unavailable
+- id: pyyaml
+  version: '>=6,<7'
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - validate
+  - render
+  on_missing: unavailable
+- id: jsonschema
+  version: '>=4.18,<5'
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - validate
+  - render
+  on_missing: unavailable
+- id: referencing
+  requirement: jsonschema dependency providing Registry with a deny-all external retriever
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - validate
+  - render
+  on_missing: unavailable
+- id: filesystem
+  requirement: Explicit existing local roots; creation selects NTFS or Linux ext4/xfs/btrfs/tmpfs
+    hard links; selected local Git configuration requires read-only Git
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - validate
+  - render
+  on_missing: unavailable
+configuration:
+  namespace: problem-frame-author
+  defaults:
+    store:
+      kind: filesystem
+      root: specs/problem-frames
+      tracking: tracked
+    template:
+      origin: package
+      path: templates/cbf.md
+artifact_roles:
+- role: problem-frame.cbf
+  owner: project
+  schema: problem-frame.cbf@1.0.0
+  read_schemas:
+  - problem-frame.cbf@1.0.0
+  store_binding: problem-frame-author.store
+  identity: cbf-<32 lowercase hex digits>
+  filename: <id>.cbf.json
+  read_operations:
+  - inspect
+  - validate
+  - render
+  write_operations:
+  - create
+- role: problem-frame.cbf-view
+  owner: derived
+  source_role: problem-frame.cbf
+  output: Result-only Markdown
+  persistence: Export requires separate caller-owned write
+  produce_operations:
+  - render
+resources:
+  references:
+  - references/authoring.md
+  - references/format.md
+  - references/operations.md
+  - references/configuration.md
+  - references/example.md
+  schemas:
+  - id: problem-frame.cbf
+    version: 1.0.0
+    path: schemas/cbf-record-v1.schema.json
+    owner: problem-frame-author
+    migration: unsupported; preserve original
+  templates:
+  - id: problem-frame.cbf.default-view
+    path: templates/cbf.md
+    input_role: problem-frame.cbf
+    output_role: problem-frame.cbf-view
+    owner: problem-frame-author
+  tools:
+  - id: problem-frame-author.fs
+    owner: problem-frame-author
+    implementation_status: implemented
+    entrypoint: scripts/problem_frame.py
+    operation_contract: references/operations.md
+    operations:
+    - explain
+    - create
+    - inspect
+    - validate
+    - render
+operations:
+- id: draft
+  execution: instruction
+  inputs:
+  - Selected use case/family, intent and source authority, observations, optional
+    explicit template and desired format
+  outputs:
+  - Family rationale, extraction sheet, full draft, source bindings, questions, omissions
+    and actual delivery location
+  instructions: references/authoring.md
+  implementation_status: implemented
+- id: review-draft
+  execution: instruction
+  inputs:
+  - Selected draft, source bindings and requested scope
+  outputs:
+  - Read-only meaning, completeness and uncertainty findings without approval or runtime
+    claims
+  instructions: references/authoring.md
+  implementation_status: implemented
+- id: explain
+  execution: tool
+  inputs:
+  - Closed request with operation, absolute project_root/package_root and operation-specific
+    fields in references/operations.md
+  outputs:
+  - Public JSON response with actual mutation state, digest, diagnostics and operation
+    result
+  tool: problem-frame-author.fs
+  implementation_status: implemented
+- id: create
+  execution: tool
+  inputs:
+  - Closed request with operation, absolute project_root/package_root and operation-specific
+    fields in references/operations.md
+  outputs:
+  - Public JSON response with actual mutation state, digest, diagnostics and operation
+    result
+  tool: problem-frame-author.fs
+  implementation_status: implemented
+- id: inspect
+  execution: tool
+  inputs:
+  - Closed request with operation, absolute project_root/package_root and operation-specific
+    fields in references/operations.md
+  outputs:
+  - Public JSON response with actual mutation state, digest, diagnostics and operation
+    result
+  tool: problem-frame-author.fs
+  implementation_status: implemented
+- id: validate
+  execution: tool
+  inputs:
+  - Closed request with operation, absolute project_root/package_root and operation-specific
+    fields in references/operations.md
+  outputs:
+  - Public JSON response with actual mutation state, digest, diagnostics and operation
+    result
+  tool: problem-frame-author.fs
+  implementation_status: implemented
+- id: render
+  execution: tool
+  inputs:
+  - Closed request with operation, absolute project_root/package_root and operation-specific
+    fields in references/operations.md
+  outputs:
+  - Public JSON response with actual mutation state, digest, diagnostics and operation
+    result
+  tool: problem-frame-author.fs
+  implementation_status: implemented

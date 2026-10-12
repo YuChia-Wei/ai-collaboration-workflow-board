@@ -1,0 +1,54 @@
+metadata_version: 4
+id: code-reviewer
+version: 0.2.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+  - id: skill-instruction-reader
+    requirement: Read the selected instruction and permitted target evidence
+    for_operations: [review]
+    on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+    - references/review.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+  - id: review
+    execution: instruction
+    inputs:
+      - Explicit review subject, scope and intended behavior
+      - Applicable target-owned rules, requested coverage and permitted evidence
+    outputs:
+      - Prose findings with location, trigger, impact, evidence and uncertainty
+      - Reviewed coverage, unavailable checks and remaining acceptance limitations
+    instructions: references/review.md
+    implementation_status: implemented
+knowledge_consumption:
+- id: common-review
+  package: engineering-common
+  version: 0.1.0
+  operations: [review]
+  resources:
+  - engineering-rule-catalog
+  requirement: optional
+  on_missing: unavailable
+- id: dotnet-review
+  package: dotnet-backend
+  version: 0.1.0
+  operations: [review]
+  resources:
+  - engineering-rule-catalog
+  - member:standards/DESIGN-BY-CONTRACT.md
+  - member:standards/coding-standards/aggregate-standards.md
+  - member:standards/coding-standards/repository-standards.md
+  - member:standards/coding-standards/test-standards.md
+  - member:standards/coding-standards/usecase-standards.md
+  requirement: optional
+  on_missing: unavailable

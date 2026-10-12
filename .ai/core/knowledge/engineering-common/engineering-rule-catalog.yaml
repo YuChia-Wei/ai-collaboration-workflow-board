@@ -1,0 +1,274 @@
+schema_version: '1.0'
+catalog_id: engineering-rule-catalog-shared
+catalog_role: canonical-portable-baseline
+catalog_location: engineering-rule-catalog.yaml
+description: Canonical portable baseline records for the existing universal engineering rule identities.
+terminal_lf_convention: normative_text is extracted verbatim from the anchored source section after CRLF/CR normalization
+  to LF and is stored with exactly one terminal LF.
+ordering:
+  rules: ascending lexical rule_id; arrays retain declared source order
+catalog_digest:
+  algorithm: sha256
+  value: d62769022fe55f4c6926ce6d60f5d6e78cac1b7c4a71f2cd15ca5fbc94a2d613
+  canonicalization: UTF-8 encoding of compact JSON with Unicode preserved, object keys sorted by Unicode code point, array
+    order preserved, and exactly one terminal LF; the complete catalog_digest field is excluded from the input.
+selector_contract:
+  capability_execution_mode_file_type: unconstrained-by-source with an empty values list means no narrower source-backed predicate
+    is declared; a resolver must not invent one or use it as a default fallback.
+  technology_profile: unconstrained-by-source with an empty values list means the portable rule is not profile-limited by
+    its source.
+constraints: []
+constraint_policy: No existing constraint IDs are registered for these rules. This catalog fabricates no constraints; a future
+  constraint requires an explicitly allocated stable constraint_id.
+rules:
+- rule_id: AICTX-EVIDENCE-001
+  kind: normative-rule
+  semantic_owner: this catalog record
+  catalog_selector:
+    rule_id: AICTX-EVIDENCE-001
+  domain: ai-context-evidence
+  strength: invariant
+  scope: universal
+  applicability:
+    text: AI context or repository facts are discovered with optional external tooling
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: unconstrained-by-source
+        values: []
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: forbidden
+  decision_evidence: null
+  derived_consumers: []
+  status: active
+  source_governance_provenance:
+    path: .dev/standards/AI-CONTEXT-BOUNDARY.md
+    anchor: '## Tool-Neutral Evidence Boundary'
+    file_sha256: e66d01672dcc3747349f44354740de1d0d37baa72533deb9fd51939a2b4c87ea
+    normative_text_sha256: 659101967c605eb6e1216fa5e49767ebc8fc7ef534af293310c708c4f09980b4
+  normative_text: |
+    ## Tool-Neutral Evidence Boundary
+
+    Rule ID: `AICTX-EVIDENCE-001`
+
+    Optional repository indexes, code graphs, IDE indexes, MCP servers, semantic
+    search, and similar tools are discovery accelerators. They may identify candidate
+    files, sections, or relationships, but their output is not authoritative project
+    truth and must not be the sole evidence for an AI-context finding, absence claim,
+    inventory, or relationship conclusion.
+
+    - Keep AI-context skills usable when no optional discovery tool is installed.
+    - Do not require one vendor, graph schema, hook, cache, or persisted index.
+    - Verify material findings against direct repository files, Git-tracked paths,
+      structured manifests, or repository-owned deterministic validators.
+    - Treat an empty search result as unknown until the declared scope is checked by
+      a tool-independent fallback.
+    - Record tool name, index freshness, scope, exclusions, and skipped checks when
+      tool output materially accelerated an assessment.
+    - Prefer the narrowest direct verification needed for a candidate finding; an
+      accelerator may choose where to look, but it may not decide what is true.
+
+    ### Quick Fallback Verification
+
+    Use these repository-native checks before accepting a discovery-tool conclusion:
+
+    | Risk | Fast verification |
+    | --- | --- |
+    | Hidden or skipped AI-context roots | Run `git ls-files -- .ai .dev .agents .claude .codex .github AGENTS.md CLAUDE.md AGENTS.zh-TW.md README.md README.en.md`, then inspect `git status --short --untracked-files=all` for untracked context. |
+    | Incomplete Markdown inventory | Run `git ls-files -- '*.md'` and compare the relevant paths with the tool result. |
+    | Missing Markdown relationship | Search the literal target or link text with `git grep -n -F -- '<target-or-link-text>' -- '*.md'`, open the source file, and resolve the target relative to that file. |
+    | Stale index or snapshot | Compare the tool's recorded revision, when available, with `git rev-parse HEAD`; directly reopen every file used by a material finding. |
+    | Tool-specific omissions | Run the target-selected AI-context validation command for registered context contracts and record any relationship class the validator does not cover. |
+
+    The 2026-07-13 Codebase Memory MCP probe is an example, not a permanent
+    product contract: its full index omitted `.claude/` and exposed Markdown files
+    and headings without Markdown link edges. Re-test current tool behavior when it
+    matters, and use the fallback checks above regardless of tool brand.
+
+    ### Generated Inventory Contract
+
+    A generated inventory, index, graph export, or snapshot that is retained as a
+    repository artifact must identify its generator, generation time, source Git
+    revision or input digest, scope, and exclusions. It must also state how a user
+    can reproduce or validate it. If those fields are absent or its source revision
+    differs from the subject revision, treat it as a discovery hint rather than
+    primary evidence.
+
+    - Do not overwrite human-owned or file-backed truth with a generated view.
+    - Do not infer completeness from a generated artifact merely because it is committed.
+    - Prefer a repository-owned deterministic regeneration or parity check when the generated artifact is an active catalog.
+    - When no active generated inventory exists, record the check as not applicable instead of creating one solely for convenience.
+  normative_text_sha256: f25723c579f796cfd97f34a4622d3f775d573fdd56f506366db3f2224808a2fb
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 6fcd3f324baa924190c39c09be14c1a32bf2482f
+      mode: '100644'
+      sha256: 9ec5c0cf7f95fd5a57ed1415c96c88175610d80d811c224b60ee39e2222d3c39
+      size: 11562
+    source_normative_text_sha256: 659101967c605eb6e1216fa5e49767ebc8fc7ef534af293310c708c4f09980b4
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: ASSESSMENT-ARTIFACT-001
+  kind: normative-rule
+  semantic_owner: this catalog record
+  catalog_selector:
+    rule_id: ASSESSMENT-ARTIFACT-001
+  domain: durable-assessment
+  strength: invariant
+  scope: universal
+  applicability:
+    text: an audit, large code review, architecture assessment, or technical-debt inventory is persisted
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: unconstrained-by-source
+        values: []
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: forbidden
+  decision_evidence: null
+  derived_consumers: []
+  status: active
+  source_governance_provenance:
+    path: .dev/standards/ASSESSMENT-ARTIFACT-POLICY.md
+    anchor: '## Assessment Versus Workflow'
+    file_sha256: 0a0eef11067a27b7023bf002aefe2c24d7e1548b7e61104a702f4a8a051446ee
+    normative_text_sha256: cb7c812fb432bc3ccf3058ed7cba810373da5ebee1834a7f878d6a08a1a81d86
+  normative_text: |
+    ## Assessment Versus Workflow
+
+    | Mode | Use | Durable artifact |
+    | --- | --- | --- |
+    | Transient analysis | Read-only analysis that remains in the conversation. | none |
+    | Standalone assessment | A persisted audit, large code review, architecture assessment, or technical-debt inventory without authorized remediation. | `.dev/assessments/<assessment-id>/` |
+    | Workflow execution | Authorized multi-stage work, remediation, or source-of-truth change. | `.dev/workflows/<workflow-id>/` |
+
+    Persistence alone does not turn an observation into a workflow. If the user asks
+    to assess and remediate in one request, store the assessment under
+    `.dev/assessments/` and store execution state under the owning workflow. The
+    workflow references the assessment; it does not copy the report.
+  normative_text_sha256: cb7c812fb432bc3ccf3058ed7cba810373da5ebee1834a7f878d6a08a1a81d86
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 6fcd3f324baa924190c39c09be14c1a32bf2482f
+      mode: '100644'
+      sha256: 9ec5c0cf7f95fd5a57ed1415c96c88175610d80d811c224b60ee39e2222d3c39
+      size: 11562
+    source_normative_text_sha256: cb7c812fb432bc3ccf3058ed7cba810373da5ebee1834a7f878d6a08a1a81d86
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: TECH-SELECT-001
+  kind: normative-rule
+  semantic_owner: this catalog record
+  catalog_selector:
+    rule_id: TECH-SELECT-001
+  domain: technology-selection
+  strength: invariant
+  scope: universal
+  applicability:
+    text: a target records or overrides a framework technology choice
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: unconstrained-by-source
+        values: []
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: forbidden
+  decision_evidence: null
+  derived_consumers: []
+  status: active
+  source_governance_provenance:
+    path: .dev/standards/TECHNOLOGY-SELECTION-POLICY.md
+    anchor: '## Selection Record'
+    file_sha256: 80a5189f9121d69d9213402b2423e0ccb0d437e603535ff3a367c11641346c7f
+    normative_text_sha256: efc4cbc1e80c87926adf01295b444eec42895db9f2b0789ef18c6a9a7c2964c0
+  normative_text: |
+    ## Selection Record
+
+    The target owner selects the configuration destination. `technologySelections`
+    in a project-owned YAML record is one supported authoring shape; installing
+    knowledge does not create it. Use the record semantics below and an explicit
+    target-selected schema when one is supplied. No removed initializer schema or
+    source-repository policy is required.
+
+    ```yaml
+    technologySelections:
+      - slot: testing.mocking
+        value: Moq
+        status: selected
+        source: explicit-target-decision
+        evidence:
+          - requirements/testing-stack.md
+        reason: Existing product test stack
+    ```
+
+    Required semantics:
+
+    - `slot` is a stable dotted capability name, not a package-specific field;
+    - `value` is the target selection;
+    - `status` is `selected`, `not-applicable`, or `unresolved`;
+    - `source` is `repository-evidence` or `explicit-target-decision`;
+    - `evidence` contains repository-relative paths supporting the selection;
+    - `reason` explains an explicit override or unresolved decision.
+
+    An absent slot does not invent target truth. If the target adopts a
+    profile default for that slot, it applies until target evidence records
+    another selection. A target override changes the selected technology, not the
+    architecture invariants surrounding it.
+
+    Recommended stable slots include:
+
+    - `testing.mocking`
+    - `testing.bdd-runner`
+    - `persistence.orm`
+    - `persistence.database`
+    - `messaging.broker`
+    - `messaging.framework`
+    - `observability.runtime`
+
+    New slots must reuse this record shape.
+  normative_text_sha256: a7020ee92289a318ce75252ba9acf409394cdb67af5b4d21d176aa18228c2238
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 6fcd3f324baa924190c39c09be14c1a32bf2482f
+      mode: '100644'
+      sha256: 9ec5c0cf7f95fd5a57ed1415c96c88175610d80d811c224b60ee39e2222d3c39
+      size: 11562
+    source_normative_text_sha256: efc4cbc1e80c87926adf01295b444eec42895db9f2b0789ef18c6a9a7c2964c0
+    semantic_change: false
+    target_adoption: not-implied
+source_provenance:
+  identity:
+    path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+    commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+    git_blob: 6fcd3f324baa924190c39c09be14c1a32bf2482f
+    mode: '100644'
+    sha256: 9ec5c0cf7f95fd5a57ed1415c96c88175610d80d811c224b60ee39e2222d3c39
+    size: 11562
+  meaning: Inert source identity only; never an installed dependency.

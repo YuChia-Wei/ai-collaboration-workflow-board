@@ -1,0 +1,46 @@
+metadata_version: 3
+id: requirement-author
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read the selected authoring instructions and permitted caller sources
+  for_operations:
+  - draft
+  - normalize
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/authoring.md
+  - references/requirement-template.md
+  - references/requirement-guide.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: draft
+  execution: instruction
+  inputs:
+  - Requested requirement scope and stakeholder or explicitly bounded observed sources
+  - Applicable target rules and optional caller-selected template and output destination
+  outputs:
+  - Requirement draft with source bindings, business rules and observable acceptance criteria
+  - Assumptions, unresolved decisions, coverage limits and actual delivery location
+  instructions: references/authoring.md
+  implementation_status: implemented
+- id: normalize
+  execution: instruction
+  inputs:
+  - Existing requirement document and authorized normalization scope
+  - Source bindings, applicable target rules and optional selected template and destination
+  outputs:
+  - Normalized requirement preserving source meaning, identities and approval state
+  - Material change summary, retained uncertainties and actual delivery location
+  instructions: references/authoring.md
+  implementation_status: implemented

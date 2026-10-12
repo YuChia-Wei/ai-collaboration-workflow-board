@@ -2,6 +2,8 @@
 
 工作流程、任務與文件紀錄專案。所有程式碼專案都位於 `src/`；網站建置結果、preview、SQLite、憑證與測試證據不進入 Git。
 
+開發協作已選配 Framework v0.19.1 的 14 個 skills 與共通知識；精確清單、驗證及使用限制見 [FRAMEWORK-INSTALLATION.md](FRAMEWORK-INSTALLATION.md)，Agent 入口見 [AGENTS.md](AGENTS.md)。這是開發工具採用，不增加 Board runtime 相依。
+
 | 路徑 | 用途 |
 | --- | --- |
 | `src/board/` | 單一 Sites 系統；`frontend/` 放瀏覽器程式，`backend/` 放 Worker／領域／D1，`contracts/` 放可攜訊息契約 |

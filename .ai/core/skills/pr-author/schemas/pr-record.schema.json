@@ -1,0 +1,389 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "pr.record 1.0.0",
+  "description": "Owned record structure; authority, actual evidence, transition and cross-field binding checks remain tool/caller responsibilities.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "owner",
+    "created_at",
+    "updated_at",
+    "title",
+    "summary",
+    "references",
+    "kind",
+    "id",
+    "state",
+    "subject",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "owner": {
+      "const": "project"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "target",
+          "relationship"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "work-item",
+              "pr",
+              "github-issue",
+              "url",
+              "text"
+            ]
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "relationship": {
+            "enum": [
+              "related",
+              "depends-on",
+              "implements",
+              "reference-only"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "github-issue"
+                }
+              },
+              "required": [
+                "kind"
+              ]
+            },
+            "then": {
+              "properties": {
+                "relationship": {
+                  "const": "reference-only"
+                },
+                "target": {
+                  "type": "string",
+                  "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/issues/[1-9][0-9]*$"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 0
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$"
+      },
+      "additionalProperties": true
+    },
+    "kind": {
+      "const": "pr"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^pr-[a-f0-9]{32}$"
+    },
+    "state": {
+      "const": "prepared"
+    },
+    "subject": {
+      "type": "object",
+      "required": [
+        "object_format",
+        "base_commit",
+        "head_commit",
+        "merge_base",
+        "base_tree",
+        "head_tree",
+        "diff_sha256",
+        "git_version",
+        "diff_recipe"
+      ],
+      "properties": {
+        "object_format": {
+          "enum": [
+            "sha1",
+            "sha256"
+          ]
+        },
+        "base_commit": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "head_commit": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "merge_base": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "base_tree": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "head_tree": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "diff_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "git_version": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "diff_recipe": {
+          "const": "pr.diff/v1"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "object_format": {
+                "const": "sha1"
+              }
+            },
+            "required": [
+              "object_format"
+            ]
+          },
+          "then": {
+            "properties": {
+              "base_commit": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              },
+              "head_commit": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              },
+              "merge_base": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              },
+              "base_tree": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              },
+              "head_tree": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "object_format": {
+                "const": "sha256"
+              }
+            },
+            "required": [
+              "object_format"
+            ]
+          },
+          "then": {
+            "properties": {
+              "base_commit": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "head_commit": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "merge_base": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "base_tree": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "head_tree": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "validation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "command",
+          "disposition",
+          "subject_head",
+          "subject_diff_sha256",
+          "evidence",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "command": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "disposition": {
+            "enum": [
+              "planned",
+              "not-executed",
+              "succeeded",
+              "failed",
+              "blocked",
+              "deferred",
+              "not-applicable"
+            ]
+          },
+          "subject_head": {
+            "type": "string",
+            "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+          },
+          "subject_diff_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "source",
+                "note"
+              ],
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "note": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              },
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "disposition": {
+                  "enum": [
+                    "succeeded",
+                    "failed"
+                  ]
+                }
+              },
+              "required": [
+                "disposition"
+              ]
+            },
+            "then": {
+              "properties": {
+                "evidence": {
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 0
+    },
+    "provider_target": {
+      "type": "object",
+      "required": [
+        "provider",
+        "host",
+        "repository",
+        "base_ref",
+        "head_ref"
+      ],
+      "properties": {
+        "provider": {
+          "const": "github"
+        },
+        "host": {
+          "const": "github.com"
+        },
+        "repository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "base_ref": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "head_ref": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

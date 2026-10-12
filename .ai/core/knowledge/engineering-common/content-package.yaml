@@ -1,0 +1,308 @@
+content_package_version: 1
+id: engineering-common
+version: 0.1.0
+entrypoint: README.md
+members:
+- {path: README.md, kind: index}
+- {path: content-package.yaml, kind: metadata}
+- {path: domain-language/README.MD, kind: index}
+- {path: domain-language/templates/aggregate-vocabulary-template.md, kind: template}
+- {path: domain-language/templates/bounded-context-language-template.md, kind: template}
+- {path: domain-language/templates/domain-event-language-template.md, kind: template}
+- {path: engineering-rule-catalog.yaml, kind: rule-catalog}
+- {path: operations/CONTEXT-MAP-GUIDE.MD, kind: knowledge}
+- {path: operations/EVENT-CATALOG-GUIDE.MD, kind: knowledge}
+- {path: operations/MQ-TOPOLOGY-GUIDE.MD, kind: knowledge}
+- {path: operations/RUNBOOK-GUIDE.MD, kind: knowledge}
+- {path: references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md, kind: knowledge}
+- {path: references/AUTHORING-BOUNDARY-CONTRACT.md, kind: knowledge}
+- {path: references/CONTEXT-RESOURCE-OWNERSHIP.md, kind: knowledge}
+- {path: references/ENGINEERING-IDENTITY-CONTRACT.md, kind: knowledge}
+- {path: references/GWT-TEST-HANDOFF-CONTRACT.md, kind: knowledge}
+- {path: references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md, kind: knowledge}
+- {path: references/PROMPT-PORTABILITY-RULES.md, kind: knowledge}
+- {path: references/SKILL-AND-SUB-AGENT-TAXONOMY.md, kind: knowledge}
+- {path: references/TECHNOLOGY-SELECTION-POLICY.md, kind: knowledge}
+resources:
+- id: engineering-rule-catalog
+  path: engineering-rule-catalog.yaml
+  kind: rule-catalog
+  rule_ids: [AICTX-EVIDENCE-001, ASSESSMENT-ARTIFACT-001, TECH-SELECT-001]
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing,
+    requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review,
+    review-draft, review-semantics]
+  technology_profile: null
+- id: member:README.md
+  path: README.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing,
+    requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review,
+    review-draft, review-semantics]
+  technology_profile: null
+- id: member:domain-language/README.MD
+  path: domain-language/README.MD
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:domain-language/templates/aggregate-vocabulary-template.md
+  path: domain-language/templates/aggregate-vocabulary-template.md
+  kind: template
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:domain-language/templates/bounded-context-language-template.md
+  path: domain-language/templates/bounded-context-language-template.md
+  kind: template
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:domain-language/templates/domain-event-language-template.md
+  path: domain-language/templates/domain-event-language-template.md
+  kind: template
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:operations/CONTEXT-MAP-GUIDE.MD
+  path: operations/CONTEXT-MAP-GUIDE.MD
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:operations/EVENT-CATALOG-GUIDE.MD
+  path: operations/EVENT-CATALOG-GUIDE.MD
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:operations/MQ-TOPOLOGY-GUIDE.MD
+  path: operations/MQ-TOPOLOGY-GUIDE.MD
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:operations/RUNBOOK-GUIDE.MD
+  path: operations/RUNBOOK-GUIDE.MD
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md
+  path: references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:references/AUTHORING-BOUNDARY-CONTRACT.md
+  path: references/AUTHORING-BOUNDARY-CONTRACT.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  path: references/CONTEXT-RESOURCE-OWNERSHIP.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing, requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review, review-draft, review-semantics]
+  technology_profile: null
+- id: member:references/ENGINEERING-IDENTITY-CONTRACT.md
+  path: references/ENGINEERING-IDENTITY-CONTRACT.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing,
+    requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review,
+    review-draft, review-semantics]
+  technology_profile: null
+- id: member:references/GWT-TEST-HANDOFF-CONTRACT.md
+  path: references/GWT-TEST-HANDOFF-CONTRACT.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing,
+    requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review,
+    review-draft, review-semantics]
+  technology_profile: null
+- id: member:references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md
+  path: references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, implementation, requirements, review, specification, test-design]
+  operations: [design, draft, implement, normalize, review]
+  technology_profile: null
+- id: member:references/PROMPT-PORTABILITY-RULES.md
+  path: references/PROMPT-PORTABILITY-RULES.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing,
+    requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review,
+    review-draft, review-semantics]
+  technology_profile: null
+- id: member:references/SKILL-AND-SUB-AGENT-TAXONOMY.md
+  path: references/SKILL-AND-SUB-AGENT-TAXONOMY.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing, requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review, review-draft, review-semantics]
+  technology_profile: null
+- id: member:references/TECHNOLOGY-SELECTION-POLICY.md
+  path: references/TECHNOLOGY-SELECTION-POLICY.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing, requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review, review-draft, review-semantics]
+  technology_profile: null
+dependencies:
+  required: []
+  optional: []
+references:
+- from: README.md
+  resource_id: engineering-rule-catalog
+  target: {package: engineering-common, path: engineering-rule-catalog.yaml, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:domain-language/README.MD
+  target: {package: engineering-common, path: domain-language/README.MD, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:domain-language/templates/aggregate-vocabulary-template.md
+  target: {package: engineering-common, path: domain-language/templates/aggregate-vocabulary-template.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:domain-language/templates/bounded-context-language-template.md
+  target: {package: engineering-common, path: domain-language/templates/bounded-context-language-template.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:domain-language/templates/domain-event-language-template.md
+  target: {package: engineering-common, path: domain-language/templates/domain-event-language-template.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:operations/CONTEXT-MAP-GUIDE.MD
+  target: {package: engineering-common, path: operations/CONTEXT-MAP-GUIDE.MD, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:operations/EVENT-CATALOG-GUIDE.MD
+  target: {package: engineering-common, path: operations/EVENT-CATALOG-GUIDE.MD, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:operations/MQ-TOPOLOGY-GUIDE.MD
+  target: {package: engineering-common, path: operations/MQ-TOPOLOGY-GUIDE.MD, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:operations/RUNBOOK-GUIDE.MD
+  target: {package: engineering-common, path: operations/RUNBOOK-GUIDE.MD, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md
+  target: {package: engineering-common, path: references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/AUTHORING-BOUNDARY-CONTRACT.md
+  target: {package: engineering-common, path: references/AUTHORING-BOUNDARY-CONTRACT.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  target: {package: engineering-common, path: references/CONTEXT-RESOURCE-OWNERSHIP.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/ENGINEERING-IDENTITY-CONTRACT.md
+  target: {package: engineering-common, path: references/ENGINEERING-IDENTITY-CONTRACT.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/GWT-TEST-HANDOFF-CONTRACT.md
+  target: {package: engineering-common, path: references/GWT-TEST-HANDOFF-CONTRACT.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md
+  target: {package: engineering-common, path: references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/PROMPT-PORTABILITY-RULES.md
+  target: {package: engineering-common, path: references/PROMPT-PORTABILITY-RULES.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/SKILL-AND-SUB-AGENT-TAXONOMY.md
+  target: {package: engineering-common, path: references/SKILL-AND-SUB-AGENT-TAXONOMY.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/TECHNOLOGY-SELECTION-POLICY.md
+  target: {package: engineering-common, path: references/TECHNOLOGY-SELECTION-POLICY.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: domain-language/README.MD
+  resource_id: member:domain-language/templates/aggregate-vocabulary-template.md
+  target: {package: engineering-common, path: domain-language/templates/aggregate-vocabulary-template.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: domain-language/README.MD
+  resource_id: member:domain-language/templates/bounded-context-language-template.md
+  target: {package: engineering-common, path: domain-language/templates/bounded-context-language-template.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: domain-language/README.MD
+  resource_id: member:domain-language/templates/domain-event-language-template.md
+  target: {package: engineering-common, path: domain-language/templates/domain-event-language-template.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: engineering-rule-catalog
+  target: {package: engineering-common, path: engineering-rule-catalog.yaml, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: references/CONTEXT-RESOURCE-OWNERSHIP.md
+  resource_id: member:references/ENGINEERING-IDENTITY-CONTRACT.md
+  target: {package: engineering-common, path: references/ENGINEERING-IDENTITY-CONTRACT.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: references/CONTEXT-RESOURCE-OWNERSHIP.md
+  resource_id: member:references/TECHNOLOGY-SELECTION-POLICY.md
+  target: {package: engineering-common, path: references/TECHNOLOGY-SELECTION-POLICY.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: references/ENGINEERING-IDENTITY-CONTRACT.md
+  resource_id: engineering-rule-catalog
+  target: {package: engineering-common, path: engineering-rule-catalog.yaml, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: references/ENGINEERING-IDENTITY-CONTRACT.md
+  resource_id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  target: {package: engineering-common, path: references/CONTEXT-RESOURCE-OWNERSHIP.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: references/SKILL-AND-SUB-AGENT-TAXONOMY.md
+  resource_id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  target: {package: engineering-common, path: references/CONTEXT-RESOURCE-OWNERSHIP.md, anchor: null}
+  requirement: required
+  on_missing: unavailable

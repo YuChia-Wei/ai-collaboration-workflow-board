@@ -1,0 +1,48 @@
+metadata_version: 4
+id: software-development-orchestrator
+version: 0.2.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read orchestration instructions and the selected project sources
+  for_operations: [orchestrate, resume]
+  on_missing: unavailable
+- id: authorized-project-operator
+  requirement: Perform only authorized project operations through available owners
+  for_operations: [orchestrate, resume]
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/orchestrate.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: orchestrate
+  execution: instruction
+  inputs:
+  - Intended software development outcome, acceptance criteria and authorization
+  - Accepted artifacts, project rules, available capabilities and selected commands
+  outputs:
+  - Proportionate stage plan with owners, dependencies and decision boundaries
+  - Actual specialist results, validation outcomes and unresolved handoffs
+  - Closeout or resumable checkpoint that preserves authority and evidence
+  instructions: references/orchestrate.md
+  implementation_status: implemented
+- id: resume
+  execution: instruction
+  inputs:
+  - Existing checkpoint, its source identities and authorized remaining outcome
+  - Current project state, artifacts, capability availability and permissions
+  outputs:
+  - Reconciled completed and remaining work, drift and pending decisions
+  - Actual continuation results or a bounded blocked handoff
+  instructions: references/orchestrate.md
+  implementation_status: implemented
+knowledge_consumption: []

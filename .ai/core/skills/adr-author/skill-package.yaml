@@ -1,0 +1,269 @@
+metadata_version: 2
+id: adr-author
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read selected public entry and resources
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - query
+  - validate
+  - revise
+  - render
+  - derive
+  - decide
+  - retire
+  - supersede
+  on_missing: unavailable
+- id: python
+  version: '>=3.11,<4'
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - query
+  - validate
+  - revise
+  - render
+  - derive
+  - decide
+  - retire
+  - supersede
+  on_missing: unavailable
+- id: pyyaml
+  version: '>=6,<7'
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - query
+  - validate
+  - revise
+  - render
+  - derive
+  - decide
+  - retire
+  - supersede
+  on_missing: unavailable
+- id: jsonschema
+  version: '>=4.18,<5'
+  for_operations:
+  - create
+  - inspect
+  - query
+  - validate
+  - revise
+  - render
+  - derive
+  - decide
+  - retire
+  - supersede
+  on_missing: unavailable
+- id: filesystem
+  requirement: Explicit local roots, bounded reads and exclusive atomic single-record writes; ignored local config in a Git
+    project requires read-only Git
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - query
+  - validate
+  - revise
+  - render
+  - derive
+  - decide
+  - retire
+  - supersede
+  on_missing: unavailable
+configuration:
+  namespace: adr-author
+  defaults:
+    store:
+      kind: filesystem
+      root: notes/adrs
+      tracking: tracked
+    template:
+      origin: package
+      path: templates/adr.md
+artifact_roles:
+- role: adr.record
+  owner: project
+  schema: adr.record@1.0.0
+  read_schemas:
+  - adr.record@1.0.0
+  store_binding: adr-author.store
+  identity: adr-<32 lowercase hex digits>
+  filename: <id>.adr.json
+  read_operations:
+  - inspect
+  - query
+  - validate
+  - render
+  write_operations:
+  - create
+  - revise
+  - derive
+  - decide
+  - retire
+  - supersede
+- role: adr.view
+  owner: derived
+  source_role: adr.record
+  output: Result-only Markdown
+  persistence: Export requires separate caller-owned write
+  produce_operations:
+  - render
+resources:
+  references:
+  - references/configuration.md
+  - references/operations.md
+  - references/example.md
+  - references/WHEN-TO-CREATE-ADR.MD
+  schemas:
+  - id: adr.record
+    version: 1.0.0
+    path: schemas/adr-record.schema.json
+    owner: adr-author
+    migration: unsupported; preserve original
+  templates:
+  - id: adr-author.default-view
+    path: templates/adr.md
+    input_role: adr.record
+    output_role: adr.view
+    owner: adr-author
+  tools:
+  - id: adr-author.fs
+    owner: adr-author
+    implementation_status: implemented
+    entrypoint: scripts/adr.py
+    operation_contract: references/operations.md
+    operations:
+    - explain
+    - create
+    - inspect
+    - query
+    - validate
+    - revise
+    - render
+    - derive
+    - decide
+    - retire
+    - supersede
+operations:
+- id: explain
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  outputs:
+  - own effective settings, field sources, config version, ignored namespace names
+    and authority bindings
+  tool: adr-author.fs
+  implementation_status: implemented
+- id: create
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - content
+  - text
+  - decision
+  - optional statuses and immutable extensions
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  - actual related_query and retained directory creations
+  tool: adr-author.fs
+  implementation_status: implemented
+- id: inspect
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  outputs:
+  - owned record, raw digest and historical evidence/freshness
+  tool: adr-author.fs
+  implementation_status: implemented
+- id: query
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - optional literal text and statuses
+  outputs:
+  - matching references with status/version/raw digest
+  - partial diagnostics and actual query_sha256
+  tool: adr-author.fs
+  implementation_status: implemented
+- id: validate
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  outputs:
+  - actual owned structure/semantic result and diagnostics
+  tool: adr-author.fs
+  implementation_status: implemented
+- id: revise
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  - expected_sha256
+  - content
+  - reason
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  tool: adr-author.fs
+  implementation_status: implemented
+- id: render
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  outputs:
+  - adr.view as result-only escaped Markdown
+  tool: adr-author.fs
+  implementation_status: implemented
+- id: derive
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  - expected_sha256
+  - reason
+  - text
+  - decision
+  - optional statuses
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  - actual related_query and retained directory creations
+  tool: adr-author.fs
+  implementation_status: implemented
+- id: decide
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  - expected_sha256
+  - reason
+  - decision_source
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  tool: adr-author.fs
+  implementation_status: implemented
+- id: retire
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  - expected_sha256
+  - reason
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  tool: adr-author.fs
+  implementation_status: implemented
+- id: supersede
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  - expected_sha256
+  - reason
+  - successor
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  tool: adr-author.fs
+  implementation_status: implemented

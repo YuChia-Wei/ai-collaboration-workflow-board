@@ -1,0 +1,67 @@
+metadata_version: 4
+id: ddd-ca-hex-architect
+version: 0.2.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read the selected architecture instructions and permitted target artifacts
+  for_operations: [design, review]
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/design.md
+  - references/review.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: design
+  execution: instruction
+  inputs:
+  - Bounded design goal, requirements, acceptance and quality constraints
+  - Target architecture decisions, selected technology guidance and compatibility constraints
+  - Existing authorization and any caller-selected output destination
+  outputs:
+  - Architecture proposal with language, invariants, boundaries, alternatives and tradeoffs
+  - Observable acceptance, risks, unresolved decisions and optional implementation or ADR handoff
+  instructions: references/design.md
+  implementation_status: implemented
+- id: review
+  execution: instruction
+  inputs:
+  - Fixed architecture artifact identity and permitted evidence
+  - Requirements, target decisions, selected rules and requested review coverage
+  outputs:
+  - Read-only findings with criterion, location, impact, evidence and uncertainty
+  - Review classification, coverage, valid alternatives and bounded handoff
+  instructions: references/review.md
+  implementation_status: implemented
+knowledge_consumption:
+- id: common-architecture
+  package: engineering-common
+  version: 0.1.0
+  operations: [design, review]
+  resources:
+  - engineering-rule-catalog
+  requirement: optional
+  on_missing: unavailable
+- id: dotnet-architecture
+  package: dotnet-backend
+  version: 0.1.0
+  operations: [design, review]
+  resources:
+  - engineering-rule-catalog
+  - member:standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md
+  - member:standards/DESIGN-BY-CONTRACT.md
+  - member:standards/coding-standards/aggregate-standards.md
+  - member:standards/coding-standards/transactional-messaging-standards.md
+  - member:standards/coding-standards/usecase-standards.md
+  - member:standards/project-structure.md
+  requirement: optional
+  on_missing: unavailable
