@@ -1,226 +1,46 @@
-# Workflow record service — #416 P0/P1 local prototype
+# AI Collaboration Workflow Board
 
-This standalone repository contains runnable code, a browser UI, a real HTTP CLI,
-and an MCP stdio bridge. It uses **synthetic data only** and never creates external
-issues, publishes a site, runs arbitrary SQL, or executes evidence commands.
-Python 3.13 and Git are sufficient; there are no package dependencies. Docker is
-not required. Binding is strictly `127.0.0.1`.
+工作流程、任務與文件紀錄專案。所有程式碼專案都位於 `src/`；網站建置結果、preview、SQLite、憑證與測試證據不進入 Git。
 
-For this installed checkout, follow [LOCAL-SETUP.md](LOCAL-SETUP.md) for its
-dedicated sibling state directory and port 8767. The paths below are generic
-examples; do not initialize Git again in this clone.
-
-## Start on Windows / PowerShell
-
-From this repository directory:
-
-```powershell
-python demo.py --runtime ../runtime
-python service.py --db ../runtime/records.sqlite --bindings ../runtime/bindings.json --port 8765
-```
-
-The seed command refuses to overwrite an existing store. When `../runtime` is
-already present, run only the service command. Open <http://127.0.0.1:8765>.
-The demonstration writer token is `demo-writer-local-only`, namespace `demo`,
-workflow `synthetic-416`. These public fixture values are for loopback synthetic
-testing only. Tokens are not stored in the browser or exported; binding files
-remain outside source Git. No production authentication is claimed.
-
-Click **載入完整 context**, select an operation, edit the JSON payload, check the
-expected revision, and submit. After a successful operation, click **新 operation
-ID** before a different write. Reuse the identical command/ID only when reconciling
-a lost response. Documents support `create`, `revise`, `rename`, `archive`;
-final documents require an explicit `erratum`, `addendum`, or `successor` revision.
-The first revision and tombstones remain readable. The UI is a record editor,
-not a task board or dispatch engine.
-
-## HTTP CLI examples
-
-```powershell
-$env:WORKFLOW_TOKEN = 'demo-writer-local-only'
-python client.py context synthetic-416
-python client.py list
-python client.py export --output ../runtime/export.json
-```
-
-Create `../runtime/command.json` with the current workflow revision:
-
-```json
-{
-  "namespace":"demo", "workflow_id":"synthetic-416",
-  "operation_id":"sample-log-001", "expected_revision":10,
-  "type":"log", "client":"http-cli", "session":"new-local-session",
-  "payload":{"text":"Synthetic continuation from a fresh session."}
-}
-```
-
-```powershell
-python client.py submit ../runtime/command.json --outbox ../runtime/outbox.json
-python client.py operation sample-log-001
-```
-
-Outbox files are rejected if inside **any Git tree**. Statuses are `pending`,
-`accepted`, `conflict`, `rejected`. A lifetime bound of three attempts persists
-across sessions; exhausted entries remain visibly pending until a bounded read-only
-receipt reconciliation confirms acceptance. Exhaustion never permits another POST.
-Before retry, the CLI
-queries operation receipt; a mismatched command hash becomes a conflict. Permission
-denials stop retries. There is no fallback to Git or a different identity.
-
-## API surface and atomicity
-
-All three interfaces share `Store.command()`:
-
-| Read | Purpose |
+| 路徑 | 用途 |
 | --- | --- |
-| `GET /v1/workflows?namespace=demo&external_link=...` | Find records by relation |
-| `GET /v1/workflows/{id}/context?namespace=demo` | Complete context, original revisions, full index, explicit missing documents |
-| `GET /v1/documents/{id}/{revision}?namespace=demo&workflow_id=...` | Exact original revision |
-| `GET /v1/operations/{id}?namespace=demo` | Accepted receipt and payload hash |
-| `GET /v1/events?namespace=demo&after=0` | All subsequent events |
-| `GET /v1/export?namespace=demo` | Consistent portable export |
+| `src/board/` | 既有 ChatGPT Sites 網站：繁體中文 UI、Worker API、D1 repository、schema 與 migrations |
+| `src/local/` | Python 本機紀錄服務：SQLite、HTTP CLI、MCP stdio、可攜匯出／還原與合成資料測試 |
+| `src/tools/` | Repository 原始碼與建置產物政策檢查 |
+| `.github/workflows/ci.yml` | GitHub Actions 測試、建置、產物保存 |
 
-Writes use `POST /v1/commands`, bearer binding, `operation_id`, `type`,
-`workflow_id`, `namespace`, `expected_revision`, and `payload`. Allowed commands:
-`create_workflow`, `update_workflow`, `add_step`, `update_step`, `document`, `log`,
-`handoff`, `evidence`, `approve`. Unsupported ACL/publish/SQL/provider commands
-are denied. Client/session labels are self-reported metadata, not authenticated
-agent identity. Read/write/approve/export roles are separate. Approval requires
-a final document and a principal that has not authored document events for the
-workflow; this is deliberately conservative.
+兩個實作有自己的契約與儲存模型，沒有隱含的雙向同步。網站保存既有 framework 來源快照與人工 board 紀錄；本機服務使用合成 fixture。資料來源的權威切換與真實資料遷移需要各自的驗證。
 
-SQLite `BEGIN IMMEDIATE` encloses workflow mutation, every document revision,
-blob reference, event, and operation receipt. Existing accepted operations are
-checked **before** revision CAS. A same-ID different payload or principal fails.
-Rejected operations leave no accepted event/receipt. The whole workflow revision
-is the concurrency unit, including independent documents/steps. This simplifies
-correctness at the cost of more conflicts under high concurrency.
+程式依領域規則、應用案例、輸入／輸出 adapters 分類。具體依賴方向與保留的限制見 [ARCHITECTURE.md](ARCHITECTURE.md)。詳細契約見 [網站說明](src/board/README.md) 與 [本機服務說明](src/local/README.md)。
 
-Every command validates the merged candidate aggregate, including already
-completed records. Terminal workflows may receive valid logs and document
-addenda, but cannot gain unfinished steps or lose required documents/results/
-evidence. Evidence needs nonblank command/result/source provenance, a recognized
-outcome (`passed`, `failed`, `interrupted`, `blocked`) and a nonempty scalar-valued
-environment. Valid failure evidence remains eligible for a completed investigation
-whose result explicitly records that failure. Empty shells cannot satisfy completion.
-CAS revisions are integers (booleans are rejected). Context reads state and events
-from one SQLite read transaction; WAL allows a concurrent writer to commit without
-mixing the reader's two snapshots.
+## 建置與測試
 
-The new prototype lifecycle is explicitly `planned → active → completed`, with
-`active ↔ blocked`; completed is terminal. Completed steps require a nonempty
-result plus existing evidence. Completed workflows require all steps complete and
-all declared required documents present. Historical source lifecycle is preserved
-as provenance, not silently reinterpreted or migrated.
-
-## MCP stdio bridge
+網站需要 Node.js 22.13 以上；GitHub Actions 使用 Node.js 24。從 repo 根目錄執行：
 
 ```powershell
-$env:WORKFLOW_TOKEN = 'demo-reader-local-only'
-python mcp_bridge.py --base http://127.0.0.1:8765
+npm --prefix src/board ci
+npm --prefix src/board test
+npm --prefix src/board run build
+npm --prefix src/board run validate
 ```
 
-The bridge implements MCP JSON-RPC stdio framing, initialization and `tools/list`
-and `tools/call` for `workflow_context`, `workflow_command`, `operation_result`,
-targeting protocol `2025-03-26`. Configure a chosen client's stdio server to launch
-this file and provide the local fixture token through its environment. No actual
-Codex/Claude/Gemini configuration was modified or connected. The acceptance run
-uses a real HTTP CLI subprocess A that exits, then a fresh MCP JSON-RPC client B
-subprocess; it is **protocol integration**, not full coding-agent E2E.
-
-## Export, preflight, clean restore
-
-`export.json` includes manifest/schema version, consistent cutoff sequence,
-workflows and IDs, all document revisions, tombstones, operations, events, source
-and old references, role mapping, and actual attachment bytes encoded as base64
-with SHA-256 hashes. It excludes bearer tokens/binding secrets. Imported identity
-roles are descriptive only: new local bindings must be supplied. Do not place
-real secrets in workflow documents; this prototype accepts synthetic content only.
+Python 使用 3.13，無第三方套件依賴：
 
 ```powershell
-python service.py --bindings ../runtime/bindings.json --preflight ../runtime/export.json
-python service.py --bindings ../runtime/rebound-bindings.json --db ../replacement/records.sqlite --restore ../runtime/export.json
-python service.py --bindings ../runtime/rebound-bindings.json --db ../replacement/records.sqlite --port 8766
+python -B src/tools/check_repository.py
+python -B -m src.local.tests.test_layout
+python -B -m src.local.tests.test_review_regressions
+python -B -m src.local.tests.test_acceptance
 ```
 
-Restore rejects an existing target, invalid package/blob/revision hashes, broken
-relationships, event revision gaps, unsafe flags, and missing explicit new writer
-bindings. It never replays commands or external effects. No leases are used.
-The test shuts down the original HTTP server, renames its DB as disabled, restores
-into a new SQLite file, compares all durable data, rejects old tokens, and appends
-a new event on the replacement. Role rebinding intentionally changes credentials.
-This demonstrates a clean portable local store, not D1 or PostgreSQL portability.
+Actions 在 push、pull request 與手動執行時驗證 source policy，於 Linux／Windows 執行本機契約測試，並建置、驗證 Worker。建置結果保存為短期 Actions artifact，沒有提交到原始碼 Git。Workflow 加入 repo 後仍需 push 才會開始 hosted run。
 
-Preflight also verifies complete receipt identity/hash/accepted state against its
-operation and event, command relationships, historical role mappings, lifecycle,
-completion invariants, and approvals. It applies the local-only reducers in an
-isolated in-memory SQLite store to compare authored semantic state and blobs with
-the supplied snapshot; this validation does not replay external side effects or
-write the target. Service-generated timestamps are retained in the package but
-excluded from the semantic replay comparison. Historical role descriptions are
-preserved across restore/export and never authorize current tokens.
+本機啟動與狀態目錄見 [LOCAL-SETUP.md](LOCAL-SETUP.md)。預設測試輸出放在已忽略的 `.runtime/`。
 
-Restore builds a unique same-directory `.restore-*.sqlite` file, imports and checks
-all durable tables, closes/checkpoints/flushes it, and atomically publishes with
-`os.link` without overwriting an existing target. Interrupted preparation can leave
-an identifiable temporary orphan, but cannot publish an empty final target; retries
-create a new temporary file. A target publication race preserves the other owner's
-file. Unsupported hard-link filesystems fail closed; no unsafe overwrite fallback
-is provided. Only this restore's temporary files are cleaned up.
+## 部署
 
-## Reproduce acceptance
+目前保留同一個 ChatGPT Sites project、D1 binding 與私有存取方式。`src/board/.openai/hosting.json` 只保存平台連結與邏輯 binding，沒有憑證。GitHub Actions 的建置成功與 Sites 的發布成功是兩個不同狀態。
 
-The delivery ZIP includes tracked source and `../prototype.bundle`, without a
-host `.git` directory. Before running tests, restore the isolated local history
-from inside `prototype` (no network or remote is configured):
+2026-10-07 核對結果：Sites 原生支援建置、儲存版本與部署；符合資格的帳號另有短期推送後私有發布能力。公開文件尚未建立可由一般 GitHub Actions 長期、無人值守直接發布既有 Sites 的 CLI／API 契約。完整流程、已確認能力與尚待確認事項見 [DEPLOYMENT.md](DEPLOYMENT.md)。
 
-```powershell
-git init
-git config core.autocrlf false
-git fetch ../prototype.bundle main
-git reset --mixed FETCH_HEAD
-```
-
-Delivery history uses a synthetic author/committer for privacy; commit IDs differ
-from the original reviewed repository, but every source tree is unchanged. The
-manifest distinguishes `prototype_sha` from `portable_history_sha` and records
-their identical trees. Original local history is retained without rewriting.
-
-```powershell
-python test_acceptance.py
-python test_review_regressions.py
-```
-
-Use a clean source commit. Output/logs/SQLite/outbox/export artifacts go into
-`../evidence/run-<UTC>/`, outside source Git. The suite performs 10 integration
-scenarios plus Git/reference before-after evidence; source files have no runtime
-record diff. Fixture evidence commands are descriptive synthetic strings and
-are never executed. The first failed Windows restore attempt is retained in the
-delivery evidence along with the corrected passing run.
-
-There are no external executor claims, deployments, sharing, real account login,
-company data, real workflow migration or deletion. AC08 requires P2 authorization;
-AC09 is N/A; AC10 is a synthetic rehearsal, with real migration deferred to P3.
-See `PLATFORM-CONTRACT.md` for Sites preparation and remaining approval boundaries.
-
-Required document retirement: archive is rejected with HTTP 422
-`required_document_archive_forbidden` while the document ID is in the workflow's
-current `required_documents` index, in every lifecycle state. The rejection keeps
-the document, revisions, workflow, events and receipts unchanged; the required
-document remains usable and the workflow can complete normally. This prototype
-does not support retiring a document created with `required: true`; no new
-restore/replacement API is implied. Optional documents can still be revised and
-archived, retaining their tombstone and every revision through export/restore.
-
-The original 10 passing scenarios did not discover all defects. Independent review
-of `3fd0902` found R1-R7; the 14 review-derived regression/control scenarios now
-cover their specific counterexamples (including process interruption and receipt
-insert failure). Author test success is not independent review acceptance. The
-updated report identifies the fixed immutable subject and second-review status.
-Second review closed R1-R7 and found R8 (required archive trapped an active
-workflow). Regression 15 tests the explicit archive rejection over actual
-HTTP, continued completion, optional tombstones and exact export/restore.
-Focused independent verification of `f031223` closed R8, with six separate
-scenarios plus an independent rerun of regression 15. These are distinct from
-the author's 15 regression and 10 integration scenarios. Final packaging changes
-only this README and the packager; runtime behavior remains the reviewed version.
+歷史 P0/P1 平台評估保留於 [PLATFORM-CONTRACT.md](PLATFORM-CONTRACT.md)，其中未實作的平台敘述屬於當時本機 prototype 的範圍。

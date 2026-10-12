@@ -1,5 +1,11 @@
 # Local contract for a later Sites adapter (unverified)
 
+Historical P0/P1 contract for the Python local prototype. The repository now
+also contains a separate Sites Worker/D1 board in `src/board/`; the unimplemented
+adapter statements below describe the original local prototype, not the current
+board. See [ARCHITECTURE.md](ARCHITECTURE.md) and [DEPLOYMENT.md](DEPLOYMENT.md)
+for current structure and verified deployment capabilities.
+
 This file prepares platform work without provisioning, deploying or granting
 access. The Python implementation and its UI are operational locally. A Sites
 Worker implementation, D1 adapter and R2 adapter are **not implemented or tested**;

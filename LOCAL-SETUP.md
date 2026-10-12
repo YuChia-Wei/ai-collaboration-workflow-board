@@ -1,51 +1,57 @@
 # Local checkout setup
 
-This checkout retains the complete original local development Git history through
-`50b608d5b1fdb7a1e558982c4c51b321653fb981`. The source checkout and its running
-demo remain intact. `origin` is the requested GitHub repository; nothing was pushed.
-It remains a synthetic-only workflow record service, not a task board.
+Run every command below from the repository root. Python 3.13 and Git suffice;
+there are no package dependencies and no Docker requirement. The Python service
+uses synthetic workflow records, loopback HTTP, and a SQLite database.
 
-From this repository, use the dedicated sibling state directory. All database,
-blobs, bindings, outbox, logs, exports and verification output stay outside Git.
-The existing delivery report/ZIP/manifest/review evidence is in
-`../ai-collaboration-workflow-board-state/delivery/`.
+Local executable source lives in `src/local/`. Database files, bindings, outboxes,
+logs, exports and test evidence default to the ignored `.runtime/` directory.
+Existing state in `../ai-collaboration-workflow-board-state/` is historical local
+state and is not copied, deleted or migrated by the source reorganization.
 
 ```powershell
-python demo.py --runtime ../ai-collaboration-workflow-board-state/runtime
-python service.py --db ../ai-collaboration-workflow-board-state/runtime/records.sqlite --bindings ../ai-collaboration-workflow-board-state/runtime/bindings.json --port 8767
+python -B -m src.local.demo --runtime .runtime/local
+python -B -m src.local.service --db .runtime/local/records.sqlite --bindings .runtime/local/bindings.json --port 8767
 ```
 
 Seed only once; it refuses an existing database. Use only the service command on
-later starts. Port 8767 avoids the earlier retained demo on 8765. Open
-http://127.0.0.1:8767/ with fixture token `demo-writer-local-only`, namespace `demo`,
-workflow `synthetic-416`. A phone cannot directly open this computer's localhost.
+later starts. Open <http://127.0.0.1:8767/> with fixture token
+`demo-writer-local-only`, namespace `demo`, workflow `synthetic-416`.
+A phone cannot directly open this computer's localhost.
 
 ```powershell
 $env:WORKFLOW_TOKEN = 'demo-writer-local-only'
-python client.py --base http://127.0.0.1:8767 context synthetic-416
-python client.py --base http://127.0.0.1:8767 export --output ../ai-collaboration-workflow-board-state/runtime/export.json
-python mcp_bridge.py --base http://127.0.0.1:8767
+python -B -m src.local.client --base http://127.0.0.1:8767 context synthetic-416
+python -B -m src.local.client --base http://127.0.0.1:8767 export --output .runtime/local/export.json
+python -B -m src.local.mcp_bridge --base http://127.0.0.1:8767
 ```
 
-For submit, put command JSON outside Git and supply
-`--outbox ../ai-collaboration-workflow-board-state/runtime/outbox.json`.
-MCP requires a real JSON-RPC stdio client, initialize and initialized notification;
-see README. True coding-agent connections are still unverified.
+For submit, place command JSON in `.runtime/local/command.json` and supply
+`--outbox .runtime/local/outbox.json`. Outboxes must be outside Git or explicitly
+ignored and untracked. The client refuses tracked and nonignored source paths.
+MCP requires a JSON-RPC stdio client, initialization, and the initialized
+notification; see the [local service contract](src/local/README.md).
+Actual coding-agent connections remain unverified.
 
 ```powershell
-$env:P1_EVIDENCE = '../ai-collaboration-workflow-board-state/evidence'
-python -B test_review_regressions.py
-python -B test_acceptance.py
+python -B -m src.local.tests.test_review_regressions
+python -B -m src.local.tests.test_acceptance
+python -B -m src.local.tests.test_layout
 ```
 
-Run tests from this repository. The suites use their own random loopback ports;
-they do not change the retained demo, Docker or the original framework.
-For preflight/restore, use service.py with the sibling export path, a **new**
-destination SQLite path outside Git, and explicitly supplied new bindings.
-Original bindings are not part of exports. README describes the restore contract.
+These commands write evidence beneath `.runtime/evidence/`, use their own random
+loopback ports, and preserve source Git state. Acceptance supports existing source
+edits but requires that no other process edits the source during the test. Git
+head, tree, tracked changes, staged changes and untracked source paths are compared
+before and after the runtime scenarios. The tests do not modify the retained
+historical demo, Docker or the original framework.
 
-No package installation or Docker is needed. Python 3.13 and Git suffice.
-The inherited README's bundle-init commands apply only to ZIP extraction, not
-this already initialized clone. package_delivery.py describes the archived P1
-delivery fixture layout; it is not needed to start or test this checkout.
-Sites/deployment/sharing and real migration remain outside authorized scope.
+For preflight and restore, use an exported package, a new destination SQLite path
+and explicitly supplied new bindings. Original bindings are excluded from exports.
+The [local README](src/local/README.md) documents the restore and atomic-publication
+contract. `python -B -m src.local.package_delivery` retains the historical delivery
+packager; its output now defaults to ignored `.runtime/delivery/` and requires
+committed source before packaging.
+
+Hosted build and deployment are separate from this synthetic loopback service;
+see the repository README and deployment documentation for GitHub Actions.

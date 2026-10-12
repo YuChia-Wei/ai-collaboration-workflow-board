@@ -1,0 +1,71 @@
+name: Build and test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository:
+    name: Source and artifact policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: python -B src/tools/check_repository.py
+
+  local:
+    name: Local contracts (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    env:
+      P1_EVIDENCE: ${{ github.workspace }}/.runtime/ci-evidence
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: python -B -m src.local.tests.test_layout
+      - run: python -B -m src.local.tests.test_review_regressions
+      - run: python -B -m src.local.tests.test_acceptance
+
+  board:
+    name: Board contracts and Worker build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: src/board
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: src/board/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npm run validate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: board-worker-${{ github.sha }}
+          path: src/board/dist/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
