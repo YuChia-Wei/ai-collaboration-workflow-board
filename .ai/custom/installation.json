@@ -1,0 +1,32 @@
+{
+  "selection_version": 2,
+  "catalog": {
+    "identity": "catalog:1:0.19.1:42b99e954e3d6fbf595075a079357f0ce1df057f:ec0cd3a7c59caf2bbcb594b479760103315cfce6c3ed1c910da9438a5186a6da",
+    "catalog_sha256": "12ca7dd23134cdfad8515c20a8fdf50951ac3b1730cf89fd4d016a27e4859a68",
+    "files_sha256": "97ef5bfb98628cc4bf6bc56a95ed0cce1f281d5f7bcf8dd6c4e49cdb58f2ae8d"
+  },
+  "skills": [
+    "adr-author",
+    "bdd-gwt-test-designer",
+    "code-reviewer",
+    "ddd-ca-hex-architect",
+    "diagnostic-analyst",
+    "lesson-author",
+    "local-change-implementer",
+    "pr-author",
+    "problem-frame-author",
+    "requirement-author",
+    "slice-implementer",
+    "software-development-orchestrator",
+    "spec-author",
+    "spec-compliance-validator"
+  ],
+  "knowledge": [
+    "engineering-common"
+  ],
+  "adapters": [
+    "codex"
+  ],
+  "bindings": [],
+  "skill_naming": "original"
+}

@@ -1,0 +1,50 @@
+metadata_version: 3
+id: spec-author
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read the selected specification instructions and permitted caller sources
+  for_operations:
+  - draft
+  - normalize
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/authoring.md
+  - references/production-template.md
+  - references/entity-template.md
+  - references/adapter-template.md
+  - references/formal-test-template.md
+  - references/spec-guide.md
+  - references/spec-organization-guide.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: draft
+  execution: instruction
+  inputs:
+  - Requested specification type, bounded subject and source requirements or explicit observations
+  - Accepted target decisions and rules with optional selected template, schema and output destination
+  outputs:
+  - Selected specification draft with preserved source bindings and explicit uncertainty
+  - Type rationale, coverage limits, open decisions and actual delivery location
+  instructions: references/authoring.md
+  implementation_status: implemented
+- id: normalize
+  execution: instruction
+  inputs:
+  - Existing specification, selected type and authorized normalization scope
+  - Source bindings and target format contract with optional selected template and destination
+  outputs:
+  - Normalized specification preserving identities, meaning and the selected target contract
+  - Material change summary, retained uncertainties and actual delivery location
+  instructions: references/authoring.md
+  implementation_status: implemented

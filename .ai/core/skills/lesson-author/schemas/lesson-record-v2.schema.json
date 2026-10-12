@@ -1,0 +1,520 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "lesson record 2.0.0",
+  "description": "Structural contract; operation, history, authority, raw-byte and write semantics remain tool-owned. Source presence does not establish runtime acceptance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "owner",
+    "id",
+    "status",
+    "revision",
+    "created_at",
+    "updated_at",
+    "content",
+    "successor",
+    "decision",
+    "provenance",
+    "history"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0.0"
+    },
+    "kind": {
+      "const": "lesson"
+    },
+    "owner": {
+      "const": "project"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^lesson-[0-9a-f]{32}$"
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "accepted",
+        "retired",
+        "superseded"
+      ]
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "content": {
+      "$ref": "#/$defs/content"
+    },
+    "successor": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/lineage"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "decision": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/decision"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/provenance"
+      },
+      "minItems": 0
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/history_entry"
+      },
+      "minItems": 0
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$"
+      },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "utf8",
+        "observed_at"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "utf8": {
+          "type": "string"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding_id",
+        "config_path",
+        "config_sha256",
+        "binding"
+      ],
+      "properties": {
+        "binding_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "config_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "binding": {
+          "type": "object",
+          "minProperties": 1
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "id",
+        "schema_version",
+        "store_root",
+        "snapshot"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "store_root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "snapshot": {
+          "$ref": "#/$defs/snapshot"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relation",
+        "role",
+        "id",
+        "schema_version",
+        "store_root",
+        "snapshot"
+      ],
+      "properties": {
+        "relation": {
+          "const": "derived-from"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "store_root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "snapshot": {
+          "$ref": "#/$defs/snapshot"
+        }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "observation",
+        "evidence",
+        "conclusion",
+        "applies_when",
+        "does_not_apply_when",
+        "confidence",
+        "follow_up"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "note"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "minItems": 0
+        },
+        "conclusion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "applies_when": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "does_not_apply_when": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "confidence": {
+          "enum": [
+            "tentative",
+            "supported"
+          ]
+        },
+        "follow_up": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "confidence": {
+                "const": "supported"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidence": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor",
+        "decision",
+        "decided_at",
+        "subject_sha256",
+        "option_id",
+        "evidence",
+        "authority_binding"
+      ],
+      "properties": {
+        "actor": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "const": "accept"
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "subject_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "option_id": {
+          "type": "null"
+        },
+        "evidence": {
+          "$ref": "#/$defs/snapshot"
+        },
+        "authority_binding": {
+          "$ref": "#/$defs/binding"
+        }
+      }
+    },
+    "previous_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content",
+        "successor",
+        "decision"
+      ],
+      "properties": {
+        "content": {
+          "$ref": "#/$defs/content"
+        },
+        "successor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/lineage"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "decision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/decision"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "history_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_revision",
+        "operation",
+        "recorded_at",
+        "reason",
+        "previous_sha256",
+        "previous_status",
+        "previous_state"
+      ],
+      "properties": {
+        "from_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "operation": {
+          "enum": [
+            "revise",
+            "accept",
+            "retire",
+            "supersede"
+          ]
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "previous_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "previous_status": {
+          "enum": [
+            "candidate",
+            "accepted",
+            "retired",
+            "superseded"
+          ]
+        },
+        "previous_state": {
+          "$ref": "#/$defs/previous_state"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "revision": {
+            "const": 1
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "history": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "superseded"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "successor": {
+            "$ref": "#/$defs/lineage"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "successor": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "candidate"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "decision": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "accepted"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "decision": {
+            "$ref": "#/$defs/decision"
+          }
+        }
+      }
+    }
+  ]
+}

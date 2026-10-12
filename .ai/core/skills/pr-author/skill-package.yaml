@@ -1,0 +1,231 @@
+metadata_version: 2
+id: pr-author
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read selected package and resources
+  for_operations:
+  - explain
+  - prepare
+  - inspect
+  - query
+  - revise
+  - render
+  - provider-read
+  - provider-create
+  - provider-update
+  on_missing: unavailable
+- id: python
+  version: '>=3.11,<4'
+  for_operations:
+  - explain
+  - prepare
+  - inspect
+  - query
+  - revise
+  - render
+  - provider-read
+  - provider-create
+  - provider-update
+  on_missing: unavailable
+- id: pyyaml
+  version: '>=6,<7'
+  for_operations:
+  - explain
+  - prepare
+  - inspect
+  - query
+  - revise
+  - render
+  - provider-read
+  - provider-create
+  - provider-update
+  on_missing: unavailable
+- id: jsonschema
+  version: '>=4.18,<5'
+  for_operations:
+  - prepare
+  - inspect
+  - query
+  - revise
+  - render
+  - provider-create
+  - provider-update
+  on_missing: unavailable
+- id: filesystem
+  requirement: Selected local files; writes need exclusive creation and same-directory
+    atomic replacement
+  for_operations:
+  - explain
+  - prepare
+  - inspect
+  - query
+  - revise
+  - render
+  - provider-read
+  - provider-create
+  - provider-update
+  on_missing: unavailable
+- id: git
+  requirement: 'Conditional: selected local-config ignore checks; PR prepare and requested
+    source rebind'
+  for_operations:
+  - explain
+  - prepare
+  - inspect
+  - query
+  - revise
+  - render
+  - provider-read
+  - provider-create
+  - provider-update
+  on_missing: unavailable
+- id: gh
+  requirement: Existing caller-authorized GitHub authentication; no credential provisioning
+  for_operations:
+  - provider-read
+  - provider-create
+  - provider-update
+  on_missing: unavailable
+configuration:
+  namespace: pr-author
+  defaults:
+    store:
+      kind: filesystem
+      root: notes/pull-requests
+      tracking: tracked
+    template:
+      origin: package
+      path: templates/pr.md
+artifact_roles:
+- role: pr.record
+  owner: project
+  schema: pr.record@1.0.0
+  read_schemas:
+  - pr.record@1.0.0
+  store_binding: pr-author.store
+  identity: pr-<32 lowercase hex digits>
+  filename: <id>.pr.json
+  read_operations:
+  - inspect
+  - query
+  - render
+  write_operations:
+  - prepare
+  - revise
+- role: pr.view
+  owner: derived
+  source_role: pr.record
+  output: result-only Markdown
+  persistence: Caller-selected export is a separate write
+  produce_operations:
+  - render
+resources:
+  references:
+  - references/configuration.md
+  - references/operations.md
+  - references/github.md
+  - references/example.md
+  schemas:
+  - id: pr.record
+    version: 1.0.0
+    path: schemas/pr-record.schema.json
+    owner: pr-author
+    migration: unsupported; preserve original
+  templates:
+  - id: pr-author.default-view
+    path: templates/pr.md
+    input_role: pr.record
+    output_role: pr.view
+    owner: pr-author
+  tools:
+  - id: pr-author.fs
+    owner: pr-author
+    implementation_status: implemented
+    entrypoint: scripts/pr.py
+    operation_contract: references/operations.md
+    operations:
+    - explain
+    - prepare
+    - inspect
+    - query
+    - revise
+    - render
+  - id: pr-author.github
+    owner: pr-author
+    implementation_status: implemented
+    entrypoint: scripts/github.py
+    operation_contract: references/github.md
+    operations:
+    - provider-read
+    - provider-create
+    - provider-update
+operations:
+- id: explain
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: pr-author.fs
+  implementation_status: implemented
+- id: prepare
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: pr-author.fs
+  implementation_status: implemented
+- id: inspect
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: pr-author.fs
+  implementation_status: implemented
+- id: query
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: pr-author.fs
+  implementation_status: implemented
+- id: revise
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: pr-author.fs
+  implementation_status: implemented
+- id: render
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: pr-author.fs
+  implementation_status: implemented
+- id: provider-read
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: pr-author.github
+  implementation_status: implemented
+- id: provider-create
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: pr-author.github
+  implementation_status: implemented
+- id: provider-update
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: pr-author.github
+  implementation_status: implemented

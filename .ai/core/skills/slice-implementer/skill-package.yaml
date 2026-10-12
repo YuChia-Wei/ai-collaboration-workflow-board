@@ -1,0 +1,69 @@
+metadata_version: 4
+id: slice-implementer
+version: 0.2.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read the implementation instructions, selected mode and permitted target sources
+  for_operations: [implement]
+  on_missing: unavailable
+- id: authorized-target-editor
+  requirement: Inspect and edit the explicitly authorized target paths
+  for_operations: [implement]
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/implement.md
+  - references/modes/command.md
+  - references/modes/query.md
+  - references/modes/reactor.md
+  - references/modes/generic.md
+  - references/test-handoff.md
+  - references/remediation.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: implement
+  execution: instruction
+  inputs:
+  - One bounded goal, intent, acceptance, non-goals and exactly one command, query, reactor or generic mode
+  - Existing authorization, target normative sources and optional finding evidence kept separately
+  - Accepted architecture, selected technology guidance, permitted paths and target validation commands
+  - Scenario input when concrete tests are in scope and optional remediation overlay
+  outputs:
+  - Bounded implementation, actual touched files and compatibility notes
+  - Actual validation outcomes, deferred work and scenario-to-assertion mapping when applicable
+  - Finding dispositions when selected and any concrete missing-decision handoff
+  instructions: references/implement.md
+  implementation_status: implemented
+knowledge_consumption:
+- id: common-implementation
+  package: engineering-common
+  version: 0.1.0
+  operations: [implement]
+  resources:
+  - engineering-rule-catalog
+  - member:references/GWT-TEST-HANDOFF-CONTRACT.md
+  requirement: optional
+  on_missing: unavailable
+- id: dotnet-implementation
+  package: dotnet-backend
+  version: 0.1.0
+  operations: [implement]
+  resources:
+  - engineering-rule-catalog
+  - member:standards/DESIGN-BY-CONTRACT.md
+  - member:standards/coding-standards/aggregate-standards.md
+  - member:standards/coding-standards/repository-standards.md
+  - member:standards/coding-standards/test-standards.md
+  - member:standards/coding-standards/transactional-messaging-standards.md
+  - member:standards/coding-standards/usecase-standards.md
+  requirement: optional
+  on_missing: unavailable

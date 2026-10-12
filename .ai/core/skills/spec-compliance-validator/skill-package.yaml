@@ -1,0 +1,57 @@
+metadata_version: 3
+id: spec-compliance-validator
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read selected instructions, actual format-owner result and permitted
+    target evidence
+  for_operations:
+  - plan-validation
+  - review-semantics
+  - assess-runtime
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/compliance.md
+  - references/report-template.md
+  - references/legacy-intake.md
+  - profiles/dotnet.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: plan-validation
+  execution: instruction
+  inputs:
+  - Selected artifact/version, intent/rules, target subject/scope and evidence requirements
+  outputs:
+  - Complete criterion inventory, authority, applicability, proposed target-owned
+    commands and unavailable prerequisites
+  instructions: references/compliance.md
+  implementation_status: implemented
+- id: review-semantics
+  execution: instruction
+  inputs:
+  - Selected bytes and source bindings, real owner structural result when required
+    and bounded target code/tests
+  outputs:
+  - Meaning, completeness and GWT/contract findings with exact criterion and evidence
+    locations
+  instructions: references/compliance.md
+  implementation_status: implemented
+- id: assess-runtime
+  execution: instruction
+  inputs:
+  - Fixed artifact/rule/code/test/config/dependency subjects, explicit target profile
+    and authentic supplied runs or authorized target execution
+  outputs:
+  - Per-criterion evidence matrix, actual outcomes, exclusions and scoped conclusion
+  instructions: references/compliance.md
+  implementation_status: implemented

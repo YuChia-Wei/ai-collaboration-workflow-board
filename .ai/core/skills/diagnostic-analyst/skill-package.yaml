@@ -1,0 +1,34 @@
+metadata_version: 3
+id: diagnostic-analyst
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read the diagnostic instructions and permitted caller evidence
+  for_operations: [diagnose]
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/diagnose.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: diagnose
+  execution: instruction
+  inputs:
+  - Observed symptom, expected behavior, subject and environment
+  - Applicable target rules, evidence and its limitations
+  - Authorized investigation scope, commands, instruments, destinations and stopping conditions
+  outputs:
+  - Prose hypotheses with falsifiers, observation coverage and evidence
+  - Reproduction and causal isolation results with confirmed, unconfirmed or blocked conclusion
+  - Bounded repair proposal and proposed or actually verified regression binding
+  instructions: references/diagnose.md
+  implementation_status: implemented

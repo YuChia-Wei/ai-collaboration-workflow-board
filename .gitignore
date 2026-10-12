@@ -19,3 +19,5 @@ coverage/
 *.zip
 bindings.local.json
 outbox*.json
+.ai/local/
+.ai/*.operation

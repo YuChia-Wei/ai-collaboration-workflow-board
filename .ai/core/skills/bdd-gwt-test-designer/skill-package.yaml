@@ -1,0 +1,63 @@
+metadata_version: 4
+id: bdd-gwt-test-designer
+version: 0.2.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read the selected scenario instructions and permitted caller sources
+  for_operations: [design, review]
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/design.md
+  - references/review.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: design
+  execution: instruction
+  inputs:
+  - Requirements, specifications, acceptance or explicitly labeled observed behavior
+  - Bounded behavior, selected testing conventions and existing authoring authority
+  - Optional caller-selected scenario format and output destination
+  outputs:
+  - Traceable GWT scenarios with concrete data, observable assertions and test levels
+  - Setup notes, expected-value sources, gaps and bounded implementation handoff
+  instructions: references/design.md
+  implementation_status: implemented
+- id: review
+  execution: instruction
+  inputs:
+  - Fixed scenario artifact identity, source behavior and acceptance
+  - Applicable target rules, selected testing conventions and requested coverage
+  outputs:
+  - Read-only findings with evidence, impact, uncertainty and suggested corrections
+  - Review classification, acceptance coverage and implementation handoff limits
+  instructions: references/review.md
+  implementation_status: implemented
+knowledge_consumption:
+- id: common-test-design
+  package: engineering-common
+  version: 0.1.0
+  operations: [design, review]
+  resources:
+  - engineering-rule-catalog
+  - member:references/GWT-TEST-HANDOFF-CONTRACT.md
+  requirement: optional
+  on_missing: unavailable
+- id: dotnet-test-design
+  package: dotnet-backend
+  version: 0.1.0
+  operations: [design, review]
+  resources:
+  - engineering-rule-catalog
+  - member:standards/coding-standards/test-standards.md
+  requirement: optional
+  on_missing: unavailable

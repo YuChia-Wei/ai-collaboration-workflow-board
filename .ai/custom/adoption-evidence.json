@@ -1,0 +1,140 @@
+{
+  "issue": 9,
+  "adoption_date": "2026-10-12",
+  "release_version": "0.19.1",
+  "source_commit": "42b99e954e3d6fbf595075a079357f0ce1df057f",
+  "archive_sha256": "1e0fc391b7258ab0e9bdc94e648d4e1c54e285bfbe4bd5f5359ecee0c958e280",
+  "candidate_identity": "subset:3:0.19.1:42b99e954e3d6fbf595075a079357f0ce1df057f:424e2dcb23fcd1809e7f529d96d83fd0a27f9c5bcbcf20e05b190b5a5ded3ee9",
+  "plan_sha256": "3b8a3ee1a3250b23af4c26748d85ca3bb5906747bb6484d1bb281802fced817c",
+  "lock_sha256": "64882b0b40e77d76bce2520d30a42f0fd175756af281cf0dcff4421ad28a1dd7",
+  "components": [
+    {
+      "kind": "knowledge",
+      "id": "engineering-common",
+      "version": "0.1.0"
+    },
+    {
+      "kind": "skill",
+      "id": "adr-author",
+      "version": "0.1.0"
+    },
+    {
+      "kind": "skill",
+      "id": "bdd-gwt-test-designer",
+      "version": "0.2.0"
+    },
+    {
+      "kind": "skill",
+      "id": "code-reviewer",
+      "version": "0.2.0"
+    },
+    {
+      "kind": "skill",
+      "id": "ddd-ca-hex-architect",
+      "version": "0.2.0"
+    },
+    {
+      "kind": "skill",
+      "id": "diagnostic-analyst",
+      "version": "0.1.0"
+    },
+    {
+      "kind": "skill",
+      "id": "lesson-author",
+      "version": "0.2.0"
+    },
+    {
+      "kind": "skill",
+      "id": "local-change-implementer",
+      "version": "0.2.0"
+    },
+    {
+      "kind": "skill",
+      "id": "pr-author",
+      "version": "0.1.0"
+    },
+    {
+      "kind": "skill",
+      "id": "problem-frame-author",
+      "version": "0.1.0"
+    },
+    {
+      "kind": "skill",
+      "id": "requirement-author",
+      "version": "0.1.0"
+    },
+    {
+      "kind": "skill",
+      "id": "slice-implementer",
+      "version": "0.2.0"
+    },
+    {
+      "kind": "skill",
+      "id": "software-development-orchestrator",
+      "version": "0.2.0"
+    },
+    {
+      "kind": "skill",
+      "id": "spec-author",
+      "version": "0.1.0"
+    },
+    {
+      "kind": "skill",
+      "id": "spec-compliance-validator",
+      "version": "0.1.0"
+    }
+  ],
+  "managed_file_count": 121,
+  "plan_actions": {
+    "add": 121,
+    "change": 0,
+    "remove": 0
+  },
+  "protected_inputs_verified": 108,
+  "post_apply_state": "managed-bytes-consistent",
+  "knowledge_bindings": [],
+  "recovery": {
+    "environment": "Windows synthetic fixture",
+    "direction": "finish",
+    "outcome": "already-matching",
+    "post_inspect": "managed-bytes-consistent",
+    "scope": "Completed-operation replay only; interrupted restore and power loss not tested"
+  },
+  "tool_smoke": {
+    "adr-author": {
+      "operation": "explain",
+      "outcome": "succeeded",
+      "mutation_state": "none"
+    },
+    "lesson-author": {
+      "operation": "explain",
+      "outcome": "succeeded",
+      "mutation_state": "none"
+    },
+    "pr-author": {
+      "operation": "explain",
+      "outcome": "succeeded",
+      "mutation_state": "none"
+    }
+  },
+  "instruction_smoke": {
+    "skill": "spec-author",
+    "operation": "draft",
+    "type": "formal-test",
+    "artifact": "ignored local evidence; not adopted product requirements"
+  },
+  "runtime_discovery": "not-verified",
+  "local_checks": {
+    "inventory_regressions": 7,
+    "python_layout": 3,
+    "python_review_regressions": 15,
+    "python_acceptance": 10,
+    "board": [
+      "npm test",
+      "npm run build",
+      "npm run validate"
+    ],
+    "outcome": "passed"
+  },
+  "hosted_ci": "see pull request live checks"
+}
