@@ -1,0 +1,170 @@
+{
+  "description": "Frozen synthetic canonicalization/hash vectors. Integers only; strings and document newlines are never normalized.",
+  "valid": [
+    {
+      "id": "unicode-values",
+      "json": "{\"z\":1,\"a\":\"臺灣\"}",
+      "canonical": "{\"a\":\"臺灣\",\"z\":1}",
+      "digest": "sha256:8b85be1267102f3e57d40431c84729bbd5137afc6106fd1615fd5d60a8dc31d5"
+    },
+    {
+      "id": "utf16-key-order",
+      "json": "{\"\\ue000\":1,\"😀\":2,\"a\":0}",
+      "canonical": "{\"a\":0,\"😀\":2,\"\":1}",
+      "digest": "sha256:eeb65aeaeec6c59da0989967658b0d4bc9a07d6550fbf60fb3fc60b9af7ae8ef"
+    },
+    {
+      "id": "numeric-looking-keys",
+      "json": "{\"2\":\"two\",\"10\":\"ten\",\"1\":\"one\"}",
+      "canonical": "{\"1\":\"one\",\"10\":\"ten\",\"2\":\"two\"}",
+      "digest": "sha256:88f1d5d864d29ee7e34bed097931cc725766463ad2b97c08685f0c20dbc66b21"
+    },
+    {
+      "id": "null-present",
+      "json": "{\"optional\":null}",
+      "canonical": "{\"optional\":null}",
+      "digest": "sha256:f66ec4e197d912a196b9eb28968da156ab0d83c729c6d029d978e4b1b9d6bc26"
+    },
+    {
+      "id": "null-absent",
+      "json": "{}",
+      "canonical": "{}",
+      "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "id": "nested",
+      "json": "{\"b\":[true,false,null,{\"z\":2,\"a\":1}],\"a\":-42}",
+      "canonical": "{\"a\":-42,\"b\":[true,false,null,{\"a\":1,\"z\":2}]}",
+      "digest": "sha256:6789a47cb95c0ec2799f8e4b749591c0fb1b44344c88cfc5e451a7affbe0aa6c"
+    },
+    {
+      "id": "max-safe",
+      "json": "{\"max\":9007199254740991,\"min\":-9007199254740991}",
+      "canonical": "{\"max\":9007199254740991,\"min\":-9007199254740991}",
+      "digest": "sha256:63546eb60913dcb1cdd5118f7bf4885beed344af930c8a9d5f38fad243fd4819"
+    },
+    {
+      "id": "composed",
+      "json": "{\"s\":\"é\"}",
+      "canonical": "{\"s\":\"é\"}",
+      "digest": "sha256:86028b41ba792eaf82aa26a45b218f6734f7f1096a86f1746c8296e088a0ccb4"
+    },
+    {
+      "id": "decomposed",
+      "json": "{\"s\":\"é\"}",
+      "canonical": "{\"s\":\"é\"}",
+      "digest": "sha256:1fc0bd7cc93fca8092a2041d7d01842876422aa7e2838acf42c14578e9f2be05"
+    },
+    {
+      "id": "controls-and-line-separators",
+      "json": "{\"s\":\"\\\"\\\\/\\b\\t\\n\\f\\r\\u0000  \"}",
+      "canonical": "{\"s\":\"\\\"\\\\/\\b\\t\\n\\f\\r\\u0000  \"}",
+      "digest": "sha256:e99116edacd8cf942443100a53fbfeeebb5d5aaedd86595f6302277bad59a768"
+    }
+  ],
+  "invalid": [
+    {
+      "id": "duplicate-property",
+      "json": "{\"a\":1,\"a\":2}"
+    },
+    {
+      "id": "escaped-duplicate",
+      "json": "{\"a\":1,\"\\u0061\":2}"
+    },
+    {
+      "id": "unsafe-integer",
+      "json": "9007199254740992"
+    },
+    {
+      "id": "decimal",
+      "json": "1.0"
+    },
+    {
+      "id": "exponent",
+      "json": "1e3"
+    },
+    {
+      "id": "negative-zero",
+      "json": "-0"
+    },
+    {
+      "id": "non-finite",
+      "json": "NaN"
+    },
+    {
+      "id": "unpaired-surrogate",
+      "json": "\"\\ud800\""
+    },
+    {
+      "id": "unpaired-low-surrogate",
+      "json": "\"\\udc00\""
+    },
+    {
+      "id": "leading-zero",
+      "json": "01"
+    },
+    {
+      "id": "trailing-data",
+      "json": "{}[]"
+    },
+    {
+      "id": "trailing-comma",
+      "json": "{\"a\":1,}"
+    },
+    {
+      "id": "missing-value",
+      "json": "[1,]"
+    },
+    {
+      "id": "bad-escape",
+      "json": "\"\\x20\""
+    }
+  ],
+  "documents": [
+    {
+      "id": "lf",
+      "content": "臺灣\n",
+      "digest": "sha256:3c52599edebec205f035e0ed96ad30f1dacaa9dde259c1f76dc8d52b5652938c"
+    },
+    {
+      "id": "crlf",
+      "content": "臺灣\r\n",
+      "digest": "sha256:610946516c6a927adc82f38b54f2d767cfaffd7d2378e180c6910a52d009c7f3"
+    },
+    {
+      "id": "empty",
+      "content": "",
+      "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "request": {
+    "authority": {
+      "owner_id": "owner-1",
+      "actor": {
+        "subject_id": "agent-A",
+        "kind": "agent",
+        "binding_id": "grant-A"
+      }
+    },
+    "command": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-9",
+      "expected_revision": 1,
+      "command": "task.claim",
+      "payload": {
+        "task_id": "T1",
+        "expected_definition_revision": 1,
+        "session": null
+      }
+    },
+    "canonical": "{\"authority\":{\"actor\":{\"binding_id\":\"grant-A\",\"kind\":\"agent\",\"subject_id\":\"agent-A\"},\"owner_id\":\"owner-1\"},\"command\":{\"command\":\"task.claim\",\"expected_revision\":1,\"operation_id\":\"OP-9\",\"payload\":{\"expected_definition_revision\":1,\"session\":null,\"task_id\":\"T1\"},\"schema_version\":\"1.0\",\"service_contract_version\":\"workflow-board/collaboration/1\",\"workflow_ref\":{\"namespace\":\"personal\",\"record_kind\":\"collaboration\",\"store_id\":\"board-local\",\"workflow_id\":\"WF-1\"}},\"purpose\":\"workflow-board-command-v1\"}",
+    "digest": "sha256:317e53749389fd58732fe71c4a0b490bc0d682930c235758209c38126ceaad92"
+  }
+}

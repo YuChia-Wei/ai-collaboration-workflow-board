@@ -18,9 +18,11 @@ for(const layer of ['domain','application']){
   for(const imported of source.matchAll(/\b(?:import|export)\s+[^;]*?\bfrom\s*['"]([^'"]+)['"]/g)){
    assert.ok(imported[1].startsWith('.'),`${relative(root,path)} must not import runtime libraries`);
    const target=relative(root,resolve(dirname(path),imported[1])).replaceAll('\\','/');
-   assert.ok(target.startsWith('domain/')||(layer==='application'&&(target.startsWith('application/')||target.startsWith('data/'))),`${relative(root,path)} must depend inward: ${target}`);
+   assert.ok(target.startsWith('domain/')||(layer==='application'&&target.startsWith('application/')),`${relative(root,path)} must depend inward: ${target}`);
   }
   assert.doesNotMatch(source,/\b(?:db|repository)\.prepare\s*\(/,`${relative(root,path)} must not contain D1 SQL access`);
+  assert.doesNotMatch(source,/\b(?:Request|Response|URLSearchParams)\b|\.results\b|JSON\.parse\(|new Date\(|Date\.now\(|\.headers\b|\benv\.DB\b/,`${relative(root,path)} must not depend on transport, persistence encoding or wall clock`);
+  assert.doesNotMatch(source,/new Fault\(\d|,(?:401|403|404|409|413|422|503)[,)]/,`${relative(root,path)} must not choose HTTP status codes`);
  }
 }
 console.log('PASS domain and application imports depend inward; SQL remains in outbound adapters');
@@ -36,6 +38,6 @@ assert.deepEqual(legacy.w,legacyOriginal,'Legacy reducer must not mutate its inp
 console.log('PASS both reducers run without HTTP or D1 and preserve their input');
 
 const receipt={accepted:true,revision:1},digest=await hash(command);
-const fake={operations:{find:async()=>({hash:digest,receipt:JSON.stringify(receipt)})},board:{load:()=>assert.fail('Replay must precede aggregate load'),commit:()=>assert.fail('Replay must not write')}};
+const fake={operations:{find:async()=>({digest,receipt})},board:{load:()=>assert.fail('Replay must precede aggregate load'),commit:()=>assert.fail('Replay must not write')}};
 assert.deepEqual(await boardCommand(fake,'owner',command),receipt);
 console.log('PASS command use case replays receipts through a fake repository port without D1');

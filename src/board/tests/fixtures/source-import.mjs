@@ -17,17 +17,17 @@ export async function sourceImport(request,db){
   return json({records,documents,active:active?.value||null,demo_count:demos.count});
  }
  demand(request.method==='POST','method_not_allowed',405);
- const raw=await request.text();demand(new TextEncoder().encode(raw).length<=1500000,'request_too_large',413);const p=JSON.parse(raw);
+ const raw=await request.text();demand(new TextEncoder().encode(raw).length<=1500000,'request_too_large','limit_exceeded');const p=JSON.parse(raw);
  demand(/^[a-f0-9]{40}$/.test(p.dataset||''),'invalid_dataset');
  if(p.action==='stage'){
   demand(['records','documents'].includes(p.kind)&&Array.isArray(p.rows)&&p.rows.length>0&&p.rows.length<=40,'invalid_import_rows');
-  const active=await db.prepare('SELECT value FROM source_state WHERE key=?').bind('active').first();demand(active?.value!==p.dataset,'dataset_already_active',409);
+  const active=await db.prepare('SELECT value FROM source_state WHERE key=?').bind('active').first();demand(active?.value!==p.dataset,'dataset_already_active','conflict');
   const table=p.kind==='records'?'source_records':'source_documents';const statements=[];
   for(const row of p.rows){
    demand(nonempty(row.workflow_id)&&typeof row.body==='string'&&row.body.length<=1000000&&await hash(row.body)===row.hash,'invalid_import_hash');
    const w=JSON.parse(row.body);demand(p.kind==='records'?w.id===row.workflow_id&&w.record_mode==='source_snapshot'&&w.source?.commit===p.dataset:w.id===row.document_id&&nonempty(w.source_path),'invalid_import_body');
    const key=p.dataset+':'+row.workflow_id+(p.kind==='documents'?':'+row.document_id:'');
-   const existing=await db.prepare('SELECT hash FROM '+table+' WHERE key=?').bind(key).first();demand(!existing||existing.hash===row.hash,'import_payload_conflict',409);
+   const existing=await db.prepare('SELECT hash FROM '+table+' WHERE key=?').bind(key).first();demand(!existing||existing.hash===row.hash,'import_payload_conflict','conflict');
    statements.push(p.kind==='records'?db.prepare('INSERT OR IGNORE INTO source_records(key,dataset,workflow_id,body,hash) VALUES(?,?,?,?,?)').bind(key,p.dataset,row.workflow_id,row.body,row.hash):db.prepare('INSERT OR IGNORE INTO source_documents(key,dataset,workflow_id,document_id,body,hash) VALUES(?,?,?,?,?,?)').bind(key,p.dataset,row.workflow_id,row.document_id,row.body,row.hash));
   }
   await db.batch(statements);return json({accepted:true,rows:p.rows.length});

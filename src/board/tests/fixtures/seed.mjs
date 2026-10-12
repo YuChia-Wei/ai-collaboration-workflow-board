@@ -1,4 +1,5 @@
-import {command} from '../../application/legacy.mjs';
+import {command as execute} from '../../application/legacy.mjs';
+const command=(repository,owner,c)=>execute(repository,owner,c,{now:()=> '2026-10-07T00:00:00.000Z'});
 export async function seed(repository,owner){
  for(const [id,title,goal,next] of [['demo-travel','旅行手冊整理','把合成旅行資訊整理成可交接的手冊。','補上雨天備案並修訂交通文件'],['demo-reading','週末讀書角','試用文件修訂與心得紀錄，不是真實專案進度。','整理第二份閱讀心得'],['demo-cooking','料理筆記整備','示範受控步驟與證據關聯。','核對份量並更新準備步驟']]){
   if(await repository.legacy.load(owner,id))continue;

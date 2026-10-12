@@ -1,0 +1,1060 @@
+[
+  {
+    "id": "C01",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-1",
+      "expected_revision": 0,
+      "command": "workflow.create",
+      "payload": {
+        "title": "Workflow",
+        "goal": "完成分析",
+        "scope": {
+          "included": "本次工作",
+          "excluded": "部署"
+        },
+        "skill": {
+          "id": "analysis",
+          "version": null
+        },
+        "external_work_refs": []
+      }
+    }
+  },
+  {
+    "id": "C02",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-2",
+      "expected_revision": 1,
+      "command": "workflow.start",
+      "payload": {}
+    }
+  },
+  {
+    "id": "C03",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-3",
+      "expected_revision": 1,
+      "command": "workflow.pause",
+      "payload": {
+        "reason": "稍後接續"
+      }
+    }
+  },
+  {
+    "id": "C04",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-4",
+      "expected_revision": 1,
+      "command": "workflow.resume",
+      "payload": {}
+    }
+  },
+  {
+    "id": "C05",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-5",
+      "expected_revision": 1,
+      "command": "workflow.cancel",
+      "payload": {
+        "reason": "範圍變更",
+        "remaining": "未完成驗證"
+      }
+    }
+  },
+  {
+    "id": "C06",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-6",
+      "expected_revision": 1,
+      "command": "workflow.complete",
+      "payload": {
+        "summary": "必要工作已交付",
+        "document_refs": [
+          {
+            "document_id": "plan",
+            "revision": 1,
+            "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "C07",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-7",
+      "expected_revision": 1,
+      "command": "plan.revise",
+      "payload": {
+        "plan": {
+          "document_id": "plan",
+          "expected_document_revision": 0,
+          "content": "# 工作計畫\n"
+        },
+        "execution_impact": "declared",
+        "task_changes": [
+          {
+            "kind": "add",
+            "definition": {
+              "id": "T1",
+              "title": "分析",
+              "description": "整理規則",
+              "scope": {
+                "included": "本次工作",
+                "excluded": "部署"
+              },
+              "completion_criteria": [
+                "提供分析文件"
+              ],
+              "dependencies": [],
+              "plan_basis": {
+                "document_id": "plan",
+                "revision": 1,
+                "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+              },
+              "inputs": [],
+              "expected_artifacts": [
+                "分析文件"
+              ],
+              "decision_ids": [],
+              "workstream": null
+            }
+          }
+        ],
+        "unaffected_task_ids": [],
+        "decision_dispositions": [],
+        "completion_requirements": [
+          {
+            "id": "REQ-1",
+            "description": "交付分析",
+            "task_ids": [
+              "T1"
+            ],
+            "document_refs": []
+          }
+        ],
+        "requirement_dispositions": []
+      }
+    }
+  },
+  {
+    "id": "C08",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-8",
+      "expected_revision": 1,
+      "command": "document.append",
+      "payload": {
+        "document": {
+          "document_id": "result",
+          "expected_document_revision": 0,
+          "content": "分析結果\n"
+        },
+        "purpose": "result"
+      }
+    }
+  },
+  {
+    "id": "C09",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-9",
+      "expected_revision": 1,
+      "command": "task.claim",
+      "payload": {
+        "task_id": "T1",
+        "expected_definition_revision": 1,
+        "session": null
+      }
+    }
+  },
+  {
+    "id": "C10",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-10",
+      "expected_revision": 1,
+      "command": "task.progress",
+      "payload": {
+        "task_id": "T1",
+        "assignment": {
+          "assignment_id": "ASG-1",
+          "generation": 1,
+          "definition_revision": 1
+        },
+        "summary": "已完成初稿",
+        "evidence": []
+      }
+    }
+  },
+  {
+    "id": "C11",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-11",
+      "expected_revision": 1,
+      "command": "task.release",
+      "payload": {
+        "task_id": "T1",
+        "assignment": {
+          "assignment_id": "ASG-1",
+          "generation": 1,
+          "definition_revision": 1
+        },
+        "handoff": {
+          "completed": "分析已完成",
+          "remaining": "補充驗證",
+          "next_step": "檢查既有結果",
+          "artifact_refs": [
+            {
+              "kind": "document",
+              "ref": {
+                "document_id": "plan",
+                "revision": 1,
+                "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+              }
+            }
+          ],
+          "blockers": [],
+          "limitations": [],
+          "next_actor_hint": null
+        }
+      }
+    }
+  },
+  {
+    "id": "C12",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-12",
+      "expected_revision": 1,
+      "command": "task.block",
+      "payload": {
+        "task_id": "T1",
+        "assignment": {
+          "assignment_id": "ASG-1",
+          "generation": 1,
+          "definition_revision": 1
+        },
+        "reason": "缺少輸入",
+        "handoff": {
+          "completed": "分析已完成",
+          "remaining": "補充驗證",
+          "next_step": "檢查既有結果",
+          "artifact_refs": [
+            {
+              "kind": "document",
+              "ref": {
+                "document_id": "plan",
+                "revision": 1,
+                "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+              }
+            }
+          ],
+          "blockers": [],
+          "limitations": [],
+          "next_actor_hint": null
+        }
+      }
+    }
+  },
+  {
+    "id": "C13",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-13",
+      "expected_revision": 1,
+      "command": "task.unblock",
+      "payload": {
+        "task_id": "T1",
+        "resolution": "已補齊輸入"
+      }
+    }
+  },
+  {
+    "id": "C14",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-14",
+      "expected_revision": 1,
+      "command": "task.complete",
+      "payload": {
+        "task_id": "T1",
+        "assignment": {
+          "assignment_id": "ASG-1",
+          "generation": 1,
+          "definition_revision": 1
+        },
+        "result": {
+          "summary": "分析完成",
+          "criterion_results": [
+            {
+              "criterion_index": 0,
+              "outcome": "satisfied",
+              "explanation": "結果文件可讀",
+              "evidence_ids": []
+            }
+          ],
+          "artifacts": [
+            {
+              "kind": "document",
+              "ref": {
+                "document_id": "result",
+                "revision": 1,
+                "content_hash": "sha256:0f33ae5f3694c08f7e75bda9711782603bebd4310ea8114e6e2224e4287d18e7"
+              }
+            }
+          ],
+          "evidence": [],
+          "limitations": []
+        }
+      }
+    }
+  },
+  {
+    "id": "C15",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-15",
+      "expected_revision": 1,
+      "command": "task.cancel",
+      "payload": {
+        "task_id": "T1",
+        "assignment": null,
+        "reason": "不再交付此任務",
+        "handoff": null
+      }
+    }
+  },
+  {
+    "id": "C16",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-16",
+      "expected_revision": 1,
+      "command": "decision.open",
+      "payload": {
+        "decision_id": "Q1",
+        "question": "採用哪個方案",
+        "options": [
+          "A",
+          "B"
+        ],
+        "required_decider": {
+          "kind": "human"
+        },
+        "blocks": {
+          "task_ids": [
+            "T1"
+          ],
+          "workflow_closure": false
+        },
+        "basis": [
+          {
+            "document_id": "plan",
+            "revision": 1,
+            "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "C17",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-17",
+      "expected_revision": 1,
+      "command": "decision.resolve",
+      "payload": {
+        "decision_id": "Q1",
+        "expected_decision_revision": 1,
+        "basis": [
+          {
+            "document_id": "plan",
+            "revision": 1,
+            "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+          }
+        ],
+        "outcome": "decided",
+        "value": "A",
+        "reason": "符合範圍"
+      }
+    }
+  },
+  {
+    "id": "C18",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-18",
+      "expected_revision": 1,
+      "command": "handoff.record",
+      "payload": {
+        "task_id": null,
+        "handoff": {
+          "completed": "分析已完成",
+          "remaining": "補充驗證",
+          "next_step": "檢查既有結果",
+          "artifact_refs": [
+            {
+              "kind": "document",
+              "ref": {
+                "document_id": "plan",
+                "revision": 1,
+                "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+              }
+            }
+          ],
+          "blockers": [],
+          "limitations": [],
+          "next_actor_hint": null
+        }
+      }
+    }
+  },
+  {
+    "id": "C19",
+    "schema": "command",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-19",
+      "expected_revision": 1,
+      "command": "checkpoint.append",
+      "payload": {
+        "observation": "確認目前計畫與限制",
+        "next_step": "接手任務",
+        "document_refs": [
+          {
+            "document_id": "plan",
+            "revision": 1,
+            "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "Q01",
+    "schema": "query",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "query": "capabilities",
+      "payload": {
+        "store_id": "board-local",
+        "namespace": "personal"
+      }
+    }
+  },
+  {
+    "id": "Q02",
+    "schema": "query",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "query": "workflow.find",
+      "payload": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "q": "",
+        "limit": 20,
+        "cursor": null
+      }
+    }
+  },
+  {
+    "id": "Q03",
+    "schema": "query",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "query": "workflow.context",
+      "payload": {
+        "workflow_ref": {
+          "store_id": "board-local",
+          "namespace": "personal",
+          "record_kind": "collaboration",
+          "workflow_id": "WF-1"
+        },
+        "limit": 10
+      }
+    }
+  },
+  {
+    "id": "Q04",
+    "schema": "query",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "query": "context.page",
+      "payload": {
+        "workflow_ref": {
+          "store_id": "board-local",
+          "namespace": "personal",
+          "record_kind": "collaboration",
+          "workflow_id": "WF-1"
+        },
+        "section": "tasks",
+        "cursor": "opaque.cursor"
+      }
+    }
+  },
+  {
+    "id": "Q05",
+    "schema": "query",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "query": "document.read",
+      "payload": {
+        "workflow_ref": {
+          "store_id": "board-local",
+          "namespace": "personal",
+          "record_kind": "collaboration",
+          "workflow_id": "WF-1"
+        },
+        "document_ref": {
+          "document_id": "plan",
+          "revision": 1,
+          "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+        }
+      }
+    }
+  },
+  {
+    "id": "Q06",
+    "schema": "query",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "query": "operation.get",
+      "payload": {
+        "workflow_ref": {
+          "store_id": "board-local",
+          "namespace": "personal",
+          "record_kind": "collaboration",
+          "workflow_id": "WF-1"
+        },
+        "operation_id": "OP-1"
+      }
+    }
+  },
+  {
+    "id": "Q07",
+    "schema": "query",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "query": "task.read",
+      "payload": {
+        "workflow_ref": {
+          "store_id": "board-local",
+          "namespace": "personal",
+          "record_kind": "collaboration",
+          "workflow_id": "WF-1"
+        },
+        "task_id": "T1",
+        "definition_revision": 1,
+        "at_revision": 2
+      }
+    }
+  },
+  {
+    "id": "Q08",
+    "schema": "query",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "query": "decision.read",
+      "payload": {
+        "workflow_ref": {
+          "store_id": "board-local",
+          "namespace": "personal",
+          "record_kind": "collaboration",
+          "workflow_id": "WF-1"
+        },
+        "decision_id": "Q1",
+        "decision_revision": 1,
+        "at_revision": 2
+      }
+    }
+  },
+  {
+    "id": "O01",
+    "schema": "receipt",
+    "value": {
+      "accepted": true,
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-9",
+      "request_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "before_revision": 1,
+      "revision": 2,
+      "actor": {
+        "subject_id": "agent-A",
+        "kind": "agent",
+        "binding_id": "grant-A"
+      },
+      "accepted_at": "2026-10-12T00:00:00.000Z",
+      "effects": [
+        {
+          "kind": "assignment",
+          "id": "ASG-1",
+          "revision": 1
+        },
+        {
+          "kind": "task",
+          "id": "T1",
+          "revision": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "O02",
+    "schema": "operation_result",
+    "value": {
+      "outcome": "unknown",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "operation_id": "OP-9"
+    }
+  },
+  {
+    "id": "O03",
+    "schema": "error",
+    "value": {
+      "error": "revision_conflict",
+      "category": "conflict",
+      "details": {
+        "current_revision": 2
+      }
+    }
+  },
+  {
+    "id": "O04",
+    "schema": "context",
+    "value": {
+      "service_contract_version": "workflow-board/collaboration/1",
+      "schema_version": "1.0",
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "revision": 2,
+      "workflow": {
+        "title": "Workflow",
+        "goal": "完成分析",
+        "scope": {
+          "included": "本次工作",
+          "excluded": "部署"
+        },
+        "status": "active",
+        "plan": {
+          "document_id": "plan",
+          "revision": 1,
+          "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+        },
+        "skill": {
+          "id": "analysis",
+          "version": null
+        },
+        "external_work_refs": [],
+        "completion_requirements": [
+          {
+            "id": "REQ-1",
+            "description": "交付分析",
+            "task_ids": [
+              "T1"
+            ],
+            "document_refs": []
+          }
+        ],
+        "requirement_dispositions": [],
+        "result": null
+      },
+      "tasks": {
+        "items": [
+          {
+            "id": "T1",
+            "title": "分析",
+            "status": "pending",
+            "definition_revision": 1,
+            "dependencies": [],
+            "plan_basis": {
+              "document_id": "plan",
+              "revision": 1,
+              "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+            },
+            "assignment": null,
+            "ready": true,
+            "claimable": true,
+            "blocking_decision_ids": []
+          }
+        ],
+        "total": 1,
+        "has_more": false,
+        "cursor": null
+      },
+      "decisions": {
+        "items": [],
+        "total": 0,
+        "has_more": false,
+        "cursor": null
+      },
+      "handoffs": {
+        "items": [],
+        "total": 0,
+        "has_more": false,
+        "cursor": null
+      },
+      "missing": []
+    }
+  },
+  {
+    "id": "O05",
+    "schema": "context_page",
+    "value": {
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "revision": 2,
+      "section": "tasks",
+      "page": {
+        "items": [
+          {
+            "id": "T1",
+            "title": "分析",
+            "status": "pending",
+            "definition_revision": 1,
+            "dependencies": [],
+            "plan_basis": {
+              "document_id": "plan",
+              "revision": 1,
+              "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+            },
+            "assignment": null,
+            "ready": true,
+            "claimable": true,
+            "blocking_decision_ids": []
+          }
+        ],
+        "total": 1,
+        "has_more": false,
+        "cursor": null
+      }
+    }
+  },
+  {
+    "id": "O06",
+    "schema": "task_record",
+    "value": {
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "snapshot_revision": 2,
+      "summary": {
+        "id": "T1",
+        "title": "分析",
+        "status": "pending",
+        "definition_revision": 1,
+        "dependencies": [],
+        "plan_basis": {
+          "document_id": "plan",
+          "revision": 1,
+          "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+        },
+        "assignment": null,
+        "ready": true,
+        "claimable": true,
+        "blocking_decision_ids": []
+      },
+      "definition": {
+        "id": "T1",
+        "title": "分析",
+        "description": "整理規則",
+        "scope": {
+          "included": "本次工作",
+          "excluded": "部署"
+        },
+        "completion_criteria": [
+          "提供分析文件"
+        ],
+        "dependencies": [],
+        "plan_basis": {
+          "document_id": "plan",
+          "revision": 1,
+          "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+        },
+        "inputs": [],
+        "expected_artifacts": [
+          "分析文件"
+        ],
+        "decision_ids": [],
+        "workstream": null
+      },
+      "result": null
+    }
+  },
+  {
+    "id": "O07",
+    "schema": "decision_record",
+    "value": {
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "snapshot_revision": 2,
+      "decision": {
+        "id": "Q1",
+        "revision": 1,
+        "question": "採用哪個方案",
+        "status": "pending",
+        "required_decider": {
+          "kind": "human"
+        },
+        "blocks": {
+          "task_ids": [
+            "T1"
+          ],
+          "workflow_closure": false
+        },
+        "basis": [
+          {
+            "document_id": "plan",
+            "revision": 1,
+            "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+          }
+        ]
+      },
+      "resolution": null,
+      "options": [
+        "A",
+        "B"
+      ]
+    }
+  },
+  {
+    "id": "O08",
+    "schema": "document",
+    "value": {
+      "workflow_ref": {
+        "store_id": "board-local",
+        "namespace": "personal",
+        "record_kind": "collaboration",
+        "workflow_id": "WF-1"
+      },
+      "ref": {
+        "document_id": "plan",
+        "revision": 1,
+        "content_hash": "sha256:ddba9bf9f8afcbc5a8271ff38d21fe3ec34114e00bfd1f249bb6f99d902deee2"
+      },
+      "content": "# 工作計畫\n",
+      "created_at": "2026-10-12T00:00:00.000Z",
+      "actor": {
+        "subject_id": "agent-A",
+        "kind": "agent",
+        "binding_id": "grant-A"
+      }
+    }
+  },
+  {
+    "id": "O09",
+    "schema": "find_result",
+    "value": {
+      "items": [
+        {
+          "workflow_ref": {
+            "store_id": "board-local",
+            "namespace": "personal",
+            "record_kind": "collaboration",
+            "workflow_id": "WF-1"
+          },
+          "title": "Workflow",
+          "status": "active",
+          "revision": 2
+        }
+      ],
+      "has_more": false,
+      "cursor": null
+    }
+  }
+]

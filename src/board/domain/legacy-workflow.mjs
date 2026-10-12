@@ -16,9 +16,9 @@ export async function applyLegacyCommand(workflow,c,time){
  const row=workflow;
  let w;
  if(t==='create_workflow'){
-  demand(!row,'workflow_exists',409);demand(c.expected_revision===0,'revision_conflict',409);
+  demand(!row,'workflow_exists','conflict');demand(c.expected_revision===0,'revision_conflict','conflict');
   w={id:c.workflow_id,title:p.title,goal:p.goal,authorized_scope:'本人私有 Sites UI；合成資料',source:{repo:'synthetic://sites-demonstration',commit:'synthetic-v1',branch:'synthetic'},policy_version:'sites-ui-preview-1',template_version:'synthetic-1',status:'planned',revision:0,next_step:p.next_step||'補充第一個步驟',next_owner:p.next_owner||'本人',required_documents:[],steps:{},documents:{},evidence:{},logs:[],handoffs:[]};
- }else{demand(row,'workflow_not_found',404);w=structuredClone(row);demand(c.expected_revision===w.revision,'revision_conflict',409,{current_revision:w.revision});}
+ }else{demand(row,'workflow_not_found','not_found');w=structuredClone(row);demand(c.expected_revision===w.revision,'revision_conflict','conflict',{current_revision:w.revision});}
  const before=w.revision;
  if(t==='update_workflow'){
   demand(Object.keys(p).every(k=>['title','goal','next_step','next_owner','status','required_documents'].includes(k)),'invalid_fields');
@@ -38,7 +38,7 @@ export async function applyLegacyCommand(workflow,c,time){
  else if(t==='handoff'){demand(nonempty(p.next_step)&&nonempty(p.next_owner)&&['blockers','failures','limitations'].every(k=>Array.isArray(p[k])&&p[k].every(nonempty)),'invalid_handoff');w.handoffs.push({...p,at:time});w.next_step=p.next_step;w.next_owner=p.next_owner;}
  else if(t==='evidence'){
   demand(['id','command','result','source_commit'].every(k=>nonempty(p[k]))&&['passed','failed','interrupted','blocked'].includes(p.outcome),'invalid_evidence');demand(p.environment&&typeof p.environment==='object'&&Object.keys(p.environment).length>0&&Object.values(p.environment).every(v=>v!==null&&(typeof v!=='string'||nonempty(v))),'invalid_environment');demand(!('blob_base64'in p),'attachments_not_supported_in_preview');demand(!w.evidence[p.id],'evidence_exists');w.evidence[p.id]={...p,observed_at:time};
- }else demand(t==='create_workflow','command_not_allowed',403);
+ }else demand(t==='create_workflow','command_not_allowed','forbidden');
  validate(w);w.revision=before+1;
  return {w,before,t,time};
 }

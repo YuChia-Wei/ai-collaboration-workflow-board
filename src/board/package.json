@@ -6,9 +6,10 @@
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate-artifact.mjs",
     "db:generate": "drizzle-kit generate",
-    "test": "node tests/architecture.mjs && node --experimental-sqlite tests/contracts.mjs && node --experimental-sqlite tests/board.mjs"
+    "test": "node tests/architecture.mjs && node tests/platform-ports.mjs && node tests/portable-contract.mjs && python -B tests/portable-vectors.py && node tests/collaboration.mjs && node --experimental-sqlite tests/contracts.mjs && node --experimental-sqlite tests/board.mjs"
   },
   "devDependencies": {
+    "ajv": "8.17.1",
     "drizzle-kit": "0.31.4",
     "drizzle-orm": "0.44.5",
     "esbuild": "0.28.2"

@@ -22,6 +22,8 @@ npm run validate
 
 契約測試以 Node SQLite 模擬 D1 batch，覆蓋防重放、版本衝突、零列更新、交易回滾、文件保留與身分邊界；不等於 hosted D1 端到端驗證。
 
+`npm test` 也需要 Python 3，執行獨立的跨語言編碼向量。新協作 profile 的核心以合成原子 repository 驗證 23 個行為情境；這與既有人工 profile 的 SQLite／D1 adapter 回歸是兩種不同證據。CI 配置 Node 24 與 Python 3.13。
+
 ## 程式邊界
 
 `src/board` 是 Node／Worker 專案根目錄，按工作流程領域、使用案例與技術介面分類：
@@ -30,6 +32,8 @@ npm run validate
 | --- | --- |
 | `domain/board-workflow.mjs` | 人工 workflow／task 的狀態、完成條件、文件修訂及 reducer |
 | `domain/legacy-workflow.mjs` | 既有紀錄的相容規則與 reducer |
+| `domain/collaboration-workflow.mjs`、`collaboration-values.mjs` | 新協作 aggregate、DAG、承接世代、plan／decision 規則與可攜編碼 |
+| `contracts/collaboration-v1/` | 新 profile 的 JSON Schema、範例、跨語言向量與版本契約 |
 | `domain/errors.mjs`、`values.mjs`、`summary.mjs` | 契約錯誤、值驗證、hash 與摘要投影 |
 | `application/` | 命令、防重放、revision 衝突處理與查詢；`ports.mjs` 定義儲存契約 |
 | `adapters/inbound/http/` | 路由、HTTP 請求／回應與受信任的身分來源 |
@@ -55,3 +59,9 @@ Domain 不依賴 HTTP 或資料庫；application 使用 repository ports，D1 ad
 新增 board_workflows／board_tasks／board_documents／board_revisions／board_entries，owner 與 workflow/task/document ID 作複合 key。原有表及資料不改寫；文件每次修訂獨立保存，單版 256 KB，metadata 每列 64 KB。CAS、事件與 receipt 在同一 guarded batch；重試先查持久 receipt 再檢查 revision。瀏覽器僅暫存未確認操作的草稿，已保存紀錄仍以 D1 為準。
 
 AI agents、MCP／CLI adapters、原 repo 權威切換、完整 Git 歷史及二進位附件搬移不在本次實作範圍。`scripts/preview.mjs` 僅以本機記憶體 SQLite 與匯入備份驗證 UI，測試資料不寫入 hosted D1。
+
+## 協作核心與可攜契約（WB-03）
+
+[#3 的 DDD／BDD 模型](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/3) 已落成獨立的 `workflow-board/collaboration/1` 命令核心。19 種 commands 支援明確計畫、並行 task DAG、單 task 承接、交接、決策及結案限制；8 種 queries 的 DTO 與快照契約已定義。完整規則、範例、原子接受及證據對照見 [協作契約](contracts/collaboration-v1/README.md)。
+
+此 profile 尚無生產 repository、可信 Agent 身分、query handlers 或 HTTP／MCP routes，未在現行網站 capabilities 廣告，也未遷移人工／source 資料。MCP 目前只有共用錯誤映射，並非可連線的工具服務。後續 #5／#6／#7 依此契約完成 adapters、context／指定版本讀取、Web 與 hosted 驗證。
