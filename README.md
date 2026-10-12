@@ -2,13 +2,12 @@
 
 工作流程、任務與文件紀錄專案。所有程式碼專案都位於 `src/`；網站建置結果、preview、SQLite、憑證與測試證據不進入 Git。
 
-開發協作已選配 Framework v0.19.1 的 14 個 skills 與共通知識；精確清單、驗證及使用限制見 [FRAMEWORK-INSTALLATION.md](FRAMEWORK-INSTALLATION.md)，Agent 入口見 [AGENTS.md](AGENTS.md)。這是開發工具採用，不增加 Board runtime 相依。
+開發協作已選配 Framework v0.19.1 的 15 個 skills 與共通知識，包含 `ai-context-init@0.2.0`，並完成最小協作起點初始化。精確清單、驗證及使用限制見 [FRAMEWORK-INSTALLATION.md](FRAMEWORK-INSTALLATION.md)，Agent 入口見 [AGENTS.md](AGENTS.md)，開始方式見 [第一個有界任務](.dev/guides/first-task.md)。這是開發工具採用，不增加 Board runtime 相依。
 
 | 路徑 | 用途 |
 | --- | --- |
 | `src/board/` | 單一 Sites 系統；`frontend/` 放瀏覽器程式，`backend/` 放 Worker／領域／D1，`contracts/` 放可攜訊息契約 |
 | `src/local/` | Python 本機紀錄服務：SQLite、HTTP CLI、MCP stdio、可攜匯出／還原與合成資料測試 |
-| `src/tools/` | Repository 原始碼與建置產物政策檢查 |
 | `.github/workflows/ci.yml` | GitHub Actions 測試、建置、產物保存 |
 
 兩個實作有自己的契約與儲存模型，沒有隱含的雙向同步。網站保存既有 framework 來源快照與人工 board 紀錄；本機服務使用合成 fixture。資料來源的權威切換與真實資料遷移需要各自的驗證。
@@ -29,13 +28,12 @@ npm --prefix src/board run validate
 Python 使用 3.13，無第三方套件依賴：
 
 ```powershell
-python -B src/tools/check_repository.py
 python -B -m src.local.tests.test_layout
 python -B -m src.local.tests.test_review_regressions
 python -B -m src.local.tests.test_acceptance
 ```
 
-Actions 在 push、pull request 與手動執行時驗證 source policy，於 Linux／Windows 執行本機契約測試，並建置、驗證 Worker。建置結果保存為短期 Actions artifact，沒有提交到原始碼 Git。Workflow 加入 repo 後仍需 push 才會開始 hosted run。
+Actions 在 push、pull request 與手動執行時，於 Linux／Windows 執行本機契約測試，並建置、驗證 Worker。建置結果保存為短期 Actions artifact，沒有提交到原始碼 Git。Workflow 加入 repo 後仍需 push 才會開始 hosted run。
 
 本機啟動與狀態目錄見 [LOCAL-SETUP.md](LOCAL-SETUP.md)。預設測試輸出放在已忽略的 `.runtime/`。
 

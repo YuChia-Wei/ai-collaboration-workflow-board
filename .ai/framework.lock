@@ -1,5 +1,5 @@
 {
-  "candidate_identity": "subset:3:0.19.1:42b99e954e3d6fbf595075a079357f0ce1df057f:424e2dcb23fcd1809e7f529d96d83fd0a27f9c5bcbcf20e05b190b5a5ded3ee9",
+  "candidate_identity": "subset:3:0.19.1:42b99e954e3d6fbf595075a079357f0ce1df057f:91491125a5bb52a5912c23e45bc67f3442ba4fc0466e1a4ea23271f137b922a5",
   "catalog_document": {
     "adapters": [
       {
@@ -10283,6 +10283,261 @@
       },
       {
         "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/SKILL.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/SKILL.md",
+        "sha256": "ffaac04deaf44577381324b7f2293e21ea589c8be1d6dbdc3afc455563ad6250",
+        "size": 2967,
+        "source": {
+          "git_blob": "3db4d2d2031e801a1318e75cb6c3ec0b4380f253",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/SKILL.md",
+          "sha256": "ffaac04deaf44577381324b7f2293e21ea589c8be1d6dbdc3afc455563ad6250",
+          "size": 2967
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/references/initialize.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/references/initialize.md",
+        "sha256": "b3f463e90de97c80fd4b2b8c1809d05c3c5caf6ff7cb765552604d48dc21dd35",
+        "size": 11501,
+        "source": {
+          "git_blob": "008c1997a65bad39327c873a806bc28fd2cf8dfe",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/references/initialize.md",
+          "sha256": "b3f463e90de97c80fd4b2b8c1809d05c3c5caf6ff7cb765552604d48dc21dd35",
+          "size": 11501
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/references/project-structure.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/references/project-structure.md",
+        "sha256": "edb09c507448b55f7d187632d3bfb5caeb77034a0c5810674c29617606805240",
+        "size": 4135,
+        "source": {
+          "git_blob": "defbb6c0f7220bc4a068367fe82d88bd7fcc15b0",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/references/project-structure.md",
+          "sha256": "edb09c507448b55f7d187632d3bfb5caeb77034a0c5810674c29617606805240",
+          "size": 4135
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/skill-package.yaml",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/skill-package.yaml",
+        "sha256": "62e7f99f47d70c795860e1681e3ad2af3923115c00c07d514f958598ca94ccb7",
+        "size": 1915,
+        "source": {
+          "git_blob": "24834cafe29dadaa34a6420e3313929d8191fe9a",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/skill-package.yaml",
+          "sha256": "62e7f99f47d70c795860e1681e3ad2af3923115c00c07d514f958598ca94ccb7",
+          "size": 1915
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/ai-collaboration.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/ai-collaboration.md",
+        "sha256": "d115949f90921d903cfb46f88debb7ea4f518320d7a115ad6f817c9ee122ee00",
+        "size": 5171,
+        "source": {
+          "git_blob": "9cd093dc613f7adb53857dbfa0b33fa339572388",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/ai-collaboration.md",
+          "sha256": "d115949f90921d903cfb46f88debb7ea4f518320d7a115ad6f817c9ee122ee00",
+          "size": 5171
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/architecture.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/architecture.md",
+        "sha256": "4e56abf4d711f230e820e3c68a801411122a6fcdcd3717ec8ec692f5f523b5d4",
+        "size": 834,
+        "source": {
+          "git_blob": "54e3bab3445d8467b6449b8e39df91396cb9c54a",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/architecture.md",
+          "sha256": "4e56abf4d711f230e820e3c68a801411122a6fcdcd3717ec8ec692f5f523b5d4",
+          "size": 834
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/first-task.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/first-task.md",
+        "sha256": "280f6e799f28feafd942ae8bdb72076c66750dad1eb6a563d3a6da83718711d1",
+        "size": 3342,
+        "source": {
+          "git_blob": "c1500b0c9d62613bb8c1cfcc69bac4fe2d39e0b3",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/first-task.md",
+          "sha256": "280f6e799f28feafd942ae8bdb72076c66750dad1eb6a563d3a6da83718711d1",
+          "size": 3342
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/project-config.template.yaml",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/project-config.template.yaml",
+        "sha256": "1b70d0217e70237261890dbeff28d856403e1082fc9d9d82218db90374a743d4",
+        "size": 1059,
+        "source": {
+          "git_blob": "61425433f3f600dc47df926ed830effdf27e44a1",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/project-config.template.yaml",
+          "sha256": "1b70d0217e70237261890dbeff28d856403e1082fc9d9d82218db90374a743d4",
+          "size": 1059
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/project-context.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/project-context.md",
+        "sha256": "906a823b3202e0423711a52951f924d7e9a25be0d776e0bd5d6691f4d7b5e7ec",
+        "size": 2572,
+        "source": {
+          "git_blob": "884ee7a34698a1a759884fbdcb254cbc0dcce41a",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/project-context.md",
+          "sha256": "906a823b3202e0423711a52951f924d7e9a25be0d776e0bd5d6691f4d7b5e7ec",
+          "size": 2572
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/public-catalogs/dev/INDEX.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/public-catalogs/dev/INDEX.md",
+        "sha256": "099c0a0e35a8ae26a785cb061d7d92466bd32d723fa865bf845cecf99a600064",
+        "size": 636,
+        "source": {
+          "git_blob": "749e7eea2236b5ea60297e236537a69cf1a5c9c9",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/public-catalogs/dev/INDEX.md",
+          "sha256": "099c0a0e35a8ae26a785cb061d7d92466bd32d723fa865bf845cecf99a600064",
+          "size": 636
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/public-catalogs/dev/README.MD",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/public-catalogs/dev/README.MD",
+        "sha256": "365f59a215e0fd75f57567434c721f76ffd456447e270796ddaf0cd17074eb8d",
+        "size": 808,
+        "source": {
+          "git_blob": "d7a14c67912fb793cabf0468e88eccbb66156b7c",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/public-catalogs/dev/README.MD",
+          "sha256": "365f59a215e0fd75f57567434c721f76ffd456447e270796ddaf0cd17074eb8d",
+          "size": 808
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/public-root/AGENTS.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/public-root/AGENTS.md",
+        "sha256": "4a330f20585273b3607842d23bf678b2814cdea8147de682adf900e4eaf7e6f5",
+        "size": 4219,
+        "source": {
+          "git_blob": "dec2ed7059a50bf498d08af09503f4313f8d73d1",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/public-root/AGENTS.md",
+          "sha256": "4a330f20585273b3607842d23bf678b2814cdea8147de682adf900e4eaf7e6f5",
+          "size": 4219
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/public-root/CLAUDE.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/public-root/CLAUDE.md",
+        "sha256": "1a91f5a91b1a8466d0675c57c734cc8c00b1e02760c310a7cca28ed994aaf048",
+        "size": 170,
+        "source": {
+          "git_blob": "c63fcb8c22ff7643f8272fbddc231e3c5db5c035",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/public-root/CLAUDE.md",
+          "sha256": "1a91f5a91b1a8466d0675c57c734cc8c00b1e02760c310a7cca28ed994aaf048",
+          "size": 170
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/public-root/README.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/public-root/README.md",
+        "sha256": "8c170cd0c358541d5483d29ab1bb0ea93cd9f6af9068604241aaedac352c7d7c",
+        "size": 1146,
+        "source": {
+          "git_blob": "c98a82ad783c4c7da2b96bce0dee475a5587e32b",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/public-root/README.md",
+          "sha256": "8c170cd0c358541d5483d29ab1bb0ea93cd9f6af9068604241aaedac352c7d7c",
+          "size": 1146
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/technology-requirements.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/technology-requirements.md",
+        "sha256": "c2c920fb0cb62eef63521cea6dec29c63646aea7857c864828da7db3fa577d2c",
+        "size": 593,
+        "source": {
+          "git_blob": "668f346d6258fef06bbdad4bd686376aa806bc64",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/technology-requirements.md",
+          "sha256": "c2c920fb0cb62eef63521cea6dec29c63646aea7857c864828da7db3fa577d2c",
+          "size": 593
+        }
+      },
+      {
+        "binding": null,
         "destination": ".ai/core/skills/bdd-gwt-test-designer/SKILL.md",
         "kind": "payload",
         "mode": "100644",
@@ -11627,6 +11882,23 @@
       {
         "binding": {
           "adapter": "codex",
+          "core_entrypoint": ".ai/core/skills/ai-context-init/SKILL.md",
+          "entry_name": "ai-context-init",
+          "skill": "ai-context-init",
+          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+        },
+        "destination": ".agents/skills/ai-context-init/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "adapter/codex/skill/ai-context-init",
+        "path": "runtime/.agents/skills/ai-context-init/SKILL.md",
+        "sha256": "a8f940f7291e2f212b753e9e3a6ef94e2537f2ebf196627884635350cc1222f7",
+        "size": 3151,
+        "source": null
+      },
+      {
+        "binding": {
+          "adapter": "codex",
           "core_entrypoint": ".ai/core/skills/bdd-gwt-test-designer/SKILL.md",
           "entry_name": "bdd-gwt-test-designer",
           "skill": "bdd-gwt-test-designer",
@@ -11852,16 +12124,28 @@
   "mode_policy": "windows-inventory-only",
   "project_inputs": [
     {
+      "path": ".ai/custom/adoption-evidence.json",
+      "sha256": "75458f09d3c873869672123151f26b562a3748900d9be794a0bd6a9ffe0acb11"
+    },
+    {
       "path": ".ai/custom/installation.json",
-      "sha256": "cf000a5d649c164ec8ab652e9f1da4c2a4494c056d3bb8f29bcc7791bcb2dba1"
+      "sha256": "9371708e3f3c2f63dd73cc8223e9b118ee95316c8a883c017e564acb3df18d99"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "13b9d41899249df82b75f3dec55dde2e89be4a6b355a4424b49043602f8eec05"
     },
     {
       "path": ".github/workflows/ci.yml",
-      "sha256": "20916ce8967c408d945882f142c02427e65392bc6a96abbab8475e9cbeabb1e0"
+      "sha256": "398210bdbf9c2e47cba30b91167ac213eac7cd8c7beefe5715926aee74e042aa"
     },
     {
       "path": ".gitignore",
-      "sha256": "2dad64376b0f290b17b1fd55a2e448c9a41952efc6d7fdbfa2e239e4c022d5a6"
+      "sha256": "8737f8f3babd5d0de73c989bab2bab1f4e25b6b98843fe3a7a033e9e0ec2dff2"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "7a1b04133e571f051fe700ec5778eeac1043111f3a5bcbaa3963699f69664135"
     },
     {
       "path": "ARCHITECTURE.md",
@@ -11870,6 +12154,10 @@
     {
       "path": "DEPLOYMENT.md",
       "sha256": "509f3373a7014f3b063d37749f417f226aa522cb375550eb9583f857f8ebe9d8"
+    },
+    {
+      "path": "FRAMEWORK-INSTALLATION.md",
+      "sha256": "877ecaf1fdaa4dd1ddfe6e0a807aa8184d0e04d5e8a381402893b608b944c073"
     },
     {
       "path": "LOCAL-SETUP.md",
@@ -11881,7 +12169,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "09707274c5ed56c03366f44ae2f79c5edacc174cc8c409732a2fae7fb5801ce9"
+      "sha256": "0fb05bd64c06a67851a4a8b0cf12542457c2114ac57ca0eba728de13286c7be6"
     },
     {
       "path": "src/board/.gitignore",
@@ -12278,10 +12566,6 @@
     {
       "path": "src/local/tools/package_delivery.py",
       "sha256": "79692a310b810abd0b22ed15052b43b675cfcc482b3a952f415fecd40a070679"
-    },
-    {
-      "path": "src/tools/check_repository.py",
-      "sha256": "8a452506f5e0d0315b50e410277e10b07549cf19a1e46b0e374570d14cb6cb18"
     }
   ],
   "selection": {
@@ -12352,6 +12636,32 @@
         "optional_dependencies": [],
         "required_dependencies": [],
         "version": "0.1.0"
+      },
+      {
+        "id": "ai-context-init",
+        "kind": "skill",
+        "members": [
+          "SKILL.md",
+          "references/initialize.md",
+          "references/project-structure.md",
+          "skill-package.yaml",
+          "templates/ai-collaboration.md",
+          "templates/architecture.md",
+          "templates/first-task.md",
+          "templates/project-config.template.yaml",
+          "templates/project-context.md",
+          "templates/public-catalogs/dev/INDEX.md",
+          "templates/public-catalogs/dev/README.MD",
+          "templates/public-root/AGENTS.md",
+          "templates/public-root/CLAUDE.md",
+          "templates/public-root/README.md",
+          "templates/technology-requirements.md"
+        ],
+        "metadata": "skill-package.yaml",
+        "metadata_version": 3,
+        "optional_dependencies": [],
+        "required_dependencies": [],
+        "version": "0.2.0"
       },
       {
         "id": "bdd-gwt-test-designer",
@@ -12657,6 +12967,7 @@
       "skill_naming": "original",
       "skills": [
         "adr-author",
+        "ai-context-init",
         "bdd-gwt-test-designer",
         "code-reviewer",
         "ddd-ca-hex-architect",
@@ -12672,7 +12983,7 @@
         "spec-compliance-validator"
       ]
     },
-    "desired_sha256": "ec0782b5b698d4be603cae52d3b36ed08b582683c5f0b90ba7ce69d43dc12887",
+    "desired_sha256": "634e1a74d0566fc5bc5db70d3a8718dce7d4397fb1d9a6040985ab585fb85db8",
     "generator": {
       "id": "aicf-subset-derivation",
       "implementation": [

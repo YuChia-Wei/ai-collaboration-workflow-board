@@ -1,0 +1,56 @@
+metadata_version: 3
+id: ai-context-init
+version: 0.2.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read authoring resources and permitted target evidence; use authorized file tools for writes
+  for_operations:
+  - initialize
+  - refresh
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/initialize.md
+  - references/project-structure.md
+  - templates/ai-collaboration.md
+  - templates/architecture.md
+  - templates/first-task.md
+  - templates/project-config.template.yaml
+  - templates/project-context.md
+  - templates/public-root/AGENTS.md
+  - templates/public-root/CLAUDE.md
+  - templates/public-root/README.md
+  - templates/public-catalogs/dev/README.MD
+  - templates/public-catalogs/dev/INDEX.md
+  - templates/technology-requirements.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: initialize
+  execution: instruction
+  inputs:
+  - Target repository, requested collaboration context and authorized write scope
+  - Current project rules, available repository evidence and unresolved owner choices
+  outputs:
+  - Project-owned collaboration entry, selected background/baseline/first-task resources and references, or a bounded proposal
+  - File change summary, evidence sources, unresolved facts and actual validation status
+  instructions: references/initialize.md
+  implementation_status: implemented
+- id: refresh
+  execution: instruction
+  inputs:
+  - Existing initialized context, selected files and authorized refresh scope
+  - Current evidence and expected document preimages
+  outputs:
+  - Focused context updates preserving custom content and authority, or a bounded proposal
+  - Changes, collisions, retained uncertainty and actual validation status
+  instructions: references/initialize.md
+  implementation_status: implemented

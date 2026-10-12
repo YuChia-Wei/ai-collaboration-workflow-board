@@ -30,8 +30,6 @@ src/
     tools/                     fixture seed 與 delivery 工具
     tests/                     整合與 review regression 測試
     *.py                       python -m 的薄入口
-  tools/
-    check_repository.py        src 與生成產物政策
 ```
 
 Domain 不知道 HTTP 或 D1／SQLite。應用層描述用例，adapter 處理平台協定與持久化細節；入口負責組合依賴。Node runtime 的一次性匯入與合成 seed 不提供線上入口，保留在測試 fixture 中。
@@ -52,4 +50,4 @@ Python portable restore 還有較重的 application/adapter 協作，沒有宣�
 
 網站信任 Sites 轉送的 authenticated-user header。若將來改用其他 hosting，必須提供新的可信身分 adapter 與實際資料遷移驗證，再進行切換。
 
-`dist/`、`node_modules/`、preview 狀態與 `.runtime/` 均由根目錄 `.gitignore` 排除。CI 會檢查程式檔案位於 `src/`，並拒絕被追蹤的生成目錄。SQL migrations 和唯讀 catalog 是可重現的來源輸入，保留在 Git。
+`dist/`、`node_modules/`、preview 狀態與 `.runtime/` 均由根目錄 `.gitignore` 排除。原 repository policy checker 已於 `3e7ee13` 移除；SQL migrations 和唯讀 catalog 是可重現的來源輸入，保留在 Git。

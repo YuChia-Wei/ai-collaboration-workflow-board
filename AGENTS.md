@@ -24,6 +24,7 @@ the pinned installer rather than editing those files.
 
 | Need | Skill IDs |
 | --- | --- |
+| Establish or refresh the collaboration starting point | `ai-context-init` |
 | Requirements and specifications | `requirement-author`, `spec-author`, `problem-frame-author` |
 | Architecture and behavior scenarios | `ddd-ca-hex-architect`, `bdd-gwt-test-designer` |
 | Diagnosis, implementation and review | `diagnostic-analyst`, `local-change-implementer`, `slice-implementer`, `code-reviewer` |
@@ -33,8 +34,9 @@ the pinned installer rather than editing those files.
 `engineering-common@0.1.0` is installed as optional guidance. No normative
 knowledge bindings are adopted. Select relevant resources explicitly and preserve
 Board's existing decisions. .NET coverage is unavailable; do not substitute a
-source checkout or impose another technology stack. AI-context skills, local
-backlog, Claude entries and sub-agent profiles are not selected.
+source checkout or impose another technology stack. `ai-context-auditor`,
+`ai-context-governance`, local backlog, Claude entries and sub-agent profiles
+are not selected.
 
 ## Portable specifications
 
@@ -47,3 +49,35 @@ Choose the requested artifact and destination before writing; no spec, ADR,
 Lesson, PR store or framework configuration is implicitly initialized.
 
 See `FRAMEWORK-INSTALLATION.md` for exact selection, validation and maintenance.
+
+## Repository-specific starting point
+
+Initialization used `ai-context-init@0.2.0` on 2026-10-13. Existing product
+background and rules are reused; initialized documents remain project-owned.
+
+| Task | Read first |
+| --- | --- |
+| Product purpose and current implementations | [README](README.md), [Board](src/board/README.md), [local prototype](src/local/README.md) |
+| Domain, ports/adapters and available collaboration behavior | [Architecture](ARCHITECTURE.md), [collaboration contract](src/board/contracts/collaboration-v1/README.md), the selected live GitHub Issue |
+| Build and local operation | [README commands](README.md#建置與測試), [local setup](LOCAL-SETUP.md) |
+| Deployment | [Deployment contract](DEPLOYMENT.md); use the user's selected authorization |
+| A first bounded task | [First-task guide](.dev/guides/first-task.md) |
+
+Choose only the context needed for the task. Distinguish accepted requirements,
+observed implementation and assumptions; surface conflicts and unknowns. Use
+verification proportionate to the selected change and reuse existing evidence
+where valid. An installation or documentation change does not by itself justify
+a new checker, test suite or workflow. Report checks as discovered, executed,
+failed or blocked; local checks do not prove hosted behavior.
+Keep review and work records proportionate to the task and actual project rules.
+Retain the user's model, permission and execution boundaries; initialization does
+not select delegation, a stronger model or an additional approval process.
+
+Board code uses JavaScript ESM, with a TypeScript database schema; the separate
+local prototype uses Python. Current sources specify Node.js >=22.13 and Python
+3.13; CI uses Node.js 24. Run Board commands from the repository root with
+`npm --prefix src/board ...`, and local tests with `python -B -m src.local.tests...`.
+The command definitions and prerequisites were inspected during initialization;
+application tests, builds and deployment were not executed in this operation.
+The collaboration/1 contract documents pending transport/persistence integration;
+do not advertise its domain/application implementation as a hosted capability.

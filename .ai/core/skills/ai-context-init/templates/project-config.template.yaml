@@ -1,0 +1,30 @@
+# Optional project-owned inventory seed; not framework configuration or a schema.
+# Preserve an existing target format. Replace null/empty values only from evidence;
+# keep unresolved facts explicit. Never store secrets or installation lock data.
+inventory_version: 1
+repository: null
+languages: []
+technology_constraints: []
+source_roots: []
+test_roots: []
+entrypoints: []
+modules: []
+runtime_hosts: []
+architecture:
+  observed_styles: []
+  accepted_decisions: []
+  dependency_directions: []
+validation:
+  commands: [] # Each: command, cwd, prerequisites, source, status, evidence if executed.
+  ci: null # Unknown until current configuration/provider evidence establishes state.
+documentation:
+  collaboration_entry: null
+  collaboration_rules: null
+  product_context: null # Link existing product facts; do not duplicate their content here.
+  first_task: null
+  project_index: null
+  requirements: []
+  architecture: null
+evidence: [] # Safe repository paths and explicit owner decisions, never secret values.
+unresolved_facts: []
+unresolved_decisions: []
