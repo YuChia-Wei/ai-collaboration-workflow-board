@@ -129,6 +129,46 @@ framework operation config 或紀錄 store，也不執行 first-task examples。
 以及 diff／JSON 檢查。本次未執行 application tests、build、部署、
 fresh-chat behavior check 或 hosted CI；不以文件存在宣稱這些狀態通過。
 
+## 安裝後知識讀取修復（2026-10-13）
+
+初始化後，`inspect` 仍回報 `managed-bytes-consistent`，但同版公開
+`distribution.catalog.read_installed_resources(project_root, expected_lock_sha256, authorities)`
+實際回報 `installed project-input drift`。兩者檢查範圍不同：知識 reader
+另檢查 lock 的 `project_inputs`，不能以 managed 檔案一致取代知識讀取驗收。
+
+前次安裝把 111 個專案檔案列為 `protected_inputs`；Engine 2 會把這些
+非空雜湊持久化為 `project_inputs`。初始化後修改 AGENTS、ARCHITECTURE、
+FRAMEWORK-INSTALLATION 與 README，便使該持續綁定失效。這不是 managed
+skill／knowledge bytes 損毀，也不是新規格變更造成的錯誤。
+
+依使用者修復授權，沿用原 v0.19.1、原 subset、原 23-file engine pin，
+以新的 plan／apply 正式重新生成 lock：
+
+- `project_inputs` 縮到 `.ai/custom/installation.json`；選擇仍為 15 skills、
+  engineering-common、Codex adapter，`bindings: []`，未新增 normative adoption。
+- 137 個 managed 檔案全部 unchanged，0 add／change／remove；installer
+  未編輯產品或專案文件。套用前後另外核對 324 個其他 tracked 檔案，bytes 全相同。
+- 原失敗已重現；apply 後 inspect 一致，公開知識 reader 成功回傳 19 個
+  resource entries。這證明本次安裝讀取可用，不宣稱所有知識已採用或產品測試通過。
+- 本頁補記維護方式後再執行同一 reader，以確認一般文件更新不再觸發此問題。
+- 另發現 Windows `core.autocrlf=true` 將 selection 的 Git LF bytes 轉為 CRLF。
+  `.gitattributes` 已明列 `.ai/custom/installation.json text eol=lf`，工作樹選擇檔
+  回復成既有 Git blob 的 LF bytes，再以同版 installer 更新其 hash 綁定。
+  選配 JSON 值沒有變更；Git checkout filter 在 autocrlf true／false 下均產生
+  相同 LF bytes。這是 Git 換行檢查，不宣稱其他作業系統的 native 安裝驗收。
+
+本次 lock SHA-256：
+`967f5ee3274068ead7da412155a2372300e32abef18144de20051cf34159c16a`。
+原 lock、plan／apply／inspect、失敗與成功 reader 輸出、逐檔保留證據留在
+ignored `.runtime/framework-repair-20261013/`；原 installer 的 operation journal
+繼續保留，不手動改 lock 或清除 recovery markers。
+
+後續安裝維護只將需要持續綁定的 selection／實際 framework configuration／
+明確採用的 authority inputs 交給 installer。一般程式、README 或規格的
+安裝前後保留比對在操作證據中完成，避免把全 repository 變成知識 reader
+的永久雜湊前置條件。有 framework configuration 或已採用 authority 時，
+仍須依 installer／binding 契約提供其精確輸入，不能省略來繞過檢查。
+
 ## 後續維護與復原
 
 依所選發布版本的[安裝手冊](https://github.com/YuChia-Wei/ai-collaboration-framework/blob/v0.19.1/docs/installation.md)
