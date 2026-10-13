@@ -1,6 +1,6 @@
 # 未決事項、來源差異與實作缺口
 
-狀態：2026-10-13 規格初稿；基線 `3e7ee13cda8de27c8a069a062ffd0d289584722e`。本表的 GAP 編號是本次文件追溯用，不建立新 Issue、不取代 GitHub 工作權威。缺少實作不代表缺少已接受的行為；待審核的詳細需求也不因寫入本表變成已接受契約。
+狀態：2026-10-13 規格正規化版；行為基線 `3e7ee13cda8de27c8a069a062ffd0d289584722e`，初始化後的文件基線為 `aa5ba552d29dfb3525c89a7dc8e4f45234f55f10`，`src/` 相同。本表保留既有 GAP 編號，不建立新 Issue、不取代 GitHub 工作權威。缺少實作不代表缺少已接受的行為；待審核的詳細需求也不因寫入本表變成已接受契約。
 
 ## 已固定語意但仍待實作／證據
 
@@ -30,7 +30,7 @@ GAP-12 可保存的需求例子為：部分工作分次交付、同一不可變�
 
 | ID | 觀察 | 重建時處理 |
 | --- | --- | --- |
-| GAP-13 | 根 README／ARCHITECTURE 仍提到 `src/tools/check_repository.py`，但此基線的 tracked tree 沒有該檔；CI `repository` job 只有 checkout／setup-python | 文件中的命令不可直接視為可執行 gate；依存在的测试與 CI 明列實際能力。此次只記錄差異，不另行修復 CI 或加入工具 |
+| GAP-13（文件差異已解決） | 第一版規格發現根 README／ARCHITECTURE 引用不存在的 `src/tools/check_repository.py`；初始化後 `aa5ba552…` 已移除失效命令與目錄說明，ARCHITECTURE 明列 checker 在 `3e7ee13` 移除 | 保留歷史追溯；目前沒有此 checker，CI `repository` job 仍只有 checkout／setup-python。這是現況限制，不是待修復 gate 或恢復工具的要求；依存在的測試與 CI 說明實際能力 |
 | GAP-14 | `PLATFORM-CONTRACT.md` 的 Sites／D1 未實作敘述屬早期 Python prototype；現行 Board 已有人工／legacy D1 adapter | 依文件開頭範圍及目前 ARCHITECTURE 分流；不說整個 repo 沒有 D1，也不說 local 已有 D1 |
 | GAP-15 | Issue #5–#8 的方向對齊文字含 PO 前期／逐階段用語；較新的 #2／#3 明確不內建固定階段或每步批准 | 採較新已接受語意；只有明列 Decision 才 gate，不把舊草案文字轉成固定 lifecycle |
 | GAP-16 | Issue #3 的舊 source paths 使用 `src/board/domain` 等；目前已搬至 `src/board/backend/` | 保留 Issue 快照歷史，但新規格連結至本次 commit 的真實檔案；不為符合舊引用還原資料夾 |

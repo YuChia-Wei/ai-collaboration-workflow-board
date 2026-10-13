@@ -1,6 +1,6 @@
 # 領域地圖與共同語言
 
-類型：領域規格導覽。狀態：2026-10-13 初稿；來源基線見 [索引](README.md)。主要依據為 [Issue #3 快照](sources/issue-3.json) 的 DDD 節與一至八節，以及 [ARCHITECTURE](../../ARCHITECTURE.md)。本文件整理既有選擇，不另行核准架構。
+類型：領域規格導覽。狀態：2026-10-13 正規化版；來源基線見 [索引](README.md)。主要依據為 [Issue #3 快照](sources/issue-3.json) 的 DDD 節與一至八節，以及 [ARCHITECTURE](../../ARCHITECTURE.md)。本文件整理既有選擇，不另行核准架構。
 
 ## 系統目的與語意邊界
 

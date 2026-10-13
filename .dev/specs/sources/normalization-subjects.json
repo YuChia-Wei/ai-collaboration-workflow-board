@@ -1,0 +1,306 @@
+{
+  "kind": "spec-normalization-subjects",
+  "captured_on": "2026-10-13",
+  "hash_bytes": "Git index blob bytes at commit preparation; verify using git show <spec-commit>:<path>",
+  "input_commit": "aa5ba552d29dfb3525c89a7dc8e4f45234f55f10",
+  "exclusions": [
+    ".dev/specs/normalization-review.md",
+    ".dev/specs/sources/normalization-subjects.json"
+  ],
+  "aggregate_algorithm": "SHA-256 of sorted path + NUL + file sha256 + LF, UTF-8",
+  "aggregate_sha256": "66cc0acd56da74c34b3310f74b5d80f302976ef110bbef735da8ff601f4a5794",
+  "files": [
+    {
+      "path": ".dev/specs/board-human/workflow/behaviors/commands.spec.md",
+      "sha256": "d0e95c86928a2df692cf28b0e396ef7f2a406a431d0ecd17f3daafe3551792aa"
+    },
+    {
+      "path": ".dev/specs/board-human/workflow/entity/workflow.spec.md",
+      "sha256": "9832929136439e7fdedfa47e76eec348ccb3f18866eb0d4710d26955603d56b2"
+    },
+    {
+      "path": ".dev/specs/board-web/adapters/browser.spec.md",
+      "sha256": "8d3f798ae2574298933b61e440acbdf746d30cca052a2553b7324776023d671d"
+    },
+    {
+      "path": ".dev/specs/board-web/adapters/http.spec.md",
+      "sha256": "bd0d81533232a4034e4055779b37e4671593129e9d83731f76a8cca4415cd815"
+    },
+    {
+      "path": ".dev/specs/board-web/adapters/persistence.spec.md",
+      "sha256": "d8337687dfafa7d8f58cf830cee0333b9aa4fa2fdc981a01311f8a05d0d2fb5a"
+    },
+    {
+      "path": ".dev/specs/collaboration/adapters/command-repository.spec.md",
+      "sha256": "ba6e35edef6331d35e62f94c0598ea8a3dfb6a93050ac88114e3c777613aa412"
+    },
+    {
+      "path": ".dev/specs/collaboration/adapters/query-repository.spec.md",
+      "sha256": "01eee975b6a1cc1e0996cfb0a4b1b27dd022331c73c66a1bdb142f6738c1ec2d"
+    },
+    {
+      "path": ".dev/specs/collaboration/queries/capabilities.spec.md",
+      "sha256": "d649020fc52ec7fe90797514c78aae2e878ec0cf177c6a471f0b5ace5a0b1bbf"
+    },
+    {
+      "path": ".dev/specs/collaboration/queries/context-page.spec.md",
+      "sha256": "95dea57380e8c931e497380625e87bfd7988bdc18a3cf463b282c93bfdbc4497"
+    },
+    {
+      "path": ".dev/specs/collaboration/queries/find-workflows.spec.md",
+      "sha256": "e0e930ad2dfd21daf7d4d19f59f3a31b057b7fc6cad0632981792c4dfaa29fdb"
+    },
+    {
+      "path": ".dev/specs/collaboration/queries/operation-result.spec.md",
+      "sha256": "5351b21e068f46e58e8489604425200ae7afa92160ab2097e10ac490ea42b129"
+    },
+    {
+      "path": ".dev/specs/collaboration/queries/read-decision.spec.md",
+      "sha256": "91b274b7583d21133a0459b89c6c42a23d7c297b5d30de3998d9ab4ae7f563d3"
+    },
+    {
+      "path": ".dev/specs/collaboration/queries/read-document.spec.md",
+      "sha256": "47a9cad43c32dd052a933ab8a744a58eac10811f383e71dda48cb8d88b1e1406"
+    },
+    {
+      "path": ".dev/specs/collaboration/queries/read-task.spec.md",
+      "sha256": "658304ac721c338b264ea327eb1f1c0132484642ead1944a5754f46bc49deeca"
+    },
+    {
+      "path": ".dev/specs/collaboration/queries/workflow-context.spec.md",
+      "sha256": "c065e1aaf9b6376c460c80a8e76385b2b25f7bf78733d017580e088f69b8aa71"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/append-checkpoint.spec.md",
+      "sha256": "b04375a2f4620aa2b694c8bf494865683a4bf982f0ab0838851050c527260a9e"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/append-document.spec.md",
+      "sha256": "31d47860f1884e4c696095e3cbeb74dfbdfb95c9305e7a98a237e0b353e0f6e9"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/block-task.spec.md",
+      "sha256": "34e2d2776d8523ac14de285414e1ae31f56690811d69b0d6660120e7d4fbd23f"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/cancel-task.spec.md",
+      "sha256": "d5d0274442a54842b932dd97d453df4715097b7cf54e1301f29a0efb0a70cac2"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/cancel-workflow.spec.md",
+      "sha256": "661853ab05c060db9c610aec3019cdc7a4640ae806a437a8971cc3af0bf5d1f8"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/claim-task.spec.md",
+      "sha256": "ead848d8672ec57fdff58669e674abd64cc44b15c3ae4c03ee53f9fabc690de1"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/command-acceptance.spec.md",
+      "sha256": "3637fb335f6b65c64e9b0e870d2654875c8cb68c85003e71370ba902000a9e14"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/complete-task.spec.md",
+      "sha256": "16340b217aa3d1c6438cdd8953b8fce1d1243e31bd4ff14c3f9dda16209c2e7a"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/complete-workflow.spec.md",
+      "sha256": "d59fc8b77a6ff618cdd3f32f44b6ffb2467188b6487b7272204f724896ea0591"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/create-workflow.spec.md",
+      "sha256": "4e80023aeb7bdd7cea338f9749622806ff921f4f46eb50b67795ae901501b033"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/open-decision.spec.md",
+      "sha256": "bbe9453afe19ea28573a03ca206e68f7500049609d025db00f6644b6fcd6a2b9"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/pause-workflow.spec.md",
+      "sha256": "75e0d0e196ce4bc0e4c7758b7368d43318e540417ff3ea5b3c24002f59e0c3ef"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/record-handoff.spec.md",
+      "sha256": "9913c70c4d056341af9b5415298f7ec923a505bc5644324f932f1029791f4705"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/release-task.spec.md",
+      "sha256": "ce34038a2f7942e282efe02a9d397d9fd97ba3da6f3da00c43944291567db42e"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/report-task-progress.spec.md",
+      "sha256": "a8e2129bde57ffa7e233e9b97fdb68d812da2f6b9987b81e995301c1a061540b"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/resolve-decision.spec.md",
+      "sha256": "47d5676d6337be9cca36496bc0cd3cb22ff462973bac02f26ff7de16ba90a069"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/resume-workflow.spec.md",
+      "sha256": "1368d79b15a3cbf0f5bde70a5bed9fe323e170a62feec4e78d6324d135669052"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/revise-plan.spec.md",
+      "sha256": "1ab2fa98a645b882a1c5b7bf55d3a79e87eb991162d5c3992b31ea9b3bb50c69"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/start-workflow.spec.md",
+      "sha256": "bd7dbc316a33e38240569c1e529e93ac10ff43d7d2f6dbb3a9ba6b7e4d357a5b"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/behaviors/unblock-task.spec.md",
+      "sha256": "59885e3b7591496b2f0f0668608a9983e3ec2109a018d5e097cc8ad84d0d5dfc"
+    },
+    {
+      "path": ".dev/specs/collaboration/workflow/entity/workflow.spec.md",
+      "sha256": "30da0928987522241c5aeb8b625227430fd1aec60bce3ac98d8df5b1e64358a2"
+    },
+    {
+      "path": ".dev/specs/coverage.md",
+      "sha256": "123696ba9fd21b89957cde3e08326d605e0156294d34d5276dc7d1fcda010cee"
+    },
+    {
+      "path": ".dev/specs/domain-map.md",
+      "sha256": "de99923eab06852aa31d6bb572cd0b28f765ce3ab506294d27f5d9b0666ea216"
+    },
+    {
+      "path": ".dev/specs/gaps-and-decisions.md",
+      "sha256": "df1528ae8a2df72a1d72890e13b2d3d783b6988471ea51b69ddfd2f67d1efe32"
+    },
+    {
+      "path": ".dev/specs/legacy/workflow/behaviors/commands.spec.md",
+      "sha256": "6dadb831fbf229bb5694e12f6af73bfe5d0c9e23570c8ed4bf3d13a249dffc68"
+    },
+    {
+      "path": ".dev/specs/legacy/workflow/entity/workflow.spec.md",
+      "sha256": "f470f7aef6870dc6458418e2120f15c333cf4062879535d7ffbfdcbfe39df469"
+    },
+    {
+      "path": ".dev/specs/local-records/adapters/clients-and-storage.spec.md",
+      "sha256": "8e1d754559f14eb94a3e0b076499da2cc72c5571852b1bcf4b97b6cdcb8c47f9"
+    },
+    {
+      "path": ".dev/specs/local-records/portability/export-restore.spec.md",
+      "sha256": "e8512db947e8a5b96c0b64c1d9ad064cb85f4de5392f24ad39326c956dce675c"
+    },
+    {
+      "path": ".dev/specs/local-records/workflow/behaviors/commands.spec.md",
+      "sha256": "70cf9a9e5a06bdf5234d85f0d562a0028aaa3a9529171ce8adb298d6b672ca36"
+    },
+    {
+      "path": ".dev/specs/local-records/workflow/behaviors/queries.spec.md",
+      "sha256": "97c2f29f062c6a5ff4531cf9e3b099d7e3b7a0cd52f9fe3c493ce25a901bfb36"
+    },
+    {
+      "path": ".dev/specs/local-records/workflow/entity/workflow.spec.md",
+      "sha256": "0694915895605a6e703812af8b4b88fdd8ae0db477ed859cb62ee75371590153"
+    },
+    {
+      "path": ".dev/specs/migration-map.md",
+      "sha256": "a28cd39ae56c0e13575dfb8fa0ab2aab38e393db7a8b24292b7c8af896c8b749"
+    },
+    {
+      "path": ".dev/specs/README.md",
+      "sha256": "965f399c04fc9c98add9ff4f0430e5124fe8e41b8889ad1b976e28dd496f4fef"
+    },
+    {
+      "path": ".dev/specs/reconstruction.md",
+      "sha256": "29574c42c0daf2feac563bbe8e5659ae38a0b15030dbb91cb46d2e82613198f0"
+    },
+    {
+      "path": ".dev/specs/source-catalog/queries/catalog.spec.md",
+      "sha256": "902857362be2c63865ebc3ddbd78f00f787bbd777bf0c35c7ac8322622edaef4"
+    },
+    {
+      "path": ".dev/specs/sources/issue-2.json",
+      "sha256": "f970802a02b15ba0c851f0a17c1ae2b7e17af01709735ffb5c2ebf6a05686a51"
+    },
+    {
+      "path": ".dev/specs/sources/issue-3.json",
+      "sha256": "97e5e24e0a917535a26eab094143d943e3749e1cc4166a2c592d0459f561fcfc"
+    },
+    {
+      "path": ".dev/specs/sources/issue-4.json",
+      "sha256": "dddfbe53853c429db89b1f4fa52fc7942f360516e156af06f4fa8b974fc4f5f2"
+    },
+    {
+      "path": ".dev/specs/sources/issue-5.json",
+      "sha256": "f95ee72ac399d3e17a70a90d3f0d0d8d1149d5f16456fdcf20d110c14292ceb8"
+    },
+    {
+      "path": ".dev/specs/sources/issue-6.json",
+      "sha256": "618e4e8e5a0ee78f52072931f423132688101ee695aba17849d689dac370a880"
+    },
+    {
+      "path": ".dev/specs/sources/issue-7.json",
+      "sha256": "3dbc568133a38d225180d7f6cdae1b5c3a2937e94a9db400c96ab89f4cd75c39"
+    },
+    {
+      "path": ".dev/specs/sources/issue-8.json",
+      "sha256": "d0cecd7beee0552d9771eefe60366e3170f5b19ae817384849c5c3e350489e50"
+    },
+    {
+      "path": ".dev/specs/sources/manifest.json",
+      "sha256": "76e031416da595dea3beee41d65f5d10a5919f9d1d269468185bc06c029ae012"
+    },
+    {
+      "path": ".dev/specs/sources/normalization-inputs.json",
+      "sha256": "3843220b13284e99071516c7d924a27169cd87d5b09a598d3d234d8eb026ed20"
+    },
+    {
+      "path": ".dev/specs/sources/README.md",
+      "sha256": "0264a252bd6e07971d27e0477b9eeb5fe6bbef107bf926af18e7debf12a7db0a"
+    },
+    {
+      "path": ".dev/specs/tests/architecture/dependencies.test-spec.md",
+      "sha256": "cf277cc1a5112804ab12a15bea03f7dbdb1fae8c2cd985c7754e5050d937918e"
+    },
+    {
+      "path": ".dev/specs/tests/board-human/workflow/commands.test-spec.md",
+      "sha256": "a3a55c59384a912fcb7ba812dc6989bb35967c9db0a4672c685a1fdc3fd6b4ab"
+    },
+    {
+      "path": ".dev/specs/tests/board-web/browser.test-spec.md",
+      "sha256": "054e533e47e31dbebd5b7e14ba6271c700422dff15812f50b0b10094c40c6072"
+    },
+    {
+      "path": ".dev/specs/tests/collaboration/protocol.test-spec.md",
+      "sha256": "80edb26f4b8ee6b7010eb7d5fccac7eaf0f8cb458c74962ef483b485820d9916"
+    },
+    {
+      "path": ".dev/specs/tests/collaboration/queries.test-spec.md",
+      "sha256": "226ba9c09d3d216b6f85f362d0b16b6fd1b6257cf8cb6b01afb2b30eebb6febe"
+    },
+    {
+      "path": ".dev/specs/tests/collaboration/workflow/commands.test-spec.md",
+      "sha256": "7363303d54663549b4b40b6695cc2b9f15be14a7458af7a2c3b02eb19da08b4a"
+    },
+    {
+      "path": ".dev/specs/tests/collaboration/workflow/invariants.test-spec.md",
+      "sha256": "5500e04a87e26049d197a79fa4dc33e9297a68112933e1d8a4d0b5e79dece18a"
+    },
+    {
+      "path": ".dev/specs/tests/legacy/workflow/records.test-spec.md",
+      "sha256": "723e68975ec9ba3686f52c77182074c2690dc2ca0faa41c38a8f4cfcd948d603"
+    },
+    {
+      "path": ".dev/specs/tests/local-records/portability.test-spec.md",
+      "sha256": "4f31bff429543b9b95eb478be8322068efa65c1da9b93bc8d1eee6652277ce0e"
+    },
+    {
+      "path": ".dev/specs/tests/local-records/workflow.test-spec.md",
+      "sha256": "921b538f32a85de430f3a2852909d950a6f685fe2f07e1d02baad49307963512"
+    },
+    {
+      "path": ".dev/specs/tests/README.md",
+      "sha256": "077b4cc7b93a8683b7ff327e77c4a126e0ac39bc56c3a1739db578493dd31ed9"
+    },
+    {
+      "path": ".dev/specs/tests/source-catalog/catalog.test-spec.md",
+      "sha256": "1d923bf73921a894228c751f6638e80058de3f18108130f921c5df403367d46c"
+    },
+    {
+      "path": ".dev/specs/tests/test-source-inventory.md",
+      "sha256": "3b9446c40a900faeea2900d1794b6eb1ed7d8a11ea7ed62985bf01cc99ce1aab"
+    }
+  ]
+}

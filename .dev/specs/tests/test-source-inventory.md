@@ -1,6 +1,6 @@
 # 實際測試來源清冊
 
-基準 commit `3e7ee13cda8de27c8a069a062ffd0d289584722e`；2026-10-13 靜態清冊。每個名稱從基準測試原始碼讀取，來源存在不等於完整 coverage 或執行通過；本次全部 not_run。GWT 與重要 Then 對照見其他正式測試規格。Board graph 索引不足／失敗後採已追蹤來源 fallback。
+基準 commit `3e7ee13cda8de27c8a069a062ffd0d289584722e`；2026-10-13 靜態清冊。每個名稱從基準測試原始碼讀取，來源存在不等於完整 coverage 或執行通過；本次全部 not_run。GWT 與重要 Then 對照見其他正式測試規格。上一輪 Board graph 索引不足／失敗後採已追蹤來源 fallback；本輪確認 src 未變，保留該來源清冊，未重跑索引或產品測試。
 
 | 路徑 | 實際 identifier | 證據層次 | 本次結果 |
 | --- | --- | --- | --- |
@@ -101,6 +101,11 @@
 
 ## 重建接手的 coverage 狀態
 
-名稱中的 B01–B04、B06–B13 對應產品例子，但 B09 實際 action 是 claim，Issue 的 complete replay 需獨立資料列；B05（新 session context）與 B14（指定協作 document revision）沒有同義的已實作 query automation。其他同名 handoff/checkpoint 測試只證明命令不改承接，不等於 B05。全部 V01–V21 逐項缺口見 collaboration-formal-tests.md，不能因找到一個近似名稱就整項標 covered。
+名稱中的 B01–B04、B06–B13 對應產品例子，但 B09 實際 action 是 claim，Issue 的 complete replay 需獨立資料列；B05（新 session context）與 B14（指定協作 document revision）沒有同義的已實作 query automation。其他同名 handoff/checkpoint 測試只證明命令不改承接，不等於 B05。全部 V01–V21 逐項缺口見 collaboration/workflow/commands.test-spec.md（B05／B14 詳細 query 斷言見 collaboration/queries.test-spec.md；完整 V 矩陣見 README.md），不能因找到一個近似名稱就整項標 covered。
 
 新增未來 automation 時，交付 scenario/data-row → source ID → actual identifier → Given fixture／When call／每個 Then assertion → exact execution evidence。沒有語意對應的 identifier 必須列缺口；不要以 assertion_groups／test count 取代產品 coverage。
+
+
+## Normalize 狀態
+
+本輪只依語意邊界重組111個正式情境定義，87個具名測試來源列完整保留；具體 GWT 與技術binding分節。文件初始化HEAD為aa5ba552，產品來源仍3e7ee13；全部not_run。canonical map見本目錄README。

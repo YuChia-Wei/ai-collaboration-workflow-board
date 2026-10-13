@@ -1,34 +1,34 @@
 # 需求、領域與驗證追溯
 
-狀態：2026-10-13 文件覆蓋對照。下表的「覆蓋」是規格表達與情境設計，不是本次執行結果。原 Issue ID 全部保留；AC 必須連同 Issue 編號識別。原始文字及版本見 [來源快照](sources/manifest.json)。
+狀態：2026-10-13 正規化後的文件覆蓋對照；輸入 aa5ba552…，行為來源仍為 3e7ee13…。下表的「覆蓋」是規格表達與情境設計，不是本次執行結果。原 Issue ID 全部保留；AC 必須連同 Issue 編號識別。原始文字及版本見 [來源快照](sources/manifest.json)。
 
 ## 已接受研究／設計及核心契約
 
 | 來源 AC | 本次規格承接 | 驗證／證據邊界 |
 | --- | --- | --- |
-| #2 AC01：兩條旅程與 planning 語意 | domain-map；collaboration-domain 的 Plan／Handoff；use-cases UC02／UC18／CQ03–07 | B05／B06–08；查詢與跨 session journey 待實作 |
+| #2 AC01：兩條旅程與 planning 語意 | domain-map；[協作實體](collaboration/workflow/entity/workflow.spec.md) 的 Plan／Handoff；[UC／CQ 目錄](README.md#新協作行為目錄)中的 UC02／UC18／CQ03–07 | B05／B06–08；查詢與跨 session journey 待實作 |
 | #2 AC02：多 PBI、指定決定與接手、單一使用者 | domain-map contexts；CD01／CD06／CD07 | V01／V02／V09／V14；真實身份與 UI 待補 |
 | #2 AC03：skill／Board／PM 責任 | domain-map 邊界及共同語言 | task 完成與人的決定分離；外部程序／PBI 不由 Board 自動操作 |
 | #2 AC04：候選比較與未知 | 保留 issue-2.json 研究來源；gaps-and-decisions | 研究決策不需重造為 runtime 行為測試；本次未重作平台比較 |
 | #2 AC05：增量、並行、權威及可靠性 | domain-map、CD04、OP01、reconstruction | B02／B03／B09／B10；V13；無隱含 Git 副本前提 |
-| #2 AC06：Framework consumer 映射 | boundaries-and-adapters、GAP-07、issue-3.json 八 | Framework remote adapter 獨立交付，不能用 checkpoint 模擬 lifecycle |
+| #2 AC06：Framework consumer 映射 | [介面搬移對照](migration-map.md#領域行為與介面)、GAP-07、issue-3.json 八 | Framework remote adapter 獨立交付，不能用 checkpoint 模擬 lifecycle |
 | #2 AC07：研究／產品／採用分離 | README 狀態標記、reconstruction、所有 test execution boundary | 本次無產品執行、部署或採用聲明 |
-| #3 AC01：外部工作與 task/session 分開 | domain-map、CD01／CD02 | V01；protocol FT-Q11 |
+| #3 AC01：外部工作與 task/session 分開 | domain-map、CD01／CD02 | V01；[FT-Q11](tests/collaboration/queries.test-spec.md#ft-q11) |
 | #3 AC02：指定決策與兩種交接 | CD06／CD07、UC11／12／17／18 | B04／B05／B08；V02／V09 |
 | #3 AC03：DAG 及工作線 | CD03／CD04、UC02／09 | R01、B02／B03、V03／V10 |
 | #3 AC04：Actor 與 assignment fencing | CD01／CD04、UC09–15 | R02、B04、V05／V15；可信 adapter 待實作 |
 | #3 AC05：Plan／task／decision 版本 | CD03／05／06、UC02／17 | R03、B06–08、V17／V18 |
-| #3 AC06：原子性、CAS、重試、unknown 及反例 | OP01、boundaries-and-adapters | B09／B10、V07–11／V15–21；synthetic 與 hosted 分開 |
-| #3 AC07：新舊 profile 及 consumer 相容 | domain-map、existing-board-profiles、local-prototype | V12；existing-system FT-H01／H02／S04 |
-| #3 AC08：ports／介面接手與無 Git 前提 | boundaries-and-adapters、CQ01–08、reconstruction | V13／V14；未完成能力留在 GAP-01–07 |
-| #4 AC01：依賴方向 | boundaries-and-adapters、domain-map | existing-system 架構情境；architecture.mjs 來源存在 |
+| #3 AC06：原子性、CAS、重試、unknown 及反例 | OP01、[介面搬移對照](migration-map.md#領域行為與介面) | B09／B10、V07–11／V15–21；synthetic 與 hosted 分開 |
+| #3 AC07：新舊 profile 及 consumer 相容 | domain-map、[人工命令](board-human/workflow/behaviors/commands.spec.md)／[catalog](source-catalog/queries/catalog.spec.md)、[Local 命令](local-records/workflow/behaviors/commands.spec.md) | V12；[人工 FT-H01／H02](tests/board-human/workflow/commands.test-spec.md)及 [source FT-S04](tests/source-catalog/catalog.test-spec.md) |
+| #3 AC08：ports／介面接手與無 Git 前提 | [介面搬移對照](migration-map.md#領域行為與介面)、CQ01–08、reconstruction | V13／V14；未完成能力留在 GAP-01–07 |
+| #4 AC01：依賴方向 | [介面搬移對照](migration-map.md#領域行為與介面)、domain-map | [架構情境](tests/architecture/dependencies.test-spec.md)；architecture.mjs 來源存在 |
 | #4 AC02：替代 ports 驗證核心 | OP01、tests 層級／環境 | platform-ports／collaboration fixtures；替代 storage 不代表 hosted |
-| #4 AC03：跨 transport 同錯誤、版本分離 | use-cases 錯誤目錄、boundaries-and-adapters | protocol-formal 的 error mapping；未連線 MCP |
+| #4 AC03：跨 transport 同錯誤、版本分離 | [共通錯誤目錄](collaboration/workflow/behaviors/command-acceptance.spec.md)、[介面搬移對照](migration-map.md#領域行為與介面) | [協定測試](tests/collaboration/protocol.test-spec.md) 的 error mapping；未連線 MCP |
 | #4 AC04：原子接受、CAS／retry | OP01、GAP-03 | FT-I02／I03、B09／B10；新 production repository 待補 |
-| #4 AC05：可攜 schema／hash | schema/examples/vectors；protocol-query-formal-tests | 固定 JS／Python oracle；本次未執行 |
+| #4 AC05：可攜 schema／hash | schema/examples/vectors；[協定](tests/collaboration/protocol.test-spec.md)／[查詢測試](tests/collaboration/queries.test-spec.md) | 固定 JS／Python oracle；本次未執行 |
 | #4 AC06：範圍／限制明確 | README、gaps-and-decisions、reconstruction | 文件自查，不宣稱任意語言／hosting 已驗證 |
 
-精確 R01–R06、B01–B14 與全部 V01–V21 對照，見 [協作正式測試規格](tests/collaboration-formal-tests.md)。命令層另以 FT-C01–FT-C19 表達每個使用案例的獨立驗證義務。
+精確 R01–R06、B01–B14 與全部 V01–V21 對照，見 [測試索引與 R／V 對照](tests/README.md)。命令層另以 FT-C01–FT-C19 表達每個使用案例的獨立驗證義務。
 
 ## 待審核後續需求
 
@@ -47,12 +47,14 @@
 
 | 來源群組 | 行為規格 | 測試規格 |
 | --- | --- | --- |
-| `src/board/backend/domain`、`application` 新協作 | collaboration-domain／collaboration-use-cases | collaboration-formal-tests／protocol-query-formal-tests |
-| 同層人工／legacy／queries／summary | existing-board-profiles | existing-system-formal-tests |
-| HTTP／Sites identity／MCP error／strict JSON | boundaries-and-adapters | protocol-query／existing-system |
-| D1／clock／static source／schema／catalog | boundaries-and-adapters、existing-board-profiles | storage、source、ports 情境；新協作 GAP-03 |
-| frontend／build／Worker composition | existing-board-profiles、boundaries-and-adapters | UI 與 architecture 情境；無本次 browser execution |
-| local domain／application／SQLite／HTTP／CLI／MCP | local-prototype、boundaries-and-adapters | existing-system-formal-tests、test-source-inventory |
-| local portable／export schema／delivery tools | local-prototype | export／preflight／restore 與 delivery 情境 |
+| `src/board/backend/domain`、`application` 新協作 | [協作實體](collaboration/workflow/entity/workflow.spec.md)／[協作命令目錄](README.md#新協作行為目錄) | [協作命令測試](tests/collaboration/workflow/commands.test-spec.md)／[協定](tests/collaboration/protocol.test-spec.md)／[查詢測試](tests/collaboration/queries.test-spec.md) |
+| 同層人工／legacy／queries／summary | [人工命令](board-human/workflow/behaviors/commands.spec.md)／[catalog](source-catalog/queries/catalog.spec.md) | [相容系統測試索引](tests/README.md) |
+| HTTP／Sites identity／MCP error／strict JSON | [介面搬移對照](migration-map.md#領域行為與介面) | [協定測試](tests/collaboration/protocol.test-spec.md)／[相容系統](tests/README.md) |
+| D1／clock／static source／schema／catalog | [介面搬移對照](migration-map.md#領域行為與介面)、[人工命令](board-human/workflow/behaviors/commands.spec.md)／[catalog](source-catalog/queries/catalog.spec.md) | storage、source、ports 情境；新協作 GAP-03 |
+| frontend／build／Worker composition | [人工命令](board-human/workflow/behaviors/commands.spec.md)／[catalog](source-catalog/queries/catalog.spec.md)、[介面搬移對照](migration-map.md#領域行為與介面) | UI 與 architecture 情境；無本次 browser execution |
+| local domain／application／SQLite／HTTP／CLI／MCP | [Local 命令](local-records/workflow/behaviors/commands.spec.md)、[介面搬移對照](migration-map.md#領域行為與介面) | [相容系統測試索引](tests/README.md)、test-source-inventory |
+| local portable／export schema／delivery tools | [Local 命令](local-records/workflow/behaviors/commands.spec.md) | export／preflight／restore 與 delivery 情境 |
 
 Sources inventory 不列為逐行審查證明。某既有 test 只覆蓋一部分 Then 時，測試規格須維持「部分來源」，不得因檔名存在而把整個 AC 標為通過。規格沒有既有 automation 的正反例仍保留為待實作驗證義務。
+
+CD／UC／CQ／OP／EB／BA／LP 的新文件位置見[搬移對照](migration-map.md)。表中原始數字 ID 保留來源的簡寫；例如 UC02 對應文件 UC-02，沒有另編新的規則。

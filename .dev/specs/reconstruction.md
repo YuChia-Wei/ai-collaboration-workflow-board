@@ -1,6 +1,6 @@
 # 重建與交付檢核
 
-類型：規格集重建導引。狀態：2026-10-13 初稿；基線與權威見 [README](README.md)。目的為在替換實作語言或 persistence 時保留產品可觀察契約；不是部署操作授權，也不把現有實作推定為已滿足所有未來需求。
+類型：規格集重建導引。狀態：2026-10-13 正規化版；基線與權威見 [README](README.md)。目的為在替換實作語言或 persistence 時保留產品可觀察契約；不是部署操作授權，也不把現有實作推定為已滿足所有未來需求。
 
 ## 必須保留的輸入
 
@@ -8,7 +8,7 @@
 
 | 基線輸入 | 用途 | 保存規則 |
 | --- | --- | --- |
-| `sources/manifest.json` | Commit、原始檔案 bytes 與 Issue 來源身分 | 用 SHA-256 核對來源；Windows checkout 換行造成 bytes 差異時先確認 Git blob／換行，不默默重新 hash 成新基線 |
+| `sources/manifest.json` 與 `sources/normalization-inputs.json` | 原始行為來源及本輪整理輸入的身分 | 分開核對歷史 checkout bytes 與本輪固定 Git blob bytes；初始化已改 root 文件，不能用舊清單要求新文件相同，見 sources/README.md |
 | 協作 schema 1.0 | 精確 DTO，包含 19 command／8 query 類型及結果 | 按指定 `$defs` 驗證；query DTO 存在不等於 handler 已完成 |
 | examples | 各訊息的形狀範例 | 每筆獨立，不把整份當作可依序執行的 fixture |
 | vectors | Canonical JSON、raw text hash、request digest 與拒絕輸入 | 固定預期值作 oracle，不由待測算法自行生成預期結果 |
@@ -55,7 +55,7 @@ python -B -m src.local.tests.test_review_regressions
 python -B -m src.local.tests.test_acceptance
 ```
 
-Node 與 Python 環境版本依目前 README／CI；npm test 同時執行 Python portable vectors。`src/tools/check_repository.py` 在此基線不存在，不能把根 README 的舊指令列為成功 gate；見 GAP-13。命令跑完仍須讀結果與失敗，不能因 process 啟動就填 passed。
+Node 與 Python 環境版本依目前 README／CI；npm test 同時執行 Python portable vectors。`src/tools/check_repository.py` 已移除；初始化也已刪除根 README 的失效指令。GAP-13 保留為已解決的文件差異，不要求恢復 checker 或新增 gate。命令跑完仍須讀結果與失敗，不能因 process 啟動就填 passed。
 
 每個 scenario 應記錄 source commit、spec ID、實際 test path／identifier、環境、替代或真實依賴、命令、時間及狀態（passed／failed／not-run／blocked／skipped）。Hosted storage、真實 sessions、身份撤銷及恢復測試需要其自身證據；本地 synthetic 測試不能替代。
 

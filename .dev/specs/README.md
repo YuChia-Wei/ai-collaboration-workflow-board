@@ -1,47 +1,83 @@
-# Workflow Board 重建規格索引
+# Workflow Board 領域與測試規格
 
-本規格集依使用者要求保存於 `.dev/specs/`，供後續開發者在不依賴私人對話的情況下重建領域行為。文件版本為 **2026-10-13 初稿**；原始碼基線為 `3e7ee13cda8de27c8a069a062ffd0d289584722e`。這次交付是領域／使用案例／介面與正式測試規格的補全，不是新功能實作、測試執行或部署。
+本目錄供後續開發者依行為契約重建系統，不依賴私人對話。2026-10-13 依初始化後的 [AGENTS](../../AGENTS.md)、[第一個有界任務指引](../guides/first-task.md)及已安裝 `spec-author` 進行 **normalize**，採領域／聚合／規格種類整理。
 
-## 閱讀順序與產物
+本輪輸入版本為 `aa5ba552d29dfb3525c89a7dc8e4f45234f55f10`。產品 `src/` 與原規格行為基線 `3e7ee13cda8de27c8a069a062ffd0d289584722e` 相同，因此保留原行為來源及歷史 Issue 快照；初始化後的協作規則、導航及已修正的 README／ARCHITECTURE 另綁定本輪輸入版本。兩種基線不能混稱為本次執行證據，詳見[來源說明](sources/README.md)。
 
-| 文件 | 規格種類與用途 |
+## 先讀哪一份
+
+| 需要 | 入口 |
 | --- | --- |
-| [領域地圖與共同語言](domain-map.md) | 系統邊界、aggregate 所有權、不同紀錄類型的權威與語意隔離 |
-| [協作領域模型](collaboration-domain.md) | Entity／value object；識別、狀態、版本、依賴與不變條件 |
-| [協作使用案例](collaboration-use-cases.md) | Production；命令、讀取、拒絕與可靠接受協定 |
-| [邊界與 adapters](boundaries-and-adapters.md) | Adapter；輸入／輸出協定、身分與儲存映射、平台實作限制 |
-| [既有 Board profiles](existing-board-profiles.md) | 人工 profile、legacy、唯讀 source 的既有行為及前端呈現 |
-| [本機原型](local-prototype.md) | Python local 的獨立模型、存取、文件與可攜匯出／還原 |
-| [正式測試規格](tests/README.md) | GWT、可觀察斷言、測試層級、既有 test bindings 與缺口 |
-| [需求與驗證追溯](coverage.md) | Issue #2–#8 的 AC、領域文件、B／V 情境及已知未覆蓋邊界 |
-| [重建與交付檢核](reconstruction.md) | 分階段重建、跨語言契約、接受證據與不可混用的完成狀態 |
-| [未決事項與來源差異](gaps-and-decisions.md) | 尚未實作、尚未決定、待審核需求及來源差異 |
-| [來源清單](sources/manifest.json) | 107 個來源檔案的原始 bytes SHA-256、commit，以及 Issue #2–#8 快照身分 |
+| 理解產品邊界、共同語言與不同紀錄類型 | [領域地圖](domain-map.md) |
+| 重建新協作聚合 | [Workflow 實體規格](collaboration/workflow/entity/workflow.spec.md) |
+| 實作新協作命令 | [命令接受協定](collaboration/workflow/behaviors/command-acceptance.spec.md)，再從下表選 19 個使用案例 |
+| 實作有界查詢、指定版本、快照 | [Context](collaboration/queries/workflow-context.spec.md)、[分頁](collaboration/queries/context-page.spec.md)及查詢目錄 |
+| 保留既有人工 Board／legacy 相容性 | [人工聚合](board-human/workflow/entity/workflow.spec.md)、[人工命令](board-human/workflow/behaviors/commands.spec.md)，legacy 路徑見[搬移對照](migration-map.md) |
+| 重建來源 catalog／舊人端介面 | [Catalog 查詢](source-catalog/queries/catalog.spec.md)、[瀏覽器 adapter](board-web/adapters/browser.spec.md) |
+| 重建本機原型及可攜資料 | [Local 聚合](local-records/workflow/entity/workflow.spec.md)、[Local 命令](local-records/workflow/behaviors/commands.spec.md)、[匯出／還原](local-records/portability/export-restore.spec.md) |
+| 找到對應驗證情境與既有 test binding | [正式測試規格索引](tests/README.md)、[需求追溯](coverage.md) |
+| 了解重建順序、未完成能力及來源差異 | [重建導引](reconstruction.md)、[未決事項](gaps-and-decisions.md) |
+| 核對這次整理方式與審閱範圍 | [搬移對照](migration-map.md)、[整理審閱紀錄](normalization-review.md) |
 
-詳細 wire 欄位、列舉、required／null、額外欄位與合成訊息範例，直接採用版本化的 [collaboration/1 schema](../../src/board/contracts/collaboration-v1/schema.json)、[examples](../../src/board/contracts/collaboration-v1/examples.json)、[vectors](../../src/board/contracts/collaboration-v1/vectors.json) 與[契約說明](../../src/board/contracts/collaboration-v1/README.md)。這些機器可讀契約是規格集的必要組成，不能只帶走本目錄的 Markdown 而丟棄它們。Local 匯出格式另外採用 [export-schema](../../src/local/assets/export-schema.json)。
+## 新協作行為目錄
 
-## 來源權威與閱讀標記
-
-| 狀態 | 意義 | 不能推定的事 |
+| 原 ID | 命令／可觀察行為 | 規格 |
 | --- | --- | --- |
-| 已接受設計 | Issue #2／#3 的產品方向及已完成設計；#4 固定的協作契約 | 不等於所有 adapter、UI 與 hosted 驗收已完成 |
-| 來源觀察 | 基線程式／既有測試／README 呈現的行為；用於忠實重建現況 | 不把偶然實作提升為新增產品政策；矛盾留在缺口清單 |
-| 待實作契約 | 已固定語意，但沒有對應執行路徑，例如協作 query snapshots | 不得廣告為服務 capabilities |
-| 待審核需求 | Issue #5–#8 中仍標示待審核的詳細 AC、平台及後續模型 | 不藉補文件決定 credential、備份政策、部署模型或新 aggregate |
-| 本次局部 ID | 文件新編的規則／情境識別，便於追溯 | 不替換 Issue 的 R01–R06、B01–B14、V01–V21 |
+| OP01 | 命令接受、重播、拒絕及未知結果 | [接受協定](collaboration/workflow/behaviors/command-acceptance.spec.md) |
+| UC01 | workflow.create | [建立工作](collaboration/workflow/behaviors/create-workflow.spec.md) |
+| UC02 | plan.revise | [修訂計畫](collaboration/workflow/behaviors/revise-plan.spec.md) |
+| UC03 | document.append | [追加文件版本](collaboration/workflow/behaviors/append-document.spec.md) |
+| UC04 | workflow.start | [開始工作](collaboration/workflow/behaviors/start-workflow.spec.md) |
+| UC05 | workflow.pause | [暫停工作](collaboration/workflow/behaviors/pause-workflow.spec.md) |
+| UC06 | workflow.resume | [恢復工作](collaboration/workflow/behaviors/resume-workflow.spec.md) |
+| UC07 | workflow.complete | [完成工作](collaboration/workflow/behaviors/complete-workflow.spec.md) |
+| UC08 | workflow.cancel | [取消工作](collaboration/workflow/behaviors/cancel-workflow.spec.md) |
+| UC09 | task.claim | [承接任務](collaboration/workflow/behaviors/claim-task.spec.md) |
+| UC10 | task.progress | [回報進度](collaboration/workflow/behaviors/report-task-progress.spec.md) |
+| UC11 | task.release | [釋出承接](collaboration/workflow/behaviors/release-task.spec.md) |
+| UC12 | task.block | [記錄阻礙](collaboration/workflow/behaviors/block-task.spec.md) |
+| UC13 | task.unblock | [解除阻礙](collaboration/workflow/behaviors/unblock-task.spec.md) |
+| UC14 | task.complete | [完成任務](collaboration/workflow/behaviors/complete-task.spec.md) |
+| UC15 | task.cancel | [取消任務](collaboration/workflow/behaviors/cancel-task.spec.md) |
+| UC16 | decision.open | [提出指定問題](collaboration/workflow/behaviors/open-decision.spec.md) |
+| UC17 | decision.resolve | [記錄決定](collaboration/workflow/behaviors/resolve-decision.spec.md) |
+| UC18 | handoff.record | [保存交接](collaboration/workflow/behaviors/record-handoff.spec.md) |
+| UC19 | checkpoint.append | [追加觀察](collaboration/workflow/behaviors/append-checkpoint.spec.md) |
 
-GitHub Issues／Projects 仍為工作管理權威。[Issue 快照](sources/) 是本次讀取的來源副本，不建立本地 backlog，也不能用來更新或覆蓋較新的線上決策。來源清單的 hash 證明這次引用哪份 bytes，不證明每個來源檔案逐行已審查，更不是測試成功證據。日後來源改動時，先判斷影響哪個契約／情境，再更新相應規格與來源基線。
+| 原 ID | 查詢 | 規格 |
+| --- | --- | --- |
+| CQ01 | capabilities | [能力](collaboration/queries/capabilities.spec.md) |
+| CQ02 | workflow.find | [搜尋摘要](collaboration/queries/find-workflows.spec.md) |
+| CQ03 | workflow.context | [一致接手上下文](collaboration/queries/workflow-context.spec.md) |
+| CQ04 | context.page | [同快照分頁](collaboration/queries/context-page.spec.md) |
+| CQ05 | task.read | [指定任務版本](collaboration/queries/read-task.spec.md) |
+| CQ06 | decision.read | [指定決策版本](collaboration/queries/read-decision.spec.md) |
+| CQ07 | document.read | [指定文件版本](collaboration/queries/read-document.spec.md) |
+| CQ08 | operation.get | [原操作結果](collaboration/queries/operation-result.spec.md) |
 
-原始碼發現已先嘗試重新建立 code graph；索引程序失敗，現有 graph 未提供新協作定義，因此依專案允許的 fallback 核對 tracked source、契約與實際呼叫入口。不能把 graph 查無結果當成功能不存在的證明。
+## 文件責任與採用格式
 
-## 完整性的範圍
+`ai-context-init` 建立協作起點，不會自動提供完整產品規格或強制機器格式。本次依使用者選定的 `.dev/specs/` 根目錄，採用 `spec-author` 的一般 Markdown 範本與語意所有權指引；以下是這次整理的文件約定，不新增產品行為或 framework 管理設定。
 
-本輪覆蓋現有 Board 新協作核心、人工／legacy／source、local 原型及其測試責任；保持它們各自的狀態與資料契約。外部 PM 系統、Agent 執行引擎、Framework remote provider、自動部署服務都不是本次重建的內部領域。Issue #8 的交付／部署領域尚未形成接受的精確模型，保留其需求與待決策事項，不捏造 Delivery aggregate 或 API。
+- **entity**：描述一個聚合或實體的識別、資料值、所有權、不變條件與允許轉移。Workflow 的子成員留在該聚合規格，不因有 ID 就另建 aggregate。
+- **production**：描述選定使用案例的 actor／trigger、輸入、前置條件、輸出、後置條件及失敗。新協作命令與查詢各有獨立文件；既有相容介面的命令族可以在同一有界文件中保留逐命令子契約。
+- **adapter**：描述外部入口、協定、資料映射、身分、錯誤與儲存保證。程式語言、runtime、資料表與測試綁定分開列明。
+- **formal-test**：以獨立情境的 Given／When／Then、驗證層級、測試資料、oracle、來源 test binding 與缺口表達。情境文字不是執行結果。
 
-可依文件與機器契約重建已定義的行為；對尚未決定的身分、snapshot 儲存、備份及後續介面，必須完成[缺口](gaps-and-decisions.md)所列決策及證據，才能宣稱整體可上線。這次沒有以重新執行產品測試或重建第二套實作來證明重建充分性。
+每份規格保留類型、狀態、主題／所有權、來源、驗證期待與未決事項。來源中的 CD／UC／CQ／OP／EB／BA／LP 與 R／B／V／FT 編號保留；版面搬移不重新編號、不消除已知矛盾。實作語言與儲存技術放在技術綁定區；公開 wire 欄位名與其精確值仍是跨語言契約的一部分。
 
-## 本輪文件檢查
+## 必要的機器可讀契約
 
-15 份 Markdown 覆蓋領域、使用案例、介面、重建及測試設計；正式測試文件共有 111 個不同情境 ID，保留原 B01–B14、R01–R06、V01–V21。三位指定 GPT-6.1-sol 子代理分工撰寫，領域作者與介面／local 作者另以唯讀方式交叉檢視測試規格，統籌者核對並整合修正。這是文件交叉審閱，不是獨立產品驗收。
+詳細 wire 結構仍採用版本化的 [collaboration/1 schema](../../src/board/contracts/collaboration-v1/schema.json)、[examples](../../src/board/contracts/collaboration-v1/examples.json)、[vectors](../../src/board/contracts/collaboration-v1/vectors.json)及[契約 README](../../src/board/contracts/collaboration-v1/README.md)。Local 可攜資料採用自己的 [export schema](../../src/local/assets/export-schema.json)。它們是重建輸入，不能只取本目錄 Markdown 而丟棄；本次未複製出第二套可能漂移的 schema。
 
-已檢查本目錄相對連結、Markdown 表格欄位、尾端空白、JSON 可解析性、107 個來源檔案及 7 個 Issue 快照的 SHA-256，並核對 19 個命令與 8 個查詢的規格 ID 齊備。檢查僅涵蓋文件與來源一致性；產品測試、重建實作、hosted CI 與部署均未在本輪執行。
+## 來源權威與證據界線
+
+| 標記 | 意義 |
+| --- | --- |
+| 已接受設計 | Issue #2／#3 的方向及設計、#4 收斂的契約；不等於所有 adapter 已實作 |
+| 來源觀察 | 固定程式／測試來源顯示的現況；不把 code-only 細節升為新增產品政策 |
+| 待實作契約 | 已固定語意但缺執行路徑，不能廣告為 runtime capabilities |
+| 待審核需求／未決 | 後續 Issue 尚未接受的詳細 AC、實作選擇與缺口，不由 normalize 代為決定 |
+| 來源存在／部分來源／缺口 | 測試程式的對應程度，均不等於本輪執行通過 |
+
+GitHub Issues／Projects 仍為工作權威。[Issue 快照](sources/)保留上一輪讀取版本；本次整理沒有重新判定線上工作狀態。新協作 query、production persistence、可信 Agent 身分、HTTP／MCP 與新 UI 的缺口仍有效。產品測試、hosted CI、部署及真正重建另一套實作均未在這次文件整理中執行。

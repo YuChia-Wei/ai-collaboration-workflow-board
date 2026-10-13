@@ -1,0 +1,168 @@
+{
+  "kind": "spec-normalization-inputs",
+  "captured_on": "2026-10-13",
+  "input_commit": "aa5ba552d29dfb3525c89a7dc8e4f45234f55f10",
+  "behavior_source_commit": "3e7ee13cda8de27c8a069a062ffd0d289584722e",
+  "product_src_changed_since_behavior_source": false,
+  "note": "Hashes are Git blob bytes at input_commit, not installed file verification or current output hashes. Existing source manifest and Issue snapshots retain their historical bindings.",
+  "original_specs": [
+    {
+      "path": ".dev/specs/README.md",
+      "sha256": "407aaa0e2c697524b214f1ab51f41401853aeb9c35735f1bbc401d3475c998eb"
+    },
+    {
+      "path": ".dev/specs/boundaries-and-adapters.md",
+      "sha256": "ebca52f72f7c766f23bd2bd8076b069317f9ebc0335d5548f5fb925a3db02fed"
+    },
+    {
+      "path": ".dev/specs/collaboration-domain.md",
+      "sha256": "6fb098f5b8cad5859b1e636130d7b8624a9dc9afecd9ad5368f3f8337cffabb9"
+    },
+    {
+      "path": ".dev/specs/collaboration-use-cases.md",
+      "sha256": "c0e4b964be9c5e0b999e714b388fb55fb7bc662aa8cf1d2e793368e7ef63233b"
+    },
+    {
+      "path": ".dev/specs/coverage.md",
+      "sha256": "fce9d2daf8e5b3618318fbefa5f3520b9168cdab12507ae9972165eaa939d37a"
+    },
+    {
+      "path": ".dev/specs/domain-map.md",
+      "sha256": "ab3de038b12f4909ac83ec5adf3fc477e308509efd80c17ba36651a0747673a8"
+    },
+    {
+      "path": ".dev/specs/existing-board-profiles.md",
+      "sha256": "4fb543c94e4de314f4b8f8e6ed2b132e7f0ee7d8a2016db03d6f7ebb1180bd5c"
+    },
+    {
+      "path": ".dev/specs/gaps-and-decisions.md",
+      "sha256": "188d229c6078bed88edad4639d22089eef691b4bc03885207ddba3f2f0085a91"
+    },
+    {
+      "path": ".dev/specs/local-prototype.md",
+      "sha256": "789e16aa2afd8da4d081b062be6f8ea0517356e7d7d3beb0a4e9e0f970b5c6df"
+    },
+    {
+      "path": ".dev/specs/reconstruction.md",
+      "sha256": "be4fb40c69bc03ab3ed301332096bf97d2ebdc530a8a2f454b7f2fcadb106411"
+    },
+    {
+      "path": ".dev/specs/sources/issue-2.json",
+      "sha256": "f970802a02b15ba0c851f0a17c1ae2b7e17af01709735ffb5c2ebf6a05686a51"
+    },
+    {
+      "path": ".dev/specs/sources/issue-3.json",
+      "sha256": "97e5e24e0a917535a26eab094143d943e3749e1cc4166a2c592d0459f561fcfc"
+    },
+    {
+      "path": ".dev/specs/sources/issue-4.json",
+      "sha256": "dddfbe53853c429db89b1f4fa52fc7942f360516e156af06f4fa8b974fc4f5f2"
+    },
+    {
+      "path": ".dev/specs/sources/issue-5.json",
+      "sha256": "f95ee72ac399d3e17a70a90d3f0d0d8d1149d5f16456fdcf20d110c14292ceb8"
+    },
+    {
+      "path": ".dev/specs/sources/issue-6.json",
+      "sha256": "618e4e8e5a0ee78f52072931f423132688101ee695aba17849d689dac370a880"
+    },
+    {
+      "path": ".dev/specs/sources/issue-7.json",
+      "sha256": "3dbc568133a38d225180d7f6cdae1b5c3a2937e94a9db400c96ab89f4cd75c39"
+    },
+    {
+      "path": ".dev/specs/sources/issue-8.json",
+      "sha256": "d0cecd7beee0552d9771eefe60366e3170f5b19ae817384849c5c3e350489e50"
+    },
+    {
+      "path": ".dev/specs/sources/manifest.json",
+      "sha256": "76e031416da595dea3beee41d65f5d10a5919f9d1d269468185bc06c029ae012"
+    },
+    {
+      "path": ".dev/specs/tests/README.md",
+      "sha256": "2a981b108a2f3befe239ba6182949c81cb5e14e6115779d7bf98360d5dc38b52"
+    },
+    {
+      "path": ".dev/specs/tests/collaboration-formal-tests.md",
+      "sha256": "75fe4f2d109776756cd2156bab3476502a5383bae7bb44b6ccf8e15fbbec8977"
+    },
+    {
+      "path": ".dev/specs/tests/existing-system-formal-tests.md",
+      "sha256": "332d06c85e0f1aa333f0e9c79b43be588d90f732fa1182cc574397bf6cfea318"
+    },
+    {
+      "path": ".dev/specs/tests/protocol-query-formal-tests.md",
+      "sha256": "60b47c2ec5028bd7abf58f12019ab32891ca1af1eed3b06c527968d1597c869d"
+    },
+    {
+      "path": ".dev/specs/tests/test-source-inventory.md",
+      "sha256": "08fd7cd546139d9f0cc6dd78808d54a2783d30191a95b7aca8d55a7b0a48ff28"
+    }
+  ],
+  "selected_guidance": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "875b2eb064697f7da7538e7021897f911397ac5663669ba33ceee16a398de07f"
+    },
+    {
+      "path": ".dev/guides/first-task.md",
+      "sha256": "ffdfccda77de704bb6992d76d94d6f7d0182499249f9bc6a196221a8d313f510"
+    },
+    {
+      "path": "FRAMEWORK-INSTALLATION.md",
+      "sha256": "50bebb1a7b8fdeb5c934b7e9374505f9996a775a72d04bd844fae750dfba5c5b"
+    },
+    {
+      "path": "README.md",
+      "sha256": "04399e202e300bc81c8157313a187b20eef53e3e7ed3cc28857c930297f60aa1"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "sha256": "4fef789b229953aede33f134efa3699bbd6c8ec811a945907e18d296a9962910"
+    },
+    {
+      "path": ".ai/core/skills/spec-author/SKILL.md",
+      "sha256": "3d69af228904426406b0dfa31a5bc5b96fb5bad22161fc3ee1d146e0146fee19"
+    },
+    {
+      "path": ".ai/core/skills/spec-author/references/authoring.md",
+      "sha256": "521cd217af6eeb31a2095ef3b5945d93af99129f7209e729b975f3189a559510"
+    },
+    {
+      "path": ".ai/core/skills/spec-author/references/spec-organization-guide.md",
+      "sha256": "2787c86c4072f26c9bb7fe5bad39f2db635e88ad1f1fd407e685851502971197"
+    },
+    {
+      "path": ".ai/core/skills/spec-author/references/spec-guide.md",
+      "sha256": "ed1c7f0e7b9c3e17ce37d6be8d7f6bf520ef76bdfec11c23f84e18a5134d8e1c"
+    },
+    {
+      "path": ".ai/core/skills/spec-author/references/entity-template.md",
+      "sha256": "425f67efc291daf5755f61d1963ec2b3f9848d7c3cc80e0f0f339e27483ccaf0"
+    },
+    {
+      "path": ".ai/core/skills/spec-author/references/production-template.md",
+      "sha256": "d9fddc3d14844aaa692fc33533046c0c5a320e74efd1163599d6be50961079d5"
+    },
+    {
+      "path": ".ai/core/skills/spec-author/references/adapter-template.md",
+      "sha256": "0c2dccdc61a306553e06c637a5d1fcb6cafd28aac92eef406940ee2150503ba9"
+    },
+    {
+      "path": ".ai/core/skills/spec-author/references/formal-test-template.md",
+      "sha256": "77e554da50aec47d6db41796527eb78e7e0edf0d7874cd0123bb0c0ece542fa5"
+    },
+    {
+      "path": ".ai/core/skills/bdd-gwt-test-designer/references/design.md",
+      "sha256": "6e1818ec85603d790103d62736ef10aed99c925e97f40ec02ecd5ddf9b338958"
+    },
+    {
+      "path": ".ai/core/skills/bdd-gwt-test-designer/references/review.md",
+      "sha256": "07862be20d7f4d3c9a640705d2452d882acdce4a32440a26090f0de6f54f5828"
+    },
+    {
+      "path": ".ai/core/skills/spec-compliance-validator/references/compliance.md",
+      "sha256": "c242d81d83f24a074ea3561709326445fa5cd5bbda2c8e8e29b492a6932d3f74"
+    }
+  ]
+}
