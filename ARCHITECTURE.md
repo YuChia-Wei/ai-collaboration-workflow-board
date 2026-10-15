@@ -10,7 +10,7 @@ src/
       domain/                  workflow 規則、值、錯誤與摘要
       application/             commands、queries 與 repository ports
       adapters/inbound/http/   Request、Response、路由與 Sites 身分入口
-      adapters/inbound/mcp/    共用 domain 錯誤映射；尚無協作 transport
+      adapters/inbound/mcp/    協作工具、JSON-RPC transport 與共用錯誤映射
       adapters/inbound/shared/ 嚴格 JSON wire parser
       adapters/outbound/d1/    D1 SQL、持久資料、交易 batch
       adapters/outbound/runtime/ 系統時鐘 adapter
@@ -42,7 +42,9 @@ Board 的內層只接收 plain DTO、已解碼 records、語意錯誤及注入�
 
 `workflow-board/collaboration/1` 為獨立協作 profile，使用一個 Workflow aggregate 維護 task DAG、assignment generation、plan／decision revisions 及必要交付。其 domain reducers 與 application 命令接受用例已有本機 BDD automation；19 種 commands、8 種 query DTO 與 JS／Python hash 向量見 [協作契約](src/board/contracts/collaboration-v1/README.md)。新協作 repository 的 accept／reject 必須原子綁定 operation digest，不能把 unknown 當成已拒絕。
 
-新 profile 尚未接入生產 persistence、可信 Agent 身分、query snapshots 或 HTTP／MCP routes；現行服務不廣告此能力。Context／resume、指定文件版本讀取及 hosted storage 驗證由 #5／#6／#7 承接。舊人工 profile、legacy 與 source snapshot 保持各自相容語意，本機 Python 原型也不因此成為新協作服務。
+WB-04 MVP 已加入 D1 adapter、不可變 query snapshots、HTTP／MCP routes 與伺服器設定的 Agent binding adapter，並通過本機 SQL／transport 驗證。協作資料使用獨立資料表；命令以單一 batch 保存 accepted／rejected outcome，CAS、快照、facts 與事件均受同一 attempt 保護。快照分段保存以避免大 aggregate 成為單一大列；文件 facts 保留指定版本原文。Query application 只接收 decoded repository 值。
+
+2026-10-14 已部署第 7 版，讀回 hosted D1 新表與平台 MCP discovery；真實 Site plugin client 的合成讀寫及 D1 故障情境仍未驗證。身分與 store 設定缺少時拒絕存取；本次採用的單 owner binding 不能區分同 owner 下的不同 Agent sessions，也不授予 human／decide／change_scope。部署與接入狀態見 [MVP 操作說明](src/board/COLLABORATION-MVP.md)。舊人工 profile、legacy、source snapshot 及 Python 原型保持各自語意。
 
 既有人工／legacy profile 的重構保留命令接受、CAS、event 與 receipt 的原子性。相同 operation ID 的重試先讀持久 receipt，仍檢查 payload 與 principal；不以新 revision 自動重播衝突。既有 hosted 資料表、migration bytes、source catalog 與私有身分語意保持相容。
 

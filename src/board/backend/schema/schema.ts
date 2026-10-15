@@ -23,3 +23,24 @@ export const boardRevisions=sqliteTable('board_revisions',{
 export const boardEntries=sqliteTable('board_entries',{
  owner:text('owner').notNull(),workflowId:text('workflow_id').notNull(),id:text('id').notNull(),kind:text('kind').notNull(),createdAt:text('created_at').notNull(),body:text('body').notNull()
 },t=>[primaryKey({columns:[t.owner,t.workflowId,t.id]}),index('idx_board_entries_kind').on(t.owner,t.workflowId,t.kind)]);
+
+// collaboration/1 has separate operation keys, immutable snapshots and facts.
+const collaborationScope=()=>({owner:text('owner').notNull(),storeId:text('store_id').notNull(),workflowId:text('workflow_id').notNull()});
+export const collaborationHeads=sqliteTable('collaboration_heads',{
+ ...collaborationScope(),revision:integer('revision').notNull(),lastAttempt:text('last_attempt').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.workflowId]})]);
+export const collaborationOperations=sqliteTable('collaboration_operations',{
+ key:text('key').primaryKey(),...collaborationScope(),operationId:text('operation_id').notNull(),digest:text('digest').notNull(),attempt:text('attempt').notNull(),outcome:text('outcome').notNull(),receipt:text('receipt').notNull()
+},t=>[uniqueIndex('idx_collaboration_operation_scope').on(t.owner,t.storeId,t.operationId)]);
+export const collaborationSnapshots=sqliteTable('collaboration_snapshots',{
+ seq:integer('seq').primaryKey({autoIncrement:true}),...collaborationScope(),revision:integer('revision').notNull(),summary:text('summary').notNull(),chunkCount:integer('chunk_count').notNull()
+},t=>[uniqueIndex('idx_collaboration_snapshot').on(t.owner,t.storeId,t.workflowId,t.revision)]);
+export const collaborationChunks=sqliteTable('collaboration_chunks',{
+ ...collaborationScope(),revision:integer('revision').notNull(),position:integer('position').notNull(),body:text('body').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.workflowId,t.revision,t.position]})]);
+export const collaborationFacts=sqliteTable('collaboration_facts',{
+ ...collaborationScope(),revision:integer('revision').notNull(),kind:text('kind').notNull(),position:integer('position').notNull(),body:text('body').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.workflowId,t.revision,t.kind,t.position]})]);
+export const collaborationCursors=sqliteTable('collaboration_cursors',{
+ id:text('id').primaryKey(),owner:text('owner').notNull(),body:text('body').notNull()
+});

@@ -2,8 +2,8 @@ import {Fault} from '../../../domain/errors.mjs';
 import {unicodeScalarString} from '../../../domain/collaboration-values.mjs';
 
 /** Preserve duplicate-key and numeric-token evidence before normal JSON parsing. */
-export function parseContractJson(source){
- if(typeof source!=='string'||new TextEncoder().encode(source).length>300000)throw new Fault('request_too_large','limit_exceeded');
+export function parseContractJson(source,maxBytes=300000){
+ if(typeof source!=='string'||new TextEncoder().encode(source).length>maxBytes)throw new Fault('request_too_large','limit_exceeded');
  let offset=0;
  const fail=()=>{throw new Fault('invalid_json');};
  const ws=()=>{while(/[ \t\r\n]/.test(source[offset]??'!'))offset++;};

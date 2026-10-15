@@ -22,7 +22,7 @@ npm run validate
 
 契約測試以 Node SQLite 模擬 D1 batch，覆蓋防重放、版本衝突、零列更新、交易回滾、文件保留與身分邊界；不等於 hosted D1 端到端驗證。
 
-`npm test` 也需要 Python 3，執行獨立的跨語言編碼向量。新協作 profile 的核心以合成原子 repository 驗證 23 個行為情境；這與既有人工 profile 的 SQLite／D1 adapter 回歸是兩種不同證據。CI 配置 Node 24 與 Python 3.13。
+`npm test` 也需要 Python 3，執行獨立的跨語言編碼向量。協作核心保留 23 個合成 repository 情境；MVP 另有 10 個 SQL／query 情境及 5 個 transport 情境，`validate` 會對打包後 Worker 重跑 transport 流程。這些與既有人工 profile 回歸及 hosted 驗證是不同證據。CI 配置 Node 24 與 Python 3.13。
 
 ## 程式邊界
 
@@ -48,7 +48,7 @@ npm run validate
 
 Domain 不依賴 HTTP 或資料庫；application 使用 repository ports，D1 adapter 實作交易。新增紀錄及既有紀錄保有各自的契約和儲存格式。HTTP adapter 不執行 SQL，composition root 負責選擇平台身分來源。領域 reducer 可在沒有 D1、HTTP 或網路的環境執行。
 
-建置使用 esbuild 封裝 Worker ESM 於 `dist/server/index.js`，並將 schema migrations 放在 provider 使用的 `dist/drizzle/`。`.openai/hosting.json` 保留既有 Sites project 的 metadata。[GitHub Actions CI](../../.github/workflows/ci.yml) 負責可重現的安裝、測試、建置與 artifact 驗證；部署環境與身分設定請參閱 repository 根目錄的部署說明。GitHub repo 的 push／merge 與遠端部署為各自的操作。
+建置使用 esbuild 封裝 Worker ESM 於 `dist/server/index.js`，並將 schema migrations 放在 Sites 使用的 `dist/.openai/drizzle/`。`.openai/hosting.json` 保留既有 Sites project 的 metadata。[GitHub Actions CI](../../.github/workflows/ci.yml) 負責可重現的安裝、測試、建置與 artifact 驗證；部署環境與身分設定請參閱 repository 根目錄的部署說明。GitHub repo 的 push／merge 與遠端部署為各自的操作。
 
 ## 新版 board
 
@@ -66,4 +66,6 @@ AI agents、MCP／CLI adapters、原 repo 權威切換、完整 Git 歷史及二
 
 [#3 的 DDD／BDD 模型](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/3) 已落成獨立的 `workflow-board/collaboration/1` 命令核心。19 種 commands 支援明確計畫、並行 task DAG、單 task 承接、交接、決策及結案限制；8 種 queries 的 DTO 與快照契約已定義。完整規則、範例、原子接受及證據對照見 [協作契約](contracts/collaboration-v1/README.md)。
 
-此 profile 尚無生產 repository、可信 Agent 身分、query handlers 或 HTTP／MCP routes，未在現行網站 capabilities 廣告，也未遷移人工／source 資料。MCP 目前只有共用錯誤映射，並非可連線的工具服務。後續 #5／#6／#7 依此契約完成 adapters、context／指定版本讀取、Web 與 hosted 驗證。
+WB-04 MVP 已加入 D1 repository、8 種 queries、HTTP／MCP routes 與明確設定的 Agent binding adapter。本機合成流程可從建立、計畫、認領、進度、交接一路執行至完成，並驗證打包後 Worker。2026-10-14 第 7 版已部署，D1 新表與平台 discovery 已讀回；真實 Site plugin session 的合成讀寫仍待完成。設定、限制、測試對照與接入步驟見 [COLLABORATION-MVP.md](COLLABORATION-MVP.md)。既有人工 Web UI 不操作 collaboration profile；未遷移人工／source 資料。
+
+專案內試用入口為 `npm --prefix src/board run trial:collaboration -- <start|validate|resume|status> <run-id>`。它保存本機 SQLite、固定來源／skill 原文與 Worker、操作回條及驗證輸出，讓新程序可續接；不以線上記錄作唯一證據。步驟與證據限制見 [試行指南](../../.dev/guides/collaboration-trial.md)。

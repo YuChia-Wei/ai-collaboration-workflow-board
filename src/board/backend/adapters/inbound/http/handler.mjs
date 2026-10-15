@@ -10,7 +10,7 @@ export function createHttpHandler(createApplication,getPage,resolveOwner){
  return async function handle(request,env){
   try{
    const url=new URL(request.url);
-   if(url.pathname==='/')return new Response(getPage(),{headers:{'content-type':'text/html;charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'}});
+   if(url.pathname==='/')return new Response(getPage(request,env),{headers:{'content-type':'text/html;charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'}});
    demand(url.pathname.startsWith('/api/'),'not_found','not_found');
    if(url.pathname==='/api/source-import')throw new Fault('import_forbidden','forbidden');
    const owner=await resolveOwner(request,env);demand(nonempty(owner),'signin_required','unauthenticated');

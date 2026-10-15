@@ -1,6 +1,6 @@
 /**
- * Collaboration/1 ports. The command use case is implemented; no production
- * storage/identity/transport implementation is advertised for this profile.
+ * Collaboration/1 ports. Command/query use cases and D1/HTTP/MCP adapters have
+ * local integration coverage; hosted deployment and client acceptance are separate.
  * Normative DTOs and state/transaction rules: contracts/collaboration-v1/.
  * SQL rows, HTTP requests, response status and secrets are not port values.
  *
@@ -39,6 +39,18 @@
  * @property {(access:AccessContext,ref:WorkflowRef,taskId:string,definitionRevision:number,atRevision:number)=>Promise<WireMessage>} task
  * @property {(access:AccessContext,ref:WorkflowRef,decisionId:string,decisionRevision:number,atRevision:number)=>Promise<WireMessage>} decision
  * @property {(access:AccessContext,ref:WorkflowRef,documentRef:WireMessage)=>Promise<WireMessage>} document
+ *
+ * The query application implements that public behavior through an immutable
+ * read repository. These values remain decoded, independent of SQL or transport:
+ * @typedef {object} CollaborationReadRepository
+ * @property {(owner:string,ref:WorkflowRef,revision?:number)=>Promise<CommandState|null>} snapshot Latest committed snapshot if revision is omitted; exact immutable revision otherwise
+ * @property {(owner:string,ref:WorkflowRef,revision:number,kind:string)=>Promise<WireMessage[]>} facts Facts at or before the pinned revision, ordered by acceptance revision and position
+ * @property {(owner:string,ref:WorkflowRef,revision:number)=>Promise<WireMessage[]>} documentRefs Exact document reference metadata at the pinned revision, excluding content
+ * @property {(owner:string,ref:WorkflowRef,documentRef:WireMessage)=>Promise<WireMessage|null>} document Exact document version; application verifies requested and actual hash
+ * @property {(owner:string,value:WireMessage)=>Promise<string>} saveCursor Persist an opaque cursor bound to owner and immutable query position; repeated equivalent cursors can be reused
+ * @property {(owner:string,id:string)=>Promise<WireMessage|null>} cursor Never resolve another owner's cursor
+ * @property {(owner:string,storeId:string)=>Promise<number>} baseline Find enumeration baseline
+ * @property {(owner:string,storeId:string,q:string,baseline:number,after:string,limit:number)=>Promise<WireMessage[]>} find Latest summary per workflow at baseline; workflow ID ascending, title substring match (ASCII case-insensitive)
  *
  * Context pages/point reads pin one revision. An adapter unable to preserve that
  * snapshot returns snapshot_expired and never substitutes a newer page/version.

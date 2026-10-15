@@ -2,7 +2,7 @@
 
 本文件承接 [#3 的 DDD／BDD 模型](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/3)，由 [#4](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/4) 固定可攜的用例、資料及接受協定。
 
-**狀態：契約、19 種 domain command 與 application 接受用例已提供並通過本機驗證；新協作 profile 尚未接上 HTTP／MCP 或持久化 adapter。** 現行網站只接受既有人工 profile `framework-board/1` 與原 legacy 路徑；指定未知 profile 時明確回報 `unsupported_profile`，不落入 legacy。Schema、範例或通過編碼測試都不是服務已支援此能力的證據。
+**狀態：19 種 domain commands、application 接受用例、8 種 queries、D1 repository 與 HTTP／MCP adapters 已有本機驗證；2026-10-14 第 7 版已部署，D1 新表與平台 discovery 已讀回，真實 Site plugin client 合成讀寫仍待完成。** 設定缺少時協作 routes 拒絕存取。既有人工 profile `framework-board/1` 與 legacy 保持相容；未知 profile 明確拒絕，不落入 legacy。MVP 接入限制及最新證據見 [操作說明](../../COLLABORATION-MVP.md)。Schema、編碼測試或本機 SQL 通過均不代表 hosted 服務已完成驗收。
 
 ## 1. 來源與實作邊界
 
@@ -11,7 +11,7 @@
 - [vectors.json](vectors.json) 是固定跨語言編碼向量，包含正例、拒絕例、文件 hash 與綁定可信身分的 request digest。
 - [目前 ports](../../backend/application/ports.mjs) 已供人工／legacy application 使用；[協作 ports](../../backend/application/collaboration-ports.mjs) 定義 command repository、identity、clock、ID 與 query 語意；[application](../../backend/application/collaboration.mjs) 及 [domain reducer](../../backend/domain/collaboration-workflow.mjs) 已實作命令接受流程。
 - 本次有實作：移除內層 HTTP status、URLSearchParams、D1 results／序列化 row、直接系統時間及固定 catalog 依賴；提供編碼器、嚴格 JSON parser、HTTP／MCP error mapping、新協作命令核心與行為驗證。
-- 後續交付：新 profile 的 query handlers、認證、context snapshot、D1 儲存、HTTP／MCP transport、Web UI 及 hosted 驗證。不得在這些能力完成前將 profile 列入 capabilities。
+- WB-04 MVP 已補 query handlers、context snapshots、D1 儲存、HTTP／MCP transport 與預設拒絕存取的 identity adapter。本次串接先採單 owner Agent binding；後續仍需真實 client／hosted 交易驗證與 Web UI；capabilities 只列出當前 access context 可執行的能力。
 
 DDD 核心仍是一個 Workflow aggregate。Task、assignment、plan／decision 版本與結案條件由同一接受點維護；HTTP／MCP、SQL、身分來源及時鐘留在 adapters／composition root。Storage table、API DTO 與 aggregate 的記憶體表示不要求相同。
 
@@ -39,7 +39,7 @@ Protocol 版本用完整相等值協商；新欄位、命令或行為須更新�
 
 ## 3. 身分與用例入口
 
-未來 HTTP／MCP adapters 都呼叫相同入口：
+HTTP／MCP adapters 都呼叫相同入口：
 
 ```text
 executeCommand(accessContext, command) -> accepted receipt | rejected receipt
@@ -61,7 +61,7 @@ accessContext 由可信 identity adapter 提供 `owner_id`、ActorRef（subject_
 
 授權先於私有資料讀取／回條回放。Assignment ID 不是 bearer token；同 owner 不等於同承接者。Decision 沿用、豁免、移除關聯或變更阻擋，也受原 required_decider 約束。認證及授權失敗不回傳他人的 current revision、documents 或 receipts。
 
-首版預留 HTTP `POST /api/collaboration/v1/commands` 及 `POST /api/collaboration/v1/queries` 作具型別的 JSON transport；**目前沒有實作這兩個 route**。#5 可以在不改用例語意下收斂 transport，並須同時補具體認證與連線證據。MCP 工具使用相同 DTO／application；不以通用 SQL、任意 patch 或 checkpoint 模擬 lifecycle 命令。
+HTTP `POST /api/collaboration/v1/commands` 及 `POST /api/collaboration/v1/queries` 作具型別 JSON transport；MCP 使用 `POST /mcp`。這些 routes 已有本機實作，#5 的真實認證／連線驗證仍待完成。MCP 工具使用相同 DTO／application；不以通用 SQL、任意 patch 或 checkpoint 模擬 lifecycle 命令。
 
 ## 4. 命令與 domain 驗證
 
@@ -154,6 +154,8 @@ Domain/application 的 Fault 只包含 error code、category、details，不持�
 目前人工 API 的 error body 仍為 `{error,...details}`，HTTP status 行為保留。新 profile 的錯誤為 `{error,category,details}`；HTTP／MCP adapter 皆由同一 Fault 映射，不建立第二套 domain 判斷。
 
 ## 8. BDD 與證據對照
+
+下表保留 WB-03 的原始證據邊界；WB-04 新增的查詢、SQL／HTTP／MCP 與 bundled Worker 測試，另見 [MVP 驗證對照](../../COLLABORATION-MVP.md#執行驗證)。下表中的「尚未實作／後續」描述 WB-03 當時狀態，不覆蓋本文開頭的目前狀態。
 
 | Rule／例子 | 本次驗證 | 證據與限制 |
 | --- | --- | --- |

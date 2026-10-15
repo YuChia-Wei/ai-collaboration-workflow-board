@@ -24,7 +24,7 @@ const migrations=await files(schemaRoot);
 assert.ok(migrations.some(path=>path.endsWith(".sql")), "Migration package must contain SQL migrations");
 assert.ok(migrations.some(path=>path.endsWith("_journal.json")), "Migration package must contain the Drizzle journal");
 assert.ok(migrations.some(path=>path.endsWith("_snapshot.json")), "Migration package must contain Drizzle snapshots");
-const packagedRoot=resolve(projectRoot,"dist/drizzle");
+const packagedRoot=resolve(projectRoot,"dist/.openai/drizzle");
 const packaged=await files(packagedRoot);
 assert.deepEqual(packaged.map(path=>relative(packagedRoot,path)).sort(),migrations.map(path=>relative(schemaRoot,path)).sort(),"Packaged schema files must match source exactly");
 for(const migration of migrations)assert.deepEqual(await readFile(resolve(packagedRoot,relative(schemaRoot,migration))),await readFile(migration),"Migration content must remain unchanged");
