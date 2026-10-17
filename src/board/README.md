@@ -66,6 +66,6 @@ AI agents、MCP／CLI adapters、原 repo 權威切換、完整 Git 歷史及二
 
 [#3 的 DDD／BDD 模型](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/3) 已落成獨立的 `workflow-board/collaboration/1` 命令核心。19 種 commands 支援明確計畫、並行 task DAG、單 task 承接、交接、決策及結案限制；8 種 queries 的 DTO 與快照契約已定義。完整規則、範例、原子接受及證據對照見 [協作契約](contracts/collaboration-v1/README.md)。
 
-WB-04 MVP 已加入 D1 repository、8 種 queries、HTTP／MCP routes 與明確設定的 Agent binding adapter。本機合成流程可從建立、計畫、認領、進度、交接一路執行至完成，並驗證打包後 Worker。2026-10-14 第 7 版已部署，D1 新表與平台 discovery 已讀回；真實 Site plugin session 的合成讀寫仍待完成。設定、限制、測試對照與接入步驟見 [COLLABORATION-MVP.md](COLLABORATION-MVP.md)。既有人工 Web UI 不操作 collaboration profile；未遷移人工／source 資料。
+WB-04 MVP 已加入 D1 repository、8 種 queries、HTTP／MCP routes 與明確設定的 Agent binding adapter。本機合成流程可從建立、計畫、認領、進度、交接一路執行至完成，並驗證打包後 Worker。2026-10-15 已在第 10 版以真實 Site plugin 完成兩組合成資料、17 筆接受命令、回執恢復／重送及指定版本讀回，另驗證一筆過期 revision 拒絕；D1 紀錄已逐筆比對。2026-10-17 使用者確認合成畫面，單 owner 範圍補測與介面比較完成；tokens／debit 未量測，未宣稱節省。設定、限制、測試對照與接入步驟見 [COLLABORATION-MVP.md](COLLABORATION-MVP.md)。協作檢視入口與既有人工／source 資料分開，未執行資料遷移。
 
 專案內試用入口為 `npm --prefix src/board run trial:collaboration -- <start|validate|resume|status> <run-id>`。它保存本機 SQLite、固定來源／skill 原文與 Worker、操作回條及驗證輸出，讓新程序可續接；不以線上記錄作唯一證據。步驟與證據限制見 [試行指南](../../.dev/guides/collaboration-trial.md)。

@@ -115,4 +115,14 @@ await test('FT-Q03/04 FT-P04: UTF-8 page budgets shrink pages and never emit sta
  f.sqlite.prepare("UPDATE collaboration_facts SET body=json_set(body,'$.handoff.completed',?) WHERE kind='handoffs'").run('中'.repeat(24000));
  await assert.rejects(f.query('context.page',{workflow_ref:ref,section:'handoffs',cursor:context.handoffs.cursor}),e=>e.error==='limit_exceeded');
 });
+await test('GAP-17: a schema-valid addition beyond 100 aggregate tasks is a durable capacity rejection',async()=>{
+ const f=fixture();await f.setup(100);const before=f.domain();
+ const content='# Second plan\n',plan={document_id:'plan',revision:2,content_hash:await contentDigest(content)};
+ const definition={id:'T101',title:'Overflow',description:'Overflow',scope,completion_criteria:['done'],dependencies:[],plan_basis:plan,inputs:[],expected_artifacts:[],decision_ids:[],workstream:null};
+ const payload={plan:{document_id:'plan',expected_document_revision:1,content},execution_impact:'declared',task_changes:[{kind:'add',definition}],unaffected_task_ids:Array.from({length:100},(_,i)=>'T'+(i+1)),decision_dispositions:[],completion_requirements:[{id:'R1',description:'Deliver tasks',task_ids:Array.from({length:100},(_,i)=>'T'+(i+1)),document_refs:[]},{id:'R2',description:'Overflow',task_ids:['T101'],document_refs:[]}],requirement_dispositions:[]};
+ const {c,r}=await f.send('plan.revise',payload);assert.equal(r.accepted,false);assert.equal(r.failure.error,'limit_exceeded');assert.equal(f.domain(),before);
+ assert.deepEqual(await f.services().executeCommand(access,c),r);
+ assert.deepEqual((await f.query('operation.get',{workflow_ref:ref,operation_id:c.operation_id})).receipt,r);
+ f.sqlite.close();
+});
 console.log(JSON.stringify({scenarios:passed,passed:true,scope:'real SQLite SQL through simulated D1 batch; no hosted evidence'}));

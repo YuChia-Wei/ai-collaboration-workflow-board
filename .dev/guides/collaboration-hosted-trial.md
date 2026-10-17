@@ -6,7 +6,63 @@
 
 本次設定採 Site owner 對應單一 Agent binding，允許 read／plan／execute／manage。所有該 owner 的工作階段共用 actor，沒有同 owner 多 Agent 身分隔離，也沒有人的決策權限。設定存於 Sites runtime environment；不將 owner ID、binding 設定內容或憑證放入 repository。
 
-## 最新接續：第 7 版與真實 client 驗證
+## 最新結果：2026-10-15 第 10 版真實 client 合成讀寫
+
+使用者於重新啟動電腦後要求先檢查 plugin，再授權依計畫完成線上合成讀寫及驗證。首次原請求已成功，昨天的 connector schema rejection 在此次重試沒有再發生；保留原 operation ID、payload 與歷史失敗證據。
+
+此次沿用已部署的第 **10** 版，沒有重新部署。Site source `9d4280a3c19740101e74580f708205cf0b202d56`，deployment `appgdep_6ad03e4c6eac8191ae1c6f0c83ba68d2` 為 `succeeded`，environment revision 3，Worker SHA-256 `d0053e2a4b208921ebb78df68ea90de77dce742fb781c668477bbf3a9ee782ab`。本機 Git commit 為 `4dc65ce49f467cdf9d734e6b6cc95be79e9f6b3e`；Sites source 與本機 Git 身分分開記錄。
+
+兩筆合成 workflow 的 **17 筆命令全部 accepted**：
+
+| Workflow | 線上狀態 |
+| --- | --- |
+| `wb07-acceptance-20261014-active` | revision 11、active；DONE completed、DOING in_progress、BLOCKED blocked、NEXT pending；1 個待人決策、2 筆交接、plan@1 |
+| `wb07-acceptance-20261014-completed` | revision 6、completed；RESULT completed、plan@1；明示尚無人類接受成果結論 |
+
+### 自動驗證結果與限制
+
+| 項目 | 2026-10-15 真實 plugin／D1 結果 |
+| --- | --- |
+| 原操作恢復及重送 | create 原回執查回及同請求重送完全一致；未增加 workflow revision |
+| 過期 revision | 以新 operation ID 提交 expected_revision 6、現況 11 的進度請求，被 `revision_conflict` 拒絕；查回與重送均為原拒絕回執，head 仍 11 |
+| Context | 目標、範圍、來源及其原觀察時間、工作狀態、阻擋決策、交接下一步、文件 revision 均讀回；missing 明列為空 |
+| 分頁 | limit 1 遍歷 4 個 tasks、2 筆 handoffs 及 2 筆 workflow 摘要，內容與完整讀取相同，末頁 has_more=false／cursor=null |
+| 游標邊界 | 跨 workflow 使用 cursor、變更搜尋條件沿用 cursor，均 `invalid_cursor / forbidden` |
+| 歷史快照 | 當前 revision 11 已完成的 DONE，指定 revision 4 仍讀到 in_progress 且 result=null |
+| 不存在的快照／重取 | 指定不存在的 revision 1000 回 `snapshot_expired`，重新讀取 baseline 成功；這不是自然到期或清理後的快照測試 |
+| 文件／點讀 | 兩份 plan@1 原文、指定 hash 與本機計畫一致；錯誤 hash 回 `document_hash_mismatch`；task／decision 指定版本可讀 |
+| 權限 | 錯誤 store 回 `store_mismatch / forbidden`；discovery 僅列 18 Agent commands／8 queries，沒有 decision_resolve。未執行跨帳號或撤銷實測 |
+| D1 獨立讀回 | 完整分頁讀回 2 個 heads、18 個唯一 operations（17 accepted、1 rejected），逐筆 receipt 與 plugin 相符 |
+
+證據保存在 `.runtime/sites-wb07-fixture/hosted/verification-20261015.json` 與 `assertions-20261015.json`；每筆最終 request 與 response 保存在 `hosted/operations/<operation_id>/`。資料庫 owner 與複合 key 未寫入新證據檔；回執與業務資料保留。搜尋採 title substring，因此 q=wb07 不會匹配 workflow ID；空 q 列舉及分頁已確認兩筆資料。
+
+### 使用者線上驗收
+
+開啟[協作畫面](https://workflow-records-private.yuchia-wei.chatgpt.site/?view=collaboration&store=workflow-records-private-collaboration)，使用原本 owner 帳號登入；頁面若保留先前空結果，按重新讀取。
+
+1. 列表應顯示「[合成驗收] Workflow 協作與交接」及「[合成驗收] 已完成的 workflow」。
+2. 第一筆看板應各有一張已完成、執行中、受阻、待處理卡片；開啟 BLOCKED／NEXT，核對阻礙、待決策與前置依賴。
+3. 查看「決策」「文件與成果」「交接」：D-UI 待人決策、plan@1 可閱讀／下載、兩筆交接含下一步與範圍限制。
+4. 第二筆顯示 workflow 完成，同時明確區分沒有 PO 核准或人類接受成果。
+5. 回報資料是否完整、用詞是否易懂，以及手機／桌面卡片與文件是否易讀。本輪不要求操作人類核准；目前沒有可信 human 審核寫入入口。
+
+2026-10-17 使用者回覆「目前看起來 OK」，作為上述合成資料畫面試用確認。這不代表 #7 人類審核／成果接受功能已驗收；資料均為合成。
+
+### #5 收尾結果（2026-10-17）
+
+- AC01 的選定 Codex plugin 合成讀寫已取得 hosted 證據；未宣稱其他 SDK／CI client 支援或獨立 initialize trace 已全部驗證。
+- AC02／AC03 的本次固定情境已驗證；容量極限與缺漏等本機結果不能擴張為全部 hosted 情境。
+- AC04：collaboration/1 沒有刪除／清理／TTL／ID 重用；刪除標記及自然過期不適用，固定快照、游標綁定與缺快照重取已有證據。儲存會隨歷史成長。
+- AC05：補齊本機與相同 bundled Worker 的無／失效 binding、唯讀工具與寫入拒絕、每次請求撤銷及未授權 discovery 驗證。未中斷線上 binding，未宣稱跨帳號 OAuth 或同 owner 多 Agent 隔離。
+- AC06：已完成 2 個相同情境 × 2 介面 × 5 次 loopback 比較，20/20 固定結果正確；往返相同，MCP 回應 bytes 較多。實際模型 tokens／debit 仍未量測；沒有節省宣稱。
+- GAP-17：owner 於 2026-10-17 採用 shape 與 aggregate／UTF-8 bytes 的區分。契約已更新，101 筆單次陣列、100+1 累積 task 與文件 bytes 邊界通過測試。
+- #7 的人類審核／要求修改與成果接受仍屬另一項工作；#6 的供應商故障、備份／還原也沒有由這次正常讀寫取代。
+
+完整 T／AC 對照、實測數字、命令與限制見 [2026-10-17 結案驗證紀錄](collaboration-closeout-20261017.md)。四項收尾完成，沒有新增需使用者操作的線上驗收。
+
+以下第 7／6 版段落保留為 **2026-10-14 歷史紀錄**；當中的「尚未寫入」「等待重新載入」不代表本節的最新結果。
+
+## 歷史接續：第 7 版與真實 client 驗證
 
 2026-10-14 使用者要求載入「工作紀錄室」並繼續串接。26 個工具已載入；真實 Codex client 的 capabilities、workflow.find 與 operation.get 已成功。
 

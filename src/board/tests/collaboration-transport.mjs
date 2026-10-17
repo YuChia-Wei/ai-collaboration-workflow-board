@@ -28,6 +28,7 @@ async function query(name,payload){const r=await call(name.replaceAll('.','_'),{
 await test('D01: discovery, legacy initialize and permission-filtered tools through the production root',async()=>{
  const d=await rpc('server/discover');assert.equal(d.status,200);assert.equal(d.body.result.resultType,'complete');assert.deepEqual(d.body.result.capabilities,{tools:{}});
  const legacy=await post('/mcp',{jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2025-11-25',clientInfo:{name:'test',version:'1'},capabilities:{}}});assert.equal(legacy.body.result.protocolVersion,'2025-11-25');
+ const initialized=await post('/mcp',{jsonrpc:'2.0',method:'notifications/initialized'},{'mcp-protocol-version':'2025-11-25'});assert.equal(initialized.status,202);assert.equal(initialized.body,null);
  const list=await rpc('tools/list');assert.equal(list.body.result.tools.length,26);assert.ok(!list.body.result.tools.some(t=>t.name==='decision_resolve'));
  const create=list.body.result.tools.find(t=>t.name==='workflow_create').inputSchema;
  const textPattern=create.properties.payload.properties.title.pattern;
@@ -90,4 +91,45 @@ await test('HTTP and MCP share the exact application outcome; durable rejection 
  const response=await post('/api/collaboration/v1/commands',c);assert.equal(response.status,409);assert.equal(response.body.accepted,false);
  const mcp=await call('task_claim',c);assert.equal(mcp.isError,true);assert.deepEqual(mcp.structuredContent,response.body);
 });
+await test('D07: per-request revocation and read-only grants protect existing data and writes',async()=>{
+ const before=JSON.stringify(sqlite.prepare('SELECT * FROM collaboration_operations').all());
+ const q={...envelope,query:'workflow.context',payload:{workflow_ref:ref,limit:20}};
+ const c={...envelope,workflow_ref:ref,operation_id:'denied-write',expected_revision:revision,command:'workflow.pause',payload:{reason:'deny'}};
+ const readonly={...env,COLLABORATION_BINDINGS:JSON.stringify({owner:{...binding,capabilities:['read']}})};
+ assert.equal((await post('/api/collaboration/v1/queries',q,{},readonly)).status,200);
+ assert.equal((await post('/api/collaboration/v1/commands',c,{},readonly)).status,403);
+ const listed=await post('/mcp',{jsonrpc:'2.0',id:1,method:'tools/list'},{'mcp-protocol-version':'2025-11-25'},readonly);
+ assert.equal(listed.body.result.tools.length,8);
+ assert.ok(!listed.body.result.tools.some(t=>t.name==='workflow_pause'));
+ for(const configuration of [
+  {...env,COLLABORATION_BINDINGS:JSON.stringify({owner:{...binding,enabled:false}})},
+  {...env,COLLABORATION_BINDINGS:JSON.stringify({})},
+ ]){
+  for(const [path,body] of [['/api/collaboration/v1/queries',q],['/api/collaboration/v1/commands',c],['/mcp',{jsonrpc:'2.0',id:1,method:'server/discover'}]]){
+   const r=await post(path,body,{},configuration);assert.equal(r.status,403);
+   assert.ok(!JSON.stringify(r.body).includes('MVP'));
+  }
+ }
+ assert.equal((await post('/api/collaboration/v1/queries',q,{'oai-authenticated-user-id':'unbound-owner'})).status,403);
+ assert.equal((await post('/api/collaboration/v1/queries',q)).status,200);
+ assert.equal(JSON.stringify(sqlite.prepare('SELECT * FROM collaboration_operations').all()),before);
+});
+await test('GAP-17: schema shape rejection differs from valid-shape UTF-8 capacity rejection',async()=>{
+ const scope={included:'boundary tests',excluded:'deployment'};
+ const target={...ref,workflow_id:'LIMIT'};
+ const create={...envelope,workflow_ref:target,operation_id:'limit-create',expected_revision:0,command:'workflow.create',payload:{title:'Limits',goal:'Limits',scope,skill:{id:'test',version:null},external_work_refs:[]}};
+ assert.equal((await post('/api/collaboration/v1/commands',create)).body.accepted,true);
+ const content='中'.repeat(86000);
+ const plan={document_id:'plan',revision:1,content_hash:await contentDigest(content)};
+ const definition={id:'T',title:'Task',description:'Task',scope,completion_criteria:['done'],dependencies:[],plan_basis:plan,inputs:[],expected_artifacts:[],decision_ids:[],workstream:null};
+ const base={...envelope,workflow_ref:target,operation_id:'limit-document',expected_revision:1,command:'plan.revise',payload:{plan:{document_id:'plan',expected_document_revision:0,content},execution_impact:'declared',task_changes:[{kind:'add',definition}],unaffected_task_ids:[],decision_dispositions:[],completion_requirements:[{id:'R',description:'Done',task_ids:['T'],document_refs:[]}],requirement_dispositions:[]}};
+ const before=sqlite.prepare('SELECT count(*) AS n FROM collaboration_operations').get().n;
+ const shape={...base,operation_id:'limit-shape',payload:{...base.payload,plan:{...base.payload.plan,content:'small'},task_changes:Array.from({length:101},(_,i)=>({kind:'add',definition:{...definition,id:'T'+i}}))}};
+ const bad=await post('/api/collaboration/v1/commands',shape);assert.equal(bad.status,422);assert.equal(bad.body.error,'invalid_command');
+ assert.equal(sqlite.prepare('SELECT count(*) AS n FROM collaboration_operations').get().n,before);
+ const capacity=await post('/api/collaboration/v1/commands',base);assert.equal(capacity.status,413);assert.equal(capacity.body.failure.error,'limit_exceeded');
+ const replay=await call('plan_revise',base);assert.equal(replay.isError,true);assert.deepEqual(replay.structuredContent,capacity.body);
+ const context=await query('workflow.context',{workflow_ref:target,limit:20});assert.equal(context.revision,1);assert.equal(context.tasks.items.length,0);
+});
 console.log(JSON.stringify({scenarios:passed,passed:true,subject:artifact?'bundled Worker (runtime codegen disabled)':'production source composition root',scope:'local synthetic requests; no real client or hosted D1 evidence'}));
+sqlite.close();

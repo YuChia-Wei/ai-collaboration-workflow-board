@@ -58,9 +58,16 @@ Fault 只有 error/category/details，領域無 HTTP status。category transport
 正式測試情境、測試層級及驗證責任見 [測試規格索引](../../../tests/README.md)；此連結不表示測試已執行。
 
 
-## 容量與錯誤來源差異（GAP-17）
+## 容量與錯誤分類（GAP-17，2026-10-17 已決定）
 
-契約 README 對超限概括要求 `limit_exceeded`；目前 application 先跑 schema，因此單命令 `task_changes=101`、`decision_dispositions=101` 或 `dependencies=33` 先得 `invalid_command`。形狀合法但 aggregate 累積到 101，以及 bytes 超限，才進入相應領域／容量拒絕。驗證要分開 shape 與 aggregate／bytes 限制；來源差異待 owner 收斂，不能只改本文件宣稱程式已符合。
+歷史差異：契約 README 曾對超限概括要求 `limit_exceeded`，application 則先驗證 schema。2026-10-17 使用者明確採用下列區分，本節取代原「待 owner 收斂」狀態，其他基線描述保留為歷史來源：
+
+- 單次請求不符合 schema（包括 maxItems／maxLength）→ `invalid_command`／category `invalid`。例如單命令 `task_changes=101`、`decision_dispositions=101` 或單 task `dependencies=33`。
+- 請求形狀合法，但 aggregate 累積容量或 UTF-8 bytes 超限 → `limit_exceeded`／category `limit_exceeded`。例如目前已有 100 tasks，再以合法的一筆 add 增加第 101 項；字元長度合法的文件原文超過 256000 UTF-8 bytes。
+- HTTP 映射分別為 422／413；MCP 業務錯誤保留 error／category／details 並標示 isError。Schema 拒絕在 application 接受前發生；能保存的 domain 容量拒絕仍依 OP-01 保留 rejected receipt。拒絕不改 workflow、文件或 domain facts。
+- 原始 request bytes 可在 transport 解析／schema 驗證前拒絕。同時違反多項限制時不保證固定錯誤優先順序；驗證每個情境須隔離其預期原因。
+
+此決定收斂規格語意，不自行構成測試通過；來源與 bundled Worker 的執行結果另行記錄。
 
 ## 技術 binding 與開放決策
 

@@ -44,7 +44,7 @@ Board 的內層只接收 plain DTO、已解碼 records、語意錯誤及注入�
 
 WB-04 MVP 已加入 D1 adapter、不可變 query snapshots、HTTP／MCP routes 與伺服器設定的 Agent binding adapter，並通過本機 SQL／transport 驗證。協作資料使用獨立資料表；命令以單一 batch 保存 accepted／rejected outcome，CAS、快照、facts 與事件均受同一 attempt 保護。快照分段保存以避免大 aggregate 成為單一大列；文件 facts 保留指定版本原文。Query application 只接收 decoded repository 值。
 
-2026-10-14 已部署第 7 版，讀回 hosted D1 新表與平台 MCP discovery；真實 Site plugin client 的合成讀寫及 D1 故障情境仍未驗證。身分與 store 設定缺少時拒絕存取；本次採用的單 owner binding 不能區分同 owner 下的不同 Agent sessions，也不授予 human／decide／change_scope。部署與接入狀態見 [MVP 操作說明](src/board/COLLABORATION-MVP.md)。舊人工 profile、legacy、source snapshot 及 Python 原型保持各自語意。
+2026-10-15 已在第 10 版完成真實 Site plugin client 的兩組合成讀寫、回執恢復／重送、分頁與歷史快照，並比對 hosted D1 的 2 個 heads 與 18 筆 operations。2026-10-17 補齊單 owner 範圍權限／撤銷的本機驗證及介面比較；使用者確認合成畫面，tokens／debit 未量測，沒有節省宣稱。D1 故障／備份還原另屬 #6。身分與 store 設定缺少時拒絕存取；本次採用的單 owner binding 不能區分同 owner 下的不同 Agent sessions，也不授予 human／decide／change_scope。部署與接入狀態見 [MVP 操作說明](src/board/COLLABORATION-MVP.md)。舊人工 profile、legacy、source snapshot 及 Python 原型保持各自語意。
 
 既有人工／legacy profile 的重構保留命令接受、CAS、event 與 receipt 的原子性。相同 operation ID 的重試先讀持久 receipt，仍檢查 payload 與 principal；不以新 revision 自動重播衝突。既有 hosted 資料表、migration bytes、source catalog 與私有身分語意保持相容。
 

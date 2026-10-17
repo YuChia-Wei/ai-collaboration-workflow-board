@@ -14,8 +14,8 @@
 | Recovery | 同 operation＋digest 回放原 receipt；unknown 保留原 ID 與請求；不同 payload 拒絕 |
 | Transport | `POST /mcp`；`POST /api/collaboration/v1/commands`、`/queries`；共用 application 與錯誤語意 |
 | Worker | 建置時產生 standalone schema validator；打包成 ESM，測試停用執行期 code generation |
-| Hosted 設定 | 2026-10-14 第 7 版部署成功，單 owner Agent binding 已設定，D1 新表已讀回；真實 client 查詢成功，合成寫入待新版工具定義載入 |
-| 未完成 | Site plugin 真實 client 合成讀寫、hosted D1 交易／故障驗證、實際 token benchmark、Web collaboration UI、備份／還原演練 |
+| Hosted 設定 | 2026-10-15 在第 10 版完成真實 Codex plugin 的 17 筆合成命令、context／文件讀回、接受及拒絕回執重送、分頁與歷史快照驗證；D1 的 2 heads／18 operations 逐筆吻合 |
+| 2026-10-17 收尾 | 使用者確認合成畫面；GAP-17 已採用並補測，單 owner binding 權限／撤銷補測通過；同情境介面比較完成，實際 tokens／debit 未量測。完整範圍及證據見結案紀錄；#6／#7 各自待辦 |
 
 ## 接入與授權
 
@@ -55,6 +55,8 @@
 
 命令狀態按 immutable revision 分段儲存，每段最多 16000 UTF-16 code units 且不切斷 surrogate pair。文件及其他 facts 追加保存。Context cursors 為 owner-bound lookup records，綁定 ref／section／revision／position／limit；相同游標內容重用同一識別。Cursor 不是 bearer token，也不授予存取權。快照與 operation outcomes 隨 workflow 保留；本版沒有清理或 ID 重用機制，因此儲存用量會隨歷史成長。
 
+collaboration/1 本版沒有刪除或 TTL，故刪除 tombstone 與自然到期測試不適用。快照不存在時回 snapshot_expired，client 應丟棄舊頁並重取 baseline；不能把不存在的 revision 測試稱為自然到期。未來新增清理／刪除需另訂保留與標記契約。
+
 Find 按 workflow ID 升冪，title substring 搜尋，ASCII 大小寫不敏感；其 cursor 固定 query、limit 與列舉 baseline。不是全文檢索或跨 workflow 業務交易。Context／page 同時限制筆數與 64000 bytes；單項放不下明確拒絕，不回傳無法前進的空頁。Query application 目前會讀取該 workflow 的 snapshot／所需歷史 metadata，再產生有界回應；沒有宣稱歷史讀取成本固定或完成效能驗收。
 
 ## 執行驗證
@@ -81,6 +83,6 @@ npm --prefix src/board run validate
 
 ## Hosted 接續
 
-2026-10-14 已完成同一 owner-private Site 第 7 版發布、environment revision 3、D1 新表及平台 discovery 的讀回。Site plugin 的 26 個工具已載入，真實 client 的 capabilities／find／operation.get 成功。寫入發現 connector full-string pattern 相容性問題，第 7 版已修正 MCP 投影；當前對話仍回報舊 schema，合成資料尚未寫入。須重新載入工具定義，保留原 request／operation ID 再接續。完整版本識別、證據和接續步驟見 [線上試行指南](../../.dev/guides/collaboration-hosted-trial.md)。
+2026-10-15 已在同一 owner-private Site 第 10 版、environment revision 3，使用真實 Codex plugin 完成兩組合成資料。17 筆命令 accepted，active／completed workflows 分別為 revision 11／6；另有一筆預期 revision_conflict。接受／拒絕重送、操作查回、文件 hash、分頁、游標錯配、歷史快照及 D1 逐筆讀回均完成。2026-10-17 使用者確認合成畫面，並完成本機權限／撤銷補測及同情境介面比較；tokens／debit 未量測，未宣稱節省。版本與 hosted 證據見 [線上試行指南](../../.dev/guides/collaboration-hosted-trial.md)，完整範圍及 T／AC 對照見 [結案紀錄](../../.dev/guides/collaboration-closeout-20261017.md)。
 
-Site source 已由官方 helper 推送並部署；本專案 GitHub 尚未 commit／push、建立 PR、merge 或關閉 Issues。Site audience 保持僅本人。
+Site source 已由官方 helper 推送並部署；2026-10-15 前端對話已另依使用者授權建立本機整合 commit `4dc65ce49f467cdf9d734e6b6cc95be79e9f6b3e`。本輪只執行合成驗證與更新紀錄，沒有 GitHub push／PR／merge 或關閉 Issues。Site audience 保持僅本人。

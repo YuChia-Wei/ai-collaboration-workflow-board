@@ -2,7 +2,7 @@
 
 本文件承接 [#3 的 DDD／BDD 模型](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/3)，由 [#4](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/4) 固定可攜的用例、資料及接受協定。
 
-**狀態：19 種 domain commands、application 接受用例、8 種 queries、D1 repository 與 HTTP／MCP adapters 已有本機驗證；2026-10-14 第 7 版已部署，D1 新表與平台 discovery 已讀回，真實 Site plugin client 合成讀寫仍待完成。** 設定缺少時協作 routes 拒絕存取。既有人工 profile `framework-board/1` 與 legacy 保持相容；未知 profile 明確拒絕，不落入 legacy。MVP 接入限制及最新證據見 [操作說明](../../COLLABORATION-MVP.md)。Schema、編碼測試或本機 SQL 通過均不代表 hosted 服務已完成驗收。
+**狀態：19 種 domain commands、application 接受用例、8 種 queries、D1 repository 與 HTTP／MCP adapters 已有本機驗證；2026-10-15 在第 10 版完成選定真實 Site plugin client 的合成讀寫、回執重送／恢復、分頁與歷史版本驗證，並比對 D1。2026-10-17 完成單 owner 範圍補測、介面比較及使用者合成畫面確認；tokens／debit 未量測。** 設定缺少時協作 routes 拒絕存取。既有人工 profile `framework-board/1` 與 legacy 保持相容；未知 profile 明確拒絕，不落入 legacy。MVP 接入限制及最新證據見 [操作說明](../../COLLABORATION-MVP.md)。Schema、編碼測試或本機 SQL 通過均不代表 hosted 服務已完成全部驗收。
 
 ## 1. 來源與實作邊界
 
@@ -11,7 +11,7 @@
 - [vectors.json](vectors.json) 是固定跨語言編碼向量，包含正例、拒絕例、文件 hash 與綁定可信身分的 request digest。
 - [目前 ports](../../backend/application/ports.mjs) 已供人工／legacy application 使用；[協作 ports](../../backend/application/collaboration-ports.mjs) 定義 command repository、identity、clock、ID 與 query 語意；[application](../../backend/application/collaboration.mjs) 及 [domain reducer](../../backend/domain/collaboration-workflow.mjs) 已實作命令接受流程。
 - 本次有實作：移除內層 HTTP status、URLSearchParams、D1 results／序列化 row、直接系統時間及固定 catalog 依賴；提供編碼器、嚴格 JSON parser、HTTP／MCP error mapping、新協作命令核心與行為驗證。
-- WB-04 MVP 已補 query handlers、context snapshots、D1 儲存、HTTP／MCP transport 與預設拒絕存取的 identity adapter。本次串接先採單 owner Agent binding；後續仍需真實 client／hosted 交易驗證與 Web UI；capabilities 只列出當前 access context 可執行的能力。
+- WB-04 MVP 已補 query handlers、context snapshots、D1 儲存、HTTP／MCP transport 與預設拒絕存取的 identity adapter。本次串接採單 owner Agent binding，已有選定 client 的 hosted 合成讀寫及唯讀 Web UI；capabilities 只列出當前 access context 可執行的能力。人類審核寫入另屬 #7。
 
 DDD 核心仍是一個 Workflow aggregate。Task、assignment、plan／decision 版本與結案條件由同一接受點維護；HTTP／MCP、SQL、身分來源及時鐘留在 adapters／composition root。Storage table、API DTO 與 aggregate 的記憶體表示不要求相同。
 
@@ -35,7 +35,7 @@ DDD 核心仍是一個 Workflow aggregate。Task、assignment、plan／decision 
 
 Protocol 版本用完整相等值協商；新欄位、命令或行為須更新相應 schema／profile 並提供相容策略。舊 client 不被要求忽略未知資料。若要新增 schema minor，服務必須明列所支援的完整版本；不得僅憑相同主版號宣稱相容。
 
-首版採保守容量契約：request 300000 UTF-8 bytes、單份文件 256000 bytes、單筆 metadata 64000 bytes、context header 16000 bytes、context／page response 64000 bytes；每 workflow 最多 100 tasks、100 decisions，每 task 最多 32 dependencies，query page 最多 20 個項目，find 最多 50 筆。Schema 的 maxLength 是字元數，**不能代替 UTF-8 bytes 上限**。這些是接受限制，不是效能測試結論；需同時滿足筆數與 bytes。超限回報 limit_exceeded，不分段接受命令，也不靜默刪除欄位。所有寫入必須保證必要 context header 可在預算內完整取得。
+首版採保守容量契約：request 300000 UTF-8 bytes、單份文件 256000 bytes、單筆 metadata 64000 bytes、context header 16000 bytes、context／page response 64000 bytes；每 workflow 最多 100 tasks、100 decisions，每 task 最多 32 dependencies，query page 最多 20 個項目，find 最多 50 筆。Schema 的 maxLength 是字元數，**不能代替 UTF-8 bytes 上限**。這些是接受限制，不是效能測試結論；需同時滿足筆數與 bytes。依 2026-10-17 owner 採用的 GAP-17 決定，單次請求不符合 schema（包括 maxItems／maxLength）回報 `invalid_command`；請求形狀合法，但 aggregate 累積容量或 UTF-8 bytes 超限，回報 `limit_exceeded`。Transport 的原始 request bytes 限制可在 schema 驗證前拒絕；不承諾同時違反多項限制時固定先報哪一項。不分段接受命令，也不靜默刪除欄位。所有寫入必須保證必要 context header 可在預算內完整取得。
 
 ## 3. 身分與用例入口
 
@@ -61,7 +61,7 @@ accessContext 由可信 identity adapter 提供 `owner_id`、ActorRef（subject_
 
 授權先於私有資料讀取／回條回放。Assignment ID 不是 bearer token；同 owner 不等於同承接者。Decision 沿用、豁免、移除關聯或變更阻擋，也受原 required_decider 約束。認證及授權失敗不回傳他人的 current revision、documents 或 receipts。
 
-HTTP `POST /api/collaboration/v1/commands` 及 `POST /api/collaboration/v1/queries` 作具型別 JSON transport；MCP 使用 `POST /mcp`。這些 routes 已有本機實作，#5 的真實認證／連線驗證仍待完成。MCP 工具使用相同 DTO／application；不以通用 SQL、任意 patch 或 checkpoint 模擬 lifecycle 命令。
+HTTP `POST /api/collaboration/v1/commands` 及 `POST /api/collaboration/v1/queries` 作具型別 JSON transport；MCP 使用 `POST /mcp`。這些 routes 已有本機實作，#5 選定 Codex Site plugin 的真實連線與合成讀寫已驗證；支援邊界見操作說明。MCP 工具使用相同 DTO／application；不以通用 SQL、任意 patch 或 checkpoint 模擬 lifecycle 命令。
 
 ## 4. 命令與 domain 驗證
 
@@ -109,6 +109,8 @@ execution_impact=none 時 task_changes 與 decision_dispositions 必須為空，
 Context header 不能截斷；集合頁可少於 limit 以遵守 bytes 上限，須提供 total、has_more、cursor。每個非空剩餘集合要有有效 cursor；若連單項都無法放入預算，回報 limit_exceeded，不回傳不會前進的空頁。has_more=false 時 cursor=null；有缺漏以 missing 明列，缺漏資料不能被當成完整內容。
 
 第一個 context 與其 task／decision 點讀都須對應同一 snapshot。Storage 無法保留該 revision 時回報 snapshot_expired，client 丟棄舊頁並重取 context，不混合新舊頁面。不可用「先讀 revision，分別讀資料後未核對」冒稱一致快照。Find 的 cursor 也綁定 owner／store／query 及列舉基線；過期同樣重取，不保證跨 workflow 原子結案或任意時點的全站 snapshot。
+
+本版 collaboration/1 沒有刪除、清理、TTL 或 ID 重用；snapshot／cursor／operations 隨 workflow 保留。刪除 tombstone 與自然到期情境不適用；不存在快照的拒絕與 baseline 重取仍須明確。新增清理或刪除時須另定保留／標記契約，不能以目前缺快照測試當作自然過期證據。
 
 Resume 是 context＋按需指定版本讀取的 client 用例，不自動 claim。必要 task 定義、decision 結果或指定文件未取得時，client 必須保留缺漏資訊，再決定是否可執行。
 
