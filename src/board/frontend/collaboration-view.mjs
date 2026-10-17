@@ -27,8 +27,8 @@ export function detailMarkup(c,tab) {
   <div class="c-stats">${counts.map(({s,n})=>`<div><strong>${n}</strong><span>${labels[s]}工作</span></div>`).join('')}</div><p class="small">工作數量是執行狀態統計，不代表業務驗收進度。</p>
   <div class="next"><div><div class="next-label">交接紀錄中的下一步</div><div class="next-text">${text(next??'尚無交接下一步；請先查閱工作與計畫。')}</div><div class="next-owner">${esc(handoffs.at(-1)?.handoff.next_actor_hint||'下一位尚未指定')} · 交接不擴大允許範圍</div></div></div>
   ${c.missing.length?`<div class="warn" role="alert"><strong>接手資料有缺漏，不能視為完整內容</strong>${lines(c.missing.map(m=>`${m.kind} · ${m.ref}：${m.reason}`))}</div>`:''}
-  <nav class="tabs" aria-label="Workflow 詳情">${[['tasks',`工作看板 ${tasks.length}`],['overview','總覽'],['decisions',`決策 ${pending.length} 待處理`],['documents','文件與成果'],['handoff',`交接 ${handoffs.length}`]].map(([id,name])=>`<button data-tab="${id}" class="${tab===id?'on':''}" aria-current="${tab===id?'page':'false'}">${name}</button>`).join('')}</nav>
-  <div id="c-content">${tab==='overview'?overview(c):tab==='tasks'?taskList(c):tab==='decisions'?decisionList(c):tab==='documents'?documents(c):handoffList(c)}</div>`;
+  <nav class="tabs" aria-label="Workflow 詳情">${[['tasks',`工作看板 ${tasks.length}`],['review','審閱工作區'],['overview','總覽'],['decisions',`決策 ${pending.length} 待處理`],['documents','文件與成果'],['handoff',`交接 ${handoffs.length}`]].map(([id,name])=>`<button data-tab="${id}" class="${tab===id?'on':''}" aria-current="${tab===id?'page':'false'}">${name}</button>`).join('')}</nav>
+  <div id="c-content">${tab==='review'?'':tab==='overview'?overview(c):tab==='tasks'?taskList(c):tab==='decisions'?decisionList(c):tab==='documents'?documents(c):handoffList(c)}</div>`;
 }
 
 function overview(c) {

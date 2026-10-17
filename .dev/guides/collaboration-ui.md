@@ -1,5 +1,56 @@
 # #7 Workflow 協作前端試行
 
+## 2026-10-17 審閱工作區：本機 UI 交付
+
+本節記錄最新的範圍調整；下方日期較早的紀錄保留當時驗收邊界。使用者已確認 #7 優先處理畫面操作流程，後端未實作不阻擋本次 UI 交付。#13（審核業務）與 #14（可信人類授權）不在本次實作範圍。下列為本機驗收證據，GitHub 合併／結案與部署版本另由 Issue／PR 記錄。
+
+### 已實作的操作流程
+
+1. 開啟協作 workflow 的「審閱工作區」，篩選待決策問題或已提交工作成果。工作 completed 不會被標示為已送審／已接受。
+2. 開啟項目後，沿用既有 `decision.read`／`task.read`，讀取同一 workflow 快照與指定版本。文件仍使用精確 revision／hash 校驗。
+3. 選擇建議核准、建議接受成果或要求修改／補充，填寫意見，再預覽草稿。
+4. 草稿顯示對象、版本、快照與意見；正式送出按鈕停用並說明服務尚未接入。修改意見後會清除舊確認內容。
+5. 可提出 JSON 草稿下載，或前往既有交接資訊。切換項目／頁籤、重新讀取或離開時，未保存草稿有捨棄提示；草稿僅在本頁記憶體，不寫入瀏覽器持久儲存或 Board。
+
+`workflow-board/review-draft/1` 僅為本機交接檔格式，包含 workflow ref、快照、審閱對象／版本、依據、建議結果、意見與 `status: unsent`。它不是 collaboration command，不含 actor／權限聲明，不能直接重播成核准；接手須重讀現況。沒有變更 collaboration/1.0、後端 API、DB 或認證。
+
+### 本次證據與限制
+
+- `npm --prefix src/board test`、`run build`、`run validate` 通過；其中 UI-01–15 全數通過。
+- 新增 UI-13：待決策／已提交結果的清單與空狀態；UI-14：真實本機 query → 草稿 → 確認，保留版本／refs、不發出 command；UI-15：錯誤對象／版本／快照及無效意見拒絕。
+- 本機 Chrome 使用打包 Worker＋合成 SQLite，已確認預設看板、審閱入口、待決策篩選、讀取選項／版本、填寫意見、草稿確認及停用送出。重新讀取觸發未保存草稿 confirm。
+- 瀏覽器下載事件等待逾時；已點選下載，但未確認檔案落地。後續瀏覽器控制逾時，取消提示後的保留行為與截圖未完成驗證，不能列為通過。改用新分頁後已確認手機版成果篩選、指定結果閱讀、填寫意見與確認；390px viewport 的 document width 為 375px，沒有水平溢出，console error 清單為空。CLI 查詢也未成功完成，未新增依賴。
+- UI 自動化已驗證草稿資料與輸出 HTML；不等於 browser download、真實人類審核或 hosted 驗收。預覽 evidence 位於忽略的 `.runtime/wb07-review/`。
+
+### 後續接入的最小缺口（本次未展開）
+
+| 責任 | 後續必要輸入／結果 | 本次 UI 行為 |
+| --- | --- | --- |
+| #13 | 正式提交／審核對象與 revision、接受／要求修改的業務語意、必要證據規則、歷史查詢與結構化失敗結果 | 保留精確快照與依據；只產生未送出草稿，不自行判定核准有效性 |
+| #14 | 可信 principal 與可操作能力、未授權／失效結果 | 不從現有 Agent capabilities 推定 human，正式送出固定未啟用 |
+| 跨層驗收 | 真實命令接受／拒絕與另一 session 接手讀回 | 後端可用後另行接入；不作為此次 UI 交付前置 |
+
+### 2026-10-17 最終 UI 補驗證
+
+上述下載及瀏覽器控制逾時是前一輪結果，以下補驗證取代其「尚未確認」狀態：
+
+- 使用實際頁面操作下載 `review-draft-unsent.json`，讀回檔案：format 為 `workflow-board/review-draft/1`、status 為 `unsent`，包含 workflow 快照 r11、D-UI revision 1、plan revision/hash、要求補充及原意見；沒有 command 或 actor。
+- 站內離開提示改為可鍵盤操作的 dialog。切換交接時選擇「保留草稿」後，意見、處理方式與確認內容完整保留；重新讀取提示按 Escape 亦保留。選擇捨棄後成功開啟交接、草稿清除。
+- 修改意見會清除舊確認；重新預覽顯示新內容。正式送出固定停用，不會產生後端寫入。
+- 已取得桌面審閱確認、離開提示及窄螢幕截圖；瀏覽器 console error 為空。證據保存於忽略的 `.runtime/wb07-review-final/`：`downloaded-draft.json`、`confirmation.jpg`、`leave-prompt.jpg`、`mobile.jpg`。
+- 最終來源的完整 Board tests（含 UI-01–15）、build、validate 及 `git diff --check` 通過。瀏覽器證據為本機合成 Worker/SQLite，不代表線上人類審核。
+
+| 驗收 | 本次 UI 範圍結果 | 保留的跨層缺口 |
+| --- | --- | --- |
+| AC01 | 通過：workflow、來源、範圍、工作狀態與下一步 | 不推定完整產品階層 |
+| AC02 | 通過：完成、決策、交接與未知接受狀態分開 | session 觀察 #12、人類接受 #13 |
+| AC03 | 通過：指定版本／hash、審閱依據及快照一致性 | 正式審核歷史、更新後失效規則 #13 |
+| AC04 | 通過：讀取拒絕／錯誤明示、無可用審核服務時不允許送出 | 真實授權、缺證據與命令拒絕 #13／#14 |
+| AC05 | 通過：阻礙、成果、文件、下一步與交接可讀 | 不擴大接手授權 |
+| AC06 | 通過：審閱→意見→確認→下載／保留／捨棄→交接 | 真實寫入與跨 session 接受待後續整合 |
+
+本次 #7 依使用者確認的 UI 範圍交付；上述跨層缺口保持未實作，未展開 #13／#14。
+
 來源：[WB-06 / Issue #7](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/7)，2026-10-15 讀回仍 open、沒有留言。初始切片授權涵蓋本機 UI、必要串接與測試；後續使用者另行授權部署到原私有 Site，並於檢視版本 10 後要求本機 commit 與結案評估。提交範圍包含 UI 所需、同 checkout 原有的 #5 transport／storage 實作與測試，不代表 #5 或 #7 全部驗收完成。未進行 GitHub push／PR／merge 或 Issue 關閉。
 
 ## 最小使用流程
