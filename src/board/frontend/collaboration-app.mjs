@@ -1,8 +1,29 @@
 import {createCollaborationClient} from './collaboration-client.mjs';
 import {esc,listMarkup,detailMarkup,taskMarkup,taskDetailShell,decisionMarkup,emptyCollaborationMarkup} from './collaboration-view.mjs';
+import {reviewTargets,reviewQueueMarkup,reviewEditorMarkup,createReviewDraft,reviewConfirmationMarkup} from './collaboration-review.mjs';
 
 const $=id=>document.getElementById(id);
 let client,items=[],cursor=null,context=null,selected=null,tab='tasks',listSerial=0,selectionSerial=0,documentSerial=0,loadedDocument=null;
+let reviewSerial=0,review=null,reviewDraft=null,reviewDirty=false,leaveDialogOpen=false;
+async function leaveReview(){
+  if(leaveDialogOpen)return false;
+  if(reviewDirty){
+    leaveDialogOpen=true;
+    const discard=await new Promise(resolve=>{
+      const dialog=document.createElement('dialog');dialog.className='c-leave-dialog';
+      dialog.setAttribute('aria-labelledby','c-leave-title');dialog.setAttribute('aria-describedby','c-leave-description');
+      dialog.innerHTML='<h2 id="c-leave-title">保留這份審閱草稿？</h2><p id="c-leave-description">草稿尚未保存到 Board。離開後會捨棄本頁的意見與確認內容。</p><div class="c-review-actions"><button id="c-keep-draft" autofocus>保留草稿，繼續編輯</button><button id="c-discard-draft">捨棄草稿並離開</button></div>';
+      const finish=value=>{dialog.close();dialog.remove();resolve(value);};
+      dialog.addEventListener('cancel',e=>{e.preventDefault();finish(false);});
+      dialog.querySelector('#c-keep-draft').onclick=()=>finish(false);
+      dialog.querySelector('#c-discard-draft').onclick=()=>finish(true);
+      document.body.append(dialog);dialog.showModal();
+    });
+    leaveDialogOpen=false;if(!discard)return false;
+  }
+  reviewSerial++;review=null;reviewDraft=null;reviewDirty=false;return true;
+}
+window.addEventListener('beforeunload',e=>{if(reviewDirty){e.preventDefault();e.returnValue='';}});
 const preview=document.querySelector('meta[name="collaboration-preview"]')?.content;
 const params=new URLSearchParams(location.search);
 $('app').className='app c-app';
@@ -20,6 +41,7 @@ function errorMarkup(e,retry='c-retry'){return `<div class="notice" role="alert"
 function renderList(){$('c-list').innerHTML=listMarkup(items,selected);$('c-count').textContent=`${items.length}${cursor?'+':''}`;$('c-more').hidden=!cursor;}
 function invalidateSelection(){selectionSerial++;documentSerial++;context=null;selected=null;modal.close();$('c-detail').innerHTML='<div class="empty">選擇 workflow 查看詳情。</div>';}
 async function connect(){
+  if(!await leaveReview())return;
   ++listSerial;invalidateSelection();items=[];cursor=null;renderList();
   const store=$('c-store').value.trim();if(!store)return;
   client=createCollaborationClient(store);const serial=listSerial;
@@ -42,14 +64,33 @@ async function loadList(more=false){
   }catch(e){if(serial===listSerial){items=[];cursor=null;invalidateSelection();$('c-list').innerHTML=errorMarkup(e);$('c-more').hidden=true;$('c-retry').onclick=()=>loadList(false);}}
   finally{if(serial===listSerial){$('c-list').removeAttribute('aria-busy');$('c-more').disabled=false;}}
 }
-async function choose(id){
+async function choose(id,keepTab=false){
   const item=items.find(w=>w.workflow_ref.workflow_id===id);if(!item)return;
-  const serial=++selectionSerial;documentSerial++;modal.close();context=null;selected=id;tab='tasks';renderList();
+  if(!await leaveReview())return;
+  const serial=++selectionSerial;documentSerial++;modal.close();context=null;selected=id;if(!keepTab)tab='tasks';renderList();
   $('app').classList.add('show-detail');$('c-detail').innerHTML='<div class="loader" role="status">正在取得一致的 workflow 快照…</div>';
   try{const value=await client.context(item.workflow_ref);if(serial!==selectionSerial)return;context=value;renderDetail();}
   catch(e){if(serial===selectionSerial){$('c-detail').innerHTML=errorMarkup(e,'c-detail-retry');$('c-detail-retry').onclick=()=>choose(id);}}
 }
-function renderDetail(){if(context){$('c-detail').classList.toggle('c-board-view',tab==='tasks');$('c-detail').innerHTML=detailMarkup(context,tab);}}
+function renderDetail(){if(context){$('c-detail').classList.toggle('c-board-view',tab==='tasks');$('c-detail').innerHTML=detailMarkup(context,tab);if(tab==='review')$('c-content').innerHTML=reviewQueueMarkup(context);}}
+async function openReview(key){
+  if(!context||!await leaveReview())return;
+  const current=context,target=reviewTargets(current).find(t=>t.key===key);if(!target)return;
+  const serial=++reviewSerial,editor=$('c-review-editor');editor.hidden=false;editor.innerHTML='<p role="status">正在讀取指定版本與證據…</p>';editor.focus({preventScroll:true});editor.scrollIntoView({block:'start',behavior:'smooth'});
+  try{
+    const summary=current[target.kind==='decision'?'decisions':'tasks'].items.find(t=>t.id===target.id);
+    const record=await client[target.kind](current,summary);
+    if(serial!==reviewSerial||context!==current||!editor.isConnected)return;
+    review={context:current,target,record};editor.innerHTML=reviewEditorMarkup(current,target,record);
+  }catch(e){if(serial===reviewSerial&&editor.isConnected){
+    editor.innerHTML=`<div class="notice" role="alert">${esc(e.message)}</div><button data-review="${esc(key)}">重試讀取</button><button id="c-refresh">重新讀取 workflow</button>`;
+  }}
+}
+function downloadDraft(){
+  if(!reviewDraft)return;
+  const url=URL.createObjectURL(new Blob([JSON.stringify(reviewDraft,null,2)],{type:'application/json;charset=utf-8'})),a=document.createElement('a');
+  a.href=url;a.download='review-draft-unsent.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
 async function readPart(kind,id,button){
   const current=context,serial=selectionSerial,currentTab=tab;
   const summary=current[kind==='task'?'tasks':'decisions'].items.find(x=>x.id===id);
@@ -74,13 +115,31 @@ async function openDocument(ref){
   }catch(e){if(serial===documentSerial){$('c-document').innerHTML=errorMarkup(e,'c-doc-retry');$('c-doc-retry').onclick=()=>openDocument(ref);}}
 }
 $('c-connect').onsubmit=e=>{e.preventDefault();connect();};
-let timer;$('c-search').oninput=()=>{clearTimeout(timer);++listSerial;invalidateSelection();items=[];cursor=null;$('c-more').hidden=true;$('c-list').innerHTML='<div class="loader">正在搜尋…</div>';timer=setTimeout(()=>loadList(false),250);};
+let timer;$('c-search').oninput=async()=>{if(!await leaveReview())return;clearTimeout(timer);++listSerial;invalidateSelection();items=[];cursor=null;$('c-more').hidden=true;$('c-list').innerHTML='<div class="loader">正在搜尋…</div>';timer=setTimeout(()=>loadList(false),250);};
 $('c-more').onclick=()=>loadList(true);
-$('app').addEventListener('click',e=>{
+$('app').addEventListener('change',e=>{
+  if(e.target.id==='c-review-filter'){
+    let shown=0;document.querySelectorAll('[data-review-kind]').forEach(item=>{item.hidden=e.target.value!=='all'&&item.dataset.reviewKind!==e.target.value;if(!item.hidden)shown++;});
+    $('c-review-filter-empty').hidden=shown>0;
+  }
+});
+$('app').addEventListener('input',e=>{if(e.target.closest('#c-review-form')){reviewDirty=true;reviewDraft=null;$('c-review-confirmation').innerHTML='';}});
+$('app').addEventListener('submit',e=>{
+  if(e.target.id!=='c-review-form')return;e.preventDefault();if(!review)return;
+  try{
+    reviewDraft=createReviewDraft(review.context,review.target,review.record,{outcome:$('c-review-outcome').value,reason:$('c-review-reason').value});
+    $('c-review-confirmation').innerHTML=reviewConfirmationMarkup(reviewDraft);$('c-review-confirmation').scrollIntoView({block:'nearest',behavior:'smooth'});
+  }catch(error){$('c-review-confirmation').innerHTML=`<p class="notice" role="alert">${esc(error.message)}</p>`;}
+});
+$('app').addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.workflow)choose(b.dataset.workflow);
-  if(b.dataset.tab){tab=b.dataset.tab;renderDetail();}
-  if(b.id==='c-refresh')choose(selected);
+  if(b.dataset.tab){if(!await leaveReview())return;tab=b.dataset.tab;renderDetail();}
+  if(b.id==='c-refresh')choose(selected,true);
+  if(b.dataset.review)openReview(b.dataset.review);
+  if(b.id==='c-review-close'&&await leaveReview()){$('c-review-editor').hidden=true;document.querySelector('[data-review]')?.focus();}
+  if(b.id==='c-review-download')downloadDraft();
+  if(b.id==='c-review-edit'){$('c-review-reason').focus();$('c-review-reason').scrollIntoView({block:'center'});}
   if(b.id==='c-back')$('app').classList.remove('show-detail');
   if(b.id==='c-task-close'){
     const card=document.querySelector('.c-task-card.selected');$('c-task-detail').hidden=true;

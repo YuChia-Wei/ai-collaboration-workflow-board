@@ -5,6 +5,7 @@ import {collaborationUiFixture} from '../scripts/collaboration-ui-fixture.mjs';
 import {createCollaborationClient} from '../frontend/collaboration-client.mjs';
 import {detailMarkup,taskMarkup,decisionMarkup,listMarkup,documentButton} from '../frontend/collaboration-view.mjs';
 import {recordBoardMarkup} from '../frontend/record-board.mjs';
+import {reviewAvailability,reviewTargets,reviewQueueMarkup,reviewEditorMarkup,createReviewDraft,reviewConfirmationMarkup} from '../frontend/collaboration-review.mjs';
 
 const {sqlite,db}=sqliteCollaboration(),store='ui-test';
 const binding={enabled:true,subject_id:'agent-test',binding_id:'ui-test-grant',capabilities:['read','plan','execute','manage']};
@@ -113,5 +114,34 @@ try {
     const unsafe=await (await handle(new Request('https://board.test/'),{...env,COLLABORATION_STORE_ID:'"><script>alert(1)</script>'})).text();
     assert.doesNotMatch(unsafe,/<script|collaboration-store/);
   });
-  console.log(JSON.stringify({scenarios:passed,passed:true,scope:'UI query client and presentation against local SQLite/production HTTP root; pagination/corruption fault injection; no hosted or human approval proof'}));
+  await scenario('UI-13 / review queue: pending decisions and submitted results remain distinct, not accepted',async()=>{
+    assert.deepEqual(reviewTargets(active).map(t=>t.key),['decision:D-UI','task:DONE']);
+    assert.match(reviewQueueMarkup(active),/審核狀態未提供/);
+    const empty=structuredClone(active);empty.decisions.items=[];empty.tasks.items=[];
+    assert.match(reviewQueueMarkup(empty),/目前沒有待決策/);
+    assert.equal(reviewAvailability.enabled,false);
+  });
+  await scenario('UI-14 / draft flow: real snapshot reading to confirmation preserves refs without writing approval',async()=>{
+    const before=requests.length;
+    for(const target of reviewTargets(active)){
+      const record=await client[target.kind](active,active[target.kind==='task'?'tasks':'decisions'].items.find(t=>t.id===target.id));
+      const markup=reviewEditorMarkup(active,target,record);assert.match(markup,/預覽審閱草稿/);
+      const draft=createReviewDraft(active,target,record,{outcome:'request_changes',reason:'請補充 <script> 證據'});
+      assert.equal(draft.status,'unsent');assert.deepEqual(draft.workflow_ref,active.workflow_ref);assert.deepEqual(draft.basis,[active.workflow.plan]);
+      assert.equal(draft.snapshot_revision,active.revision);assert.equal(draft.command,undefined);assert.equal(draft.actor,undefined);
+      const html=reviewConfirmationMarkup(draft);assert.match(html,/disabled aria-describedby/);assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>/);
+      assert.match(html,/不是|不會/);assert.match(html,/尚未送出/);
+    }
+    assert.ok(requests.slice(before).every(r=>r.query&&!r.command));
+  });
+  await scenario('UI-15 / draft validation: stale snapshots, mismatched identities and empty reasons never produce confirmation',async()=>{
+    const target=reviewTargets(active)[0],record=await client.decision(active,active.decisions.items[0]);
+    const values={outcome:'approve',reason:'依據已讀取'};
+    assert.throws(()=>createReviewDraft(active,target,record,{...values,reason:'  '}),/填寫/);
+    assert.throws(()=>createReviewDraft(active,target,record,{...values,outcome:'accept'}),/選擇/);
+    assert.throws(()=>createReviewDraft({...active,revision:active.revision+1},target,record,values),/快照不符/);
+    assert.throws(()=>createReviewDraft(active,target,{...record,workflow_ref:{...record.workflow_ref,store_id:'other'}},values),/快照不符/);
+    assert.throws(()=>createReviewDraft(active,target,{...record,decision:{...record.decision,revision:999}},values),/快照不符/);
+  });
+  console.log(JSON.stringify({scenarios:passed,passed:true,scope:'UI query client, review drafts and presentation against local SQLite/production HTTP root; no hosted or human approval proof'}));
 } finally {sqlite.close();}
