@@ -16,7 +16,7 @@ the graph is insufficient, and text search for literals, configuration and prose
 
 ## Installed skills
 
-Framework v0.19.1 is selected in `.ai/custom/installation.json` and verified by
+Framework v0.20.1 is selected in `.ai/custom/installation.json` and verified by
 `.ai/framework.lock`. Codex entries are `.agents/skills/<id>/SKILL.md`; read the
 selected entry and only its applicable references. Installed resources under
 `.ai/core/` and runtime entries are managed; change selection and reinstall through
@@ -26,17 +26,17 @@ the pinned installer rather than editing those files.
 | --- | --- |
 | Establish or refresh the collaboration starting point | `ai-context-init` |
 | Requirements and specifications | `requirement-author`, `spec-author`, `problem-frame-author` |
-| Architecture and behavior scenarios | `ddd-ca-hex-architect`, `bdd-gwt-test-designer` |
+| Architecture, test design and formal test specifications | `ddd-ca-hex-architect`, `test-designer` |
 | Diagnosis, implementation and review | `diagnostic-analyst`, `local-change-implementer`, `slice-implementer`, `code-reviewer` |
 | Compliance and stage selection | `spec-compliance-validator`, `software-development-orchestrator` |
 | Decisions, observations and PR content | `adr-author`, `lesson-author`, `pr-author` |
 
-`engineering-common@0.1.0` is installed as optional guidance. No normative
+`engineering-common@0.3.0` is installed as optional guidance. No normative
 knowledge bindings are adopted. Select relevant resources explicitly and preserve
 Board's existing decisions. .NET coverage is unavailable; do not substitute a
 source checkout or impose another technology stack. `ai-context-auditor`,
-`ai-context-governance`, local backlog, Claude entries and sub-agent profiles
-are not selected.
+`ai-context-governance`, local backlog, `user-story-author`, `workflow-records`,
+Claude entries and sub-agent profiles are not selected.
 
 ## Portable specifications
 
@@ -44,7 +44,9 @@ Use product vocabulary, observable behavior, invariants, failures and acceptance
 criteria when authoring specs. Keep implementation language, persistence adapters
 and test bindings explicit and separate from the behavior contract. A future
 language change still requires implementing and validating those contracts.
-Installing `spec-author` does not establish complete product specifications.
+Use `spec-author` for production, entity and adapter specifications; use
+`test-designer` for formal test specifications. Installing either does not
+establish complete product specifications or executed test evidence.
 Choose the requested artifact and destination before writing; no spec, ADR,
 Lesson, PR store or framework configuration is implicitly initialized.
 

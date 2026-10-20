@@ -8,10 +8,10 @@ distinct. Select the requested output before using the format of the input.
 
 | Requested result | Owner | Boundary |
 | --- | --- | --- |
-| Stakeholder goals, business rules and acceptance criteria in a requirement document | `requirement-author` | Code is observed current behavior, not confirmation of business intent. |
-| A production, entity, adapter or formal test specification under the target spec contract | `spec-author` | Preserve the selected spec type and its schema; GWT wording inside a formal test spec does not change the owner. |
+| Bounded requirement exploration, stakeholder goals, business rules and acceptance criteria | `requirement-author` | Code is observed current behavior, not confirmation of business intent. |
+| A production, entity or adapter system specification from requirements and accepted design | `spec-author` | Preserve design source identities, decisions and the selected system-spec contract. |
 | A CBF/SWF model and its required file set for a selected use case/workpiece | `problem-frame-author` | Preserve source bindings and distinguish observed/inferred behavior from approved requirements. Drafting is not compliance validation. |
-| Scenario notes, a GWT matrix or assertion design without a formal spec artifact | `bdd-gwt-test-designer` | Scenario design is separate from test implementation and execution. |
+| General test designs, GWT scenarios or formal test specifications | `test-designer` | One owner controls test-design semantics and selected formal-test output; implementation and execution remain separate. |
 | An unresolved responsibility, aggregate, port or dependency-direction decision | `ddd-ca-hex-architect` | Resolve the specific architecture decision; do not rewrite already accepted requirements. |
 
 A generic word such as "spec", shared input files, file count or the presence of

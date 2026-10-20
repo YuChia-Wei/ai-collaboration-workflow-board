@@ -2,7 +2,7 @@
 
 工作流程、任務與文件紀錄專案。所有程式碼專案都位於 `src/`；網站建置結果、preview、SQLite、憑證與測試證據不進入 Git。
 
-開發協作已選配 Framework v0.19.1 的 15 個 skills 與共通知識，包含 `ai-context-init@0.2.0`，並完成最小協作起點初始化。精確清單、驗證及使用限制見 [FRAMEWORK-INSTALLATION.md](FRAMEWORK-INSTALLATION.md)，Agent 入口見 [AGENTS.md](AGENTS.md)，開始方式見 [第一個有界任務](.dev/guides/first-task.md)。這是開發工具採用，不增加 Board runtime 相依。
+開發協作已選配 Framework v0.20.1 的 15 個 skills 與 `engineering-common@0.3.0`，包含 `ai-context-init@0.2.1`；既有最小協作起點初始化保留。測試設計入口已由 `bdd-gwt-test-designer` 遷移為 `test-designer`。精確清單、驗證及使用限制見 [FRAMEWORK-INSTALLATION.md](FRAMEWORK-INSTALLATION.md)，Agent 入口見 [AGENTS.md](AGENTS.md)，開始方式見 [第一個有界任務](.dev/guides/first-task.md)。這是開發工具採用，不增加 Board runtime 相依。
 
 | 路徑 | 用途 |
 | --- | --- |

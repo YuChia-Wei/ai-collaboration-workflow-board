@@ -1,6 +1,6 @@
-metadata_version: 3
+metadata_version: 4
 id: requirement-author
-version: 0.1.0
+version: 0.2.1
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -10,6 +10,7 @@ runtime:
 - id: skill-instruction-reader
   requirement: Read the selected authoring instructions and permitted caller sources
   for_operations:
+  - explore
   - draft
   - normalize
   on_missing: unavailable
@@ -20,17 +21,30 @@ resources:
   - references/authoring.md
   - references/requirement-template.md
   - references/requirement-guide.md
+  - references/explore.md
+  - references/knowledge.md
   schemas: []
   templates: []
   tools: []
 operations:
+- id: explore
+  execution: instruction
+  inputs:
+  - Bounded stakeholder intent, existing decisions, evidence and unresolved questions
+  - Permitted sources, target rules and current authorization
+  outputs:
+  - Bounded facts, decisions, examples, questions and next step without an acceptance
+    claim
+  instructions: references/explore.md
+  implementation_status: implemented
 - id: draft
   execution: instruction
   inputs:
   - Requested requirement scope and stakeholder or explicitly bounded observed sources
   - Applicable target rules and optional caller-selected template and output destination
   outputs:
-  - Requirement draft with source bindings, business rules and observable acceptance criteria
+  - Requirement draft with source bindings, business rules and observable acceptance
+    criteria
   - Assumptions, unresolved decisions, coverage limits and actual delivery location
   instructions: references/authoring.md
   implementation_status: implemented
@@ -44,3 +58,27 @@ operations:
   - Material change summary, retained uncertainties and actual delivery location
   instructions: references/authoring.md
   implementation_status: implemented
+knowledge_consumption:
+- id: common-requirement-authoring
+  package: engineering-common
+  version: 0.3.0
+  operations:
+  - draft
+  - normalize
+  resources:
+  - member:bdd/discovery.md
+  - member:bdd/formulation.md
+  - member:ddd/domain-discovery.md
+  requirement: optional
+  on_missing: unavailable
+- id: common-requirement-exploration
+  package: engineering-common
+  version: 0.3.0
+  operations:
+  - explore
+  resources:
+  - member:bdd/discovery.md
+  - member:ddd/domain-discovery.md
+  - member:discovery/collaborative-discovery.md
+  requirement: optional
+  on_missing: unavailable

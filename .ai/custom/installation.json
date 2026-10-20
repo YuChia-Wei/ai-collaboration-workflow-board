@@ -1,14 +1,13 @@
 {
   "selection_version": 2,
   "catalog": {
-    "identity": "catalog:1:0.19.1:42b99e954e3d6fbf595075a079357f0ce1df057f:ec0cd3a7c59caf2bbcb594b479760103315cfce6c3ed1c910da9438a5186a6da",
-    "catalog_sha256": "12ca7dd23134cdfad8515c20a8fdf50951ac3b1730cf89fd4d016a27e4859a68",
-    "files_sha256": "97ef5bfb98628cc4bf6bc56a95ed0cce1f281d5f7bcf8dd6c4e49cdb58f2ae8d"
+    "identity": "catalog:1:0.20.1:fba2f031f1c969cd5788af924e307ffebf553422:66ba50538eacba621a08fc3cc413ded6bc3d1dd39fa36e878ac311feecf2beac",
+    "catalog_sha256": "a5f336f29e3b9da401fbe9abf57c9db244286c7b820f807f9a4b3ee9de870088",
+    "files_sha256": "a60fe308a994c76e4628a499174f32addfbb9e637e4f94c40b28ded861a74d90"
   },
   "skills": [
     "adr-author",
     "ai-context-init",
-    "bdd-gwt-test-designer",
     "code-reviewer",
     "ddd-ca-hex-architect",
     "diagnostic-analyst",
@@ -20,7 +19,8 @@
     "slice-implementer",
     "software-development-orchestrator",
     "spec-author",
-    "spec-compliance-validator"
+    "spec-compliance-validator",
+    "test-designer"
   ],
   "knowledge": [
     "engineering-common"

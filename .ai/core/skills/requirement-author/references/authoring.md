@@ -104,3 +104,10 @@ artifact/location, source bindings, accepted decisions, open questions,
 authorization state and exact next output. Otherwise finish here. Do not
 mandate another skill, install a dependency, create workflow/store records,
 implement code, execute tests or assert approval as a consequence of authoring.
+
+## Optional method knowledge
+
+When selected knowledge is relevant to this draft or normalization, follow
+[the installed-resource protocol](knowledge.md) and the current operation allowlist.
+Reuse accepted inputs and decisions; do not require exploration or re-ask resolved
+questions unless new conflicting evidence affects the requested output.

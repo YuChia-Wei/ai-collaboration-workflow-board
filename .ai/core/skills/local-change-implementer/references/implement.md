@@ -104,11 +104,34 @@ repair; a diagnostic finding does not grant implementation authority.
    edits. Do not treat a tool's success as proof the radius stayed bounded.
 4. Update immediate tests when needed to protect the changed contract and
    within authority. Avoid unrelated cleanup or implementation-mirroring tests.
-5. Run the narrowest meaningful authorized target checks. Obtain the actual
-   command, working directory, prerequisites and allowed output scope from
-   target evidence. No default product command or package is supplied here.
+5. Confirm test necessity before execution from the actual diff, semantics,
+   direct dependencies and target-owned gates. Ordinary prose or whitespace with no
+   parsing, schema, output or behavior effect does not select a test by edit,
+   extension or path alone. Whitespace affecting those contracts needs the
+   relevant checks; investigate unclear impact before choosing. Run only the
+   necessary authorized checks using the target's actual command, working
+   directory, prerequisites and output scope. No default command is supplied.
 6. Inspect the diff and actual touched radius. Stop dependent edits if an
    unaccepted semantic/architecture decision or wider operation emerges.
+
+Use any supplied validation plan as an initial expectation, and revise
+conditional checks as actual edits reveal or remove impacts. Before execution,
+confirm which checks are necessary; after the change, confirm required
+acceptance evidence is complete. Do not silently cancel mandatory target gates
+or accepted acceptance requirements. Return newly discovered wider impacts or
+cross-task scheduling changes to the orchestration owner when one is selected;
+otherwise reconcile them through the existing task owner, without requiring an
+orchestrator installation. A change to accepted requirements needs its owner's
+decision. Bug reproduction, TDD and incremental checks may run before or during
+edits for a concrete purpose; the numbered steps do not require all testing to
+wait until implementation ends.
+
+Large integration, E2E, usability, full installation/upgrade and high-cost AI checks
+need a clearly affected behavior/boundary or an explicit user request or accepted
+acceptance criterion; do not expand to a full matrix by default. Preserve
+mandatory target gates, security and release obligations. Reports, handoffs or
+SHA changes alone do not select tests. Explain an unnecessary check briefly in
+the existing result, without a new receipt, ledger or complete hash inventory.
 
 An unavailable editor blocks implementation. Missing selected specialist rules
 block the corresponding decision. Missing test tools, environment or command

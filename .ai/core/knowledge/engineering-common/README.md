@@ -28,6 +28,10 @@ target adoption; optional installation creates no new approval or artifact manda
 The metadata lists every member and resource. The following links are topic entrypoints;
 select additional resources by their declared IDs for the current task.
 
+- [BDD topic selection](bdd/README.md)
+- [DDD topic selection](ddd/README.md)
+- [Collaborative discovery](discovery/collaborative-discovery.md)
+- [General test-design handoff](references/TEST-DESIGN-HANDOFF-CONTRACT.md)
 - Content metadata: `content-package.yaml`
 - [engineering-rule-catalog.yaml](engineering-rule-catalog.yaml)
 - [references/ENGINEERING-IDENTITY-CONTRACT.md](references/ENGINEERING-IDENTITY-CONTRACT.md)

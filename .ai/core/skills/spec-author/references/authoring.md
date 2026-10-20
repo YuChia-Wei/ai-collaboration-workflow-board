@@ -15,15 +15,15 @@ wording selects it automatically.
 | One production behavior, use case, command/query or reactor and its contract | production | [Production template](production-template.md) |
 | Entity, aggregate or value-object state, identity and invariants | entity | [Entity template](entity-template.md) |
 | An inbound/outbound adapter or interface, mapping and failure contract | adapter | [Adapter template](adapter-template.md) |
-| A formal specification of verification targets, scenarios and assertions | formal-test | [Formal-test template](formal-test-template.md) |
 
-A formal-test specification remains a formal-test artifact when scenarios use
-GWT. Preserve supplied scenario IDs, source links and accepted scenario design.
-Scenario notes, a GWT matrix or assertion design alone belong to a separate
-scenario-design responsibility; do not create an extra spec solely to process
-them. Requirements, structured problem frames and compliance verdicts are also
-distinct requested outputs. Do not impose a requirement-to-spec pipeline or
-author a second artifact without an actual need.
+
+Formal-test specifications, scenario notes, matrices and assertion/test design
+belong to `test-designer`. Preserve existing test-design identities and references
+when they explain system acceptance; do not author or redesign those artifacts
+as an incidental part of a system specification. Requirements, problem frames
+and compliance verdicts remain distinct outputs. Explicit skill selection with
+a conflicting artifact request needs bounded clarification, not silent routing.
+Do not impose a multi-skill pipeline or create a second artifact without a need.
 
 Honor explicit skill and artifact choices. If they conflict, or the type cannot
 be determined, resolve that bounded ambiguity before drafting an assumed type.
@@ -65,6 +65,28 @@ bundles no .NET, persistence, messaging, API-versioning or test-framework
 specialist contract; disclose missing requested coverage rather than treating
 it as reviewed or creating a new architecture choice.
 
+
+## Use accepted design without inventing it
+
+Bind accepted designer outputs by identity, available revision and decision
+status alongside the requirements. Carry their responsibilities, dependency
+direction, invariants and selected contracts into the appropriate specification.
+A complete accepted design does not need another designer invocation merely
+because specification authoring starts. Ask only about a material gap or conflict.
+
+If no new design has been selected, an explicitly requested provisional draft
+may cover supported behavior and mark design-dependent sections unresolved.
+Separate observations, proposed mechanisms and accepted decisions. Do not choose
+aggregate ownership, transport, persistence, concurrency or failure policy to
+fill a template. Identify which missing decision blocks which contract.
+A proposed alternative remains proposed until the relevant target owner accepts it.
+
+Preserve system verifiability: state observable acceptance, including relevant
+refusal/failure outcomes, and link existing test-design IDs where available.
+Do not remove expected results when transferring formal-test ownership.
+Missing test design is an explicit gap if needed, not a reason to invent a test
+plan, implementation fixture or execution result within this operation.
+
 ## Develop the selected contract
 
 For **production**, describe the externally meaningful behavior, trigger/actor,
@@ -88,14 +110,6 @@ authorization, retries, cancellation, timeouts, idempotency and observability
 constraints with their sources. Separate transport failures from business
 rejections. Do not smuggle domain rules into an adapter or invent a route,
 status code or credential policy.
-
-For **formal-test**, bind each scenario to the behavior, source requirement or
-invariant it verifies. Describe test level, setup, test data, action, observable
-assertions and relevant failure/boundary cases. State required environment and
-dependencies, isolation/cleanup needs, supported oracle and known coverage gaps.
-Separate proposed test plans from observed run results. Unit or synthetic
-evidence cannot satisfy a criterion that explicitly requires real integration
-execution. Do not run tests or claim a passing outcome while authoring.
 
 For all types, preserve accepted scope, domain terms and target content.
 Do not add requirements solely to fill the default outline. Record genuine

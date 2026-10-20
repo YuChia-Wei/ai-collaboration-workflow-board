@@ -59,6 +59,16 @@ required specialist gaps cannot be reported as covered. Continue unaffected
 common work with that limit disclosed. Persist only when the actual task
 authorizes a destination; no new record family or implicit config write.
 
+## Select DDD topics for this task
+
+Within the verified installed allowlist, read `ddd/README.md` only to select a
+topic. Choose domain-discovery for disputed language, strategic-design for
+context alternatives, tactical-design for invariant ownership, and model-evolution
+for a model change. Domain-language templates and Context Map guidance are optional
+when those outputs are requested. Do not preload the collection. Without optional
+DDD knowledge, continue common architecture work grounded in caller sources while
+reporting that specialized coverage unavailable.
+
 ## Inputs and authority
 
 Confirm business capability/module, requested new design or revision, source

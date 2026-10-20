@@ -1,5 +1,5 @@
 {
-  "candidate_identity": "subset:3:0.19.1:42b99e954e3d6fbf595075a079357f0ce1df057f:91491125a5bb52a5912c23e45bc67f3442ba4fc0466e1a4ea23271f137b922a5",
+  "candidate_identity": "subset:3:0.20.1:fba2f031f1c969cd5788af924e307ffebf553422:24d5ecb4181943945247fbfcefa22d3dc8fd7d3a4bf9830c5f0208cfc8d119c1",
   "catalog_document": {
     "adapters": [
       {
@@ -23,18 +23,18 @@
     ],
     "build_inputs": [
       {
-        "git_blob": "78f0052e0c006c9431d4b0592a7a389af3056f21",
+        "git_blob": "4a31424ed52d8de63d77c739fdfda84fa7194dfc",
         "mode": "100644",
         "path": "src/adapters/claude/skill-entry-v2.md.template",
-        "sha256": "11eeedac1452cc78e9ab7726791c5032b2379815ea15e8fb0f8fb11d921d032e",
-        "size": 1201
+        "sha256": "4a0ef01a22ecb4511e003da9998274d8c1a4ec482b6acf03c8f4c508a9efd966",
+        "size": 1418
       },
       {
-        "git_blob": "3592b853bea3a18ebaa84ea1a2ee35db67392d88",
+        "git_blob": "7799aec0ab0b283c26d21889b92144d638eaad90",
         "mode": "100644",
         "path": "src/adapters/codex/skill-entry-v2.md.template",
-        "sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4",
-        "size": 1199
+        "sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6",
+        "size": 1416
       },
       {
         "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
@@ -58,25 +58,25 @@
         "size": 11564
       },
       {
-        "git_blob": "2e765101e7264f773c7c695a5cb007642686c029",
+        "git_blob": "f5c45d433820f5ebd60188ff04d8ddfbfb7f31eb",
         "mode": "100644",
         "path": "src/distribution/catalog.py",
-        "sha256": "5b2853de712d04e2cc3a34437d4d22e0869e7cf7d75904e5a9524cc9861d65e4",
-        "size": 38404
+        "sha256": "88db79985cab5c758b62cad95fc88dec13c6415194aa60d725045a81f935004c",
+        "size": 40699
       },
       {
-        "git_blob": "db306ef1659af6f406284df3c1ba2f83aa9823d7",
+        "git_blob": "c0b7faa10371c00e1ed4947f2de41cc0823b8427",
         "mode": "100644",
         "path": "src/distribution/claude.py",
-        "sha256": "47732f37a32c5aa855d09f47aa135c772aded4c41ba9698f6911e1516fea41a8",
-        "size": 4782
+        "sha256": "2c79db10ded390c209145e9539a91bb1bee5c2370b5aa804de64947364afa910",
+        "size": 4863
       },
       {
-        "git_blob": "b472c64202f21793ca1e40456688ddbe1acf2106",
+        "git_blob": "d2ebaa45bb135d8bc7eb8458b185e11574ff1265",
         "mode": "100644",
         "path": "src/distribution/codex.py",
-        "sha256": "8bf874d70818004db05e4721321714390a6d6acf60343cc4533a39517cf79d2e",
-        "size": 7955
+        "sha256": "5fbe00b4e2390ce7ef411105fab8afaa1e22462da381a8f17e8ca3844283d8eb",
+        "size": 8036
       },
       {
         "git_blob": "907320717317a90afe21e79a1bd82ecc1338d7e3",
@@ -86,11 +86,11 @@
         "size": 23040
       },
       {
-        "git_blob": "3c93d33b70caaaac1429f1f060ae5fd77810e8c0",
+        "git_blob": "c6174b0ba39ea34bef37a137ddba6f58975ba98f",
         "mode": "100644",
         "path": "src/distribution/contracts.py",
-        "sha256": "4d4c9e3b7da68496dc8c9834882049c913fc9afdf45dc150083989329a58e3a5",
-        "size": 34270
+        "sha256": "9c904ab999ae5efb0722e6b6c9b0ce14809ec9347af4b7e3c3f27196c3a46427",
+        "size": 34561
       },
       {
         "git_blob": "38332e2c55bec156e81f0dab68e298b61b52eda7",
@@ -142,25 +142,25 @@
         "size": 5704
       },
       {
-        "git_blob": "f8c4938394a830493d2a0bfb0dd12a5fdd2e933c",
+        "git_blob": "d5ece4bd253020d389add2a9b33ed0222348209e",
         "mode": "100644",
         "path": "src/distribution/manifest.yaml",
-        "sha256": "3ec136d00fbf30562ab51c495dd809d2908303c0b68bfd88dc4b96aceeaa35a5",
-        "size": 63509
+        "sha256": "4730383ad19e828b97b07d9bd5540c85d7657613e357ea51860086919fffdaf1",
+        "size": 68144
       },
       {
-        "git_blob": "45fffbd3a273e8ba0502b9428b9d426c89cdda0e",
+        "git_blob": "ecfe6555bfc495f37dcf04678fbdb8e9e04a7193",
         "mode": "100644",
         "path": "src/distribution/package.py",
-        "sha256": "f0677644df30f0d9f211dc669da6ecdb5ffcb27a90e996b4b9e036d2e610281c",
-        "size": 18372
+        "sha256": "c69e4485213ed195d67d2776fc49ec2c16177391c6311a0a48828eb16510df58",
+        "size": 18988
       },
       {
-        "git_blob": "c7ef28e28529da3344797457b7bb477ff425578e",
+        "git_blob": "794cd8ca0f9cab680f199a5cb6d9a48d04c7f49d",
         "mode": "100644",
         "path": "src/distribution/reinstallation.py",
-        "sha256": "fa3e4332306a8e935de93fc34a3e7eefd9c6bcd8a1fafa134978c8c260fcf768",
-        "size": 21572
+        "sha256": "2fd96222b48ce7d16b917747ecfe2cf4e01eaf00bd0bd687b63e92ab75573f99",
+        "size": 21720
       },
       {
         "git_blob": "22fb3136fa7ccf5d55e0c3078d13b68d05933edf",
@@ -170,17 +170,17 @@
         "size": 8608
       },
       {
-        "git_blob": "b50ac295b8b66280723d7352da5f4ad10e124372",
+        "git_blob": "945a087e6e3a0ed4c584c558853a10cf62f3d404",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/README.md",
-        "sha256": "2b923bbf2ac026df481ea436e5ca520791f74889d15dd0512c93bfa2df2935cb",
-        "size": 5133
+        "sha256": "c4cbc96b7d8884b62159d1fc10cd4bb3bb7e01a2769df93b28a8f360d94069e5",
+        "size": 5199
       },
       {
-        "git_blob": "8d93c44e2b11a583799966ea03a772fc4d41d985",
+        "git_blob": "c6fd311287052cd28a4226ce538b71bd3424ca59",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/content-package.yaml",
-        "sha256": "572ba054265dcd81e9aec19db7a9d542e76e4a1d5ed1856f0cdc92609bdc4a41",
+        "sha256": "abe75bc480f0af6696d1100c48bc7ff63afad639e03bc595d156cb6a8ad7dde4",
         "size": 251999
       },
       {
@@ -212,10 +212,10 @@
         "size": 4208
       },
       {
-        "git_blob": "b800829758ed1b2f77d3fe75a4f15e0dd5d9ce65",
+        "git_blob": "2747cd885d17c4bb724b7668639d38a4e58e92f7",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/engineering-rule-catalog.yaml",
-        "sha256": "4a4724411333670e33605236e1d96c4b470d1a18a895ee7fd7db5dceb86d6887",
+        "sha256": "bb00017d6a690bed72e70a60d065782dbc90ad9ede032747f7f07980828f2f9f",
         "size": 57189
       },
       {
@@ -1724,11 +1724,11 @@
         "size": 8991
       },
       {
-        "git_blob": "3d7683da6d711ee99f1563b8d5f5543ff4a1c648",
+        "git_blob": "3074ed0116b9a80ace0f74863eb423a59062d56b",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/standards/coding-standards/controller-standards.md",
-        "sha256": "c016ed5583f134df6d420223a459a8ed52ebcc53a2be952d51de6332cbb604f3",
-        "size": 8828
+        "sha256": "94fb26807d21f7ac1465d59a09725c59325e2bd1df11758774b427e9eb229478",
+        "size": 9690
       },
       {
         "git_blob": "54b8b2931253e942bd923d6ef6bd3772836f7f65",
@@ -1787,11 +1787,11 @@
         "size": 10830
       },
       {
-        "git_blob": "1a9e55db66bdac34935fae1386df80fcf5dc9df1",
+        "git_blob": "383d2e49ae97505c21c4a7d640dcbb19453ace4a",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/standards/project-structure.md",
-        "sha256": "f3db3f4f2a454c7d2e7b4cea97f7c8319307c73a10fb743de595fdf1696068e1",
-        "size": 16830
+        "sha256": "a6e3d0bb9f622d09d179c2a5ce8c5ed13794265b3013a154cad4720a50f1c229",
+        "size": 16994
       },
       {
         "git_blob": "e46e33819f796386cadd93dcf90888c57b54ce4e",
@@ -1892,18 +1892,109 @@
         "size": 1512
       },
       {
-        "git_blob": "1d4f9b1a5ce585dddc1804cf6800b8c6187bd08e",
+        "git_blob": "7987ca106c6a4be76d0743bf656d7cb3d425e7e2",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/README.md",
-        "sha256": "746fa7e049ccf824013ae1f685875d2271831d4f920f93b126fae1947dddd691",
-        "size": 3423
+        "sha256": "397cffe3b8ae9f26e0195ed6519857f6d1e5719350515d06b73f0809b476269a",
+        "size": 3643
       },
       {
-        "git_blob": "26fd1ee92b1089bffc4ea45b7f743176f7067e07",
+        "git_blob": "8fd3cfa1576e72b41f2ff1af1bce8a7fe2bff711",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/bdd/README.md",
+        "sha256": "3b1d2cd67880fe2484974b709ba440e7ee13755ba6f42d2dbc9309b37a8c5797",
+        "size": 2521
+      },
+      {
+        "git_blob": "441e64592064879dae8161396e91fbaaf3bd1d0e",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/bdd/automation.md",
+        "sha256": "38b55607fc432b4f089fe0b186c55a46538c9bacf9488986cf6f242a2399b340",
+        "size": 4890
+      },
+      {
+        "git_blob": "88ed3b8813e6faa0dd642fe19331441b0e1736a7",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/bdd/discovery.md",
+        "sha256": "7c75e78ef4a487f733b46ac856a45347d2c2310b8639b41c34429e5ee06fe76c",
+        "size": 4134
+      },
+      {
+        "git_blob": "f8bf5235a0e512274a4a5d028532f6b0c3d47867",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/bdd/examples/library-renewal.md",
+        "sha256": "019eefd3d077bab7afdf295e0beef7670841713af69e4ad024e688466204669e",
+        "size": 5017
+      },
+      {
+        "git_blob": "2910511bbd2d0e0e6e3edfc1ee3e9d3ec692d7b5",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/bdd/formulation.md",
+        "sha256": "f2200d77a47e1e0924f6e2f9bccd627889135bd9c4adaf08e01f276af2ef24f8",
+        "size": 4760
+      },
+      {
+        "git_blob": "3ae46961f7e91d6618ee472368b7ef89fbd0a890",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/bdd/gherkin.md",
+        "sha256": "2e2f524583e1129f86cd5f1cd267cb9be2270974716e28024b75502114011ab2",
+        "size": 4427
+      },
+      {
+        "git_blob": "b1df9391a617939701b5896cd714abd3ca8a9494",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/content-package.yaml",
-        "sha256": "ddb1a0620f53b559446b3e48de608d96667f7c0da8493169dd5ce52d4b9bdfb7",
-        "size": 15708
+        "sha256": "96ec8b442856118055a94d6771316aa1f0473a5bb1b3dfd60a693808d4bbff88",
+        "size": 27148
+      },
+      {
+        "git_blob": "99c11808ecc934d2ac233055385b2473a7459269",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/ddd/README.md",
+        "sha256": "206cc26c5d42e7ff6ff7e98401748b154196dd80075514bfdc0d0f928cca3e31",
+        "size": 2448
+      },
+      {
+        "git_blob": "56fc7a22e64147c0ae1c20510794096bc5f52e47",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/ddd/domain-discovery.md",
+        "sha256": "a2d4db1c6ad849c35574b0f4e5421e288b60b309ec93e1ee99801dbd03fdf924",
+        "size": 4220
+      },
+      {
+        "git_blob": "e70eb03cc6a568cfa34279c70ac113df5eb649bf",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/ddd/examples/order-cancellation.md",
+        "sha256": "c4fb57d60de5e95d6a60cb2edaeffa717e5608000d3f911721f3780e75195696",
+        "size": 4645
+      },
+      {
+        "git_blob": "5d31af2e42ae0259d500dd1e56814e8e6d367b40",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/ddd/model-evolution.md",
+        "sha256": "9ed1893ff94e8c5d7b25aa11ce6dbcf05656adcddab047d7ffab880cae10e50f",
+        "size": 4226
+      },
+      {
+        "git_blob": "db7816d01b1c5a0fb55c35534da07f33538b23da",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/ddd/strategic-design.md",
+        "sha256": "38141de602dcc569d1fa6fadb42e04d9ab7cad5aa9f7be87450ddeeefb96328d",
+        "size": 4996
+      },
+      {
+        "git_blob": "cecc840d9e3c544321a04018c924b2b30799fde6",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/ddd/tactical-design.md",
+        "sha256": "be8287d3846a8fea83a3578a9f5baeeedb0c6b326f615cba91fe1cb71e694339",
+        "size": 4381
+      },
+      {
+        "git_blob": "ea74672f6d29478297782a65d364ef02d297a860",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/discovery/collaborative-discovery.md",
+        "sha256": "92ebe9a31572acc2e8224d0f718ab5fcc44da679788ba9bba847e362e17026f5",
+        "size": 4256
       },
       {
         "git_blob": "ac8b661320adef1b3e9b92816cf1a6f112dd8d2b",
@@ -1927,11 +2018,11 @@
         "size": 977
       },
       {
-        "git_blob": "cfaf6e4b916f2f567426d058ba2cd25eab76241c",
+        "git_blob": "5819442b80b84187312ebd419da0de9879caa7df",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/domain-language/templates/domain-event-language-template.md",
-        "sha256": "69e32d14f4f4a451349a8784c447b1285e061ffa5ff7571888e279fd1b06f755",
-        "size": 1136
+        "sha256": "e014815a55890c6c203016997bc8a36e3049b6743bd026286cfdfba756394b34",
+        "size": 1240
       },
       {
         "git_blob": "b40d0f07baf96c7c3ca29337d9fb5d5e0c9fe821",
@@ -1941,11 +2032,11 @@
         "size": 12795
       },
       {
-        "git_blob": "b02abee2fbfafda2a6345f1ee4447055e75a79c8",
+        "git_blob": "5b8833050fdc3923bcb9d26168d04edde5d20c75",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/operations/CONTEXT-MAP-GUIDE.MD",
-        "sha256": "df8cfaf36f4ba228d009985716de940033ab1b79c282da5d6486cfce08d75ba0",
-        "size": 1599
+        "sha256": "c6bc83d3c20058215990dffb990780a59ca7eab5ce03ee8043cbd688734523d7",
+        "size": 4126
       },
       {
         "git_blob": "2a88012ff9d1916da3b5aa4d20cae152153cf34c",
@@ -1969,18 +2060,18 @@
         "size": 1835
       },
       {
-        "git_blob": "7832a008f451521b81d283dc1c75a4c33454066d",
+        "git_blob": "d1986f01415819e07015121ad258a72affd07057",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md",
-        "sha256": "f4cb699d5e6f6441cfb9064ba05fcc44f0304d29564e9c257f0cb667bd2e7979",
-        "size": 4736
+        "sha256": "36308480bc93f0b46ed342fa899619dc8e20ce9f6300105b43757c86cad6077b",
+        "size": 4734
       },
       {
-        "git_blob": "de3c27367a03e3fb67a4a3cf1fcfe9696e786d28",
+        "git_blob": "d80cc9ddf247a03221b889651bdc4c20c5c23598",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/references/AUTHORING-BOUNDARY-CONTRACT.md",
-        "sha256": "026b8ddccce5c7ede941c2c3238fe8d0456e5656a6ac23b2f134280a58910e68",
-        "size": 3931
+        "sha256": "3e8d59c793f5775541bc975043a688814549d8415713124c4e6b4ab2900c36b3",
+        "size": 3940
       },
       {
         "git_blob": "43f54370f81413bac4c89d47fb18edc0f2683aa8",
@@ -1997,11 +2088,11 @@
         "size": 2783
       },
       {
-        "git_blob": "002671ffedcb1e361ff4daf5fd5d059afc1e9c9c",
+        "git_blob": "4dcf2af4efd17e113ec1bcf69b279c60d4729c16",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/references/GWT-TEST-HANDOFF-CONTRACT.md",
-        "sha256": "a1a07886ef436eacdc7cfa4e5e41c5e186313fccb13af53eb7ebac27381c00db",
-        "size": 4249
+        "sha256": "321bb24d926c806dd21c41e837c8241967ce99efb4730738c46030b15efddf74",
+        "size": 4250
       },
       {
         "git_blob": "49e8d1b26f97ca1983ec4e4544dbcb6178a93396",
@@ -2032,18 +2123,25 @@
         "size": 4092
       },
       {
-        "git_blob": "2678764212101ecd678a813516706232db76a799",
+        "git_blob": "ab664f21a4ca823f5d394b1d1015bad557c86048",
         "mode": "100644",
-        "path": "src/profiles/collaboration.yaml",
-        "sha256": "0ac2fb0e7b666066f17aef9cb1a2f524db3229e94db3d9fabc04aded7550a1b7",
-        "size": 401
+        "path": "src/knowledge/engineering-common/references/TEST-DESIGN-HANDOFF-CONTRACT.md",
+        "sha256": "e32775d4b791cee63db76ae573cab99a5517bb2117d3db85f0392a02134474c0",
+        "size": 4880
       },
       {
-        "git_blob": "7b260352e01b4fce2287879d4e35368cd46aa543",
+        "git_blob": "ac691917329532f5dc0ceae30c4af0f70f299fae",
+        "mode": "100644",
+        "path": "src/profiles/collaboration.yaml",
+        "sha256": "85b5329407afaaf0af6650b94c8b9e16939b657b6101af4f7a3352790faff964",
+        "size": 393
+      },
+      {
+        "git_blob": "c50f05dea5611f0760dfdd9d3a3791fbc9f70da7",
         "mode": "100644",
         "path": "src/profiles/complete.yaml",
-        "sha256": "476cba9a347b4f2c64979ed782afc9459110c3f4846272d794214d9b8fdf2a9d",
-        "size": 441
+        "sha256": "21c672c31af0e42d0436b5706f085d9ba499684cecb31541df2d6b6be08ba849",
+        "size": 433
       },
       {
         "git_blob": "adce813b4cb865b93b004af0e665f226842dc4ee",
@@ -2053,11 +2151,11 @@
         "size": 142
       },
       {
-        "git_blob": "76645811e18eb15c1f3c59e4c0abecfaa95ef933",
+        "git_blob": "db7fc970462b00d33bb5d0575b6aa36ad37ee167",
         "mode": "100644",
         "path": "src/profiles/engineering.yaml",
-        "sha256": "e18c908a7c76c3b5a2cf0198ee2c7aab08801b4a7e9c73d03522f54ab2a6c10b",
-        "size": 306
+        "sha256": "37e78c832a67ef89063e5a413d24c37a7414d120e49cc04948bd83a3b4ea6109",
+        "size": 298
       },
       {
         "git_blob": "a854651f2dd1ead94640e498ff59d8eacbafe470",
@@ -2081,11 +2179,11 @@
         "size": 127
       },
       {
-        "git_blob": "25bdb2d5590af6c04c73249c63d015e8765568e8",
+        "git_blob": "3d092fbaef5143052afe9bb6964a357db999c78d",
         "mode": "100644",
         "path": "src/profiles/source-repository.yaml",
-        "sha256": "11732593b5ba6ab7c3227e4863d89aade49c2942c0859ca8de183834eceb3e3c",
-        "size": 389
+        "sha256": "09b558101ba062deefd95d3577f2ffe34a536f7f6a6deb4d79ae5c4f20dd2d11",
+        "size": 381
       },
       {
         "git_blob": "509d49a4d4b417e4621e8e19c9f358510a048e51",
@@ -2200,17 +2298,17 @@
         "size": 1988
       },
       {
-        "git_blob": "a5bd92c7053a17f158e3e90faeaac1d4df271d25",
+        "git_blob": "f468e1e3426635f090aa8d2d05648479c6ea3764",
         "mode": "100644",
         "path": "src/skills/ai-context-governance/references/maintenance.md",
-        "sha256": "89d56e0848bb9efcbc3ec1efd7e83ee9e2c392f832f8da13a7a72115fc726e3a",
-        "size": 11749
+        "sha256": "f7c9c2203ee45ff789f8dc693ac33d4ad4af168820ad0f74e28121b8e6a51056",
+        "size": 13327
       },
       {
-        "git_blob": "02c7ee665ca1367db062a172b60bd17d601d554e",
+        "git_blob": "d05bcedbadf0284200cb931487b4f43d682fa3c4",
         "mode": "100644",
         "path": "src/skills/ai-context-governance/skill-package.yaml",
-        "sha256": "3189089591f3f2db743dd271882f91c164432ce679cdea3e91fc2a91249fac2a",
+        "sha256": "1b12e07836532565725a365a776573f2ac75c3ab4e0c2836102b77fbfa857f35",
         "size": 1450
       },
       {
@@ -2221,24 +2319,24 @@
         "size": 2967
       },
       {
-        "git_blob": "008c1997a65bad39327c873a806bc28fd2cf8dfe",
+        "git_blob": "9dbe241c5b77efb8b31dfe031adf8bcf546fcd00",
         "mode": "100644",
         "path": "src/skills/ai-context-init/references/initialize.md",
-        "sha256": "b3f463e90de97c80fd4b2b8c1809d05c3c5caf6ff7cb765552604d48dc21dd35",
-        "size": 11501
+        "sha256": "f8dc2d9fdc78d81e0de87fb0e08e95690b72a66934cdf6bee48d0323e6ead7e4",
+        "size": 11819
       },
       {
-        "git_blob": "defbb6c0f7220bc4a068367fe82d88bd7fcc15b0",
+        "git_blob": "376ed9b374848edb92821ad642e7e09c2c4c07f4",
         "mode": "100644",
         "path": "src/skills/ai-context-init/references/project-structure.md",
-        "sha256": "edb09c507448b55f7d187632d3bfb5caeb77034a0c5810674c29617606805240",
-        "size": 4135
+        "sha256": "d9e97bf375410420524815d6e3f7a08f7ff150124b3108264da608fba868f6c0",
+        "size": 4213
       },
       {
-        "git_blob": "24834cafe29dadaa34a6420e3313929d8191fe9a",
+        "git_blob": "75393775225753f2685c96df21c9a44d96445527",
         "mode": "100644",
         "path": "src/skills/ai-context-init/skill-package.yaml",
-        "sha256": "62e7f99f47d70c795860e1681e3ad2af3923115c00c07d514f958598ca94ccb7",
+        "sha256": "b9bc886f7ba0fb8d22c66b481ec4a670d69018e2b8a420edc1a185ca5b2133ab",
         "size": 1915
       },
       {
@@ -2263,11 +2361,11 @@
         "size": 3342
       },
       {
-        "git_blob": "61425433f3f600dc47df926ed830effdf27e44a1",
+        "git_blob": "f2e784503f16f946bb65b060afb8c0a5b73c84c9",
         "mode": "100644",
         "path": "src/skills/ai-context-init/templates/project-config.template.yaml",
-        "sha256": "1b70d0217e70237261890dbeff28d856403e1082fc9d9d82218db90374a743d4",
-        "size": 1059
+        "sha256": "03a3b297828df123198381ad68357e13ddad865e5524b7ad40987bce858d47be",
+        "size": 1611
       },
       {
         "git_blob": "884ee7a34698a1a759884fbdcb254cbc0dcce41a",
@@ -2319,34 +2417,6 @@
         "size": 593
       },
       {
-        "git_blob": "d0de71981c4e1a7b808240d95325d2fe04ffcec8",
-        "mode": "100644",
-        "path": "src/skills/bdd-gwt-test-designer/SKILL.md",
-        "sha256": "dc3beee8d47ab3e2c78dac16d78ddf410af27ebeac8486b0e005ca1270d15cf2",
-        "size": 1914
-      },
-      {
-        "git_blob": "41cbf482ad4d1b612cb1236597cd1fbbec6aa5df",
-        "mode": "100644",
-        "path": "src/skills/bdd-gwt-test-designer/references/design.md",
-        "sha256": "6e1818ec85603d790103d62736ef10aed99c925e97f40ec02ecd5ddf9b338958",
-        "size": 9369
-      },
-      {
-        "git_blob": "5aa02943cb09adf5fb540b1042524885816849a3",
-        "mode": "100644",
-        "path": "src/skills/bdd-gwt-test-designer/references/review.md",
-        "sha256": "07862be20d7f4d3c9a640705d2452d882acdce4a32440a26090f0de6f54f5828",
-        "size": 7261
-      },
-      {
-        "git_blob": "49acefdd7a6a136a84103fc5b60682f48d99a578",
-        "mode": "100644",
-        "path": "src/skills/bdd-gwt-test-designer/skill-package.yaml",
-        "sha256": "d0f2326724037c1598689f1c4132fd60fe8124b2f5c807a0f6bec2c897190055",
-        "size": 2009
-      },
-      {
         "git_blob": "3a15a5884ce5e2f9b2d806bbb01be68895e657d0",
         "mode": "100644",
         "path": "src/skills/code-reviewer/SKILL.md",
@@ -2361,11 +2431,11 @@
         "size": 11495
       },
       {
-        "git_blob": "9a035a811a81de6e324c8b08e3f19f1e48c1347d",
+        "git_blob": "f052f44e256390e0aab8b5e0ddc1b0d45d8881b1",
         "mode": "100644",
         "path": "src/skills/code-reviewer/skill-package.yaml",
-        "sha256": "d78418616c5ea276f895824c1e27057894ef5148cb931a43c00ab8fa05b88e47",
-        "size": 1582
+        "sha256": "363279561726769b5aed5180340264f865a6829dc769b8398b4b3f8acfc36cb6",
+        "size": 1802
       },
       {
         "git_blob": "56412b6048769ec0799c0fdf7cb2a79546befb85",
@@ -2375,25 +2445,25 @@
         "size": 1442
       },
       {
-        "git_blob": "4832bf93989736c32896c4cea8509301a5a4ea9d",
+        "git_blob": "edcfddff7a1cdf4bea4c0437d6a9198b74b02514",
         "mode": "100644",
         "path": "src/skills/ddd-ca-hex-architect/references/design.md",
-        "sha256": "3e0baee2446b9ba2c1b1969a240daf519b9b99f1052f5cf011c6d13c97674dfa",
-        "size": 8333
+        "sha256": "441b5e03f16ddacbfff792a9ae2c403b40107d9540711c3ee8ed8a8b627dd1ea",
+        "size": 8904
       },
       {
-        "git_blob": "9cbda9cfc457decc4cfff6132c3f136915e83495",
+        "git_blob": "d7bc7a02ef25e9f900f34ce63082fc7212f8d61e",
         "mode": "100644",
         "path": "src/skills/ddd-ca-hex-architect/references/review.md",
-        "sha256": "5755c7055b7860eb4a0e8682013c9386f780061340e8bcaf81edbc81f55eaf91",
-        "size": 7402
+        "sha256": "b021e1dd4e003dda2def0e8112dbecce5a4a460c25c946eed19840aa812debb2",
+        "size": 7973
       },
       {
-        "git_blob": "96072b04c1408278e00cfd9dd2af0ad7cfd8e721",
+        "git_blob": "f95150a3b53ed6c149915d72cc703d03a4398c36",
         "mode": "100644",
         "path": "src/skills/ddd-ca-hex-architect/skill-package.yaml",
-        "sha256": "450a044c9b30419963b8e0530bb8f45870fb285a77aad93bf81481c1ff380a5d",
-        "size": 2265
+        "sha256": "9670fb9a2e80dda5b2bb72760b707a280ec85b0374f5350c95982b2ea3f3de3f",
+        "size": 2796
       },
       {
         "git_blob": "6ade5c42b11c42d53df3e40b741aecd9943d1fd0",
@@ -2543,18 +2613,18 @@
         "size": 1708
       },
       {
-        "git_blob": "346c15fbf6a201a2e9594e9f9cf2261c2f86786b",
+        "git_blob": "e4da9057889b1b9ab1bf6bc9289bd92ed815e553",
         "mode": "100644",
         "path": "src/skills/local-change-implementer/references/implement.md",
-        "sha256": "932de795e2508947e41c714683685bc6f7a807b254329e4ca5232080248d5488",
-        "size": 8396
+        "sha256": "370e8ca423f63406eba49788db7e7057dc557cfc54ff4de53c2c8f7b0e5526ad",
+        "size": 9997
       },
       {
-        "git_blob": "ee0c56f7f9012d1b3964fcf2aea7ec2c30787b7a",
+        "git_blob": "df2feee1a236b719058bff0a1eac651b4d868dda",
         "mode": "100644",
         "path": "src/skills/local-change-implementer/skill-package.yaml",
-        "sha256": "ffb44108af56051b60255f18442f9b7e77702c2d3d332c4a38721937adc76a32",
-        "size": 1864
+        "sha256": "d8cc8a82ab368e9390cbde96ca3f387cceaa6a59abe61c49e9c860a42452dd92",
+        "size": 2007
       },
       {
         "git_blob": "052c360188916a9d9f9d7b0c26ba25d1d750a3c9",
@@ -2697,18 +2767,32 @@
         "size": 168
       },
       {
-        "git_blob": "170a9cdf819b1b12f05cf7ff42a82fe69f54678c",
+        "git_blob": "878bdd2951684b66f9cfb37382a334fccb525f18",
         "mode": "100644",
         "path": "src/skills/requirement-author/SKILL.md",
-        "sha256": "2bc9fa947c3ae69404f888970c4b65a1c0698aad695c5c2b6ef2e61046071f0b",
-        "size": 1620
+        "sha256": "5ddc4bd32bf487b3745ac5d96321e391c63685372e15fc08311de656a1f0c31a",
+        "size": 2471
       },
       {
-        "git_blob": "e7a5529b70d18392e034178def2c3d6be03a51af",
+        "git_blob": "748ea98a8062992883d545df2a154c6e89874ff1",
         "mode": "100644",
         "path": "src/skills/requirement-author/references/authoring.md",
-        "sha256": "c75fdb5ddc59e87cdcd7c5ccb1465af2a44576e6b6a6b74e2fe67de81d1e1924",
-        "size": 6436
+        "sha256": "532758e05eb9813963c02b5141530260be90064b5d0d70394af1cae202a2ef0c",
+        "size": 6782
+      },
+      {
+        "git_blob": "b3a74f684f3852a32f2d3c4db7951f05df391f89",
+        "mode": "100644",
+        "path": "src/skills/requirement-author/references/explore.md",
+        "sha256": "47a17186109711aaaaf2c65c0a4e8b20c55ed6466c3b7db7abc736d5daa783f4",
+        "size": 4547
+      },
+      {
+        "git_blob": "d84e49329563196264ae8c9c95ae498c50870a96",
+        "mode": "100644",
+        "path": "src/skills/requirement-author/references/knowledge.md",
+        "sha256": "e76555bb7d77e9d6858d364fca2a33052b40c3da575882a9870b92668c5a0d2b",
+        "size": 3830
       },
       {
         "git_blob": "11d6b65bb499125b014fcd14bbdc908a4e8a8cde",
@@ -2725,11 +2809,11 @@
         "size": 2761
       },
       {
-        "git_blob": "e2c028ca467f48ae765b188bd6602a9faa232051",
+        "git_blob": "f97d5514056b2eb485f3064eb957e6845a6e1069",
         "mode": "100644",
         "path": "src/skills/requirement-author/skill-package.yaml",
-        "sha256": "baac6533283e998d20b43a9f2a7b817565928eee6070a85a80e05f45f6cd2d46",
-        "size": 1520
+        "sha256": "123f6eac3806bc3d2728ad5fb04c5027ba7e585118509b4c671342ef84977391",
+        "size": 2552
       },
       {
         "git_blob": "37a1c3bbb2f0635702000e942e058b99830b5fde",
@@ -2739,11 +2823,11 @@
         "size": 1994
       },
       {
-        "git_blob": "396bf271c8f0ec3d51c859976b1071ae12c829b5",
+        "git_blob": "27c5a39bc920cf0e1c7c54f6c1201abbb985dba5",
         "mode": "100644",
         "path": "src/skills/slice-implementer/references/implement.md",
-        "sha256": "08ba36b4571651cd79cc2ff1f5b76ac50a72ab35a04414f3974438e675bc89a6",
-        "size": 9695
+        "sha256": "850126f2b3b3bb612136da1faba6c300812b176781b115b69fa5d8018610c5cf",
+        "size": 11655
       },
       {
         "git_blob": "c49ab4ae17b24f9b7d102e91b89fc6422f95d0ad",
@@ -2788,11 +2872,11 @@
         "size": 2844
       },
       {
-        "git_blob": "89fb016c3d0253590d7f6f26ae1267a09ffc8210",
+        "git_blob": "033e6da6eb1556e2eb63df8ec7f4a876e4d94d53",
         "mode": "100644",
         "path": "src/skills/slice-implementer/skill-package.yaml",
-        "sha256": "6842c837b4359fc5f219eb449ed8d8aa239fd6702c091096e7453f01f5d2c9e5",
-        "size": 2431
+        "sha256": "6772a1b34fc7a97a77ae22b533238ef5a1fad07df8fd431453f7795547e8bb5b",
+        "size": 2648
       },
       {
         "git_blob": "5ab579e3b1c6a0b9d1f8ccb120868f9b6330ca8f",
@@ -2802,25 +2886,25 @@
         "size": 1645
       },
       {
-        "git_blob": "dfdfec28727f3ef211e8261707175f448fd5abb5",
+        "git_blob": "473f1ac4a5131af8076d02a60313440c4299635f",
         "mode": "100644",
         "path": "src/skills/software-development-orchestrator/references/orchestrate.md",
-        "sha256": "332df2bd353bb4649508f254030fd848376cf8142e3923b4de1657fab6383f83",
-        "size": 7490
+        "sha256": "630a5932821842d45a74c5670162594b163c352cc3a8518505df6a892014fbb4",
+        "size": 10691
       },
       {
-        "git_blob": "f81fbedf920315eadd3e746d90e0a811257364b6",
+        "git_blob": "2aabcb0577a760c016769de58aab96e58fb5ef76",
         "mode": "100644",
         "path": "src/skills/software-development-orchestrator/skill-package.yaml",
-        "sha256": "5cdae28a35f051fa4d8fee2ca1d5eb1139207df86ab6291cf1c2221bc9a0989a",
-        "size": 1677
+        "sha256": "140e0a4ecf4e1783c16378ffe411c9761970dddd4678db13a471ae9f58525883",
+        "size": 1687
       },
       {
-        "git_blob": "bb290b95639cb602563feef45175fe0d9a57d2c6",
+        "git_blob": "43e9a06a2b67552aeeaf90751f134fa0a5b3a5c0",
         "mode": "100644",
         "path": "src/skills/spec-author/SKILL.md",
-        "sha256": "3d69af228904426406b0dfa31a5bc5b96fb5bad22161fc3ee1d146e0146fee19",
-        "size": 1845
+        "sha256": "5723a4ddc03fdd8153d45d819f4aacd0eb47a8382c36ebafe177f80f291710d4",
+        "size": 2161
       },
       {
         "git_blob": "ce669c851d6535dad4946b89fb42a1cc021beb60",
@@ -2830,11 +2914,11 @@
         "size": 1922
       },
       {
-        "git_blob": "4b3a9cc5538cc90a9509bfc60f1d90f39e8ec925",
+        "git_blob": "c6c590b0581fe8c32deb49047042b817f240d113",
         "mode": "100644",
         "path": "src/skills/spec-author/references/authoring.md",
-        "sha256": "521cd217af6eeb31a2095ef3b5945d93af99129f7209e729b975f3189a559510",
-        "size": 7996
+        "sha256": "2149efb19f3a1786e9228ee1493359ca729f0b84f0ab3d0446a29213006c11da",
+        "size": 8644
       },
       {
         "git_blob": "8c2e38dfe097cadfd4fc6992d8d1789041a1a0de",
@@ -2844,13 +2928,6 @@
         "size": 1901
       },
       {
-        "git_blob": "9c0abdd96b773184dd62a54b1b6c0ee0e1a4e596",
-        "mode": "100644",
-        "path": "src/skills/spec-author/references/formal-test-template.md",
-        "sha256": "77e554da50aec47d6db41796527eb78e7e0edf0d7874cd0123bb0c0ece542fa5",
-        "size": 2484
-      },
-      {
         "git_blob": "9e1a416f48c36968b2384fc45aa5e6b3ab7164d9",
         "mode": "100644",
         "path": "src/skills/spec-author/references/production-template.md",
@@ -2858,25 +2935,25 @@
         "size": 2175
       },
       {
-        "git_blob": "c91def5923610627166d3c6f445e79161cc29c3b",
+        "git_blob": "fd8255065964de173bd16a8666ef0399a045a958",
         "mode": "100644",
         "path": "src/skills/spec-author/references/spec-guide.md",
-        "sha256": "ed1c7f0e7b9c3e17ce37d6be8d7f6bf520ef76bdfec11c23f84e18a5134d8e1c",
-        "size": 2210
+        "sha256": "66d36d144bdf9e24cef32ba75a544b2815a942f28afb0631edf2ad38f490b8e0",
+        "size": 2651
       },
       {
-        "git_blob": "494df1879a8de6e6f8696d47b7155f6cf885409a",
+        "git_blob": "eb6cfd0a29f8605ae5521cdffcae26163800b670",
         "mode": "100644",
         "path": "src/skills/spec-author/references/spec-organization-guide.md",
-        "sha256": "2787c86c4072f26c9bb7fe5bad39f2db635e88ad1f1fd407e685851502971197",
-        "size": 1700
+        "sha256": "965da2ba7ef15c1cff1899d0b4ef182b7dec359b1acf4cfb92a1ea05f164736f",
+        "size": 1981
       },
       {
-        "git_blob": "30e524a346b51de9671591613bce68fa358ecc19",
+        "git_blob": "e0093f7c2316234f5ab94c6b4cfc3974d271be4a",
         "mode": "100644",
         "path": "src/skills/spec-author/skill-package.yaml",
-        "sha256": "bbac20ca3e5c33f62b82020baf1e3c56fc21c9d3dcbae5b2ae262f5ee7b84b89",
-        "size": 1697
+        "sha256": "7fc540812c3e7f691699b329b1d7fda4f0a38c1ccab70a117153d060b3c2cd50",
+        "size": 1674
       },
       {
         "git_blob": "6b49026eb666a9e1cee48c7dcb4ceb920ecea568",
@@ -2919,6 +2996,195 @@
         "path": "src/skills/spec-compliance-validator/skill-package.yaml",
         "sha256": "aedc751c6543dd905b84c40ef1f4f0aeaa58e40e75f723756e3929f6ba477410",
         "size": 1749
+      },
+      {
+        "git_blob": "2c57b0d546d3de3aaadbe2a455b7d77f35e8abfb",
+        "mode": "100644",
+        "path": "src/skills/test-designer/SKILL.md",
+        "sha256": "102b9d5eb910af7b65e1d3914f8dd1f3c231b22eb9207c4d8b49062c31bf32ca",
+        "size": 2899
+      },
+      {
+        "git_blob": "6667b43c15ffcf3a630c3d4975bdd766bf885bca",
+        "mode": "100644",
+        "path": "src/skills/test-designer/references/design.md",
+        "sha256": "8dc4cc9ea99ed23014e29fa1a0024b6de43d800dc38a62ab2ad19d745e506cca",
+        "size": 12893
+      },
+      {
+        "git_blob": "2c19dbe3c8dde3da55b56209da465e8b9c92ecec",
+        "mode": "100644",
+        "path": "src/skills/test-designer/references/formal-test-template.md",
+        "sha256": "fac525f419faa7ea3425ab04b8e6c97b7e87273eee0d603e2791858d1875ff2d",
+        "size": 3826
+      },
+      {
+        "git_blob": "9c6daef51061c099f10326dfe8fdc09622823353",
+        "mode": "100644",
+        "path": "src/skills/test-designer/references/review.md",
+        "sha256": "b281687f1c689b2c558bdf1ce4c3c4530c720a3deca248cc80c95ff542c7ee5c",
+        "size": 9521
+      },
+      {
+        "git_blob": "ecfcf9d299f4d2fa4d62ef8cd708f79cf56dda5f",
+        "mode": "100644",
+        "path": "src/skills/test-designer/skill-package.yaml",
+        "sha256": "1f9256f028aab04f2fb5440311df1fcfda692bc12039052bafcc3e2ad8977c19",
+        "size": 2330
+      },
+      {
+        "git_blob": "936003aa3faecdf9f368f14d5601a6006d637409",
+        "mode": "100644",
+        "path": "src/skills/user-story-author/SKILL.md",
+        "sha256": "9b64cc99e9d18e546edcfc02cc8b0fcc2e7f307ba7f1239eeff3cacc46330a54",
+        "size": 1909
+      },
+      {
+        "git_blob": "7836efd9736a8b107bfb1a9ddee637995b620ae7",
+        "mode": "100644",
+        "path": "src/skills/user-story-author/references/authoring.md",
+        "sha256": "3c2218aeccc8b8a19974405e3cc76f23d2dcf7fea1cdff4bbab403ab96342211",
+        "size": 1948
+      },
+      {
+        "git_blob": "def1a652503ae90b4b90e981005361947e6ba17a",
+        "mode": "100644",
+        "path": "src/skills/user-story-author/references/examples.md",
+        "sha256": "7e52b0454454af03fc846fd59d4ca8d02edaf08dbb7cdb20e0c0ceca018d46ce",
+        "size": 7883
+      },
+      {
+        "git_blob": "d20f4f303a65b3c5f28d0d3f9449133f746307b5",
+        "mode": "100644",
+        "path": "src/skills/user-story-author/references/plan.md",
+        "sha256": "be5b8bf91a31663254d22f13ca6bed8752045ae8150feac57e0d52a550cfe4b2",
+        "size": 1603
+      },
+      {
+        "git_blob": "827b0fb0ce451c7e42c0ad00ea2885a8eb41c543",
+        "mode": "100644",
+        "path": "src/skills/user-story-author/references/review.md",
+        "sha256": "3d69ac1d9171d906277301f96e2c81d4b220b3652c1cfb6051b23b4d68ce077c",
+        "size": 1734
+      },
+      {
+        "git_blob": "c05585cdad67af222671c96dce59cf7727e7f38e",
+        "mode": "100644",
+        "path": "src/skills/user-story-author/references/story-contract.md",
+        "sha256": "e3eaa80fa78ab0b734e15ebbce35232188048e7872a8d3d1ecdd105b9e697600",
+        "size": 2242
+      },
+      {
+        "git_blob": "b5e3e771358a96a419f25089a744d8dd154a64e6",
+        "mode": "100644",
+        "path": "src/skills/user-story-author/references/templates/business-rules.md",
+        "sha256": "7d01214280c7e550b6e750321ac6ba384d5288c1872d4de7ff92aa281b052768",
+        "size": 741
+      },
+      {
+        "git_blob": "0af0b3f0592ef4b7b08b92f969df27703969fa8e",
+        "mode": "100644",
+        "path": "src/skills/user-story-author/references/templates/technical.md",
+        "sha256": "cb532448bcfd2912b41e7f3af057718417f0edd77ac112fdecaeafd4f2b1da22",
+        "size": 1147
+      },
+      {
+        "git_blob": "3c51f41ab34842a8c5480722f26d6e7a7cc65d9b",
+        "mode": "100644",
+        "path": "src/skills/user-story-author/references/templates/user-value.md",
+        "sha256": "bad1a6e3ff6a25c1c43faee7982ca121c9c29719b794f0d113eda7114cd08835",
+        "size": 828
+      },
+      {
+        "git_blob": "20f00255421872cc79d48ef41fb430dba2ad8985",
+        "mode": "100644",
+        "path": "src/skills/user-story-author/skill-package.yaml",
+        "sha256": "28eed6d6858eef83ae15033d74447bf6bf02633d47e934faffbaf2aeebdfe1f6",
+        "size": 2172
+      },
+      {
+        "git_blob": "20720db2e98bf92412b8130400378f088b86c7b9",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/SKILL.md",
+        "sha256": "23ff1ceae7931c039df707ec4d55f5c97db5aa75a8da69ae29a9117cad313544",
+        "size": 1762
+      },
+      {
+        "git_blob": "e64aff150e1ff0ce363c247fa150ed434fe20c03",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/references/git-format.md",
+        "sha256": "56bac388436e2e64b46ca547a3797907800493cb522d3ff21d26d578ead81bd9",
+        "size": 7288
+      },
+      {
+        "git_blob": "58893d1b59218e94f4b1533a7f269acaf1625882",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/references/operations.md",
+        "sha256": "f6ac73a7f7c469c7699ca72cf1a5050b849332e577d50faa810cbeadf15c80fd",
+        "size": 14453
+      },
+      {
+        "git_blob": "2e436f9195ae7961a0693e38779a3c41e3b016b3",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/skill-package.yaml",
+        "sha256": "c7d4660b505e04d5a4733b326c40dea3cfe97743a54b5d82d2ad9ac8d107a29f",
+        "size": 6065
+      },
+      {
+        "git_blob": "24346027c33776f1dbe9a0229a846dbe1458024c",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/tools/workflow-records.py",
+        "sha256": "3d36e64da50bb22f1ad317c6fad2cc043f8124a9c0f6da063c2b560183ab3189",
+        "size": 2395
+      },
+      {
+        "git_blob": "4220340f681948da3d0b4a2ad0d6d10321c6e15b",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/tools/workflow_records/__init__.py",
+        "sha256": "c897ff01ec11455156ac296a3d1626fcd1042ba04125c610b0c63e530d9c359d",
+        "size": 112
+      },
+      {
+        "git_blob": "82e9257f2e8865f25f2797a6a26b03aeb88a1578",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/tools/workflow_records/backup.py",
+        "sha256": "1272e3fc1377b0a6c2d66701b1b6757701bd830db14df0b7a703c942e3e2e846",
+        "size": 23696
+      },
+      {
+        "git_blob": "b32037e1a27618fed78995eff4e386c88d37b353",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/tools/workflow_records/common.py",
+        "sha256": "56fbf5f438377f9f29b0a6c7fcad31270261b928b762660716aef59d351e6b20",
+        "size": 4983
+      },
+      {
+        "git_blob": "3662d6c8afd25ff1fbe8d3b67e1474f0274ab19d",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/tools/workflow_records/contracts.py",
+        "sha256": "2c8559a0798ed803e9d9bdeffe7265b2b2f6a77811c4c15625fb9e6bc041c40a",
+        "size": 4791
+      },
+      {
+        "git_blob": "2c2d729c4d9b35e793c236999ca8cb75d5d522cf",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/tools/workflow_records/git_store.py",
+        "sha256": "0b5b1fdda5b597371ba796eaaf60326f9a8eb367d897cfee978fdf44db720d4c",
+        "size": 13678
+      },
+      {
+        "git_blob": "3387ad9bd66dd5c240b17be5886e897e239aa411",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/tools/workflow_records/service.py",
+        "sha256": "59bcb638b5fab1866ad941371e21f0a06b2df2f48f99f6fd08129e96391cf057",
+        "size": 14195
+      },
+      {
+        "git_blob": "95f566d7e31eadbb91b399dd59eb1ba2ec351311",
+        "mode": "100644",
+        "path": "src/skills/workflow-records/tools/workflow_records/sqlite_store.py",
+        "sha256": "48962010e2734db075396cecabafad6eb905f446707b3bfaae3076e0eb21cd18",
+        "size": 24267
       },
       {
         "git_blob": "947c15a1f220b1950d9f0e974d77a3084de08165",
@@ -3412,17 +3678,30 @@
           {
             "id": "engineering-common",
             "kind": "knowledge",
-            "version": "0.1.0"
+            "version": "0.3.0"
           }
         ],
-        "version": "0.1.0"
+        "version": "0.1.4"
       },
       {
         "id": "engineering-common",
         "kind": "knowledge",
         "members": [
           "README.md",
+          "bdd/README.md",
+          "bdd/automation.md",
+          "bdd/discovery.md",
+          "bdd/examples/library-renewal.md",
+          "bdd/formulation.md",
+          "bdd/gherkin.md",
           "content-package.yaml",
+          "ddd/README.md",
+          "ddd/domain-discovery.md",
+          "ddd/examples/order-cancellation.md",
+          "ddd/model-evolution.md",
+          "ddd/strategic-design.md",
+          "ddd/tactical-design.md",
+          "discovery/collaborative-discovery.md",
           "domain-language/README.MD",
           "domain-language/templates/aggregate-vocabulary-template.md",
           "domain-language/templates/bounded-context-language-template.md",
@@ -3440,13 +3719,14 @@
           "references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md",
           "references/PROMPT-PORTABILITY-RULES.md",
           "references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
-          "references/TECHNOLOGY-SELECTION-POLICY.md"
+          "references/TECHNOLOGY-SELECTION-POLICY.md",
+          "references/TEST-DESIGN-HANDOFF-CONTRACT.md"
         ],
         "metadata": "content-package.yaml",
         "metadata_version": 1,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.1.0"
+        "version": "0.3.0"
       },
       {
         "id": "adr-author",
@@ -3494,7 +3774,7 @@
         "metadata_version": 3,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.1.0"
+        "version": "0.1.1"
       },
       {
         "id": "ai-context-init",
@@ -3520,35 +3800,7 @@
         "metadata_version": 3,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.0"
-      },
-      {
-        "id": "bdd-gwt-test-designer",
-        "kind": "skill",
-        "members": [
-          "SKILL.md",
-          "references/design.md",
-          "references/review.md",
-          "skill-package.yaml"
-        ],
-        "metadata": "skill-package.yaml",
-        "metadata_version": 4,
-        "optional_dependencies": [
-          {
-            "id": "dotnet-backend",
-            "kind": "knowledge",
-            "on_missing": "unavailable",
-            "version": "0.1.0"
-          },
-          {
-            "id": "engineering-common",
-            "kind": "knowledge",
-            "on_missing": "unavailable",
-            "version": "0.1.0"
-          }
-        ],
-        "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.2.1"
       },
       {
         "id": "code-reviewer",
@@ -3565,17 +3817,17 @@
             "id": "dotnet-backend",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.1.4"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.3.0"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.2.4"
       },
       {
         "id": "ddd-ca-hex-architect",
@@ -3593,17 +3845,17 @@
             "id": "dotnet-backend",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.1.4"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.3.0"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.3.1"
       },
       {
         "id": "diagnostic-analyst",
@@ -3673,17 +3925,17 @@
             "id": "dotnet-backend",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.1.4"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.3.0"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.2.5"
       },
       {
         "id": "pr-author",
@@ -3733,15 +3985,24 @@
         "members": [
           "SKILL.md",
           "references/authoring.md",
+          "references/explore.md",
+          "references/knowledge.md",
           "references/requirement-guide.md",
           "references/requirement-template.md",
           "skill-package.yaml"
         ],
         "metadata": "skill-package.yaml",
-        "metadata_version": 3,
-        "optional_dependencies": [],
+        "metadata_version": 4,
+        "optional_dependencies": [
+          {
+            "id": "engineering-common",
+            "kind": "knowledge",
+            "on_missing": "unavailable",
+            "version": "0.3.0"
+          }
+        ],
         "required_dependencies": [],
-        "version": "0.1.0"
+        "version": "0.2.1"
       },
       {
         "id": "slice-implementer",
@@ -3764,17 +4025,17 @@
             "id": "dotnet-backend",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.1.4"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.3.0"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.2.5"
       },
       {
         "id": "software-development-orchestrator",
@@ -3788,7 +4049,7 @@
         "metadata_version": 4,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.3.2"
       },
       {
         "id": "spec-author",
@@ -3798,7 +4059,6 @@
           "references/adapter-template.md",
           "references/authoring.md",
           "references/entity-template.md",
-          "references/formal-test-template.md",
           "references/production-template.md",
           "references/spec-guide.md",
           "references/spec-organization-guide.md",
@@ -3808,7 +4068,7 @@
         "metadata_version": 3,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.1.0"
+        "version": "0.2.0"
       },
       {
         "id": "spec-compliance-validator",
@@ -3823,6 +4083,79 @@
         ],
         "metadata": "skill-package.yaml",
         "metadata_version": 3,
+        "optional_dependencies": [],
+        "required_dependencies": [],
+        "version": "0.1.0"
+      },
+      {
+        "id": "test-designer",
+        "kind": "skill",
+        "members": [
+          "SKILL.md",
+          "references/design.md",
+          "references/formal-test-template.md",
+          "references/review.md",
+          "skill-package.yaml"
+        ],
+        "metadata": "skill-package.yaml",
+        "metadata_version": 4,
+        "optional_dependencies": [
+          {
+            "id": "dotnet-backend",
+            "kind": "knowledge",
+            "on_missing": "unavailable",
+            "version": "0.1.4"
+          },
+          {
+            "id": "engineering-common",
+            "kind": "knowledge",
+            "on_missing": "unavailable",
+            "version": "0.3.0"
+          }
+        ],
+        "required_dependencies": [],
+        "version": "0.4.1"
+      },
+      {
+        "id": "user-story-author",
+        "kind": "skill",
+        "members": [
+          "SKILL.md",
+          "references/authoring.md",
+          "references/examples.md",
+          "references/plan.md",
+          "references/review.md",
+          "references/story-contract.md",
+          "references/templates/business-rules.md",
+          "references/templates/technical.md",
+          "references/templates/user-value.md",
+          "skill-package.yaml"
+        ],
+        "metadata": "skill-package.yaml",
+        "metadata_version": 3,
+        "optional_dependencies": [],
+        "required_dependencies": [],
+        "version": "0.1.0"
+      },
+      {
+        "id": "workflow-records",
+        "kind": "skill",
+        "members": [
+          "SKILL.md",
+          "references/git-format.md",
+          "references/operations.md",
+          "skill-package.yaml",
+          "tools/workflow-records.py",
+          "tools/workflow_records/__init__.py",
+          "tools/workflow_records/backup.py",
+          "tools/workflow_records/common.py",
+          "tools/workflow_records/contracts.py",
+          "tools/workflow_records/git_store.py",
+          "tools/workflow_records/service.py",
+          "tools/workflow_records/sqlite_store.py"
+        ],
+        "metadata": "skill-package.yaml",
+        "metadata_version": 5,
         "optional_dependencies": [],
         "required_dependencies": [],
         "version": "0.1.0"
@@ -3928,18 +4261,18 @@
       "id": "aicf-catalog-assembly",
       "implementation": [
         {
-          "git_blob": "78f0052e0c006c9431d4b0592a7a389af3056f21",
+          "git_blob": "4a31424ed52d8de63d77c739fdfda84fa7194dfc",
           "mode": "100644",
           "path": "src/adapters/claude/skill-entry-v2.md.template",
-          "sha256": "11eeedac1452cc78e9ab7726791c5032b2379815ea15e8fb0f8fb11d921d032e",
-          "size": 1201
+          "sha256": "4a0ef01a22ecb4511e003da9998274d8c1a4ec482b6acf03c8f4c508a9efd966",
+          "size": 1418
         },
         {
-          "git_blob": "3592b853bea3a18ebaa84ea1a2ee35db67392d88",
+          "git_blob": "7799aec0ab0b283c26d21889b92144d638eaad90",
           "mode": "100644",
           "path": "src/adapters/codex/skill-entry-v2.md.template",
-          "sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4",
-          "size": 1199
+          "sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6",
+          "size": 1416
         },
         {
           "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
@@ -3963,25 +4296,25 @@
           "size": 11564
         },
         {
-          "git_blob": "2e765101e7264f773c7c695a5cb007642686c029",
+          "git_blob": "f5c45d433820f5ebd60188ff04d8ddfbfb7f31eb",
           "mode": "100644",
           "path": "src/distribution/catalog.py",
-          "sha256": "5b2853de712d04e2cc3a34437d4d22e0869e7cf7d75904e5a9524cc9861d65e4",
-          "size": 38404
+          "sha256": "88db79985cab5c758b62cad95fc88dec13c6415194aa60d725045a81f935004c",
+          "size": 40699
         },
         {
-          "git_blob": "db306ef1659af6f406284df3c1ba2f83aa9823d7",
+          "git_blob": "c0b7faa10371c00e1ed4947f2de41cc0823b8427",
           "mode": "100644",
           "path": "src/distribution/claude.py",
-          "sha256": "47732f37a32c5aa855d09f47aa135c772aded4c41ba9698f6911e1516fea41a8",
-          "size": 4782
+          "sha256": "2c79db10ded390c209145e9539a91bb1bee5c2370b5aa804de64947364afa910",
+          "size": 4863
         },
         {
-          "git_blob": "b472c64202f21793ca1e40456688ddbe1acf2106",
+          "git_blob": "d2ebaa45bb135d8bc7eb8458b185e11574ff1265",
           "mode": "100644",
           "path": "src/distribution/codex.py",
-          "sha256": "8bf874d70818004db05e4721321714390a6d6acf60343cc4533a39517cf79d2e",
-          "size": 7955
+          "sha256": "5fbe00b4e2390ce7ef411105fab8afaa1e22462da381a8f17e8ca3844283d8eb",
+          "size": 8036
         },
         {
           "git_blob": "907320717317a90afe21e79a1bd82ecc1338d7e3",
@@ -3991,11 +4324,11 @@
           "size": 23040
         },
         {
-          "git_blob": "3c93d33b70caaaac1429f1f060ae5fd77810e8c0",
+          "git_blob": "c6174b0ba39ea34bef37a137ddba6f58975ba98f",
           "mode": "100644",
           "path": "src/distribution/contracts.py",
-          "sha256": "4d4c9e3b7da68496dc8c9834882049c913fc9afdf45dc150083989329a58e3a5",
-          "size": 34270
+          "sha256": "9c904ab999ae5efb0722e6b6c9b0ce14809ec9347af4b7e3c3f27196c3a46427",
+          "size": 34561
         },
         {
           "git_blob": "38332e2c55bec156e81f0dab68e298b61b52eda7",
@@ -4047,18 +4380,18 @@
           "size": 5704
         },
         {
-          "git_blob": "45fffbd3a273e8ba0502b9428b9d426c89cdda0e",
+          "git_blob": "ecfe6555bfc495f37dcf04678fbdb8e9e04a7193",
           "mode": "100644",
           "path": "src/distribution/package.py",
-          "sha256": "f0677644df30f0d9f211dc669da6ecdb5ffcb27a90e996b4b9e036d2e610281c",
-          "size": 18372
+          "sha256": "c69e4485213ed195d67d2776fc49ec2c16177391c6311a0a48828eb16510df58",
+          "size": 18988
         },
         {
-          "git_blob": "c7ef28e28529da3344797457b7bb477ff425578e",
+          "git_blob": "794cd8ca0f9cab680f199a5cb6d9a48d04c7f49d",
           "mode": "100644",
           "path": "src/distribution/reinstallation.py",
-          "sha256": "fa3e4332306a8e935de93fc34a3e7eefd9c6bcd8a1fafa134978c8c260fcf768",
-          "size": 21572
+          "sha256": "2fd96222b48ce7d16b917747ecfe2cf4e01eaf00bd0bd687b63e92ab75573f99",
+          "size": 21720
         },
         {
           "git_blob": "22fb3136fa7ccf5d55e0c3078d13b68d05933edf",
@@ -4100,7 +4433,6 @@
         "preset_version": 1,
         "skills": [
           "adr-author",
-          "bdd-gwt-test-designer",
           "code-reviewer",
           "ddd-ca-hex-architect",
           "diagnostic-analyst",
@@ -4113,7 +4445,8 @@
           "slice-implementer",
           "software-development-orchestrator",
           "spec-author",
-          "spec-compliance-validator"
+          "spec-compliance-validator",
+          "test-designer"
         ],
         "version": "0.1.0"
       },
@@ -4128,7 +4461,6 @@
           "adr-author",
           "ai-context-auditor",
           "ai-context-governance",
-          "bdd-gwt-test-designer",
           "code-reviewer",
           "ddd-ca-hex-architect",
           "diagnostic-analyst",
@@ -4141,7 +4473,8 @@
           "slice-implementer",
           "software-development-orchestrator",
           "spec-author",
-          "spec-compliance-validator"
+          "spec-compliance-validator",
+          "test-designer"
         ],
         "version": "0.1.0"
       },
@@ -4166,7 +4499,6 @@
         "knowledge": [],
         "preset_version": 1,
         "skills": [
-          "bdd-gwt-test-designer",
           "code-reviewer",
           "ddd-ca-hex-architect",
           "diagnostic-analyst",
@@ -4175,7 +4507,8 @@
           "requirement-author",
           "slice-implementer",
           "spec-author",
-          "spec-compliance-validator"
+          "spec-compliance-validator",
+          "test-designer"
         ],
         "version": "0.1.0"
       },
@@ -4226,7 +4559,6 @@
         "preset_version": 1,
         "skills": [
           "adr-author",
-          "bdd-gwt-test-designer",
           "code-reviewer",
           "ddd-ca-hex-architect",
           "diagnostic-analyst",
@@ -4238,7 +4570,8 @@
           "slice-implementer",
           "software-development-orchestrator",
           "spec-author",
-          "spec-compliance-validator"
+          "spec-compliance-validator",
+          "test-designer"
         ],
         "version": "0.1.0"
       },
@@ -4293,10 +4626,10 @@
         "version": "0.1.0"
       }
     ],
-    "release_version": "0.19.1",
+    "release_version": "0.20.1",
     "source": {
-      "commit": "42b99e954e3d6fbf595075a079357f0ce1df057f",
-      "tree": "ee283c22d206912b652dd8cddd7b3648769dae8f"
+      "commit": "fba2f031f1c969cd5788af924e307ffebf553422",
+      "tree": "753ae3615fdf8ec2736f52f91eaf4243302dd31e"
     }
   },
   "catalog_inventory": {
@@ -4308,11 +4641,11 @@
         "owner": "claude",
         "path": "adapters/claude/skill-entry-v2.md.template",
         "source": {
-          "git_blob": "78f0052e0c006c9431d4b0592a7a389af3056f21",
+          "git_blob": "4a31424ed52d8de63d77c739fdfda84fa7194dfc",
           "mode": "100644",
           "path": "src/adapters/claude/skill-entry-v2.md.template",
-          "sha256": "11eeedac1452cc78e9ab7726791c5032b2379815ea15e8fb0f8fb11d921d032e",
-          "size": 1201
+          "sha256": "4a0ef01a22ecb4511e003da9998274d8c1a4ec482b6acf03c8f4c508a9efd966",
+          "size": 1418
         }
       },
       {
@@ -4321,11 +4654,11 @@
         "owner": "codex",
         "path": "adapters/codex/skill-entry-v2.md.template",
         "source": {
-          "git_blob": "3592b853bea3a18ebaa84ea1a2ee35db67392d88",
+          "git_blob": "7799aec0ab0b283c26d21889b92144d638eaad90",
           "mode": "100644",
           "path": "src/adapters/codex/skill-entry-v2.md.template",
-          "sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4",
-          "size": 1199
+          "sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6",
+          "size": 1416
         }
       },
       {
@@ -4334,11 +4667,11 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/README.md",
         "source": {
-          "git_blob": "b50ac295b8b66280723d7352da5f4ad10e124372",
+          "git_blob": "945a087e6e3a0ed4c584c558853a10cf62f3d404",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/README.md",
-          "sha256": "2b923bbf2ac026df481ea436e5ca520791f74889d15dd0512c93bfa2df2935cb",
-          "size": 5133
+          "sha256": "c4cbc96b7d8884b62159d1fc10cd4bb3bb7e01a2769df93b28a8f360d94069e5",
+          "size": 5199
         }
       },
       {
@@ -4347,10 +4680,10 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/content-package.yaml",
         "source": {
-          "git_blob": "8d93c44e2b11a583799966ea03a772fc4d41d985",
+          "git_blob": "c6fd311287052cd28a4226ce538b71bd3424ca59",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/content-package.yaml",
-          "sha256": "572ba054265dcd81e9aec19db7a9d542e76e4a1d5ed1856f0cdc92609bdc4a41",
+          "sha256": "abe75bc480f0af6696d1100c48bc7ff63afad639e03bc595d156cb6a8ad7dde4",
           "size": 251999
         }
       },
@@ -4412,10 +4745,10 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/engineering-rule-catalog.yaml",
         "source": {
-          "git_blob": "b800829758ed1b2f77d3fe75a4f15e0dd5d9ce65",
+          "git_blob": "2747cd885d17c4bb724b7668639d38a4e58e92f7",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/engineering-rule-catalog.yaml",
-          "sha256": "4a4724411333670e33605236e1d96c4b470d1a18a895ee7fd7db5dceb86d6887",
+          "sha256": "bb00017d6a690bed72e70a60d065782dbc90ad9ede032747f7f07980828f2f9f",
           "size": 57189
         }
       },
@@ -7220,11 +7553,11 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/standards/coding-standards/controller-standards.md",
         "source": {
-          "git_blob": "3d7683da6d711ee99f1563b8d5f5543ff4a1c648",
+          "git_blob": "3074ed0116b9a80ace0f74863eb423a59062d56b",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/standards/coding-standards/controller-standards.md",
-          "sha256": "c016ed5583f134df6d420223a459a8ed52ebcc53a2be952d51de6332cbb604f3",
-          "size": 8828
+          "sha256": "94fb26807d21f7ac1465d59a09725c59325e2bd1df11758774b427e9eb229478",
+          "size": 9690
         }
       },
       {
@@ -7337,11 +7670,11 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/standards/project-structure.md",
         "source": {
-          "git_blob": "1a9e55db66bdac34935fae1386df80fcf5dc9df1",
+          "git_blob": "383d2e49ae97505c21c4a7d640dcbb19453ace4a",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/standards/project-structure.md",
-          "sha256": "f3db3f4f2a454c7d2e7b4cea97f7c8319307c73a10fb743de595fdf1696068e1",
-          "size": 16830
+          "sha256": "a6e3d0bb9f622d09d179c2a5ce8c5ed13794265b3013a154cad4720a50f1c229",
+          "size": 16994
         }
       },
       {
@@ -7532,11 +7865,89 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/README.md",
         "source": {
-          "git_blob": "1d4f9b1a5ce585dddc1804cf6800b8c6187bd08e",
+          "git_blob": "7987ca106c6a4be76d0743bf656d7cb3d425e7e2",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/README.md",
-          "sha256": "746fa7e049ccf824013ae1f685875d2271831d4f920f93b126fae1947dddd691",
-          "size": 3423
+          "sha256": "397cffe3b8ae9f26e0195ed6519857f6d1e5719350515d06b73f0809b476269a",
+          "size": 3643
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "bdd/README.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/bdd/README.md",
+        "source": {
+          "git_blob": "8fd3cfa1576e72b41f2ff1af1bce8a7fe2bff711",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/README.md",
+          "sha256": "3b1d2cd67880fe2484974b709ba440e7ee13755ba6f42d2dbc9309b37a8c5797",
+          "size": 2521
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "bdd/automation.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/bdd/automation.md",
+        "source": {
+          "git_blob": "441e64592064879dae8161396e91fbaaf3bd1d0e",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/automation.md",
+          "sha256": "38b55607fc432b4f089fe0b186c55a46538c9bacf9488986cf6f242a2399b340",
+          "size": 4890
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "bdd/discovery.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/bdd/discovery.md",
+        "source": {
+          "git_blob": "88ed3b8813e6faa0dd642fe19331441b0e1736a7",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/discovery.md",
+          "sha256": "7c75e78ef4a487f733b46ac856a45347d2c2310b8639b41c34429e5ee06fe76c",
+          "size": 4134
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "bdd/examples/library-renewal.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/bdd/examples/library-renewal.md",
+        "source": {
+          "git_blob": "f8bf5235a0e512274a4a5d028532f6b0c3d47867",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/examples/library-renewal.md",
+          "sha256": "019eefd3d077bab7afdf295e0beef7670841713af69e4ad024e688466204669e",
+          "size": 5017
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "bdd/formulation.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/bdd/formulation.md",
+        "source": {
+          "git_blob": "2910511bbd2d0e0e6e3edfc1ee3e9d3ec692d7b5",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/formulation.md",
+          "sha256": "f2200d77a47e1e0924f6e2f9bccd627889135bd9c4adaf08e01f276af2ef24f8",
+          "size": 4760
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "bdd/gherkin.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/bdd/gherkin.md",
+        "source": {
+          "git_blob": "3ae46961f7e91d6618ee472368b7ef89fbd0a890",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/gherkin.md",
+          "sha256": "2e2f524583e1129f86cd5f1cd267cb9be2270974716e28024b75502114011ab2",
+          "size": 4427
         }
       },
       {
@@ -7545,11 +7956,102 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/content-package.yaml",
         "source": {
-          "git_blob": "26fd1ee92b1089bffc4ea45b7f743176f7067e07",
+          "git_blob": "b1df9391a617939701b5896cd714abd3ca8a9494",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/content-package.yaml",
-          "sha256": "ddb1a0620f53b559446b3e48de608d96667f7c0da8493169dd5ce52d4b9bdfb7",
-          "size": 15708
+          "sha256": "96ec8b442856118055a94d6771316aa1f0473a5bb1b3dfd60a693808d4bbff88",
+          "size": 27148
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "ddd/README.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/ddd/README.md",
+        "source": {
+          "git_blob": "99c11808ecc934d2ac233055385b2473a7459269",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/README.md",
+          "sha256": "206cc26c5d42e7ff6ff7e98401748b154196dd80075514bfdc0d0f928cca3e31",
+          "size": 2448
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "ddd/domain-discovery.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/ddd/domain-discovery.md",
+        "source": {
+          "git_blob": "56fc7a22e64147c0ae1c20510794096bc5f52e47",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/domain-discovery.md",
+          "sha256": "a2d4db1c6ad849c35574b0f4e5421e288b60b309ec93e1ee99801dbd03fdf924",
+          "size": 4220
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "ddd/examples/order-cancellation.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/ddd/examples/order-cancellation.md",
+        "source": {
+          "git_blob": "e70eb03cc6a568cfa34279c70ac113df5eb649bf",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/examples/order-cancellation.md",
+          "sha256": "c4fb57d60de5e95d6a60cb2edaeffa717e5608000d3f911721f3780e75195696",
+          "size": 4645
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "ddd/model-evolution.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/ddd/model-evolution.md",
+        "source": {
+          "git_blob": "5d31af2e42ae0259d500dd1e56814e8e6d367b40",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/model-evolution.md",
+          "sha256": "9ed1893ff94e8c5d7b25aa11ce6dbcf05656adcddab047d7ffab880cae10e50f",
+          "size": 4226
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "ddd/strategic-design.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/ddd/strategic-design.md",
+        "source": {
+          "git_blob": "db7816d01b1c5a0fb55c35534da07f33538b23da",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/strategic-design.md",
+          "sha256": "38141de602dcc569d1fa6fadb42e04d9ab7cad5aa9f7be87450ddeeefb96328d",
+          "size": 4996
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "ddd/tactical-design.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/ddd/tactical-design.md",
+        "source": {
+          "git_blob": "cecc840d9e3c544321a04018c924b2b30799fde6",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/tactical-design.md",
+          "sha256": "be8287d3846a8fea83a3578a9f5baeeedb0c6b326f615cba91fe1cb71e694339",
+          "size": 4381
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "discovery/collaborative-discovery.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/discovery/collaborative-discovery.md",
+        "source": {
+          "git_blob": "ea74672f6d29478297782a65d364ef02d297a860",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/discovery/collaborative-discovery.md",
+          "sha256": "92ebe9a31572acc2e8224d0f718ab5fcc44da679788ba9bba847e362e17026f5",
+          "size": 4256
         }
       },
       {
@@ -7597,11 +8099,11 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/domain-language/templates/domain-event-language-template.md",
         "source": {
-          "git_blob": "cfaf6e4b916f2f567426d058ba2cd25eab76241c",
+          "git_blob": "5819442b80b84187312ebd419da0de9879caa7df",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/domain-language/templates/domain-event-language-template.md",
-          "sha256": "69e32d14f4f4a451349a8784c447b1285e061ffa5ff7571888e279fd1b06f755",
-          "size": 1136
+          "sha256": "e014815a55890c6c203016997bc8a36e3049b6743bd026286cfdfba756394b34",
+          "size": 1240
         }
       },
       {
@@ -7623,11 +8125,11 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/operations/CONTEXT-MAP-GUIDE.MD",
         "source": {
-          "git_blob": "b02abee2fbfafda2a6345f1ee4447055e75a79c8",
+          "git_blob": "5b8833050fdc3923bcb9d26168d04edde5d20c75",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/operations/CONTEXT-MAP-GUIDE.MD",
-          "sha256": "df8cfaf36f4ba228d009985716de940033ab1b79c282da5d6486cfce08d75ba0",
-          "size": 1599
+          "sha256": "c6bc83d3c20058215990dffb990780a59ca7eab5ce03ee8043cbd688734523d7",
+          "size": 4126
         }
       },
       {
@@ -7675,11 +8177,11 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md",
         "source": {
-          "git_blob": "7832a008f451521b81d283dc1c75a4c33454066d",
+          "git_blob": "d1986f01415819e07015121ad258a72affd07057",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md",
-          "sha256": "f4cb699d5e6f6441cfb9064ba05fcc44f0304d29564e9c257f0cb667bd2e7979",
-          "size": 4736
+          "sha256": "36308480bc93f0b46ed342fa899619dc8e20ce9f6300105b43757c86cad6077b",
+          "size": 4734
         }
       },
       {
@@ -7688,11 +8190,11 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/references/AUTHORING-BOUNDARY-CONTRACT.md",
         "source": {
-          "git_blob": "de3c27367a03e3fb67a4a3cf1fcfe9696e786d28",
+          "git_blob": "d80cc9ddf247a03221b889651bdc4c20c5c23598",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/references/AUTHORING-BOUNDARY-CONTRACT.md",
-          "sha256": "026b8ddccce5c7ede941c2c3238fe8d0456e5656a6ac23b2f134280a58910e68",
-          "size": 3931
+          "sha256": "3e8d59c793f5775541bc975043a688814549d8415713124c4e6b4ab2900c36b3",
+          "size": 3940
         }
       },
       {
@@ -7727,11 +8229,11 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/references/GWT-TEST-HANDOFF-CONTRACT.md",
         "source": {
-          "git_blob": "002671ffedcb1e361ff4daf5fd5d059afc1e9c9c",
+          "git_blob": "4dcf2af4efd17e113ec1bcf69b279c60d4729c16",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/references/GWT-TEST-HANDOFF-CONTRACT.md",
-          "sha256": "a1a07886ef436eacdc7cfa4e5e41c5e186313fccb13af53eb7ebac27381c00db",
-          "size": 4249
+          "sha256": "321bb24d926c806dd21c41e837c8241967ce99efb4730738c46030b15efddf74",
+          "size": 4250
         }
       },
       {
@@ -7784,6 +8286,19 @@
           "path": "src/knowledge/engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md",
           "sha256": "09654b188773c63a1dc806286e975787092a2c7fda1116b3a94a2a0ab0406922",
           "size": 4092
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "references/TEST-DESIGN-HANDOFF-CONTRACT.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/references/TEST-DESIGN-HANDOFF-CONTRACT.md",
+        "source": {
+          "git_blob": "ab664f21a4ca823f5d394b1d1015bad557c86048",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/references/TEST-DESIGN-HANDOFF-CONTRACT.md",
+          "sha256": "e32775d4b791cee63db76ae573cab99a5517bb2117d3db85f0392a02134474c0",
+          "size": 4880
         }
       },
       {
@@ -7961,11 +8476,11 @@
         "owner": "ai-context-governance",
         "path": "packages/skill/ai-context-governance/references/maintenance.md",
         "source": {
-          "git_blob": "a5bd92c7053a17f158e3e90faeaac1d4df271d25",
+          "git_blob": "f468e1e3426635f090aa8d2d05648479c6ea3764",
           "mode": "100644",
           "path": "src/skills/ai-context-governance/references/maintenance.md",
-          "sha256": "89d56e0848bb9efcbc3ec1efd7e83ee9e2c392f832f8da13a7a72115fc726e3a",
-          "size": 11749
+          "sha256": "f7c9c2203ee45ff789f8dc693ac33d4ad4af168820ad0f74e28121b8e6a51056",
+          "size": 13327
         }
       },
       {
@@ -7974,10 +8489,10 @@
         "owner": "ai-context-governance",
         "path": "packages/skill/ai-context-governance/skill-package.yaml",
         "source": {
-          "git_blob": "02c7ee665ca1367db062a172b60bd17d601d554e",
+          "git_blob": "d05bcedbadf0284200cb931487b4f43d682fa3c4",
           "mode": "100644",
           "path": "src/skills/ai-context-governance/skill-package.yaml",
-          "sha256": "3189089591f3f2db743dd271882f91c164432ce679cdea3e91fc2a91249fac2a",
+          "sha256": "1b12e07836532565725a365a776573f2ac75c3ab4e0c2836102b77fbfa857f35",
           "size": 1450
         }
       },
@@ -8000,11 +8515,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/references/initialize.md",
         "source": {
-          "git_blob": "008c1997a65bad39327c873a806bc28fd2cf8dfe",
+          "git_blob": "9dbe241c5b77efb8b31dfe031adf8bcf546fcd00",
           "mode": "100644",
           "path": "src/skills/ai-context-init/references/initialize.md",
-          "sha256": "b3f463e90de97c80fd4b2b8c1809d05c3c5caf6ff7cb765552604d48dc21dd35",
-          "size": 11501
+          "sha256": "f8dc2d9fdc78d81e0de87fb0e08e95690b72a66934cdf6bee48d0323e6ead7e4",
+          "size": 11819
         }
       },
       {
@@ -8013,11 +8528,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/references/project-structure.md",
         "source": {
-          "git_blob": "defbb6c0f7220bc4a068367fe82d88bd7fcc15b0",
+          "git_blob": "376ed9b374848edb92821ad642e7e09c2c4c07f4",
           "mode": "100644",
           "path": "src/skills/ai-context-init/references/project-structure.md",
-          "sha256": "edb09c507448b55f7d187632d3bfb5caeb77034a0c5810674c29617606805240",
-          "size": 4135
+          "sha256": "d9e97bf375410420524815d6e3f7a08f7ff150124b3108264da608fba868f6c0",
+          "size": 4213
         }
       },
       {
@@ -8026,10 +8541,10 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/skill-package.yaml",
         "source": {
-          "git_blob": "24834cafe29dadaa34a6420e3313929d8191fe9a",
+          "git_blob": "75393775225753f2685c96df21c9a44d96445527",
           "mode": "100644",
           "path": "src/skills/ai-context-init/skill-package.yaml",
-          "sha256": "62e7f99f47d70c795860e1681e3ad2af3923115c00c07d514f958598ca94ccb7",
+          "sha256": "b9bc886f7ba0fb8d22c66b481ec4a670d69018e2b8a420edc1a185ca5b2133ab",
           "size": 1915
         }
       },
@@ -8078,11 +8593,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/templates/project-config.template.yaml",
         "source": {
-          "git_blob": "61425433f3f600dc47df926ed830effdf27e44a1",
+          "git_blob": "f2e784503f16f946bb65b060afb8c0a5b73c84c9",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/project-config.template.yaml",
-          "sha256": "1b70d0217e70237261890dbeff28d856403e1082fc9d9d82218db90374a743d4",
-          "size": 1059
+          "sha256": "03a3b297828df123198381ad68357e13ddad865e5524b7ad40987bce858d47be",
+          "size": 1611
         }
       },
       {
@@ -8179,58 +8694,6 @@
       {
         "kind": "skill",
         "member": "SKILL.md",
-        "owner": "bdd-gwt-test-designer",
-        "path": "packages/skill/bdd-gwt-test-designer/SKILL.md",
-        "source": {
-          "git_blob": "d0de71981c4e1a7b808240d95325d2fe04ffcec8",
-          "mode": "100644",
-          "path": "src/skills/bdd-gwt-test-designer/SKILL.md",
-          "sha256": "dc3beee8d47ab3e2c78dac16d78ddf410af27ebeac8486b0e005ca1270d15cf2",
-          "size": 1914
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "references/design.md",
-        "owner": "bdd-gwt-test-designer",
-        "path": "packages/skill/bdd-gwt-test-designer/references/design.md",
-        "source": {
-          "git_blob": "41cbf482ad4d1b612cb1236597cd1fbbec6aa5df",
-          "mode": "100644",
-          "path": "src/skills/bdd-gwt-test-designer/references/design.md",
-          "sha256": "6e1818ec85603d790103d62736ef10aed99c925e97f40ec02ecd5ddf9b338958",
-          "size": 9369
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "references/review.md",
-        "owner": "bdd-gwt-test-designer",
-        "path": "packages/skill/bdd-gwt-test-designer/references/review.md",
-        "source": {
-          "git_blob": "5aa02943cb09adf5fb540b1042524885816849a3",
-          "mode": "100644",
-          "path": "src/skills/bdd-gwt-test-designer/references/review.md",
-          "sha256": "07862be20d7f4d3c9a640705d2452d882acdce4a32440a26090f0de6f54f5828",
-          "size": 7261
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "skill-package.yaml",
-        "owner": "bdd-gwt-test-designer",
-        "path": "packages/skill/bdd-gwt-test-designer/skill-package.yaml",
-        "source": {
-          "git_blob": "49acefdd7a6a136a84103fc5b60682f48d99a578",
-          "mode": "100644",
-          "path": "src/skills/bdd-gwt-test-designer/skill-package.yaml",
-          "sha256": "d0f2326724037c1598689f1c4132fd60fe8124b2f5c807a0f6bec2c897190055",
-          "size": 2009
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "SKILL.md",
         "owner": "code-reviewer",
         "path": "packages/skill/code-reviewer/SKILL.md",
         "source": {
@@ -8260,11 +8723,11 @@
         "owner": "code-reviewer",
         "path": "packages/skill/code-reviewer/skill-package.yaml",
         "source": {
-          "git_blob": "9a035a811a81de6e324c8b08e3f19f1e48c1347d",
+          "git_blob": "f052f44e256390e0aab8b5e0ddc1b0d45d8881b1",
           "mode": "100644",
           "path": "src/skills/code-reviewer/skill-package.yaml",
-          "sha256": "d78418616c5ea276f895824c1e27057894ef5148cb931a43c00ab8fa05b88e47",
-          "size": 1582
+          "sha256": "363279561726769b5aed5180340264f865a6829dc769b8398b4b3f8acfc36cb6",
+          "size": 1802
         }
       },
       {
@@ -8286,11 +8749,11 @@
         "owner": "ddd-ca-hex-architect",
         "path": "packages/skill/ddd-ca-hex-architect/references/design.md",
         "source": {
-          "git_blob": "4832bf93989736c32896c4cea8509301a5a4ea9d",
+          "git_blob": "edcfddff7a1cdf4bea4c0437d6a9198b74b02514",
           "mode": "100644",
           "path": "src/skills/ddd-ca-hex-architect/references/design.md",
-          "sha256": "3e0baee2446b9ba2c1b1969a240daf519b9b99f1052f5cf011c6d13c97674dfa",
-          "size": 8333
+          "sha256": "441b5e03f16ddacbfff792a9ae2c403b40107d9540711c3ee8ed8a8b627dd1ea",
+          "size": 8904
         }
       },
       {
@@ -8299,11 +8762,11 @@
         "owner": "ddd-ca-hex-architect",
         "path": "packages/skill/ddd-ca-hex-architect/references/review.md",
         "source": {
-          "git_blob": "9cbda9cfc457decc4cfff6132c3f136915e83495",
+          "git_blob": "d7bc7a02ef25e9f900f34ce63082fc7212f8d61e",
           "mode": "100644",
           "path": "src/skills/ddd-ca-hex-architect/references/review.md",
-          "sha256": "5755c7055b7860eb4a0e8682013c9386f780061340e8bcaf81edbc81f55eaf91",
-          "size": 7402
+          "sha256": "b021e1dd4e003dda2def0e8112dbecce5a4a460c25c946eed19840aa812debb2",
+          "size": 7973
         }
       },
       {
@@ -8312,11 +8775,11 @@
         "owner": "ddd-ca-hex-architect",
         "path": "packages/skill/ddd-ca-hex-architect/skill-package.yaml",
         "source": {
-          "git_blob": "96072b04c1408278e00cfd9dd2af0ad7cfd8e721",
+          "git_blob": "f95150a3b53ed6c149915d72cc703d03a4398c36",
           "mode": "100644",
           "path": "src/skills/ddd-ca-hex-architect/skill-package.yaml",
-          "sha256": "450a044c9b30419963b8e0530bb8f45870fb285a77aad93bf81481c1ff380a5d",
-          "size": 2265
+          "sha256": "9670fb9a2e80dda5b2bb72760b707a280ec85b0374f5350c95982b2ea3f3de3f",
+          "size": 2796
         }
       },
       {
@@ -8598,11 +9061,11 @@
         "owner": "local-change-implementer",
         "path": "packages/skill/local-change-implementer/references/implement.md",
         "source": {
-          "git_blob": "346c15fbf6a201a2e9594e9f9cf2261c2f86786b",
+          "git_blob": "e4da9057889b1b9ab1bf6bc9289bd92ed815e553",
           "mode": "100644",
           "path": "src/skills/local-change-implementer/references/implement.md",
-          "sha256": "932de795e2508947e41c714683685bc6f7a807b254329e4ca5232080248d5488",
-          "size": 8396
+          "sha256": "370e8ca423f63406eba49788db7e7057dc557cfc54ff4de53c2c8f7b0e5526ad",
+          "size": 9997
         }
       },
       {
@@ -8611,11 +9074,11 @@
         "owner": "local-change-implementer",
         "path": "packages/skill/local-change-implementer/skill-package.yaml",
         "source": {
-          "git_blob": "ee0c56f7f9012d1b3964fcf2aea7ec2c30787b7a",
+          "git_blob": "df2feee1a236b719058bff0a1eac651b4d868dda",
           "mode": "100644",
           "path": "src/skills/local-change-implementer/skill-package.yaml",
-          "sha256": "ffb44108af56051b60255f18442f9b7e77702c2d3d332c4a38721937adc76a32",
-          "size": 1864
+          "sha256": "d8cc8a82ab368e9390cbde96ca3f387cceaa6a59abe61c49e9c860a42452dd92",
+          "size": 2007
         }
       },
       {
@@ -8884,11 +9347,11 @@
         "owner": "requirement-author",
         "path": "packages/skill/requirement-author/SKILL.md",
         "source": {
-          "git_blob": "170a9cdf819b1b12f05cf7ff42a82fe69f54678c",
+          "git_blob": "878bdd2951684b66f9cfb37382a334fccb525f18",
           "mode": "100644",
           "path": "src/skills/requirement-author/SKILL.md",
-          "sha256": "2bc9fa947c3ae69404f888970c4b65a1c0698aad695c5c2b6ef2e61046071f0b",
-          "size": 1620
+          "sha256": "5ddc4bd32bf487b3745ac5d96321e391c63685372e15fc08311de656a1f0c31a",
+          "size": 2471
         }
       },
       {
@@ -8897,11 +9360,37 @@
         "owner": "requirement-author",
         "path": "packages/skill/requirement-author/references/authoring.md",
         "source": {
-          "git_blob": "e7a5529b70d18392e034178def2c3d6be03a51af",
+          "git_blob": "748ea98a8062992883d545df2a154c6e89874ff1",
           "mode": "100644",
           "path": "src/skills/requirement-author/references/authoring.md",
-          "sha256": "c75fdb5ddc59e87cdcd7c5ccb1465af2a44576e6b6a6b74e2fe67de81d1e1924",
-          "size": 6436
+          "sha256": "532758e05eb9813963c02b5141530260be90064b5d0d70394af1cae202a2ef0c",
+          "size": 6782
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/explore.md",
+        "owner": "requirement-author",
+        "path": "packages/skill/requirement-author/references/explore.md",
+        "source": {
+          "git_blob": "b3a74f684f3852a32f2d3c4db7951f05df391f89",
+          "mode": "100644",
+          "path": "src/skills/requirement-author/references/explore.md",
+          "sha256": "47a17186109711aaaaf2c65c0a4e8b20c55ed6466c3b7db7abc736d5daa783f4",
+          "size": 4547
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/knowledge.md",
+        "owner": "requirement-author",
+        "path": "packages/skill/requirement-author/references/knowledge.md",
+        "source": {
+          "git_blob": "d84e49329563196264ae8c9c95ae498c50870a96",
+          "mode": "100644",
+          "path": "src/skills/requirement-author/references/knowledge.md",
+          "sha256": "e76555bb7d77e9d6858d364fca2a33052b40c3da575882a9870b92668c5a0d2b",
+          "size": 3830
         }
       },
       {
@@ -8936,11 +9425,11 @@
         "owner": "requirement-author",
         "path": "packages/skill/requirement-author/skill-package.yaml",
         "source": {
-          "git_blob": "e2c028ca467f48ae765b188bd6602a9faa232051",
+          "git_blob": "f97d5514056b2eb485f3064eb957e6845a6e1069",
           "mode": "100644",
           "path": "src/skills/requirement-author/skill-package.yaml",
-          "sha256": "baac6533283e998d20b43a9f2a7b817565928eee6070a85a80e05f45f6cd2d46",
-          "size": 1520
+          "sha256": "123f6eac3806bc3d2728ad5fb04c5027ba7e585118509b4c671342ef84977391",
+          "size": 2552
         }
       },
       {
@@ -8962,11 +9451,11 @@
         "owner": "slice-implementer",
         "path": "packages/skill/slice-implementer/references/implement.md",
         "source": {
-          "git_blob": "396bf271c8f0ec3d51c859976b1071ae12c829b5",
+          "git_blob": "27c5a39bc920cf0e1c7c54f6c1201abbb985dba5",
           "mode": "100644",
           "path": "src/skills/slice-implementer/references/implement.md",
-          "sha256": "08ba36b4571651cd79cc2ff1f5b76ac50a72ab35a04414f3974438e675bc89a6",
-          "size": 9695
+          "sha256": "850126f2b3b3bb612136da1faba6c300812b176781b115b69fa5d8018610c5cf",
+          "size": 11655
         }
       },
       {
@@ -9053,11 +9542,11 @@
         "owner": "slice-implementer",
         "path": "packages/skill/slice-implementer/skill-package.yaml",
         "source": {
-          "git_blob": "89fb016c3d0253590d7f6f26ae1267a09ffc8210",
+          "git_blob": "033e6da6eb1556e2eb63df8ec7f4a876e4d94d53",
           "mode": "100644",
           "path": "src/skills/slice-implementer/skill-package.yaml",
-          "sha256": "6842c837b4359fc5f219eb449ed8d8aa239fd6702c091096e7453f01f5d2c9e5",
-          "size": 2431
+          "sha256": "6772a1b34fc7a97a77ae22b533238ef5a1fad07df8fd431453f7795547e8bb5b",
+          "size": 2648
         }
       },
       {
@@ -9079,11 +9568,11 @@
         "owner": "software-development-orchestrator",
         "path": "packages/skill/software-development-orchestrator/references/orchestrate.md",
         "source": {
-          "git_blob": "dfdfec28727f3ef211e8261707175f448fd5abb5",
+          "git_blob": "473f1ac4a5131af8076d02a60313440c4299635f",
           "mode": "100644",
           "path": "src/skills/software-development-orchestrator/references/orchestrate.md",
-          "sha256": "332df2bd353bb4649508f254030fd848376cf8142e3923b4de1657fab6383f83",
-          "size": 7490
+          "sha256": "630a5932821842d45a74c5670162594b163c352cc3a8518505df6a892014fbb4",
+          "size": 10691
         }
       },
       {
@@ -9092,11 +9581,11 @@
         "owner": "software-development-orchestrator",
         "path": "packages/skill/software-development-orchestrator/skill-package.yaml",
         "source": {
-          "git_blob": "f81fbedf920315eadd3e746d90e0a811257364b6",
+          "git_blob": "2aabcb0577a760c016769de58aab96e58fb5ef76",
           "mode": "100644",
           "path": "src/skills/software-development-orchestrator/skill-package.yaml",
-          "sha256": "5cdae28a35f051fa4d8fee2ca1d5eb1139207df86ab6291cf1c2221bc9a0989a",
-          "size": 1677
+          "sha256": "140e0a4ecf4e1783c16378ffe411c9761970dddd4678db13a471ae9f58525883",
+          "size": 1687
         }
       },
       {
@@ -9105,11 +9594,11 @@
         "owner": "spec-author",
         "path": "packages/skill/spec-author/SKILL.md",
         "source": {
-          "git_blob": "bb290b95639cb602563feef45175fe0d9a57d2c6",
+          "git_blob": "43e9a06a2b67552aeeaf90751f134fa0a5b3a5c0",
           "mode": "100644",
           "path": "src/skills/spec-author/SKILL.md",
-          "sha256": "3d69af228904426406b0dfa31a5bc5b96fb5bad22161fc3ee1d146e0146fee19",
-          "size": 1845
+          "sha256": "5723a4ddc03fdd8153d45d819f4aacd0eb47a8382c36ebafe177f80f291710d4",
+          "size": 2161
         }
       },
       {
@@ -9131,11 +9620,11 @@
         "owner": "spec-author",
         "path": "packages/skill/spec-author/references/authoring.md",
         "source": {
-          "git_blob": "4b3a9cc5538cc90a9509bfc60f1d90f39e8ec925",
+          "git_blob": "c6c590b0581fe8c32deb49047042b817f240d113",
           "mode": "100644",
           "path": "src/skills/spec-author/references/authoring.md",
-          "sha256": "521cd217af6eeb31a2095ef3b5945d93af99129f7209e729b975f3189a559510",
-          "size": 7996
+          "sha256": "2149efb19f3a1786e9228ee1493359ca729f0b84f0ab3d0446a29213006c11da",
+          "size": 8644
         }
       },
       {
@@ -9149,19 +9638,6 @@
           "path": "src/skills/spec-author/references/entity-template.md",
           "sha256": "425f67efc291daf5755f61d1963ec2b3f9848d7c3cc80e0f0f339e27483ccaf0",
           "size": 1901
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "references/formal-test-template.md",
-        "owner": "spec-author",
-        "path": "packages/skill/spec-author/references/formal-test-template.md",
-        "source": {
-          "git_blob": "9c0abdd96b773184dd62a54b1b6c0ee0e1a4e596",
-          "mode": "100644",
-          "path": "src/skills/spec-author/references/formal-test-template.md",
-          "sha256": "77e554da50aec47d6db41796527eb78e7e0edf0d7874cd0123bb0c0ece542fa5",
-          "size": 2484
         }
       },
       {
@@ -9183,11 +9659,11 @@
         "owner": "spec-author",
         "path": "packages/skill/spec-author/references/spec-guide.md",
         "source": {
-          "git_blob": "c91def5923610627166d3c6f445e79161cc29c3b",
+          "git_blob": "fd8255065964de173bd16a8666ef0399a045a958",
           "mode": "100644",
           "path": "src/skills/spec-author/references/spec-guide.md",
-          "sha256": "ed1c7f0e7b9c3e17ce37d6be8d7f6bf520ef76bdfec11c23f84e18a5134d8e1c",
-          "size": 2210
+          "sha256": "66d36d144bdf9e24cef32ba75a544b2815a942f28afb0631edf2ad38f490b8e0",
+          "size": 2651
         }
       },
       {
@@ -9196,11 +9672,11 @@
         "owner": "spec-author",
         "path": "packages/skill/spec-author/references/spec-organization-guide.md",
         "source": {
-          "git_blob": "494df1879a8de6e6f8696d47b7155f6cf885409a",
+          "git_blob": "eb6cfd0a29f8605ae5521cdffcae26163800b670",
           "mode": "100644",
           "path": "src/skills/spec-author/references/spec-organization-guide.md",
-          "sha256": "2787c86c4072f26c9bb7fe5bad39f2db635e88ad1f1fd407e685851502971197",
-          "size": 1700
+          "sha256": "965da2ba7ef15c1cff1899d0b4ef182b7dec359b1acf4cfb92a1ea05f164736f",
+          "size": 1981
         }
       },
       {
@@ -9209,11 +9685,11 @@
         "owner": "spec-author",
         "path": "packages/skill/spec-author/skill-package.yaml",
         "source": {
-          "git_blob": "30e524a346b51de9671591613bce68fa358ecc19",
+          "git_blob": "e0093f7c2316234f5ab94c6b4cfc3974d271be4a",
           "mode": "100644",
           "path": "src/skills/spec-author/skill-package.yaml",
-          "sha256": "bbac20ca3e5c33f62b82020baf1e3c56fc21c9d3dcbae5b2ae262f5ee7b84b89",
-          "size": 1697
+          "sha256": "7fc540812c3e7f691699b329b1d7fda4f0a38c1ccab70a117153d060b3c2cd50",
+          "size": 1674
         }
       },
       {
@@ -9292,6 +9768,357 @@
           "path": "src/skills/spec-compliance-validator/skill-package.yaml",
           "sha256": "aedc751c6543dd905b84c40ef1f4f0aeaa58e40e75f723756e3929f6ba477410",
           "size": 1749
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "SKILL.md",
+        "owner": "test-designer",
+        "path": "packages/skill/test-designer/SKILL.md",
+        "source": {
+          "git_blob": "2c57b0d546d3de3aaadbe2a455b7d77f35e8abfb",
+          "mode": "100644",
+          "path": "src/skills/test-designer/SKILL.md",
+          "sha256": "102b9d5eb910af7b65e1d3914f8dd1f3c231b22eb9207c4d8b49062c31bf32ca",
+          "size": 2899
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/design.md",
+        "owner": "test-designer",
+        "path": "packages/skill/test-designer/references/design.md",
+        "source": {
+          "git_blob": "6667b43c15ffcf3a630c3d4975bdd766bf885bca",
+          "mode": "100644",
+          "path": "src/skills/test-designer/references/design.md",
+          "sha256": "8dc4cc9ea99ed23014e29fa1a0024b6de43d800dc38a62ab2ad19d745e506cca",
+          "size": 12893
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/formal-test-template.md",
+        "owner": "test-designer",
+        "path": "packages/skill/test-designer/references/formal-test-template.md",
+        "source": {
+          "git_blob": "2c19dbe3c8dde3da55b56209da465e8b9c92ecec",
+          "mode": "100644",
+          "path": "src/skills/test-designer/references/formal-test-template.md",
+          "sha256": "fac525f419faa7ea3425ab04b8e6c97b7e87273eee0d603e2791858d1875ff2d",
+          "size": 3826
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/review.md",
+        "owner": "test-designer",
+        "path": "packages/skill/test-designer/references/review.md",
+        "source": {
+          "git_blob": "9c6daef51061c099f10326dfe8fdc09622823353",
+          "mode": "100644",
+          "path": "src/skills/test-designer/references/review.md",
+          "sha256": "b281687f1c689b2c558bdf1ce4c3c4530c720a3deca248cc80c95ff542c7ee5c",
+          "size": 9521
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "skill-package.yaml",
+        "owner": "test-designer",
+        "path": "packages/skill/test-designer/skill-package.yaml",
+        "source": {
+          "git_blob": "ecfcf9d299f4d2fa4d62ef8cd708f79cf56dda5f",
+          "mode": "100644",
+          "path": "src/skills/test-designer/skill-package.yaml",
+          "sha256": "1f9256f028aab04f2fb5440311df1fcfda692bc12039052bafcc3e2ad8977c19",
+          "size": 2330
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "SKILL.md",
+        "owner": "user-story-author",
+        "path": "packages/skill/user-story-author/SKILL.md",
+        "source": {
+          "git_blob": "936003aa3faecdf9f368f14d5601a6006d637409",
+          "mode": "100644",
+          "path": "src/skills/user-story-author/SKILL.md",
+          "sha256": "9b64cc99e9d18e546edcfc02cc8b0fcc2e7f307ba7f1239eeff3cacc46330a54",
+          "size": 1909
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/authoring.md",
+        "owner": "user-story-author",
+        "path": "packages/skill/user-story-author/references/authoring.md",
+        "source": {
+          "git_blob": "7836efd9736a8b107bfb1a9ddee637995b620ae7",
+          "mode": "100644",
+          "path": "src/skills/user-story-author/references/authoring.md",
+          "sha256": "3c2218aeccc8b8a19974405e3cc76f23d2dcf7fea1cdff4bbab403ab96342211",
+          "size": 1948
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/examples.md",
+        "owner": "user-story-author",
+        "path": "packages/skill/user-story-author/references/examples.md",
+        "source": {
+          "git_blob": "def1a652503ae90b4b90e981005361947e6ba17a",
+          "mode": "100644",
+          "path": "src/skills/user-story-author/references/examples.md",
+          "sha256": "7e52b0454454af03fc846fd59d4ca8d02edaf08dbb7cdb20e0c0ceca018d46ce",
+          "size": 7883
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/plan.md",
+        "owner": "user-story-author",
+        "path": "packages/skill/user-story-author/references/plan.md",
+        "source": {
+          "git_blob": "d20f4f303a65b3c5f28d0d3f9449133f746307b5",
+          "mode": "100644",
+          "path": "src/skills/user-story-author/references/plan.md",
+          "sha256": "be5b8bf91a31663254d22f13ca6bed8752045ae8150feac57e0d52a550cfe4b2",
+          "size": 1603
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/review.md",
+        "owner": "user-story-author",
+        "path": "packages/skill/user-story-author/references/review.md",
+        "source": {
+          "git_blob": "827b0fb0ce451c7e42c0ad00ea2885a8eb41c543",
+          "mode": "100644",
+          "path": "src/skills/user-story-author/references/review.md",
+          "sha256": "3d69ac1d9171d906277301f96e2c81d4b220b3652c1cfb6051b23b4d68ce077c",
+          "size": 1734
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/story-contract.md",
+        "owner": "user-story-author",
+        "path": "packages/skill/user-story-author/references/story-contract.md",
+        "source": {
+          "git_blob": "c05585cdad67af222671c96dce59cf7727e7f38e",
+          "mode": "100644",
+          "path": "src/skills/user-story-author/references/story-contract.md",
+          "sha256": "e3eaa80fa78ab0b734e15ebbce35232188048e7872a8d3d1ecdd105b9e697600",
+          "size": 2242
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/templates/business-rules.md",
+        "owner": "user-story-author",
+        "path": "packages/skill/user-story-author/references/templates/business-rules.md",
+        "source": {
+          "git_blob": "b5e3e771358a96a419f25089a744d8dd154a64e6",
+          "mode": "100644",
+          "path": "src/skills/user-story-author/references/templates/business-rules.md",
+          "sha256": "7d01214280c7e550b6e750321ac6ba384d5288c1872d4de7ff92aa281b052768",
+          "size": 741
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/templates/technical.md",
+        "owner": "user-story-author",
+        "path": "packages/skill/user-story-author/references/templates/technical.md",
+        "source": {
+          "git_blob": "0af0b3f0592ef4b7b08b92f969df27703969fa8e",
+          "mode": "100644",
+          "path": "src/skills/user-story-author/references/templates/technical.md",
+          "sha256": "cb532448bcfd2912b41e7f3af057718417f0edd77ac112fdecaeafd4f2b1da22",
+          "size": 1147
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/templates/user-value.md",
+        "owner": "user-story-author",
+        "path": "packages/skill/user-story-author/references/templates/user-value.md",
+        "source": {
+          "git_blob": "3c51f41ab34842a8c5480722f26d6e7a7cc65d9b",
+          "mode": "100644",
+          "path": "src/skills/user-story-author/references/templates/user-value.md",
+          "sha256": "bad1a6e3ff6a25c1c43faee7982ca121c9c29719b794f0d113eda7114cd08835",
+          "size": 828
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "skill-package.yaml",
+        "owner": "user-story-author",
+        "path": "packages/skill/user-story-author/skill-package.yaml",
+        "source": {
+          "git_blob": "20f00255421872cc79d48ef41fb430dba2ad8985",
+          "mode": "100644",
+          "path": "src/skills/user-story-author/skill-package.yaml",
+          "sha256": "28eed6d6858eef83ae15033d74447bf6bf02633d47e934faffbaf2aeebdfe1f6",
+          "size": 2172
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "SKILL.md",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/SKILL.md",
+        "source": {
+          "git_blob": "20720db2e98bf92412b8130400378f088b86c7b9",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/SKILL.md",
+          "sha256": "23ff1ceae7931c039df707ec4d55f5c97db5aa75a8da69ae29a9117cad313544",
+          "size": 1762
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/git-format.md",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/references/git-format.md",
+        "source": {
+          "git_blob": "e64aff150e1ff0ce363c247fa150ed434fe20c03",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/references/git-format.md",
+          "sha256": "56bac388436e2e64b46ca547a3797907800493cb522d3ff21d26d578ead81bd9",
+          "size": 7288
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/operations.md",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/references/operations.md",
+        "source": {
+          "git_blob": "58893d1b59218e94f4b1533a7f269acaf1625882",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/references/operations.md",
+          "sha256": "f6ac73a7f7c469c7699ca72cf1a5050b849332e577d50faa810cbeadf15c80fd",
+          "size": 14453
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "skill-package.yaml",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/skill-package.yaml",
+        "source": {
+          "git_blob": "2e436f9195ae7961a0693e38779a3c41e3b016b3",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/skill-package.yaml",
+          "sha256": "c7d4660b505e04d5a4733b326c40dea3cfe97743a54b5d82d2ad9ac8d107a29f",
+          "size": 6065
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "tools/workflow-records.py",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/tools/workflow-records.py",
+        "source": {
+          "git_blob": "24346027c33776f1dbe9a0229a846dbe1458024c",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/tools/workflow-records.py",
+          "sha256": "3d36e64da50bb22f1ad317c6fad2cc043f8124a9c0f6da063c2b560183ab3189",
+          "size": 2395
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "tools/workflow_records/__init__.py",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/tools/workflow_records/__init__.py",
+        "source": {
+          "git_blob": "4220340f681948da3d0b4a2ad0d6d10321c6e15b",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/tools/workflow_records/__init__.py",
+          "sha256": "c897ff01ec11455156ac296a3d1626fcd1042ba04125c610b0c63e530d9c359d",
+          "size": 112
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "tools/workflow_records/backup.py",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/tools/workflow_records/backup.py",
+        "source": {
+          "git_blob": "82e9257f2e8865f25f2797a6a26b03aeb88a1578",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/tools/workflow_records/backup.py",
+          "sha256": "1272e3fc1377b0a6c2d66701b1b6757701bd830db14df0b7a703c942e3e2e846",
+          "size": 23696
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "tools/workflow_records/common.py",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/tools/workflow_records/common.py",
+        "source": {
+          "git_blob": "b32037e1a27618fed78995eff4e386c88d37b353",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/tools/workflow_records/common.py",
+          "sha256": "56fbf5f438377f9f29b0a6c7fcad31270261b928b762660716aef59d351e6b20",
+          "size": 4983
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "tools/workflow_records/contracts.py",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/tools/workflow_records/contracts.py",
+        "source": {
+          "git_blob": "3662d6c8afd25ff1fbe8d3b67e1474f0274ab19d",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/tools/workflow_records/contracts.py",
+          "sha256": "2c8559a0798ed803e9d9bdeffe7265b2b2f6a77811c4c15625fb9e6bc041c40a",
+          "size": 4791
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "tools/workflow_records/git_store.py",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/tools/workflow_records/git_store.py",
+        "source": {
+          "git_blob": "2c2d729c4d9b35e793c236999ca8cb75d5d522cf",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/tools/workflow_records/git_store.py",
+          "sha256": "0b5b1fdda5b597371ba796eaaf60326f9a8eb367d897cfee978fdf44db720d4c",
+          "size": 13678
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "tools/workflow_records/service.py",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/tools/workflow_records/service.py",
+        "source": {
+          "git_blob": "3387ad9bd66dd5c240b17be5886e897e239aa411",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/tools/workflow_records/service.py",
+          "sha256": "59bcb638b5fab1866ad941371e21f0a06b2df2f48f99f6fd08129e96391cf057",
+          "size": 14195
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "tools/workflow_records/sqlite_store.py",
+        "owner": "workflow-records",
+        "path": "packages/skill/workflow-records/tools/workflow_records/sqlite_store.py",
+        "source": {
+          "git_blob": "95f566d7e31eadbb91b399dd59eb1ba2ec351311",
+          "mode": "100644",
+          "path": "src/skills/workflow-records/tools/workflow_records/sqlite_store.py",
+          "sha256": "48962010e2734db075396cecabafad6eb905f446707b3bfaae3076e0eb21cd18",
+          "size": 24267
         }
       },
       {
@@ -9690,11 +10517,11 @@
     "files": [
       {
         "path": "src/adapters/claude/skill-entry-v2.md.template",
-        "sha256": "11eeedac1452cc78e9ab7726791c5032b2379815ea15e8fb0f8fb11d921d032e"
+        "sha256": "4a0ef01a22ecb4511e003da9998274d8c1a4ec482b6acf03c8f4c508a9efd966"
       },
       {
         "path": "src/adapters/codex/skill-entry-v2.md.template",
-        "sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+        "sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
       },
       {
         "path": "src/adapters/codex/skill-entry.md.template",
@@ -9710,15 +10537,15 @@
       },
       {
         "path": "src/distribution/catalog.py",
-        "sha256": "5b2853de712d04e2cc3a34437d4d22e0869e7cf7d75904e5a9524cc9861d65e4"
+        "sha256": "88db79985cab5c758b62cad95fc88dec13c6415194aa60d725045a81f935004c"
       },
       {
         "path": "src/distribution/claude.py",
-        "sha256": "47732f37a32c5aa855d09f47aa135c772aded4c41ba9698f6911e1516fea41a8"
+        "sha256": "2c79db10ded390c209145e9539a91bb1bee5c2370b5aa804de64947364afa910"
       },
       {
         "path": "src/distribution/codex.py",
-        "sha256": "8bf874d70818004db05e4721321714390a6d6acf60343cc4533a39517cf79d2e"
+        "sha256": "5fbe00b4e2390ce7ef411105fab8afaa1e22462da381a8f17e8ca3844283d8eb"
       },
       {
         "path": "src/distribution/content.py",
@@ -9726,7 +10553,7 @@
       },
       {
         "path": "src/distribution/contracts.py",
-        "sha256": "4d4c9e3b7da68496dc8c9834882049c913fc9afdf45dc150083989329a58e3a5"
+        "sha256": "9c904ab999ae5efb0722e6b6c9b0ce14809ec9347af4b7e3c3f27196c3a46427"
       },
       {
         "path": "src/distribution/data.py",
@@ -9758,11 +10585,11 @@
       },
       {
         "path": "src/distribution/package.py",
-        "sha256": "f0677644df30f0d9f211dc669da6ecdb5ffcb27a90e996b4b9e036d2e610281c"
+        "sha256": "c69e4485213ed195d67d2776fc49ec2c16177391c6311a0a48828eb16510df58"
       },
       {
         "path": "src/distribution/reinstallation.py",
-        "sha256": "fa3e4332306a8e935de93fc34a3e7eefd9c6bcd8a1fafa134978c8c260fcf768"
+        "sha256": "2fd96222b48ce7d16b917747ecfe2cf4e01eaf00bd0bd687b63e92ab75573f99"
       },
       {
         "path": "src/distribution/selection.py",
@@ -9782,7 +10609,7 @@
       }
     ],
     "id": "framework-managed-installation",
-    "source_commit": "42b99e954e3d6fbf595075a079357f0ce1df057f",
+    "source_commit": "fba2f031f1c969cd5788af924e307ffebf553422",
     "version": "2.0.0"
   },
   "installation_id": "7c54901bfce34f338469f12b5850b57b",
@@ -9795,14 +10622,116 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/README.md",
-        "sha256": "746fa7e049ccf824013ae1f685875d2271831d4f920f93b126fae1947dddd691",
-        "size": 3423,
+        "sha256": "397cffe3b8ae9f26e0195ed6519857f6d1e5719350515d06b73f0809b476269a",
+        "size": 3643,
         "source": {
-          "git_blob": "1d4f9b1a5ce585dddc1804cf6800b8c6187bd08e",
+          "git_blob": "7987ca106c6a4be76d0743bf656d7cb3d425e7e2",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/README.md",
-          "sha256": "746fa7e049ccf824013ae1f685875d2271831d4f920f93b126fae1947dddd691",
-          "size": 3423
+          "sha256": "397cffe3b8ae9f26e0195ed6519857f6d1e5719350515d06b73f0809b476269a",
+          "size": 3643
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/bdd/README.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/bdd/README.md",
+        "sha256": "3b1d2cd67880fe2484974b709ba440e7ee13755ba6f42d2dbc9309b37a8c5797",
+        "size": 2521,
+        "source": {
+          "git_blob": "8fd3cfa1576e72b41f2ff1af1bce8a7fe2bff711",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/README.md",
+          "sha256": "3b1d2cd67880fe2484974b709ba440e7ee13755ba6f42d2dbc9309b37a8c5797",
+          "size": 2521
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/bdd/automation.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/bdd/automation.md",
+        "sha256": "38b55607fc432b4f089fe0b186c55a46538c9bacf9488986cf6f242a2399b340",
+        "size": 4890,
+        "source": {
+          "git_blob": "441e64592064879dae8161396e91fbaaf3bd1d0e",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/automation.md",
+          "sha256": "38b55607fc432b4f089fe0b186c55a46538c9bacf9488986cf6f242a2399b340",
+          "size": 4890
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/bdd/discovery.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/bdd/discovery.md",
+        "sha256": "7c75e78ef4a487f733b46ac856a45347d2c2310b8639b41c34429e5ee06fe76c",
+        "size": 4134,
+        "source": {
+          "git_blob": "88ed3b8813e6faa0dd642fe19331441b0e1736a7",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/discovery.md",
+          "sha256": "7c75e78ef4a487f733b46ac856a45347d2c2310b8639b41c34429e5ee06fe76c",
+          "size": 4134
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/bdd/examples/library-renewal.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/bdd/examples/library-renewal.md",
+        "sha256": "019eefd3d077bab7afdf295e0beef7670841713af69e4ad024e688466204669e",
+        "size": 5017,
+        "source": {
+          "git_blob": "f8bf5235a0e512274a4a5d028532f6b0c3d47867",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/examples/library-renewal.md",
+          "sha256": "019eefd3d077bab7afdf295e0beef7670841713af69e4ad024e688466204669e",
+          "size": 5017
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/bdd/formulation.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/bdd/formulation.md",
+        "sha256": "f2200d77a47e1e0924f6e2f9bccd627889135bd9c4adaf08e01f276af2ef24f8",
+        "size": 4760,
+        "source": {
+          "git_blob": "2910511bbd2d0e0e6e3edfc1ee3e9d3ec692d7b5",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/formulation.md",
+          "sha256": "f2200d77a47e1e0924f6e2f9bccd627889135bd9c4adaf08e01f276af2ef24f8",
+          "size": 4760
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/bdd/gherkin.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/bdd/gherkin.md",
+        "sha256": "2e2f524583e1129f86cd5f1cd267cb9be2270974716e28024b75502114011ab2",
+        "size": 4427,
+        "source": {
+          "git_blob": "3ae46961f7e91d6618ee472368b7ef89fbd0a890",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/bdd/gherkin.md",
+          "sha256": "2e2f524583e1129f86cd5f1cd267cb9be2270974716e28024b75502114011ab2",
+          "size": 4427
         }
       },
       {
@@ -9812,14 +10741,133 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/content-package.yaml",
-        "sha256": "ddb1a0620f53b559446b3e48de608d96667f7c0da8493169dd5ce52d4b9bdfb7",
-        "size": 15708,
+        "sha256": "96ec8b442856118055a94d6771316aa1f0473a5bb1b3dfd60a693808d4bbff88",
+        "size": 27148,
         "source": {
-          "git_blob": "26fd1ee92b1089bffc4ea45b7f743176f7067e07",
+          "git_blob": "b1df9391a617939701b5896cd714abd3ca8a9494",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/content-package.yaml",
-          "sha256": "ddb1a0620f53b559446b3e48de608d96667f7c0da8493169dd5ce52d4b9bdfb7",
-          "size": 15708
+          "sha256": "96ec8b442856118055a94d6771316aa1f0473a5bb1b3dfd60a693808d4bbff88",
+          "size": 27148
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/ddd/README.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/ddd/README.md",
+        "sha256": "206cc26c5d42e7ff6ff7e98401748b154196dd80075514bfdc0d0f928cca3e31",
+        "size": 2448,
+        "source": {
+          "git_blob": "99c11808ecc934d2ac233055385b2473a7459269",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/README.md",
+          "sha256": "206cc26c5d42e7ff6ff7e98401748b154196dd80075514bfdc0d0f928cca3e31",
+          "size": 2448
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/ddd/domain-discovery.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/ddd/domain-discovery.md",
+        "sha256": "a2d4db1c6ad849c35574b0f4e5421e288b60b309ec93e1ee99801dbd03fdf924",
+        "size": 4220,
+        "source": {
+          "git_blob": "56fc7a22e64147c0ae1c20510794096bc5f52e47",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/domain-discovery.md",
+          "sha256": "a2d4db1c6ad849c35574b0f4e5421e288b60b309ec93e1ee99801dbd03fdf924",
+          "size": 4220
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/ddd/examples/order-cancellation.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/ddd/examples/order-cancellation.md",
+        "sha256": "c4fb57d60de5e95d6a60cb2edaeffa717e5608000d3f911721f3780e75195696",
+        "size": 4645,
+        "source": {
+          "git_blob": "e70eb03cc6a568cfa34279c70ac113df5eb649bf",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/examples/order-cancellation.md",
+          "sha256": "c4fb57d60de5e95d6a60cb2edaeffa717e5608000d3f911721f3780e75195696",
+          "size": 4645
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/ddd/model-evolution.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/ddd/model-evolution.md",
+        "sha256": "9ed1893ff94e8c5d7b25aa11ce6dbcf05656adcddab047d7ffab880cae10e50f",
+        "size": 4226,
+        "source": {
+          "git_blob": "5d31af2e42ae0259d500dd1e56814e8e6d367b40",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/model-evolution.md",
+          "sha256": "9ed1893ff94e8c5d7b25aa11ce6dbcf05656adcddab047d7ffab880cae10e50f",
+          "size": 4226
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/ddd/strategic-design.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/ddd/strategic-design.md",
+        "sha256": "38141de602dcc569d1fa6fadb42e04d9ab7cad5aa9f7be87450ddeeefb96328d",
+        "size": 4996,
+        "source": {
+          "git_blob": "db7816d01b1c5a0fb55c35534da07f33538b23da",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/strategic-design.md",
+          "sha256": "38141de602dcc569d1fa6fadb42e04d9ab7cad5aa9f7be87450ddeeefb96328d",
+          "size": 4996
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/ddd/tactical-design.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/ddd/tactical-design.md",
+        "sha256": "be8287d3846a8fea83a3578a9f5baeeedb0c6b326f615cba91fe1cb71e694339",
+        "size": 4381,
+        "source": {
+          "git_blob": "cecc840d9e3c544321a04018c924b2b30799fde6",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/ddd/tactical-design.md",
+          "sha256": "be8287d3846a8fea83a3578a9f5baeeedb0c6b326f615cba91fe1cb71e694339",
+          "size": 4381
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/discovery/collaborative-discovery.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/discovery/collaborative-discovery.md",
+        "sha256": "92ebe9a31572acc2e8224d0f718ab5fcc44da679788ba9bba847e362e17026f5",
+        "size": 4256,
+        "source": {
+          "git_blob": "ea74672f6d29478297782a65d364ef02d297a860",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/discovery/collaborative-discovery.md",
+          "sha256": "92ebe9a31572acc2e8224d0f718ab5fcc44da679788ba9bba847e362e17026f5",
+          "size": 4256
         }
       },
       {
@@ -9880,14 +10928,14 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/domain-language/templates/domain-event-language-template.md",
-        "sha256": "69e32d14f4f4a451349a8784c447b1285e061ffa5ff7571888e279fd1b06f755",
-        "size": 1136,
+        "sha256": "e014815a55890c6c203016997bc8a36e3049b6743bd026286cfdfba756394b34",
+        "size": 1240,
         "source": {
-          "git_blob": "cfaf6e4b916f2f567426d058ba2cd25eab76241c",
+          "git_blob": "5819442b80b84187312ebd419da0de9879caa7df",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/domain-language/templates/domain-event-language-template.md",
-          "sha256": "69e32d14f4f4a451349a8784c447b1285e061ffa5ff7571888e279fd1b06f755",
-          "size": 1136
+          "sha256": "e014815a55890c6c203016997bc8a36e3049b6743bd026286cfdfba756394b34",
+          "size": 1240
         }
       },
       {
@@ -9914,14 +10962,14 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/operations/CONTEXT-MAP-GUIDE.MD",
-        "sha256": "df8cfaf36f4ba228d009985716de940033ab1b79c282da5d6486cfce08d75ba0",
-        "size": 1599,
+        "sha256": "c6bc83d3c20058215990dffb990780a59ca7eab5ce03ee8043cbd688734523d7",
+        "size": 4126,
         "source": {
-          "git_blob": "b02abee2fbfafda2a6345f1ee4447055e75a79c8",
+          "git_blob": "5b8833050fdc3923bcb9d26168d04edde5d20c75",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/operations/CONTEXT-MAP-GUIDE.MD",
-          "sha256": "df8cfaf36f4ba228d009985716de940033ab1b79c282da5d6486cfce08d75ba0",
-          "size": 1599
+          "sha256": "c6bc83d3c20058215990dffb990780a59ca7eab5ce03ee8043cbd688734523d7",
+          "size": 4126
         }
       },
       {
@@ -9982,14 +11030,14 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md",
-        "sha256": "f4cb699d5e6f6441cfb9064ba05fcc44f0304d29564e9c257f0cb667bd2e7979",
-        "size": 4736,
+        "sha256": "36308480bc93f0b46ed342fa899619dc8e20ce9f6300105b43757c86cad6077b",
+        "size": 4734,
         "source": {
-          "git_blob": "7832a008f451521b81d283dc1c75a4c33454066d",
+          "git_blob": "d1986f01415819e07015121ad258a72affd07057",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md",
-          "sha256": "f4cb699d5e6f6441cfb9064ba05fcc44f0304d29564e9c257f0cb667bd2e7979",
-          "size": 4736
+          "sha256": "36308480bc93f0b46ed342fa899619dc8e20ce9f6300105b43757c86cad6077b",
+          "size": 4734
         }
       },
       {
@@ -9999,14 +11047,14 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/references/AUTHORING-BOUNDARY-CONTRACT.md",
-        "sha256": "026b8ddccce5c7ede941c2c3238fe8d0456e5656a6ac23b2f134280a58910e68",
-        "size": 3931,
+        "sha256": "3e8d59c793f5775541bc975043a688814549d8415713124c4e6b4ab2900c36b3",
+        "size": 3940,
         "source": {
-          "git_blob": "de3c27367a03e3fb67a4a3cf1fcfe9696e786d28",
+          "git_blob": "d80cc9ddf247a03221b889651bdc4c20c5c23598",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/references/AUTHORING-BOUNDARY-CONTRACT.md",
-          "sha256": "026b8ddccce5c7ede941c2c3238fe8d0456e5656a6ac23b2f134280a58910e68",
-          "size": 3931
+          "sha256": "3e8d59c793f5775541bc975043a688814549d8415713124c4e6b4ab2900c36b3",
+          "size": 3940
         }
       },
       {
@@ -10050,14 +11098,14 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/references/GWT-TEST-HANDOFF-CONTRACT.md",
-        "sha256": "a1a07886ef436eacdc7cfa4e5e41c5e186313fccb13af53eb7ebac27381c00db",
-        "size": 4249,
+        "sha256": "321bb24d926c806dd21c41e837c8241967ce99efb4730738c46030b15efddf74",
+        "size": 4250,
         "source": {
-          "git_blob": "002671ffedcb1e361ff4daf5fd5d059afc1e9c9c",
+          "git_blob": "4dcf2af4efd17e113ec1bcf69b279c60d4729c16",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/references/GWT-TEST-HANDOFF-CONTRACT.md",
-          "sha256": "a1a07886ef436eacdc7cfa4e5e41c5e186313fccb13af53eb7ebac27381c00db",
-          "size": 4249
+          "sha256": "321bb24d926c806dd21c41e837c8241967ce99efb4730738c46030b15efddf74",
+          "size": 4250
         }
       },
       {
@@ -10126,6 +11174,23 @@
           "path": "src/knowledge/engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md",
           "sha256": "09654b188773c63a1dc806286e975787092a2c7fda1116b3a94a2a0ab0406922",
           "size": 4092
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/references/TEST-DESIGN-HANDOFF-CONTRACT.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/references/TEST-DESIGN-HANDOFF-CONTRACT.md",
+        "sha256": "e32775d4b791cee63db76ae573cab99a5517bb2117d3db85f0392a02134474c0",
+        "size": 4880,
+        "source": {
+          "git_blob": "ab664f21a4ca823f5d394b1d1015bad557c86048",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/references/TEST-DESIGN-HANDOFF-CONTRACT.md",
+          "sha256": "e32775d4b791cee63db76ae573cab99a5517bb2117d3db85f0392a02134474c0",
+          "size": 4880
         }
       },
       {
@@ -10305,14 +11370,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/references/initialize.md",
-        "sha256": "b3f463e90de97c80fd4b2b8c1809d05c3c5caf6ff7cb765552604d48dc21dd35",
-        "size": 11501,
+        "sha256": "f8dc2d9fdc78d81e0de87fb0e08e95690b72a66934cdf6bee48d0323e6ead7e4",
+        "size": 11819,
         "source": {
-          "git_blob": "008c1997a65bad39327c873a806bc28fd2cf8dfe",
+          "git_blob": "9dbe241c5b77efb8b31dfe031adf8bcf546fcd00",
           "mode": "100644",
           "path": "src/skills/ai-context-init/references/initialize.md",
-          "sha256": "b3f463e90de97c80fd4b2b8c1809d05c3c5caf6ff7cb765552604d48dc21dd35",
-          "size": 11501
+          "sha256": "f8dc2d9fdc78d81e0de87fb0e08e95690b72a66934cdf6bee48d0323e6ead7e4",
+          "size": 11819
         }
       },
       {
@@ -10322,14 +11387,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/references/project-structure.md",
-        "sha256": "edb09c507448b55f7d187632d3bfb5caeb77034a0c5810674c29617606805240",
-        "size": 4135,
+        "sha256": "d9e97bf375410420524815d6e3f7a08f7ff150124b3108264da608fba868f6c0",
+        "size": 4213,
         "source": {
-          "git_blob": "defbb6c0f7220bc4a068367fe82d88bd7fcc15b0",
+          "git_blob": "376ed9b374848edb92821ad642e7e09c2c4c07f4",
           "mode": "100644",
           "path": "src/skills/ai-context-init/references/project-structure.md",
-          "sha256": "edb09c507448b55f7d187632d3bfb5caeb77034a0c5810674c29617606805240",
-          "size": 4135
+          "sha256": "d9e97bf375410420524815d6e3f7a08f7ff150124b3108264da608fba868f6c0",
+          "size": 4213
         }
       },
       {
@@ -10339,13 +11404,13 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/skill-package.yaml",
-        "sha256": "62e7f99f47d70c795860e1681e3ad2af3923115c00c07d514f958598ca94ccb7",
+        "sha256": "b9bc886f7ba0fb8d22c66b481ec4a670d69018e2b8a420edc1a185ca5b2133ab",
         "size": 1915,
         "source": {
-          "git_blob": "24834cafe29dadaa34a6420e3313929d8191fe9a",
+          "git_blob": "75393775225753f2685c96df21c9a44d96445527",
           "mode": "100644",
           "path": "src/skills/ai-context-init/skill-package.yaml",
-          "sha256": "62e7f99f47d70c795860e1681e3ad2af3923115c00c07d514f958598ca94ccb7",
+          "sha256": "b9bc886f7ba0fb8d22c66b481ec4a670d69018e2b8a420edc1a185ca5b2133ab",
           "size": 1915
         }
       },
@@ -10407,14 +11472,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/templates/project-config.template.yaml",
-        "sha256": "1b70d0217e70237261890dbeff28d856403e1082fc9d9d82218db90374a743d4",
-        "size": 1059,
+        "sha256": "03a3b297828df123198381ad68357e13ddad865e5524b7ad40987bce858d47be",
+        "size": 1611,
         "source": {
-          "git_blob": "61425433f3f600dc47df926ed830effdf27e44a1",
+          "git_blob": "f2e784503f16f946bb65b060afb8c0a5b73c84c9",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/project-config.template.yaml",
-          "sha256": "1b70d0217e70237261890dbeff28d856403e1082fc9d9d82218db90374a743d4",
-          "size": 1059
+          "sha256": "03a3b297828df123198381ad68357e13ddad865e5524b7ad40987bce858d47be",
+          "size": 1611
         }
       },
       {
@@ -10538,74 +11603,6 @@
       },
       {
         "binding": null,
-        "destination": ".ai/core/skills/bdd-gwt-test-designer/SKILL.md",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/bdd-gwt-test-designer",
-        "path": "payload/.ai/core/skills/bdd-gwt-test-designer/SKILL.md",
-        "sha256": "dc3beee8d47ab3e2c78dac16d78ddf410af27ebeac8486b0e005ca1270d15cf2",
-        "size": 1914,
-        "source": {
-          "git_blob": "d0de71981c4e1a7b808240d95325d2fe04ffcec8",
-          "mode": "100644",
-          "path": "src/skills/bdd-gwt-test-designer/SKILL.md",
-          "sha256": "dc3beee8d47ab3e2c78dac16d78ddf410af27ebeac8486b0e005ca1270d15cf2",
-          "size": 1914
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/bdd-gwt-test-designer/references/design.md",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/bdd-gwt-test-designer",
-        "path": "payload/.ai/core/skills/bdd-gwt-test-designer/references/design.md",
-        "sha256": "6e1818ec85603d790103d62736ef10aed99c925e97f40ec02ecd5ddf9b338958",
-        "size": 9369,
-        "source": {
-          "git_blob": "41cbf482ad4d1b612cb1236597cd1fbbec6aa5df",
-          "mode": "100644",
-          "path": "src/skills/bdd-gwt-test-designer/references/design.md",
-          "sha256": "6e1818ec85603d790103d62736ef10aed99c925e97f40ec02ecd5ddf9b338958",
-          "size": 9369
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/bdd-gwt-test-designer/references/review.md",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/bdd-gwt-test-designer",
-        "path": "payload/.ai/core/skills/bdd-gwt-test-designer/references/review.md",
-        "sha256": "07862be20d7f4d3c9a640705d2452d882acdce4a32440a26090f0de6f54f5828",
-        "size": 7261,
-        "source": {
-          "git_blob": "5aa02943cb09adf5fb540b1042524885816849a3",
-          "mode": "100644",
-          "path": "src/skills/bdd-gwt-test-designer/references/review.md",
-          "sha256": "07862be20d7f4d3c9a640705d2452d882acdce4a32440a26090f0de6f54f5828",
-          "size": 7261
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/bdd-gwt-test-designer/skill-package.yaml",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/bdd-gwt-test-designer",
-        "path": "payload/.ai/core/skills/bdd-gwt-test-designer/skill-package.yaml",
-        "sha256": "d0f2326724037c1598689f1c4132fd60fe8124b2f5c807a0f6bec2c897190055",
-        "size": 2009,
-        "source": {
-          "git_blob": "49acefdd7a6a136a84103fc5b60682f48d99a578",
-          "mode": "100644",
-          "path": "src/skills/bdd-gwt-test-designer/skill-package.yaml",
-          "sha256": "d0f2326724037c1598689f1c4132fd60fe8124b2f5c807a0f6bec2c897190055",
-          "size": 2009
-        }
-      },
-      {
-        "binding": null,
         "destination": ".ai/core/skills/code-reviewer/SKILL.md",
         "kind": "payload",
         "mode": "100644",
@@ -10645,14 +11642,14 @@
         "mode": "100644",
         "owner": "skill/code-reviewer",
         "path": "payload/.ai/core/skills/code-reviewer/skill-package.yaml",
-        "sha256": "d78418616c5ea276f895824c1e27057894ef5148cb931a43c00ab8fa05b88e47",
-        "size": 1582,
+        "sha256": "363279561726769b5aed5180340264f865a6829dc769b8398b4b3f8acfc36cb6",
+        "size": 1802,
         "source": {
-          "git_blob": "9a035a811a81de6e324c8b08e3f19f1e48c1347d",
+          "git_blob": "f052f44e256390e0aab8b5e0ddc1b0d45d8881b1",
           "mode": "100644",
           "path": "src/skills/code-reviewer/skill-package.yaml",
-          "sha256": "d78418616c5ea276f895824c1e27057894ef5148cb931a43c00ab8fa05b88e47",
-          "size": 1582
+          "sha256": "363279561726769b5aed5180340264f865a6829dc769b8398b4b3f8acfc36cb6",
+          "size": 1802
         }
       },
       {
@@ -10679,14 +11676,14 @@
         "mode": "100644",
         "owner": "skill/ddd-ca-hex-architect",
         "path": "payload/.ai/core/skills/ddd-ca-hex-architect/references/design.md",
-        "sha256": "3e0baee2446b9ba2c1b1969a240daf519b9b99f1052f5cf011c6d13c97674dfa",
-        "size": 8333,
+        "sha256": "441b5e03f16ddacbfff792a9ae2c403b40107d9540711c3ee8ed8a8b627dd1ea",
+        "size": 8904,
         "source": {
-          "git_blob": "4832bf93989736c32896c4cea8509301a5a4ea9d",
+          "git_blob": "edcfddff7a1cdf4bea4c0437d6a9198b74b02514",
           "mode": "100644",
           "path": "src/skills/ddd-ca-hex-architect/references/design.md",
-          "sha256": "3e0baee2446b9ba2c1b1969a240daf519b9b99f1052f5cf011c6d13c97674dfa",
-          "size": 8333
+          "sha256": "441b5e03f16ddacbfff792a9ae2c403b40107d9540711c3ee8ed8a8b627dd1ea",
+          "size": 8904
         }
       },
       {
@@ -10696,14 +11693,14 @@
         "mode": "100644",
         "owner": "skill/ddd-ca-hex-architect",
         "path": "payload/.ai/core/skills/ddd-ca-hex-architect/references/review.md",
-        "sha256": "5755c7055b7860eb4a0e8682013c9386f780061340e8bcaf81edbc81f55eaf91",
-        "size": 7402,
+        "sha256": "b021e1dd4e003dda2def0e8112dbecce5a4a460c25c946eed19840aa812debb2",
+        "size": 7973,
         "source": {
-          "git_blob": "9cbda9cfc457decc4cfff6132c3f136915e83495",
+          "git_blob": "d7bc7a02ef25e9f900f34ce63082fc7212f8d61e",
           "mode": "100644",
           "path": "src/skills/ddd-ca-hex-architect/references/review.md",
-          "sha256": "5755c7055b7860eb4a0e8682013c9386f780061340e8bcaf81edbc81f55eaf91",
-          "size": 7402
+          "sha256": "b021e1dd4e003dda2def0e8112dbecce5a4a460c25c946eed19840aa812debb2",
+          "size": 7973
         }
       },
       {
@@ -10713,14 +11710,14 @@
         "mode": "100644",
         "owner": "skill/ddd-ca-hex-architect",
         "path": "payload/.ai/core/skills/ddd-ca-hex-architect/skill-package.yaml",
-        "sha256": "450a044c9b30419963b8e0530bb8f45870fb285a77aad93bf81481c1ff380a5d",
-        "size": 2265,
+        "sha256": "9670fb9a2e80dda5b2bb72760b707a280ec85b0374f5350c95982b2ea3f3de3f",
+        "size": 2796,
         "source": {
-          "git_blob": "96072b04c1408278e00cfd9dd2af0ad7cfd8e721",
+          "git_blob": "f95150a3b53ed6c149915d72cc703d03a4398c36",
           "mode": "100644",
           "path": "src/skills/ddd-ca-hex-architect/skill-package.yaml",
-          "sha256": "450a044c9b30419963b8e0530bb8f45870fb285a77aad93bf81481c1ff380a5d",
-          "size": 2265
+          "sha256": "9670fb9a2e80dda5b2bb72760b707a280ec85b0374f5350c95982b2ea3f3de3f",
+          "size": 2796
         }
       },
       {
@@ -10951,14 +11948,14 @@
         "mode": "100644",
         "owner": "skill/local-change-implementer",
         "path": "payload/.ai/core/skills/local-change-implementer/references/implement.md",
-        "sha256": "932de795e2508947e41c714683685bc6f7a807b254329e4ca5232080248d5488",
-        "size": 8396,
+        "sha256": "370e8ca423f63406eba49788db7e7057dc557cfc54ff4de53c2c8f7b0e5526ad",
+        "size": 9997,
         "source": {
-          "git_blob": "346c15fbf6a201a2e9594e9f9cf2261c2f86786b",
+          "git_blob": "e4da9057889b1b9ab1bf6bc9289bd92ed815e553",
           "mode": "100644",
           "path": "src/skills/local-change-implementer/references/implement.md",
-          "sha256": "932de795e2508947e41c714683685bc6f7a807b254329e4ca5232080248d5488",
-          "size": 8396
+          "sha256": "370e8ca423f63406eba49788db7e7057dc557cfc54ff4de53c2c8f7b0e5526ad",
+          "size": 9997
         }
       },
       {
@@ -10968,14 +11965,14 @@
         "mode": "100644",
         "owner": "skill/local-change-implementer",
         "path": "payload/.ai/core/skills/local-change-implementer/skill-package.yaml",
-        "sha256": "ffb44108af56051b60255f18442f9b7e77702c2d3d332c4a38721937adc76a32",
-        "size": 1864,
+        "sha256": "d8cc8a82ab368e9390cbde96ca3f387cceaa6a59abe61c49e9c860a42452dd92",
+        "size": 2007,
         "source": {
-          "git_blob": "ee0c56f7f9012d1b3964fcf2aea7ec2c30787b7a",
+          "git_blob": "df2feee1a236b719058bff0a1eac651b4d868dda",
           "mode": "100644",
           "path": "src/skills/local-change-implementer/skill-package.yaml",
-          "sha256": "ffb44108af56051b60255f18442f9b7e77702c2d3d332c4a38721937adc76a32",
-          "size": 1864
+          "sha256": "d8cc8a82ab368e9390cbde96ca3f387cceaa6a59abe61c49e9c860a42452dd92",
+          "size": 2007
         }
       },
       {
@@ -11325,14 +12322,14 @@
         "mode": "100644",
         "owner": "skill/requirement-author",
         "path": "payload/.ai/core/skills/requirement-author/SKILL.md",
-        "sha256": "2bc9fa947c3ae69404f888970c4b65a1c0698aad695c5c2b6ef2e61046071f0b",
-        "size": 1620,
+        "sha256": "5ddc4bd32bf487b3745ac5d96321e391c63685372e15fc08311de656a1f0c31a",
+        "size": 2471,
         "source": {
-          "git_blob": "170a9cdf819b1b12f05cf7ff42a82fe69f54678c",
+          "git_blob": "878bdd2951684b66f9cfb37382a334fccb525f18",
           "mode": "100644",
           "path": "src/skills/requirement-author/SKILL.md",
-          "sha256": "2bc9fa947c3ae69404f888970c4b65a1c0698aad695c5c2b6ef2e61046071f0b",
-          "size": 1620
+          "sha256": "5ddc4bd32bf487b3745ac5d96321e391c63685372e15fc08311de656a1f0c31a",
+          "size": 2471
         }
       },
       {
@@ -11342,14 +12339,48 @@
         "mode": "100644",
         "owner": "skill/requirement-author",
         "path": "payload/.ai/core/skills/requirement-author/references/authoring.md",
-        "sha256": "c75fdb5ddc59e87cdcd7c5ccb1465af2a44576e6b6a6b74e2fe67de81d1e1924",
-        "size": 6436,
+        "sha256": "532758e05eb9813963c02b5141530260be90064b5d0d70394af1cae202a2ef0c",
+        "size": 6782,
         "source": {
-          "git_blob": "e7a5529b70d18392e034178def2c3d6be03a51af",
+          "git_blob": "748ea98a8062992883d545df2a154c6e89874ff1",
           "mode": "100644",
           "path": "src/skills/requirement-author/references/authoring.md",
-          "sha256": "c75fdb5ddc59e87cdcd7c5ccb1465af2a44576e6b6a6b74e2fe67de81d1e1924",
-          "size": 6436
+          "sha256": "532758e05eb9813963c02b5141530260be90064b5d0d70394af1cae202a2ef0c",
+          "size": 6782
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/requirement-author/references/explore.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/requirement-author",
+        "path": "payload/.ai/core/skills/requirement-author/references/explore.md",
+        "sha256": "47a17186109711aaaaf2c65c0a4e8b20c55ed6466c3b7db7abc736d5daa783f4",
+        "size": 4547,
+        "source": {
+          "git_blob": "b3a74f684f3852a32f2d3c4db7951f05df391f89",
+          "mode": "100644",
+          "path": "src/skills/requirement-author/references/explore.md",
+          "sha256": "47a17186109711aaaaf2c65c0a4e8b20c55ed6466c3b7db7abc736d5daa783f4",
+          "size": 4547
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/requirement-author/references/knowledge.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/requirement-author",
+        "path": "payload/.ai/core/skills/requirement-author/references/knowledge.md",
+        "sha256": "e76555bb7d77e9d6858d364fca2a33052b40c3da575882a9870b92668c5a0d2b",
+        "size": 3830,
+        "source": {
+          "git_blob": "d84e49329563196264ae8c9c95ae498c50870a96",
+          "mode": "100644",
+          "path": "src/skills/requirement-author/references/knowledge.md",
+          "sha256": "e76555bb7d77e9d6858d364fca2a33052b40c3da575882a9870b92668c5a0d2b",
+          "size": 3830
         }
       },
       {
@@ -11393,14 +12424,14 @@
         "mode": "100644",
         "owner": "skill/requirement-author",
         "path": "payload/.ai/core/skills/requirement-author/skill-package.yaml",
-        "sha256": "baac6533283e998d20b43a9f2a7b817565928eee6070a85a80e05f45f6cd2d46",
-        "size": 1520,
+        "sha256": "123f6eac3806bc3d2728ad5fb04c5027ba7e585118509b4c671342ef84977391",
+        "size": 2552,
         "source": {
-          "git_blob": "e2c028ca467f48ae765b188bd6602a9faa232051",
+          "git_blob": "f97d5514056b2eb485f3064eb957e6845a6e1069",
           "mode": "100644",
           "path": "src/skills/requirement-author/skill-package.yaml",
-          "sha256": "baac6533283e998d20b43a9f2a7b817565928eee6070a85a80e05f45f6cd2d46",
-          "size": 1520
+          "sha256": "123f6eac3806bc3d2728ad5fb04c5027ba7e585118509b4c671342ef84977391",
+          "size": 2552
         }
       },
       {
@@ -11427,14 +12458,14 @@
         "mode": "100644",
         "owner": "skill/slice-implementer",
         "path": "payload/.ai/core/skills/slice-implementer/references/implement.md",
-        "sha256": "08ba36b4571651cd79cc2ff1f5b76ac50a72ab35a04414f3974438e675bc89a6",
-        "size": 9695,
+        "sha256": "850126f2b3b3bb612136da1faba6c300812b176781b115b69fa5d8018610c5cf",
+        "size": 11655,
         "source": {
-          "git_blob": "396bf271c8f0ec3d51c859976b1071ae12c829b5",
+          "git_blob": "27c5a39bc920cf0e1c7c54f6c1201abbb985dba5",
           "mode": "100644",
           "path": "src/skills/slice-implementer/references/implement.md",
-          "sha256": "08ba36b4571651cd79cc2ff1f5b76ac50a72ab35a04414f3974438e675bc89a6",
-          "size": 9695
+          "sha256": "850126f2b3b3bb612136da1faba6c300812b176781b115b69fa5d8018610c5cf",
+          "size": 11655
         }
       },
       {
@@ -11546,14 +12577,14 @@
         "mode": "100644",
         "owner": "skill/slice-implementer",
         "path": "payload/.ai/core/skills/slice-implementer/skill-package.yaml",
-        "sha256": "6842c837b4359fc5f219eb449ed8d8aa239fd6702c091096e7453f01f5d2c9e5",
-        "size": 2431,
+        "sha256": "6772a1b34fc7a97a77ae22b533238ef5a1fad07df8fd431453f7795547e8bb5b",
+        "size": 2648,
         "source": {
-          "git_blob": "89fb016c3d0253590d7f6f26ae1267a09ffc8210",
+          "git_blob": "033e6da6eb1556e2eb63df8ec7f4a876e4d94d53",
           "mode": "100644",
           "path": "src/skills/slice-implementer/skill-package.yaml",
-          "sha256": "6842c837b4359fc5f219eb449ed8d8aa239fd6702c091096e7453f01f5d2c9e5",
-          "size": 2431
+          "sha256": "6772a1b34fc7a97a77ae22b533238ef5a1fad07df8fd431453f7795547e8bb5b",
+          "size": 2648
         }
       },
       {
@@ -11580,14 +12611,14 @@
         "mode": "100644",
         "owner": "skill/software-development-orchestrator",
         "path": "payload/.ai/core/skills/software-development-orchestrator/references/orchestrate.md",
-        "sha256": "332df2bd353bb4649508f254030fd848376cf8142e3923b4de1657fab6383f83",
-        "size": 7490,
+        "sha256": "630a5932821842d45a74c5670162594b163c352cc3a8518505df6a892014fbb4",
+        "size": 10691,
         "source": {
-          "git_blob": "dfdfec28727f3ef211e8261707175f448fd5abb5",
+          "git_blob": "473f1ac4a5131af8076d02a60313440c4299635f",
           "mode": "100644",
           "path": "src/skills/software-development-orchestrator/references/orchestrate.md",
-          "sha256": "332df2bd353bb4649508f254030fd848376cf8142e3923b4de1657fab6383f83",
-          "size": 7490
+          "sha256": "630a5932821842d45a74c5670162594b163c352cc3a8518505df6a892014fbb4",
+          "size": 10691
         }
       },
       {
@@ -11597,14 +12628,14 @@
         "mode": "100644",
         "owner": "skill/software-development-orchestrator",
         "path": "payload/.ai/core/skills/software-development-orchestrator/skill-package.yaml",
-        "sha256": "5cdae28a35f051fa4d8fee2ca1d5eb1139207df86ab6291cf1c2221bc9a0989a",
-        "size": 1677,
+        "sha256": "140e0a4ecf4e1783c16378ffe411c9761970dddd4678db13a471ae9f58525883",
+        "size": 1687,
         "source": {
-          "git_blob": "f81fbedf920315eadd3e746d90e0a811257364b6",
+          "git_blob": "2aabcb0577a760c016769de58aab96e58fb5ef76",
           "mode": "100644",
           "path": "src/skills/software-development-orchestrator/skill-package.yaml",
-          "sha256": "5cdae28a35f051fa4d8fee2ca1d5eb1139207df86ab6291cf1c2221bc9a0989a",
-          "size": 1677
+          "sha256": "140e0a4ecf4e1783c16378ffe411c9761970dddd4678db13a471ae9f58525883",
+          "size": 1687
         }
       },
       {
@@ -11614,14 +12645,14 @@
         "mode": "100644",
         "owner": "skill/spec-author",
         "path": "payload/.ai/core/skills/spec-author/SKILL.md",
-        "sha256": "3d69af228904426406b0dfa31a5bc5b96fb5bad22161fc3ee1d146e0146fee19",
-        "size": 1845,
+        "sha256": "5723a4ddc03fdd8153d45d819f4aacd0eb47a8382c36ebafe177f80f291710d4",
+        "size": 2161,
         "source": {
-          "git_blob": "bb290b95639cb602563feef45175fe0d9a57d2c6",
+          "git_blob": "43e9a06a2b67552aeeaf90751f134fa0a5b3a5c0",
           "mode": "100644",
           "path": "src/skills/spec-author/SKILL.md",
-          "sha256": "3d69af228904426406b0dfa31a5bc5b96fb5bad22161fc3ee1d146e0146fee19",
-          "size": 1845
+          "sha256": "5723a4ddc03fdd8153d45d819f4aacd0eb47a8382c36ebafe177f80f291710d4",
+          "size": 2161
         }
       },
       {
@@ -11648,14 +12679,14 @@
         "mode": "100644",
         "owner": "skill/spec-author",
         "path": "payload/.ai/core/skills/spec-author/references/authoring.md",
-        "sha256": "521cd217af6eeb31a2095ef3b5945d93af99129f7209e729b975f3189a559510",
-        "size": 7996,
+        "sha256": "2149efb19f3a1786e9228ee1493359ca729f0b84f0ab3d0446a29213006c11da",
+        "size": 8644,
         "source": {
-          "git_blob": "4b3a9cc5538cc90a9509bfc60f1d90f39e8ec925",
+          "git_blob": "c6c590b0581fe8c32deb49047042b817f240d113",
           "mode": "100644",
           "path": "src/skills/spec-author/references/authoring.md",
-          "sha256": "521cd217af6eeb31a2095ef3b5945d93af99129f7209e729b975f3189a559510",
-          "size": 7996
+          "sha256": "2149efb19f3a1786e9228ee1493359ca729f0b84f0ab3d0446a29213006c11da",
+          "size": 8644
         }
       },
       {
@@ -11673,23 +12704,6 @@
           "path": "src/skills/spec-author/references/entity-template.md",
           "sha256": "425f67efc291daf5755f61d1963ec2b3f9848d7c3cc80e0f0f339e27483ccaf0",
           "size": 1901
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/spec-author/references/formal-test-template.md",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/spec-author",
-        "path": "payload/.ai/core/skills/spec-author/references/formal-test-template.md",
-        "sha256": "77e554da50aec47d6db41796527eb78e7e0edf0d7874cd0123bb0c0ece542fa5",
-        "size": 2484,
-        "source": {
-          "git_blob": "9c0abdd96b773184dd62a54b1b6c0ee0e1a4e596",
-          "mode": "100644",
-          "path": "src/skills/spec-author/references/formal-test-template.md",
-          "sha256": "77e554da50aec47d6db41796527eb78e7e0edf0d7874cd0123bb0c0ece542fa5",
-          "size": 2484
         }
       },
       {
@@ -11716,14 +12730,14 @@
         "mode": "100644",
         "owner": "skill/spec-author",
         "path": "payload/.ai/core/skills/spec-author/references/spec-guide.md",
-        "sha256": "ed1c7f0e7b9c3e17ce37d6be8d7f6bf520ef76bdfec11c23f84e18a5134d8e1c",
-        "size": 2210,
+        "sha256": "66d36d144bdf9e24cef32ba75a544b2815a942f28afb0631edf2ad38f490b8e0",
+        "size": 2651,
         "source": {
-          "git_blob": "c91def5923610627166d3c6f445e79161cc29c3b",
+          "git_blob": "fd8255065964de173bd16a8666ef0399a045a958",
           "mode": "100644",
           "path": "src/skills/spec-author/references/spec-guide.md",
-          "sha256": "ed1c7f0e7b9c3e17ce37d6be8d7f6bf520ef76bdfec11c23f84e18a5134d8e1c",
-          "size": 2210
+          "sha256": "66d36d144bdf9e24cef32ba75a544b2815a942f28afb0631edf2ad38f490b8e0",
+          "size": 2651
         }
       },
       {
@@ -11733,14 +12747,14 @@
         "mode": "100644",
         "owner": "skill/spec-author",
         "path": "payload/.ai/core/skills/spec-author/references/spec-organization-guide.md",
-        "sha256": "2787c86c4072f26c9bb7fe5bad39f2db635e88ad1f1fd407e685851502971197",
-        "size": 1700,
+        "sha256": "965da2ba7ef15c1cff1899d0b4ef182b7dec359b1acf4cfb92a1ea05f164736f",
+        "size": 1981,
         "source": {
-          "git_blob": "494df1879a8de6e6f8696d47b7155f6cf885409a",
+          "git_blob": "eb6cfd0a29f8605ae5521cdffcae26163800b670",
           "mode": "100644",
           "path": "src/skills/spec-author/references/spec-organization-guide.md",
-          "sha256": "2787c86c4072f26c9bb7fe5bad39f2db635e88ad1f1fd407e685851502971197",
-          "size": 1700
+          "sha256": "965da2ba7ef15c1cff1899d0b4ef182b7dec359b1acf4cfb92a1ea05f164736f",
+          "size": 1981
         }
       },
       {
@@ -11750,14 +12764,14 @@
         "mode": "100644",
         "owner": "skill/spec-author",
         "path": "payload/.ai/core/skills/spec-author/skill-package.yaml",
-        "sha256": "bbac20ca3e5c33f62b82020baf1e3c56fc21c9d3dcbae5b2ae262f5ee7b84b89",
-        "size": 1697,
+        "sha256": "7fc540812c3e7f691699b329b1d7fda4f0a38c1ccab70a117153d060b3c2cd50",
+        "size": 1674,
         "source": {
-          "git_blob": "30e524a346b51de9671591613bce68fa358ecc19",
+          "git_blob": "e0093f7c2316234f5ab94c6b4cfc3974d271be4a",
           "mode": "100644",
           "path": "src/skills/spec-author/skill-package.yaml",
-          "sha256": "bbac20ca3e5c33f62b82020baf1e3c56fc21c9d3dcbae5b2ae262f5ee7b84b89",
-          "size": 1697
+          "sha256": "7fc540812c3e7f691699b329b1d7fda4f0a38c1ccab70a117153d060b3c2cd50",
+          "size": 1674
         }
       },
       {
@@ -11863,20 +12877,105 @@
         }
       },
       {
+        "binding": null,
+        "destination": ".ai/core/skills/test-designer/SKILL.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/test-designer",
+        "path": "payload/.ai/core/skills/test-designer/SKILL.md",
+        "sha256": "102b9d5eb910af7b65e1d3914f8dd1f3c231b22eb9207c4d8b49062c31bf32ca",
+        "size": 2899,
+        "source": {
+          "git_blob": "2c57b0d546d3de3aaadbe2a455b7d77f35e8abfb",
+          "mode": "100644",
+          "path": "src/skills/test-designer/SKILL.md",
+          "sha256": "102b9d5eb910af7b65e1d3914f8dd1f3c231b22eb9207c4d8b49062c31bf32ca",
+          "size": 2899
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/test-designer/references/design.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/test-designer",
+        "path": "payload/.ai/core/skills/test-designer/references/design.md",
+        "sha256": "8dc4cc9ea99ed23014e29fa1a0024b6de43d800dc38a62ab2ad19d745e506cca",
+        "size": 12893,
+        "source": {
+          "git_blob": "6667b43c15ffcf3a630c3d4975bdd766bf885bca",
+          "mode": "100644",
+          "path": "src/skills/test-designer/references/design.md",
+          "sha256": "8dc4cc9ea99ed23014e29fa1a0024b6de43d800dc38a62ab2ad19d745e506cca",
+          "size": 12893
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/test-designer/references/formal-test-template.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/test-designer",
+        "path": "payload/.ai/core/skills/test-designer/references/formal-test-template.md",
+        "sha256": "fac525f419faa7ea3425ab04b8e6c97b7e87273eee0d603e2791858d1875ff2d",
+        "size": 3826,
+        "source": {
+          "git_blob": "2c19dbe3c8dde3da55b56209da465e8b9c92ecec",
+          "mode": "100644",
+          "path": "src/skills/test-designer/references/formal-test-template.md",
+          "sha256": "fac525f419faa7ea3425ab04b8e6c97b7e87273eee0d603e2791858d1875ff2d",
+          "size": 3826
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/test-designer/references/review.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/test-designer",
+        "path": "payload/.ai/core/skills/test-designer/references/review.md",
+        "sha256": "b281687f1c689b2c558bdf1ce4c3c4530c720a3deca248cc80c95ff542c7ee5c",
+        "size": 9521,
+        "source": {
+          "git_blob": "9c6daef51061c099f10326dfe8fdc09622823353",
+          "mode": "100644",
+          "path": "src/skills/test-designer/references/review.md",
+          "sha256": "b281687f1c689b2c558bdf1ce4c3c4530c720a3deca248cc80c95ff542c7ee5c",
+          "size": 9521
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/test-designer/skill-package.yaml",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/test-designer",
+        "path": "payload/.ai/core/skills/test-designer/skill-package.yaml",
+        "sha256": "1f9256f028aab04f2fb5440311df1fcfda692bc12039052bafcc3e2ad8977c19",
+        "size": 2330,
+        "source": {
+          "git_blob": "ecfcf9d299f4d2fa4d62ef8cd708f79cf56dda5f",
+          "mode": "100644",
+          "path": "src/skills/test-designer/skill-package.yaml",
+          "sha256": "1f9256f028aab04f2fb5440311df1fcfda692bc12039052bafcc3e2ad8977c19",
+          "size": 2330
+        }
+      },
+      {
         "binding": {
           "adapter": "codex",
           "core_entrypoint": ".ai/core/skills/adr-author/SKILL.md",
           "entry_name": "adr-author",
           "skill": "adr-author",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/adr-author/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/adr-author",
         "path": "runtime/.agents/skills/adr-author/SKILL.md",
-        "sha256": "a6a8941e617a852647f51ed9171ad63f15126ec155980a35cc491ef8cc586a08",
-        "size": 2261,
+        "sha256": "b0aaf2f221b3fdd85d0e2b57d3f910d4cc0f29fda6f36a6043619ab2ac3bf15a",
+        "size": 2478,
         "source": null
       },
       {
@@ -11885,32 +12984,15 @@
           "core_entrypoint": ".ai/core/skills/ai-context-init/SKILL.md",
           "entry_name": "ai-context-init",
           "skill": "ai-context-init",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/ai-context-init/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/ai-context-init",
         "path": "runtime/.agents/skills/ai-context-init/SKILL.md",
-        "sha256": "a8f940f7291e2f212b753e9e3a6ef94e2537f2ebf196627884635350cc1222f7",
-        "size": 3151,
-        "source": null
-      },
-      {
-        "binding": {
-          "adapter": "codex",
-          "core_entrypoint": ".ai/core/skills/bdd-gwt-test-designer/SKILL.md",
-          "entry_name": "bdd-gwt-test-designer",
-          "skill": "bdd-gwt-test-designer",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
-        },
-        "destination": ".agents/skills/bdd-gwt-test-designer/SKILL.md",
-        "kind": "runtime",
-        "mode": "100644",
-        "owner": "adapter/codex/skill/bdd-gwt-test-designer",
-        "path": "runtime/.agents/skills/bdd-gwt-test-designer/SKILL.md",
-        "sha256": "8fe3e4db3ad6357af4ca528b0f6c68731a6104b711144f6a9407be1e21e4c300",
-        "size": 1890,
+        "sha256": "ae5e80259f463246c11900565ad1b86069019d7ed408e52a5089a7f32430e339",
+        "size": 3368,
         "source": null
       },
       {
@@ -11919,15 +13001,15 @@
           "core_entrypoint": ".ai/core/skills/code-reviewer/SKILL.md",
           "entry_name": "code-reviewer",
           "skill": "code-reviewer",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/code-reviewer/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/code-reviewer",
         "path": "runtime/.agents/skills/code-reviewer/SKILL.md",
-        "sha256": "d5da8908047223039763ff5e86c776d97d00f518818fc12de5ff6b3b74861902",
-        "size": 1742,
+        "sha256": "c5e54d90147ba6dd86a8091b3157048c080ab709aa1e93c6fcd021fb49575f25",
+        "size": 1959,
         "source": null
       },
       {
@@ -11936,15 +13018,15 @@
           "core_entrypoint": ".ai/core/skills/ddd-ca-hex-architect/SKILL.md",
           "entry_name": "ddd-ca-hex-architect",
           "skill": "ddd-ca-hex-architect",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/ddd-ca-hex-architect/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/ddd-ca-hex-architect",
         "path": "runtime/.agents/skills/ddd-ca-hex-architect/SKILL.md",
-        "sha256": "e8872e44c1f800d68eb83ff18ddba735a17b02d43191c384fdb562d497b8b3f3",
-        "size": 1815,
+        "sha256": "6408cac131972f3dffd91493bd17ef4297934325c21855843f53842fcd7a1403",
+        "size": 2032,
         "source": null
       },
       {
@@ -11953,15 +13035,15 @@
           "core_entrypoint": ".ai/core/skills/diagnostic-analyst/SKILL.md",
           "entry_name": "diagnostic-analyst",
           "skill": "diagnostic-analyst",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/diagnostic-analyst/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/diagnostic-analyst",
         "path": "runtime/.agents/skills/diagnostic-analyst/SKILL.md",
-        "sha256": "7e1892c7d09eb7ea1ff2496fc6acfd14d6e8cfb86c88f91c28aaf53388d55a02",
-        "size": 1719,
+        "sha256": "fd086130a070222faa544ceabe9a5cae6760cb7dc3e08e3268edaa5f8ff4fc97",
+        "size": 1936,
         "source": null
       },
       {
@@ -11970,15 +13052,15 @@
           "core_entrypoint": ".ai/core/skills/lesson-author/SKILL.md",
           "entry_name": "lesson-author",
           "skill": "lesson-author",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/lesson-author/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/lesson-author",
         "path": "runtime/.agents/skills/lesson-author/SKILL.md",
-        "sha256": "961119867ab4e3fc28280001b40fa0462ea307f9a37ed93eb53f108866c100aa",
-        "size": 2297,
+        "sha256": "869c42f2aa8216f4aa56d9c95add1d14b799207f7f2399899ebb86b4522cf113",
+        "size": 2514,
         "source": null
       },
       {
@@ -11987,15 +13069,15 @@
           "core_entrypoint": ".ai/core/skills/local-change-implementer/SKILL.md",
           "entry_name": "local-change-implementer",
           "skill": "local-change-implementer",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/local-change-implementer/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/local-change-implementer",
         "path": "runtime/.agents/skills/local-change-implementer/SKILL.md",
-        "sha256": "eae76abcfb31344691d2270371c5d3883cb356780cf9b4016e9ebaf7b98514ac",
-        "size": 1796,
+        "sha256": "2dae3133ce73bb25013c85a7bc49b1cd7fe60678f13a235b4efd9495cc015e80",
+        "size": 2013,
         "source": null
       },
       {
@@ -12004,15 +13086,15 @@
           "core_entrypoint": ".ai/core/skills/pr-author/SKILL.md",
           "entry_name": "pr-author",
           "skill": "pr-author",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/pr-author/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/pr-author",
         "path": "runtime/.agents/skills/pr-author/SKILL.md",
-        "sha256": "217f263e69ef38d19ef8a23c0d3e73bdde0d378d0de975532bdc37246b5f4955",
-        "size": 2378,
+        "sha256": "d5ef9c0e4d6c57153e93ed7af320ceb8cd09890b5fd10786ad626fc52fc76d9e",
+        "size": 2595,
         "source": null
       },
       {
@@ -12021,15 +13103,15 @@
           "core_entrypoint": ".ai/core/skills/problem-frame-author/SKILL.md",
           "entry_name": "problem-frame-author",
           "skill": "problem-frame-author",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/problem-frame-author/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/problem-frame-author",
         "path": "runtime/.agents/skills/problem-frame-author/SKILL.md",
-        "sha256": "ecc32ab73f06a7c2e80c3e0ac933ff84e3de4d69df9e50b6de711df2d3597df5",
-        "size": 2549,
+        "sha256": "b26e194242f9f2259a96ee6eb0c281df157338053cdf0c90b118778e3c137db8",
+        "size": 2766,
         "source": null
       },
       {
@@ -12038,15 +13120,15 @@
           "core_entrypoint": ".ai/core/skills/requirement-author/SKILL.md",
           "entry_name": "requirement-author",
           "skill": "requirement-author",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/requirement-author/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/requirement-author",
         "path": "runtime/.agents/skills/requirement-author/SKILL.md",
-        "sha256": "d9fdb97fbbd4d8d7b81305bc3ac5d8b68905ced4d3c665cfbe56147f240ebf52",
-        "size": 1977,
+        "sha256": "1cde6f04d1b6ffb555c9d97b6275edcc261c1f9c1484f354fddb85d7a82fa8d0",
+        "size": 2417,
         "source": null
       },
       {
@@ -12055,15 +13137,15 @@
           "core_entrypoint": ".ai/core/skills/slice-implementer/SKILL.md",
           "entry_name": "slice-implementer",
           "skill": "slice-implementer",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/slice-implementer/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/slice-implementer",
         "path": "runtime/.agents/skills/slice-implementer/SKILL.md",
-        "sha256": "a96c1d28fcb1ff0886d5c2ebca9f476d2bf521bee421cd9c77629e6924e0ef6f",
-        "size": 2357,
+        "sha256": "4a68228351df0ebd9475a170ec040e56604319710591bb1c9561f3af0e81ccb8",
+        "size": 2574,
         "source": null
       },
       {
@@ -12072,15 +13154,15 @@
           "core_entrypoint": ".ai/core/skills/software-development-orchestrator/SKILL.md",
           "entry_name": "software-development-orchestrator",
           "skill": "software-development-orchestrator",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/software-development-orchestrator/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/software-development-orchestrator",
         "path": "runtime/.agents/skills/software-development-orchestrator/SKILL.md",
-        "sha256": "2200b6234ea3a1110d4d94ed7081d83375427a501eba1c39b5fa70d92239a2a3",
-        "size": 1900,
+        "sha256": "e4374018d2b69ff1f632d86ad17f192e5844e176dd70106499a3951c2f82b9e4",
+        "size": 2117,
         "source": null
       },
       {
@@ -12089,15 +13171,15 @@
           "core_entrypoint": ".ai/core/skills/spec-author/SKILL.md",
           "entry_name": "spec-author",
           "skill": "spec-author",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/spec-author/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/spec-author",
         "path": "runtime/.agents/skills/spec-author/SKILL.md",
-        "sha256": "f62e7f95029d22ff227f3a9e68b71c4bc2a2aa236328ed6b4564e768ab42c7da",
-        "size": 2343,
+        "sha256": "3c7798deb70e77ae6a4beba03a63873c193f8e5271d3d443388f924ae52afd46",
+        "size": 2446,
         "source": null
       },
       {
@@ -12106,15 +13188,32 @@
           "core_entrypoint": ".ai/core/skills/spec-compliance-validator/SKILL.md",
           "entry_name": "spec-compliance-validator",
           "skill": "spec-compliance-validator",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
         },
         "destination": ".agents/skills/spec-compliance-validator/SKILL.md",
         "kind": "runtime",
         "mode": "100644",
         "owner": "adapter/codex/skill/spec-compliance-validator",
         "path": "runtime/.agents/skills/spec-compliance-validator/SKILL.md",
-        "sha256": "4b622e969291d590dba0309c0454bcdde201c72b8e3def4e93c10d44100f3e1d",
-        "size": 2136,
+        "sha256": "9162cd2abee8cfe482bfb78818a4bfbbbe215b8f066f5b10c6d4ecad83a7a147",
+        "size": 2353,
+        "source": null
+      },
+      {
+        "binding": {
+          "adapter": "codex",
+          "core_entrypoint": ".ai/core/skills/test-designer/SKILL.md",
+          "entry_name": "test-designer",
+          "skill": "test-designer",
+          "template_sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6"
+        },
+        "destination": ".agents/skills/test-designer/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "adapter/codex/skill/test-designer",
+        "path": "runtime/.agents/skills/test-designer/SKILL.md",
+        "sha256": "3148d3c2ca8508f3ee10bb7d5e1ae2004b1f68c9d89d1379d929a827188eb1f7",
+        "size": 2124,
         "source": null
       }
     ],
@@ -12125,7 +13224,7 @@
   "project_inputs": [
     {
       "path": ".ai/custom/installation.json",
-      "sha256": "05ec4f9b101185b7510c82af95ad6918247555c2e70a4c4e68ad3ee7dc466f72"
+      "sha256": "d97233314fe9cc5f3ea8d67f98c028b0ced842c256662fcbd1e01df517ae0907"
     }
   ],
   "selection": {
@@ -12141,9 +13240,9 @@
       }
     ],
     "catalog": {
-      "catalog_sha256": "12ca7dd23134cdfad8515c20a8fdf50951ac3b1730cf89fd4d016a27e4859a68",
-      "files_sha256": "97ef5bfb98628cc4bf6bc56a95ed0cce1f281d5f7bcf8dd6c4e49cdb58f2ae8d",
-      "identity": "catalog:1:0.19.1:42b99e954e3d6fbf595075a079357f0ce1df057f:ec0cd3a7c59caf2bbcb594b479760103315cfce6c3ed1c910da9438a5186a6da"
+      "catalog_sha256": "a5f336f29e3b9da401fbe9abf57c9db244286c7b820f807f9a4b3ee9de870088",
+      "files_sha256": "a60fe308a994c76e4628a499174f32addfbb9e637e4f94c40b28ded861a74d90",
+      "identity": "catalog:1:0.20.1:fba2f031f1c969cd5788af924e307ffebf553422:66ba50538eacba621a08fc3cc413ded6bc3d1dd39fa36e878ac311feecf2beac"
     },
     "components": [
       {
@@ -12151,7 +13250,20 @@
         "kind": "knowledge",
         "members": [
           "README.md",
+          "bdd/README.md",
+          "bdd/automation.md",
+          "bdd/discovery.md",
+          "bdd/examples/library-renewal.md",
+          "bdd/formulation.md",
+          "bdd/gherkin.md",
           "content-package.yaml",
+          "ddd/README.md",
+          "ddd/domain-discovery.md",
+          "ddd/examples/order-cancellation.md",
+          "ddd/model-evolution.md",
+          "ddd/strategic-design.md",
+          "ddd/tactical-design.md",
+          "discovery/collaborative-discovery.md",
           "domain-language/README.MD",
           "domain-language/templates/aggregate-vocabulary-template.md",
           "domain-language/templates/bounded-context-language-template.md",
@@ -12169,13 +13281,14 @@
           "references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md",
           "references/PROMPT-PORTABILITY-RULES.md",
           "references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
-          "references/TECHNOLOGY-SELECTION-POLICY.md"
+          "references/TECHNOLOGY-SELECTION-POLICY.md",
+          "references/TEST-DESIGN-HANDOFF-CONTRACT.md"
         ],
         "metadata": "content-package.yaml",
         "metadata_version": 1,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.1.0"
+        "version": "0.3.0"
       },
       {
         "id": "adr-author",
@@ -12221,35 +13334,7 @@
         "metadata_version": 3,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.0"
-      },
-      {
-        "id": "bdd-gwt-test-designer",
-        "kind": "skill",
-        "members": [
-          "SKILL.md",
-          "references/design.md",
-          "references/review.md",
-          "skill-package.yaml"
-        ],
-        "metadata": "skill-package.yaml",
-        "metadata_version": 4,
-        "optional_dependencies": [
-          {
-            "id": "dotnet-backend",
-            "kind": "knowledge",
-            "on_missing": "unavailable",
-            "version": "0.1.0"
-          },
-          {
-            "id": "engineering-common",
-            "kind": "knowledge",
-            "on_missing": "unavailable",
-            "version": "0.1.0"
-          }
-        ],
-        "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.2.1"
       },
       {
         "id": "code-reviewer",
@@ -12266,17 +13351,17 @@
             "id": "dotnet-backend",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.1.4"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.3.0"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.2.4"
       },
       {
         "id": "ddd-ca-hex-architect",
@@ -12294,17 +13379,17 @@
             "id": "dotnet-backend",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.1.4"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.3.0"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.3.1"
       },
       {
         "id": "diagnostic-analyst",
@@ -12355,17 +13440,17 @@
             "id": "dotnet-backend",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.1.4"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.3.0"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.2.5"
       },
       {
         "id": "pr-author",
@@ -12415,15 +13500,24 @@
         "members": [
           "SKILL.md",
           "references/authoring.md",
+          "references/explore.md",
+          "references/knowledge.md",
           "references/requirement-guide.md",
           "references/requirement-template.md",
           "skill-package.yaml"
         ],
         "metadata": "skill-package.yaml",
-        "metadata_version": 3,
-        "optional_dependencies": [],
+        "metadata_version": 4,
+        "optional_dependencies": [
+          {
+            "id": "engineering-common",
+            "kind": "knowledge",
+            "on_missing": "unavailable",
+            "version": "0.3.0"
+          }
+        ],
         "required_dependencies": [],
-        "version": "0.1.0"
+        "version": "0.2.1"
       },
       {
         "id": "slice-implementer",
@@ -12446,17 +13540,17 @@
             "id": "dotnet-backend",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.1.4"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.1.0"
+            "version": "0.3.0"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.2.5"
       },
       {
         "id": "software-development-orchestrator",
@@ -12470,7 +13564,7 @@
         "metadata_version": 4,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.0"
+        "version": "0.3.2"
       },
       {
         "id": "spec-author",
@@ -12480,7 +13574,6 @@
           "references/adapter-template.md",
           "references/authoring.md",
           "references/entity-template.md",
-          "references/formal-test-template.md",
           "references/production-template.md",
           "references/spec-guide.md",
           "references/spec-organization-guide.md",
@@ -12490,7 +13583,7 @@
         "metadata_version": 3,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.1.0"
+        "version": "0.2.0"
       },
       {
         "id": "spec-compliance-validator",
@@ -12508,6 +13601,35 @@
         "optional_dependencies": [],
         "required_dependencies": [],
         "version": "0.1.0"
+      },
+      {
+        "id": "test-designer",
+        "kind": "skill",
+        "members": [
+          "SKILL.md",
+          "references/design.md",
+          "references/formal-test-template.md",
+          "references/review.md",
+          "skill-package.yaml"
+        ],
+        "metadata": "skill-package.yaml",
+        "metadata_version": 4,
+        "optional_dependencies": [
+          {
+            "id": "dotnet-backend",
+            "kind": "knowledge",
+            "on_missing": "unavailable",
+            "version": "0.1.4"
+          },
+          {
+            "id": "engineering-common",
+            "kind": "knowledge",
+            "on_missing": "unavailable",
+            "version": "0.3.0"
+          }
+        ],
+        "required_dependencies": [],
+        "version": "0.4.1"
       }
     ],
     "desired": {
@@ -12516,9 +13638,9 @@
       ],
       "bindings": [],
       "catalog": {
-        "catalog_sha256": "12ca7dd23134cdfad8515c20a8fdf50951ac3b1730cf89fd4d016a27e4859a68",
-        "files_sha256": "97ef5bfb98628cc4bf6bc56a95ed0cce1f281d5f7bcf8dd6c4e49cdb58f2ae8d",
-        "identity": "catalog:1:0.19.1:42b99e954e3d6fbf595075a079357f0ce1df057f:ec0cd3a7c59caf2bbcb594b479760103315cfce6c3ed1c910da9438a5186a6da"
+        "catalog_sha256": "a5f336f29e3b9da401fbe9abf57c9db244286c7b820f807f9a4b3ee9de870088",
+        "files_sha256": "a60fe308a994c76e4628a499174f32addfbb9e637e4f94c40b28ded861a74d90",
+        "identity": "catalog:1:0.20.1:fba2f031f1c969cd5788af924e307ffebf553422:66ba50538eacba621a08fc3cc413ded6bc3d1dd39fa36e878ac311feecf2beac"
       },
       "knowledge": [
         "engineering-common"
@@ -12528,7 +13650,6 @@
       "skills": [
         "adr-author",
         "ai-context-init",
-        "bdd-gwt-test-designer",
         "code-reviewer",
         "ddd-ca-hex-architect",
         "diagnostic-analyst",
@@ -12540,26 +13661,27 @@
         "slice-implementer",
         "software-development-orchestrator",
         "spec-author",
-        "spec-compliance-validator"
+        "spec-compliance-validator",
+        "test-designer"
       ]
     },
-    "desired_sha256": "634e1a74d0566fc5bc5db70d3a8718dce7d4397fb1d9a6040985ab585fb85db8",
+    "desired_sha256": "130a5c15989fbf5263adc737158db67bcff80b9b42921d13772d434caeb85472",
     "generator": {
       "id": "aicf-subset-derivation",
       "implementation": [
         {
-          "git_blob": "78f0052e0c006c9431d4b0592a7a389af3056f21",
+          "git_blob": "4a31424ed52d8de63d77c739fdfda84fa7194dfc",
           "mode": "100644",
           "path": "src/adapters/claude/skill-entry-v2.md.template",
-          "sha256": "11eeedac1452cc78e9ab7726791c5032b2379815ea15e8fb0f8fb11d921d032e",
-          "size": 1201
+          "sha256": "4a0ef01a22ecb4511e003da9998274d8c1a4ec482b6acf03c8f4c508a9efd966",
+          "size": 1418
         },
         {
-          "git_blob": "3592b853bea3a18ebaa84ea1a2ee35db67392d88",
+          "git_blob": "7799aec0ab0b283c26d21889b92144d638eaad90",
           "mode": "100644",
           "path": "src/adapters/codex/skill-entry-v2.md.template",
-          "sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4",
-          "size": 1199
+          "sha256": "786fba6b9ed3eaba711d39d2366d39ccfbfe4a5f2a39947256ceab7ed37fd4f6",
+          "size": 1416
         },
         {
           "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
@@ -12583,25 +13705,25 @@
           "size": 11564
         },
         {
-          "git_blob": "2e765101e7264f773c7c695a5cb007642686c029",
+          "git_blob": "f5c45d433820f5ebd60188ff04d8ddfbfb7f31eb",
           "mode": "100644",
           "path": "src/distribution/catalog.py",
-          "sha256": "5b2853de712d04e2cc3a34437d4d22e0869e7cf7d75904e5a9524cc9861d65e4",
-          "size": 38404
+          "sha256": "88db79985cab5c758b62cad95fc88dec13c6415194aa60d725045a81f935004c",
+          "size": 40699
         },
         {
-          "git_blob": "db306ef1659af6f406284df3c1ba2f83aa9823d7",
+          "git_blob": "c0b7faa10371c00e1ed4947f2de41cc0823b8427",
           "mode": "100644",
           "path": "src/distribution/claude.py",
-          "sha256": "47732f37a32c5aa855d09f47aa135c772aded4c41ba9698f6911e1516fea41a8",
-          "size": 4782
+          "sha256": "2c79db10ded390c209145e9539a91bb1bee5c2370b5aa804de64947364afa910",
+          "size": 4863
         },
         {
-          "git_blob": "b472c64202f21793ca1e40456688ddbe1acf2106",
+          "git_blob": "d2ebaa45bb135d8bc7eb8458b185e11574ff1265",
           "mode": "100644",
           "path": "src/distribution/codex.py",
-          "sha256": "8bf874d70818004db05e4721321714390a6d6acf60343cc4533a39517cf79d2e",
-          "size": 7955
+          "sha256": "5fbe00b4e2390ce7ef411105fab8afaa1e22462da381a8f17e8ca3844283d8eb",
+          "size": 8036
         },
         {
           "git_blob": "907320717317a90afe21e79a1bd82ecc1338d7e3",
@@ -12611,11 +13733,11 @@
           "size": 23040
         },
         {
-          "git_blob": "3c93d33b70caaaac1429f1f060ae5fd77810e8c0",
+          "git_blob": "c6174b0ba39ea34bef37a137ddba6f58975ba98f",
           "mode": "100644",
           "path": "src/distribution/contracts.py",
-          "sha256": "4d4c9e3b7da68496dc8c9834882049c913fc9afdf45dc150083989329a58e3a5",
-          "size": 34270
+          "sha256": "9c904ab999ae5efb0722e6b6c9b0ce14809ec9347af4b7e3c3f27196c3a46427",
+          "size": 34561
         },
         {
           "git_blob": "38332e2c55bec156e81f0dab68e298b61b52eda7",
@@ -12667,18 +13789,18 @@
           "size": 5704
         },
         {
-          "git_blob": "45fffbd3a273e8ba0502b9428b9d426c89cdda0e",
+          "git_blob": "ecfe6555bfc495f37dcf04678fbdb8e9e04a7193",
           "mode": "100644",
           "path": "src/distribution/package.py",
-          "sha256": "f0677644df30f0d9f211dc669da6ecdb5ffcb27a90e996b4b9e036d2e610281c",
-          "size": 18372
+          "sha256": "c69e4485213ed195d67d2776fc49ec2c16177391c6311a0a48828eb16510df58",
+          "size": 18988
         },
         {
-          "git_blob": "c7ef28e28529da3344797457b7bb477ff425578e",
+          "git_blob": "794cd8ca0f9cab680f199a5cb6d9a48d04c7f49d",
           "mode": "100644",
           "path": "src/distribution/reinstallation.py",
-          "sha256": "fa3e4332306a8e935de93fc34a3e7eefd9c6bcd8a1fafa134978c8c260fcf768",
-          "size": 21572
+          "sha256": "2fd96222b48ce7d16b917747ecfe2cf4e01eaf00bd0bd687b63e92ab75573f99",
+          "size": 21720
         },
         {
           "git_blob": "22fb3136fa7ccf5d55e0c3078d13b68d05933edf",
@@ -12711,11 +13833,11 @@
       ]
     },
     "mode": "catalog-subset",
-    "release_version": "0.19.1",
+    "release_version": "0.20.1",
     "schema_version": 3,
     "source": {
-      "commit": "42b99e954e3d6fbf595075a079357f0ce1df057f",
-      "tree": "ee283c22d206912b652dd8cddd7b3648769dae8f"
+      "commit": "fba2f031f1c969cd5788af924e307ffebf553422",
+      "tree": "753ae3615fdf8ec2736f52f91eaf4243302dd31e"
     }
   }
 }

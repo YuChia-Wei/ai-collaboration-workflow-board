@@ -1,16 +1,17 @@
 # Specification organization guide
 
-Use the target project's selected root, naming rules and existing artifact owners.
-This optional layout does not require `.dev/specs`, move existing records or create
-empty directories. The [authoring method](authoring.md) owns artifact selection;
+Use the target's selected root, naming rules, formats and existing artifact owners.
+This optional layout does not require `.dev/specs`, move records or create empty
+directories. The [authoring method](authoring.md) owns artifact selection;
 [presentation guidance](spec-guide.md) offers optional formats.
 
-## Reflect semantic ownership
+## Reflect accepted semantic ownership
 
-For domain-oriented targets, group documents by bounded context and, when relevant,
-by the aggregate whose behavior is specified. A reference to another aggregate does
-not transfer ownership. A query, adapter or cross-context flow may have its own
-accepted owner. Resolve unclear boundaries before guessing their directory.
+For domain-oriented targets, group documents by the accepted context and, where
+relevant, the aggregate whose behavior is specified. Reuse accepted designer
+outputs. A reference does not transfer ownership; a query, adapter or flow may
+have another accepted owner. Preserve uncertainty instead of guessing a directory
+that silently establishes an unresolved boundary.
 
 ```text
 docs/specifications/
@@ -18,23 +19,25 @@ docs/specifications/
     <aggregate>/
       entity/<aggregate>-spec.md
       behaviors/create-<aggregate>.md
-  tests/
+    adapters/<interface>-spec.md
+  tests/                              # related artifacts owned by test-designer
     <bounded-context>/
       aggregate/<aggregate>.test-spec.md
       behaviors/create-<aggregate>.test-spec.md
       integration/<target>.test-spec.md
     cross-context/<flow>.test-spec.md
-    end-to-end/<journey>.test-spec.md
 ```
 
-Names and extensions above are examples. Preserve a target's Markdown, JSON or
-other accepted format, and keep production/test documents distinguishable. A
-cross-context or end-to-end subject need not live under one aggregate.
+Names, extensions and grouping above are examples. The tests subtree illustrates
+related `test-designer` outputs, not artifacts spec-author must create.
+Keep system specifications and test designs distinguishable while preserving
+existing cross-references and observable acceptance in system specifications.
+A cross-context subject need not be forced beneath one aggregate.
 
 ## Selected relocation
 
-Only relocate documents when that operation is requested. Read their current
-identities, accepted ownership, references and unresolved work; list exact moves
-and affected references. Preserve historical IDs and approval status, update only
-in-scope links, and check the selected target format. A layout proposal alone does
-not authorize a move or bulk migration.
+Relocate only when requested. Inspect current identities, accepted ownership,
+references and unresolved work; list exact moves and affected references.
+Preserve historical IDs, decisions and approval state. Update only authorized
+links and retain the selected schema/version and normalization contract.
+A layout proposal alone does not authorize a move, migration or new record store.

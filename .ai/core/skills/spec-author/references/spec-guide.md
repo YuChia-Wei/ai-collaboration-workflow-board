@@ -1,44 +1,46 @@
 # Specification presentation guide
 
 The [authoring method](authoring.md) owns artifact selection, source binding and
-uncertainty. Use the caller's target contract, schema and format when supplied;
-the four packaged prose templates remain the defaults. This reference offers
-optional presentation examples, not a JSON schema or an additional required stage.
-See [organization guidance](spec-organization-guide.md) for configurable locations.
+uncertainty. Honor the target contract, schema and format; the three packaged
+prose templates are defaults only. This guide creates no schema or required stage.
+See [organization guidance](spec-organization-guide.md) for target-owned locations.
 
-## Describe the behavior before implementation names
+## Express accepted behavior and design
 
-Use the business operation as the subject. A command/query is its input model;
-a dispatch handler, when actually selected, maps the inbound delivery and invokes
-the behavior. Do not invent an aggregate, event, repository or handler to fill a
-format. Technology-specific terminology requires the target-selected supplement;
-this independent skill has no dependency on a framework source checkout.
+Use the business operation as the subject. Bind its requirements and accepted
+design output identities. Retain ownership, invariants, dependencies and decisions
+from those sources rather than redesigning them during document formatting.
+A selected command/query or handler can be named when supported by the design;
+do not invent aggregates, repositories, events or class names to fill the format.
+Technology details need actual target decisions. This skill does not directly
+consume optional engineering-method packages or import source-checkout guidance.
 
-## Optional JSON examples
+When a design gap remains, retain its affected contract as unresolved in a
+caller-requested provisional draft. Do not make it appear accepted by assigning
+an implementation type. Reuse complete design outputs without repeating design.
 
-When a target chooses JSON without supplying a closed schema, discuss the shape
-before writing it. The following illustrates a production behavior; include only
-fields supported by real sources and leave unknown contracts explicit:
+## Select the smallest useful representation
 
-```json
-{
-  "useCase": "CreateProduct",
-  "behavior": "Create a product under the accepted naming rule",
-  "input": [{ "name": "name", "type": "string" }],
-  "output": { "productId": "target-selected identifier" }
-}
-```
+Use prose, tables or the caller's chosen format to explain inputs, outcomes,
+invariants, errors and effects. A source ID/revision/status can be attached to
+its claim or retained in permitted companion notes when a closed schema cannot
+contain it. Do not introduce arbitrary metadata into that schema.
 
-An adapter example may describe direction, protocol, endpoints and error mapping;
-entity/value-object examples may describe identity, attributes, equality and
-invariants. Their accepted owners and schema determine required fields. Examples
-must not override a closed format or adopt a route, package, ORM or event model.
+For JSON without a supplied schema, propose the shape before treating it as a
+contract. Include only supported fields. A label such as “target-selected ID”
+marks an unresolved type; it is not a validated machine-readable specification.
+Do not invent a shared record family to standardize unrelated targets.
 
-## Review and test-spec boundary
+## Preserve verifiability and ownership
 
-Check accepted behavior, inputs/outputs, invariants, failures, source IDs and open
-choices against the selected contract. Reference related artifacts only when they
-exist and matter. A production specification states expected behavior; a formal-test
-specification states scenarios, setup, observable assertions and verification level.
-One does not replace the other, and no mandatory requirement-to-spec-to-test pipeline
-is implied. Authoring does not implement or execute tests.
+System specifications retain observable acceptance and supported failure results.
+For example, a caller can observe a refusal and an unchanged due date when those
+outcomes are accepted requirements. State the expected behavior without choosing
+a mocking library, test fixture or runner.
+
+Reference existing test-design artifacts and scenario IDs where useful.
+Formal-test specifications and all scenario/assertion/test design belong to
+`test-designer`; they are related artifacts rather than a fourth spec-author type.
+Do not silently route an explicitly selected skill to a different output: clarify
+the bounded mismatch with the caller. No mandatory authoring pipeline is implied.
+Authoring is neither test execution nor a passing acceptance result.
