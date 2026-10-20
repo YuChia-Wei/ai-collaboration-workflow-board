@@ -1,6 +1,6 @@
 metadata_version: 3
 id: ai-context-init
-version: 0.2.0
+version: 0.2.1
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:

@@ -20,7 +20,7 @@
 
 - Use past-tense business language for completed facts.
 - Avoid implementation details in event names.
-- Document when an event name is intentionally technical because it is an integration contract.
+- A domain event records a business fact within its context model; an integration contract has separately defined external meaning, ownership and versioning, without requiring a technical event name.
 
 ## Payload Language
 

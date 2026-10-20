@@ -2,7 +2,7 @@
 
 工作流程、任務與文件紀錄專案。所有程式碼專案都位於 `src/`；網站建置結果、preview、SQLite、憑證與測試證據不進入 Git。
 
-開發協作已選配 Framework v0.19.1 的 15 個 skills 與共通知識，包含 `ai-context-init@0.2.0`，並完成最小協作起點初始化。精確清單、驗證及使用限制見 [FRAMEWORK-INSTALLATION.md](FRAMEWORK-INSTALLATION.md)，Agent 入口見 [AGENTS.md](AGENTS.md)，開始方式見 [第一個有界任務](.dev/guides/first-task.md)。這是開發工具採用，不增加 Board runtime 相依。
+開發協作已選配 Framework v0.20.1 的 15 個 skills 與 `engineering-common@0.3.0`，包含 `ai-context-init@0.2.1`；既有最小協作起點初始化保留。測試設計入口已由 `bdd-gwt-test-designer` 遷移為 `test-designer`。精確清單、驗證及使用限制見 [FRAMEWORK-INSTALLATION.md](FRAMEWORK-INSTALLATION.md)，Agent 入口見 [AGENTS.md](AGENTS.md)，開始方式見 [第一個有界任務](.dev/guides/first-task.md)。這是開發工具採用，不增加 Board runtime 相依。
 
 | 路徑 | 用途 |
 | --- | --- |
@@ -13,6 +13,10 @@
 兩個實作有自己的契約與儲存模型，沒有隱含的雙向同步。網站保存既有 framework 來源快照與人工 board 紀錄；本機服務使用合成 fixture。資料來源的權威切換與真實資料遷移需要各自的驗證。
 
 程式依領域規則、應用案例、輸入／輸出 adapters 分類。具體依賴方向與保留的限制見 [ARCHITECTURE.md](ARCHITECTURE.md)。詳細契約見 [網站說明](src/board/README.md) 與 [本機服務說明](src/local/README.md)。
+
+連接線上 Board 的新 [CLI 使用指南](src/board/CLI.md) 包含啟動方式、雙層認證、
+JSON／exit code、精確版本讀取與跨 session 接手。CLI 與服務認證 adapter 已有
+本機實作及驗證；線上憑證設定與部署尚未執行。這與 Python 本機原型的 CLI 分開。
 
 ## 建置與測試
 

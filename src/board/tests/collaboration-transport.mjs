@@ -51,6 +51,18 @@ await test('D07: missing authentication, revoked binding, Origin and human capab
  assert.equal((await post('/mcp',message,{}, {...env,COLLABORATION_BINDINGS:undefined})).status,503);
  assert.equal((await post('/mcp',message,{}, {...env,COLLABORATION_BINDINGS:JSON.stringify({owner:{...binding,capabilities:['read','decide']}})})).status,503);
 });
+await test('CLI HTTP service authentication survives Worker bundling and keeps Sites/MCP identity separate',async()=>{
+ const token='wb1.artifact.'+'a'.repeat(43);
+ const credential={id:'artifact',owner_id:'owner',enabled:true,expires_at:'2099-01-01T00:00:00.000Z',token_sha256:await contentDigest(token)};
+ const configuration={...env,COLLABORATION_SERVICE_CREDENTIALS:JSON.stringify({version:1,credentials:[credential]})};
+ const input={...envelope,query:'capabilities',payload:{store_id:'local',namespace:'personal'}};
+ const serviceHeaders={'oai-authenticated-user-id':'',Authorization:'Bearer '+token};
+ assert.equal((await post('/api/collaboration/v1/queries',input,serviceHeaders,configuration)).status,200);
+ assert.equal((await post('/api/collaboration/v1/queries',input,{...serviceHeaders,Authorization:'Bearer invalid','oai-authenticated-user-id':'owner'},configuration)).status,401);
+ assert.equal((await post('/api/collaboration/v1/queries',input,serviceHeaders)).status,503);
+ assert.equal((await post('/api/collaboration/v1/queries',input,{'oai-authenticated-user-id':'','OAI-Sites-Authorization':'Bearer synthetic-platform-token'},configuration)).status,401);
+ assert.equal((await post('/mcp',{jsonrpc:'2.0',id:1,method:'tools/list'},serviceHeaders,configuration)).status,401);
+});
 await test('FT-P01-06: protocol errors, duplicate keys, unsupported versions and forged actor do not mutate',async()=>{
  assert.equal((await post('/mcp','{"jsonrpc":"2.0","id":1,"id":2,"method":"tools/list"}')).body.error.code,-32700);
  assert.equal((await rpc('tools/list',{}, {'mcp-method':'different'})).body.error.code,-32020);

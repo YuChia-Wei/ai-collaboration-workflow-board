@@ -1,4 +1,82 @@
-# Framework 開發工具採用（#9）
+# Framework 開發工具採用
+
+## 目前安裝：v0.20.1（#18，2026-10-20）
+
+依 owner「開始處理」授權，從 v0.19.1 直接升級至正式
+[v0.20.1](https://github.com/YuChia-Wei/ai-collaboration-framework/releases/tag/v0.20.1)。
+來源 commit 為 `fba2f031f1c969cd5788af924e307ffebf553422`。
+原 15 項 skill 選配保留；依該版手冊將退役 ID
+`bdd-gwt-test-designer` 明確替換為 `test-designer`，沒有安裝 alias。
+
+| 套件 | 目前版本 |
+| --- | --- |
+| adr-author | 0.1.0 |
+| ai-context-init | 0.2.1 |
+| code-reviewer | 0.2.4 |
+| ddd-ca-hex-architect | 0.3.1 |
+| diagnostic-analyst | 0.1.0 |
+| lesson-author | 0.2.0 |
+| local-change-implementer | 0.2.5 |
+| pr-author | 0.1.0 |
+| problem-frame-author | 0.1.0 |
+| requirement-author | 0.2.1 |
+| slice-implementer | 0.2.5 |
+| software-development-orchestrator | 0.3.2 |
+| spec-author | 0.2.0 |
+| spec-compliance-validator | 0.1.0 |
+| test-designer | 0.4.1 |
+| engineering-common | 0.3.0 |
+| Codex adapter | 0.1.0 |
+
+選擇仍為 Codex、original naming、`bindings: []`；未新增知識包、
+sub-agent profiles、Claude、`user-story-author` 或 `workflow-records`。
+測試設計與 formal-test specification 由 `test-designer` 負責；
+`spec-author` 保留 production／entity／adapter 規格責任。
+既有初始化與 Board 自有規則保留，未重新初始化專案或採納 normative rules。
+
+### 升級驗證
+
+- 正式 ZIP SHA-256：
+  `e60b53e83e89ee3742e5ff4b20b5a28037ffef3cf8b12817dcb40c869b89be80`；
+  sidecar、release manifest 相符，481 個封存內容成員及 23 個 engine pin
+  成員逐檔核對成功。
+- 使用同一封存檔 derive、inspect、plan、apply、inspect。升級前沒有
+  managed drift；預覽與套用皆為 22 add、43 change、6 remove、88 unchanged，
+  沒有 unknown collision；最長操作路徑 168 UTF-16 code units。
+- 移除項目為舊測試設計 skill／entry，以及轉移至 `test-designer` 的
+  formal-test template。最終 153 個 managed files 通過
+  `managed-bytes-consistent`。
+- Installer 套用前後比對 219 個其他既有 tracked files，全數 bytes 相符。
+  隨後僅另行更新 AGENTS、README 與本頁的目前版本／路由與驗收資訊。
+- 公開 `read_installed_resources` 以實際 lock hash 讀回 33 個 resources、
+  0 bindings；這是資源可讀取證據，不表示全部知識已採納。
+- 已讀取並依新版 `software-development-orchestrator@0.3.2` 接續本次工作。
+  Installed `adr-author explain` 實際執行 succeeded、mutation none；
+  未建立 ADR store。第一次沿用歷史 request 的雙重反斜線路徑遭拒，
+  改用有效絕對路徑的新 request 後成功，失敗輸出保留。
+- 本次為 Windows／Python 3.13.14／PyYAML 6.0.3。沒有執行應用程式
+  測試、build、全套安裝矩陣、跨平台或中斷復原試驗；沒有產品程式變更。
+  新 session 自動 skill discovery 尚未驗證，直接讀取新版 entry 不替代此證據。
+
+本次 lock SHA-256：
+`69dda105328c8904d5b5f50a84f2357022898b4dfc1ae8b9e0e97fc0f6f61eb7`。
+持續綁定的 project input 只有 `.ai/custom/installation.json`，不把一般
+產品與文件檔案加入知識 reader 的永久 hash 前置。
+
+原始套件、before snapshot、requests/responses、精確 plan 與讀取結果保留在
+本機 `C:\wb-fw0201`；operation journal 位於
+`C:\wb-fw0201\recovery\i-85a5626e3b3aedf1e2b9c9771ef1a65c`。
+這些是本機操作證據，未宣稱為 GitHub 附件。
+必要時依 [v0.20.1 復原手冊](https://github.com/YuChia-Wei/ai-collaboration-framework/blob/v0.20.1/docs/recovery.md)
+綁定原 operation 與當前 hashes；不刪 marker、不手改 lock，
+已完成操作不能直接當成任意降版工具。
+
+本節證明本機升級與上述操作；Git 整合、hosted CI、Issue 關閉與部署
+須另有實際結果。#18 → #16 CLI → #17 MCP 的執行順序不變。
+
+## v0.19.1 安裝與初始化歷史（#9）
+
+以下保留當時的版本、驗證與維護紀錄；目前安裝狀態以上節為準。
 
 2026-10-12 依專案擁有者指示完成選配安裝。來源為正式發布的
 [Framework v0.19.1](https://github.com/YuChia-Wei/ai-collaboration-framework/releases/tag/v0.19.1)，

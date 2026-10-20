@@ -7,6 +7,7 @@ import {sourceProjection} from './adapters/outbound/static/source-projection.mjs
 import {demand} from './domain/errors.mjs';
 import {createCollaborationServices} from './collaboration.mjs';
 import {resolveSitesCollaborationAccess} from './adapters/inbound/http/collaboration-identity.mjs';
+import {resolveCollaborationHttpAccess} from './adapters/inbound/http/collaboration-service-identity.mjs';
 import {createCollaborationHttpHandler} from './adapters/inbound/http/collaboration-handler.mjs';
 import {createMcpHandler} from './adapters/inbound/mcp/handler.mjs';
 
@@ -24,7 +25,7 @@ function browserPage(_request,env){
  return valid?page.replace('</head>',`<meta name="collaboration-store" content="${store}"></head>`):page;
 }
 const humanHandler=createHttpHandler(createServices,browserPage,resolveSitesOwner);
-const collaborationHandler=createCollaborationHttpHandler(createCollaborationServices,resolveSitesCollaborationAccess);
+const collaborationHandler=createCollaborationHttpHandler(createCollaborationServices,resolveCollaborationHttpAccess);
 const mcpHandler=createMcpHandler(createCollaborationServices,resolveSitesCollaborationAccess);
 export function handle(request,env){
  const path=new URL(request.url).pathname;

@@ -5,6 +5,10 @@ inventory_version: 1
 repository: null
 languages: []
 technology_constraints: []
+# Optional TECH-SELECT-001 authoring shape; the target selects its destination.
+# Each selection records slot, value, status, source, evidence and reason.
+# Constraints above are owner-imposed limits, not technology selection decisions.
+technologySelections: []
 source_roots: []
 test_roots: []
 entrypoints: []
@@ -13,6 +17,10 @@ runtime_hosts: []
 architecture:
   observed_styles: []
   accepted_decisions: []
+  # Optional evidence of profile-default adoption or opt-out (e.g. DELETE-SOFT-001).
+  # Record capability/rule, decision, source, evidence and reason in the target's format.
+  # An empty list adopts no profile or capability; preserve an existing target format.
+  capability_selections: []
   dependency_directions: []
 validation:
   commands: [] # Each: command, cwd, prerequisites, source, status, evidence if executed.

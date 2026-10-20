@@ -86,6 +86,10 @@ Their prompts are authoring instructions: remove those prompts from output, reso
 placeholders, or write an explicit unknown. Do not present unconfigured commands as
 quick-start instructions. Inventory YAML is an optional project-owned format, not
 framework configuration, a validated universal schema or a new precedence source.
+Its optional technology selections and architecture capability selections record
+target decisions separately from owner-imposed technology constraints. Empty
+collections adopt no technology or profile; preserve the target's existing format
+and decision destination rather than requiring this seed or its example path.
 
 Keep the root entry concise but usable on its own for essential scope,
 authorization and truthful reporting. Add a small task-to-document reading map

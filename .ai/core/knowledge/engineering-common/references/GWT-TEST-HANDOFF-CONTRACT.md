@@ -67,7 +67,7 @@ missing scenario results as evidence of execution. Preserve earlier failures.
 Actual fixture execution demonstrates that fixture only. A small model exercise
 does not establish general generation reliability or downstream adoption.
 
-The BDD designer supplies design/review output. The bounded implementation owner
+The test designer supplies design/review output. The bounded implementation owner
 supplies executable tests and their mapping; the code reviewer assesses those
 tests; target-owned execution supplies results. Existing authorization travels
 with the handoff and is not requested again merely because the owner changes.

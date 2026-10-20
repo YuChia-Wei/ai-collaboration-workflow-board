@@ -1,6 +1,6 @@
 metadata_version: 3
 id: spec-author
-version: 0.1.0
+version: 0.2.0
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -21,7 +21,6 @@ resources:
   - references/production-template.md
   - references/entity-template.md
   - references/adapter-template.md
-  - references/formal-test-template.md
   - references/spec-guide.md
   - references/spec-organization-guide.md
   schemas: []
@@ -31,8 +30,10 @@ operations:
 - id: draft
   execution: instruction
   inputs:
-  - Requested specification type, bounded subject and source requirements or explicit observations
-  - Accepted target decisions and rules with optional selected template, schema and output destination
+  - Requested specification type, bounded subject and source requirements or explicit
+    observations
+  - Accepted target decisions and rules with optional selected template, schema and
+    output destination
   outputs:
   - Selected specification draft with preserved source bindings and explicit uncertainty
   - Type rationale, coverage limits, open decisions and actual delivery location
@@ -42,9 +43,11 @@ operations:
   execution: instruction
   inputs:
   - Existing specification, selected type and authorized normalization scope
-  - Source bindings and target format contract with optional selected template and destination
+  - Source bindings and target format contract with optional selected template and
+    destination
   outputs:
-  - Normalized specification preserving identities, meaning and the selected target contract
+  - Normalized specification preserving identities, meaning and the selected target
+    contract
   - Material change summary, retained uncertainties and actual delivery location
   instructions: references/authoring.md
   implementation_status: implemented

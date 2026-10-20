@@ -109,3 +109,13 @@ Optional handoff names affected artifact, source IDs, proposed correction,
 decision owner and existing revision/implementation permission. Return that
 semantic handoff when another skill is unavailable. It cannot enlarge scope
 or turn proposed architecture into accepted truth.
+
+## Select DDD topics for this task
+
+Within the verified installed allowlist, read `ddd/README.md` only to select a
+topic. Choose domain-discovery for disputed language, strategic-design for
+context alternatives, tactical-design for invariant ownership, and model-evolution
+for a model change. Domain-language templates and Context Map guidance are optional
+when those outputs are requested. Do not preload the collection. Without optional
+DDD knowledge, continue common architecture work grounded in caller sources while
+reporting that specialized coverage unavailable.

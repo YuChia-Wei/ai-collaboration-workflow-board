@@ -11,7 +11,7 @@ source root does not need renaming to match these examples.
 | Human onboarding | `README.md` | Purpose, verified prerequisites and smallest supported start |
 | Project knowledge navigation | `.dev/README.MD`, `.dev/INDEX.md` | Scope and links to existing project truth |
 | Product background | `.dev/project-context.md` | Accepted purpose, users, scope and constraints, or a link to equivalent existing content |
-| Repository inventory | `.dev/project-config.yaml` | Evidence-backed facts and unresolved observations; optional |
+| Repository inventory | `.dev/project-config.yaml` | Optional evidence-backed facts, constraints and target-owned technology/capability decisions; preserve an existing destination and format |
 | Product intent | `.dev/requirement/` | Owner requirements and acceptance criteria |
 | Architecture | `.dev/ARCHITECTURE.md` | Current boundaries, dependency direction and decisions |
 | Production and test specifications | `.dev/specs/` | Selected domain/use-case/test contracts, separated when needed |

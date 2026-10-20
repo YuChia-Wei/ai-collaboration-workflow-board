@@ -1,34 +1,38 @@
 ---
 name: spec-author
-description: Draft or normalize a selected production, entity, adapter or formal-test specification using caller-supplied sources, target contracts, templates and destinations. Preserve source bindings, accepted scope and unresolved choices.
+description: Draft or normalize production, entity or adapter system specifications from requirements and accepted design outputs. Preserve source identities, decisions, invariants and unresolved choices without inventing design decisions.
 ---
 
 # Spec Author
 
-Use this package for a selected specification artifact. The public operations
-are `draft` and `normalize`; read [the authoring method](references/authoring.md)
-and only the default template for the selected type when the caller has not
-provided one:
+Use this package to express a selected system specification from requirements
+and accepted designer outputs. Public operations remain `draft` and `normalize`;
+read [the authoring method](references/authoring.md).
+When no target template is supplied, select only the relevant prose default:
 
 - [Production/use-case specification](references/production-template.md)
 - [Entity/value-object specification](references/entity-template.md)
 - [Adapter/interface specification](references/adapter-template.md)
-- [Formal-test specification](references/formal-test-template.md)
 
-For an optional target-selected format or layout, see [presentation guidance](references/spec-guide.md)
-and [organization guidance](references/spec-organization-guide.md).
+Optional [presentation guidance](references/spec-guide.md) and
+[organization guidance](references/spec-organization-guide.md) adapt to the
+selected target format and location; they impose no new record family.
 
-These templates are ordinary prose references, not machine schemas. The caller
-may select a different template, format and output path. With no destination,
-return the draft in the conversation. No configuration, store, tool, required
-skill dependency or mandatory programming runtime is provisioned.
+Reuse accepted designs without requiring the designer to repeat completed work.
+Missing design decisions may remain explicit in a provisional draft when the
+caller requests it; do not present inferred ownership or mechanisms as accepted.
 
-A formal-test specification stays with this package when it contains
-Given-When-Then scenarios. Scenario notes, a GWT matrix or assertion design
-without a formal specification are a different requested output. Preserve an
-explicit skill selection and resolve a conflicting artifact request rather
-than silently changing owners.
+Formal-test specifications and all test-design outputs belong to `test-designer`.
+System specifications still retain observable acceptance and references to
+existing test designs where relevant; verifiability is part of their contract.
+If explicit skill selection conflicts with the requested artifact, resolve the
+bounded mismatch with the caller rather than silently switching ownership or output.
+There is no mandatory sequence of requirement, design, specification and tests.
 
-Authoring records expected behavior and how it may be verified; it does not
-approve architecture, implement or run tests, or prove code/test compliance.
-Common guidance does not supply an unselected technology-specific contract.
+Templates are ordinary prose guidance, not machine schemas. Honor a selected
+target schema/version, template and destination. Without a destination, return
+conversation output. This package has no configuration, store, tool, direct
+method-knowledge consumption or mandatory programming runtime.
+
+Authoring does not approve business or architecture decisions, implement code,
+execute tests, establish acceptance or prove specification compliance.

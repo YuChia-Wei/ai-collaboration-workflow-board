@@ -1,6 +1,6 @@
 metadata_version: 4
 id: local-change-implementer
-version: 0.2.0
+version: 0.2.5
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -9,11 +9,13 @@ dependencies:
 runtime:
 - id: skill-instruction-reader
   requirement: Read local implementation instructions and permitted target sources
-  for_operations: [implement]
+  for_operations:
+  - implement
   on_missing: unavailable
 - id: authorized-target-editor
   requirement: Inspect and edit the explicitly authorized target paths
-  for_operations: [implement]
+  for_operations:
+  - implement
   on_missing: unavailable
 configuration: null
 artifact_roles: []
@@ -39,19 +41,23 @@ operations:
 knowledge_consumption:
 - id: common-local-change
   package: engineering-common
-  version: 0.1.0
-  operations: [implement]
+  version: 0.3.0
+  operations:
+  - implement
   resources:
   - engineering-rule-catalog
   requirement: optional
   on_missing: unavailable
 - id: dotnet-local-change
   package: dotnet-backend
-  version: 0.1.0
-  operations: [implement]
+  version: 0.1.4
+  operations:
+  - implement
   resources:
+  # Controller is guidance only; access does not adopt a normative rule.
   - engineering-rule-catalog
   - member:standards/coding-standards/aggregate-standards.md
+  - member:standards/coding-standards/controller-standards.md
   - member:standards/coding-standards/repository-standards.md
   - member:standards/coding-standards/test-standards.md
   - member:standards/coding-standards/usecase-standards.md

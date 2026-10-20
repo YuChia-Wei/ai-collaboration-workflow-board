@@ -1,6 +1,6 @@
 metadata_version: 4
 id: software-development-orchestrator
-version: 0.2.0
+version: 0.3.2
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -9,11 +9,15 @@ dependencies:
 runtime:
 - id: skill-instruction-reader
   requirement: Read orchestration instructions and the selected project sources
-  for_operations: [orchestrate, resume]
+  for_operations:
+  - orchestrate
+  - resume
   on_missing: unavailable
 - id: authorized-project-operator
   requirement: Perform only authorized project operations through available owners
-  for_operations: [orchestrate, resume]
+  for_operations:
+  - orchestrate
+  - resume
   on_missing: unavailable
 configuration: null
 artifact_roles: []

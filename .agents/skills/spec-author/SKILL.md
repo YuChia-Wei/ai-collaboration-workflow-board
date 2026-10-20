@@ -1,11 +1,11 @@
 ---
 name: spec-author
-description: "Draft or normalize a selected production, entity, adapter or formal-test specification using caller-supplied sources, target contracts, templates and destinations. Preserve source bindings, accepted scope and unresolved choices."
+description: "Draft or normalize production, entity or adapter system specifications from requirements and accepted design outputs. Preserve source identities, decisions, invariants and unresolved choices without inventing design decisions."
 ---
 
 # spec-author
 
-Codex runtime entry for `spec-author@0.1.0`. This generated projection does not
+Codex runtime entry for `spec-author@0.2.0`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 
@@ -20,16 +20,19 @@ Selected installed skill members:
 - [references/adapter-template.md](../../../.ai/core/skills/spec-author/references/adapter-template.md)
 - [references/authoring.md](../../../.ai/core/skills/spec-author/references/authoring.md)
 - [references/entity-template.md](../../../.ai/core/skills/spec-author/references/entity-template.md)
-- [references/formal-test-template.md](../../../.ai/core/skills/spec-author/references/formal-test-template.md)
 - [references/production-template.md](../../../.ai/core/skills/spec-author/references/production-template.md)
 - [references/spec-guide.md](../../../.ai/core/skills/spec-author/references/spec-guide.md)
 - [references/spec-organization-guide.md](../../../.ai/core/skills/spec-author/references/spec-organization-guide.md)
 
-For metadata version 4, `knowledge_consumption` declares exact knowledge package
+For metadata versions 4 and 5, `knowledge_consumption` declares exact knowledge package
 versions, operations and resource IDs. Follow the installed skill's selected
 binding to access knowledge. An optional missing package or resource makes the
 named coverage unavailable; do not assume it was installed or promise that
 coverage. Required dependencies must be present before the operation is used.
+
+Metadata 5 also declares executable module closure in tool `support_files`.
+Keep every declared member with its tool entrypoint; never load missing modules
+from the framework source checkout or ambient paths.
 
 For metadata versions 1–3, follow the declared operation and runtime contracts.
 An instruction operation means read its declared instructions; a tool operation

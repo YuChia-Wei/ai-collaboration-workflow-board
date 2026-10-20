@@ -26,11 +26,15 @@ Selected installed skill members:
 - [scripts/problem_frame.py](../../../.ai/core/skills/problem-frame-author/scripts/problem_frame.py)
 - [templates/cbf.md](../../../.ai/core/skills/problem-frame-author/templates/cbf.md)
 
-For metadata version 4, `knowledge_consumption` declares exact knowledge package
+For metadata versions 4 and 5, `knowledge_consumption` declares exact knowledge package
 versions, operations and resource IDs. Follow the installed skill's selected
 binding to access knowledge. An optional missing package or resource makes the
 named coverage unavailable; do not assume it was installed or promise that
 coverage. Required dependencies must be present before the operation is used.
+
+Metadata 5 also declares executable module closure in tool `support_files`.
+Keep every declared member with its tool entrypoint; never load missing modules
+from the framework source checkout or ambient paths.
 
 For metadata versions 1–3, follow the declared operation and runtime contracts.
 An instruction operation means read its declared instructions; a tool operation

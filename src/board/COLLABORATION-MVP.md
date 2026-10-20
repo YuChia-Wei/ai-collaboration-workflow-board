@@ -19,6 +19,10 @@
 
 ## 接入與授權
 
+2026-10-20 #16 另新增 [CLI 與 HTTP 服務憑證接點](CLI.md)，先完成本機實作與
+驗證，尚未部署；下列 Sites identity 為既有線上／MCP 接入方式。新的服務憑證
+仍解析同一份 owner／Agent binding，不擴張為多 Agent 身分隔離。
+
 目前提供一個**預設拒絕存取**的 Sites identity adapter。它只信任 Sites ingress 的 `oai-authenticated-user-id`，再查伺服器設定；工具 payload、session、email 或 display name 都不能建立 actor。僅限部署在會驗證並覆寫身分 headers 的 Sites ingress 後方，不能把同一 Worker 直接暴露為可偽造 headers 的公開 origin。
 
 此方案每個 owner 對應一個 Agent binding，所有該 owner 的 sessions 共用 actor。它適合單 Agent MVP，**不提供同 owner 多 Agent 身分隔離**；不同 actor 的隔離目前有 application／SQL 測試，但不是此 Sites adapter 的真實多 Agent 接入證據。若採各 Agent 可撤銷憑證，須另接可信 identity adapter 並驗證目標 client，不能以 client 自填的 Agent 名稱替代。2026-10-14 依使用者要求完成資料串接設定，先採此方案，已保存 hosted binding（environment revision 3）；完整連線與資料寫入狀態見下方接續紀錄。
