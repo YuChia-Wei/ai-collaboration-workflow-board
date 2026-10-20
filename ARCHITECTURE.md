@@ -10,12 +10,15 @@ src/
       domain/                  workflow 規則、值、錯誤與摘要
       application/             commands、queries 與 repository ports
       adapters/inbound/http/   Request、Response、路由與 Sites 身分入口
+      adapters/inbound/cli/    終端機參數與輸出契約
       adapters/inbound/mcp/    協作工具、JSON-RPC transport 與共用錯誤映射
       adapters/inbound/shared/ 嚴格 JSON wire parser
       adapters/outbound/d1/    D1 SQL、持久資料、交易 batch
+      adapters/outbound/http/  CLI 的遠端 collaboration HTTP client
       adapters/outbound/runtime/ 系統時鐘 adapter
       adapters/outbound/static/  固定來源 catalog adapter
       index.mjs                後端依賴組裝入口
+      cli.mjs                  Node CLI 的獨立組裝入口
       schema/migrations/       資料庫版本與 Drizzle metadata
       data/                    固定來源版本的唯讀 catalog
     contracts/collaboration-v1/ JSON schemas、跨語言向量及接受協定
@@ -51,5 +54,13 @@ WB-04 MVP 已加入 D1 adapter、不可變 query snapshots、HTTP／MCP routes �
 Python portable restore 還有較重的 application/adapter 協作，沒有宣稱所有交易細節都已抽象成完全可替換的 storage port。現階段以保留可驗證的契約與清楚的功能邊界為優先；不新增沒有用途的 aggregate base class、泛用 repository 或 DI framework。
 
 網站信任 Sites 轉送的 authenticated-user header。若將來改用其他 hosting，必須提供新的可信身分 adapter 與實際資料遷移驗證，再進行切換。
+
+#16 CLI 的遠端 HTTP client 只使用 versioned DTO，不讀寫 DB。
+collaboration HTTP 的新增服務認證 adapter 以 server-side token digest 映射到
+既有 owner，再解析原 `COLLABORATION_BINDINGS`，沒有建立另一套 actor 或 domain
+規則。Sites 服務存取只負責私有 origin 入口，Board 專用 credential 才負責此
+應用程式的身分綁定；兩者必須分開。既有 MCP 仍採原 Sites identity adapter。
+這些新增來源先做本機驗證，尚未部署到既有 Site；設定與使用契約見
+[CLI 說明](src/board/CLI.md)。
 
 `dist/`、`node_modules/`、preview 狀態與 `.runtime/` 均由根目錄 `.gitignore` 排除。原 repository policy checker 已於 `3e7ee13` 移除；SQL migrations 和唯讀 catalog 是可重現的來源輸入，保留在 Git。

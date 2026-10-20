@@ -7,6 +7,11 @@ const validId=value=>typeof value==='string'&&/^[A-Za-z0-9][A-Za-z0-9._-]{0,159}
  * Provisioning remains explicit: absent configuration fails closed. */
 export function resolveSitesCollaborationAccess(request,env){
  const owner=resolveSitesOwner(request);demand(owner,'signin_required','unauthenticated');
+ return resolveCollaborationBinding(owner,env);
+}
+
+/** The owner has already been authenticated by the selected ingress adapter. */
+export function resolveCollaborationBinding(owner,env){
  demand(env.COLLABORATION_BINDINGS,'collaboration_identity_unconfigured','unavailable');
  let bindings;try{bindings=JSON.parse(env.COLLABORATION_BINDINGS);}catch{demand(false,'collaboration_identity_unconfigured','unavailable');}
  demand(bindings&&typeof bindings==='object'&&!Array.isArray(bindings),'collaboration_identity_unconfigured','unavailable');

@@ -10,6 +10,10 @@
 
 ## 本地驗證
 
+新增的 [Workflow Board CLI](CLI.md) 透過 collaboration HTTP API 連接 Board。
+首版服務憑證 adapter 與 CLI 先在本機驗證；線上憑證設定與部署尚待執行。
+使用 `node src/board/backend/cli.mjs help`（repo 根目錄）查看入口。
+
 在 repository 根目錄先進入 Node 專案；建置輸出在 `src/board/dist/`，由 Git 忽略。
 
 ```powershell

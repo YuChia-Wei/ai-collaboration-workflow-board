@@ -14,6 +14,10 @@
 
 程式依領域規則、應用案例、輸入／輸出 adapters 分類。具體依賴方向與保留的限制見 [ARCHITECTURE.md](ARCHITECTURE.md)。詳細契約見 [網站說明](src/board/README.md) 與 [本機服務說明](src/local/README.md)。
 
+連接線上 Board 的新 [CLI 使用指南](src/board/CLI.md) 包含啟動方式、雙層認證、
+JSON／exit code、精確版本讀取與跨 session 接手。CLI 與服務認證 adapter 已有
+本機實作及驗證；線上憑證設定與部署尚未執行。這與 Python 本機原型的 CLI 分開。
+
 ## 建置與測試
 
 網站需要 Node.js 22.13 以上；GitHub Actions 使用 Node.js 24。從 repo 根目錄執行：
