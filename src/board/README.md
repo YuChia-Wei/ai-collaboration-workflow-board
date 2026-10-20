@@ -15,6 +15,10 @@
 日常命令、到期日與輪替方式見指南，線上合成驗收記錄與本機測試分列。
 使用 `node src/board/backend/cli.mjs help`（repo 根目錄）查看入口。
 
+[MCP 使用指南](MCP.md) 提供「工作紀錄室」Sites plugin 的設定、版本／認證矩陣、
+只讀接手提示及 CLI 對照。雙向合成交接與獨立新對話的唯讀接手已實測；
+不把 CLI 服務憑證當成通用 MCP client 的已支援登入方式。
+
 在 repository 根目錄先進入 Node 專案；建置輸出在 `src/board/dist/`，由 Git 忽略。
 
 ```powershell
