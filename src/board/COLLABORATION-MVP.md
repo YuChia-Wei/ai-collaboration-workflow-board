@@ -40,6 +40,9 @@ Site 的合成驗收；下列 Sites identity 為既有線上／MCP 接入方式�
 
 ## MCP 與 client 用法
 
+首版 client 的設定、認證／版本矩陣、只讀接手提示、CLI 對照與恢復操作，
+見 [MCP 使用指南](MCP.md)。#17 雙向交接與獨立新對話驗收的證據分列於指南。
+
 支援 MCP `2026-07-28` 的 `server/discover`、`tools/list`、`tools/call`，並提供 `2025-11-25` 的 stateless initialize 相容入口。新版請求需依協定附上 version／method／tool-name headers 及 `_meta`。不提供 SSE session、subscription 或 server-initiated calls。未知方法、版本、header mismatch 與工具用例錯誤分開回報。參考 [MCP versioning](https://modelcontextprotocol.io/specification/2026-07-28/basic/versioning)、[Streamable HTTP](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http)。
 
 工具名把契約操作的 `.` 改成 `_`，例如 `workflow_context`、`task_claim`、`operation_get`。Arguments 保留完整契約 envelope，不自動補省略的業務欄位。JSON request 拒絕重複 keys、非整數 token 及無效 Unicode；命令／查詢內容限 300000 UTF-8 bytes，MCP 外層訊息限 320000 bytes。

@@ -19,6 +19,9 @@ JSON／exit code、精確版本讀取與跨 session 接手。2026-10-20 已完�
 部署、線上合成驗收及 Windows 認證管理員配置；日常直接使用指南中的
 `windows-cli.ps1 run workflow-records-private ...`。這與 Python 本機原型的 CLI 分開。
 
+[MCP 使用指南](src/board/MCP.md) 說明「工作紀錄室」plugin 的連線、只讀接手、
+版本與錯誤處理，以及與 CLI 的雙向交接；已完成獨立新對話的唯讀接手驗收。
+
 ## 建置與測試
 
 網站需要 Node.js 22.13 以上；GitHub Actions 使用 Node.js 24。從 repo 根目錄執行：

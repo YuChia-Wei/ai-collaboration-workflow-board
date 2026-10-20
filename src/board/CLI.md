@@ -6,7 +6,8 @@ CLI 0.1.0 的首版目標是連接既有線上 Workflow Board，使用
 [線上驗收紀錄](../../.dev/guides/cli-hosted-acceptance-20261020.md)。
 
 此 CLI 不使用 `src/local` Python 原型的 API／資料庫，不執行 Agent、自動派工、
-人類審核或直接 SQL。#16 為 CLI 工作項目；#17 新 MCP 模式仍在其後。
+人類審核或直接 SQL。#16 為 CLI 工作項目；#17 的
+[MCP 使用指南](MCP.md) 說明既有 Sites plugin 與 CLI 的雙向交接。
 
 ## 這台 Windows 電腦的日常用法
 
