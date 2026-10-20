@@ -60,7 +60,9 @@ collaboration HTTP 的新增服務認證 adapter 以 server-side token digest �
 既有 owner，再解析原 `COLLABORATION_BINDINGS`，沒有建立另一套 actor 或 domain
 規則。Sites 服務存取只負責私有 origin 入口，Board 專用 credential 才負責此
 應用程式的身分綁定；兩者必須分開。既有 MCP 仍採原 Sites identity adapter。
-這些新增來源先做本機驗證，尚未部署到既有 Site；設定與使用契約見
+2026-10-20 已部署至既有私有 Site 並完成合成驗收；Windows 啟動 adapter 從目前
+使用者的認證管理員讀取 profile，只向 Node 子程序注入秘密，不改變業務契約。
+設定與使用契約見
 [CLI 說明](src/board/CLI.md)。
 
 `dist/`、`node_modules/`、preview 狀態與 `.runtime/` 均由根目錄 `.gitignore` 排除。原 repository policy checker 已於 `3e7ee13` 移除；SQL migrations 和唯讀 catalog 是可重現的來源輸入，保留在 Git。

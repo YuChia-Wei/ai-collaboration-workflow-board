@@ -12,6 +12,7 @@
     "db:generate": "drizzle-kit generate",
     "test": "node tests/architecture.mjs && node tests/platform-ports.mjs && node tests/portable-contract.mjs && python -B tests/portable-vectors.py && node tests/collaboration.mjs && node --experimental-sqlite tests/collaboration-storage.mjs && node --experimental-sqlite tests/collaboration-transport.mjs && node --experimental-sqlite tests/cli.mjs && node --experimental-sqlite tests/contracts.mjs && node --experimental-sqlite tests/board.mjs && node --experimental-sqlite tests/collaboration-ui.mjs",
     "test:cli": "node --experimental-sqlite tests/cli.mjs",
+    "test:windows-cli": "node tests/windows-cli.mjs",
     "cli": "node backend/cli.mjs",
     "preview:collaboration": "node --experimental-sqlite scripts/collaboration-ui-preview.mjs",
     "test:collaboration-ui": "node --experimental-sqlite tests/collaboration-ui.mjs"

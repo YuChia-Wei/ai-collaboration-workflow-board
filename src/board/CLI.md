@@ -1,12 +1,78 @@
 # Workflow Board CLI
 
 CLI 0.1.0 的首版目標是連接既有線上 Workflow Board，使用
-`workflow-board/collaboration/1`。程式與合成驗證先在本機交付；**現有 Site
-尚未部署本次服務認證 adapter，也尚未設定 Board 服務憑證**。以下線上設定是
-部署後的操作契約，不能把本機通過當成線上可用。
+`workflow-board/collaboration/1`。2026-10-20 已部署至既有私有 Site 第 13 版，
+並完成正式入口的 CLI 合成讀寫。憑證、GitHub／Sites 版本與分層驗收結果見
+[線上驗收紀錄](../../.dev/guides/cli-hosted-acceptance-20261020.md)。
 
 此 CLI 不使用 `src/local` Python 原型的 API／資料庫，不執行 Agent、自動派工、
 人類審核或直接 SQL。#16 為 CLI 工作項目；#17 新 MCP 模式仍在其後。
+
+## 這台 Windows 電腦的日常用法
+
+Owner 已選擇把兩項服務憑證保存在**目前 Windows 使用者的認證管理員**。
+已配置的 profile 名稱是 `workflow-records-private`；不需要每次重新輸入 token。
+在 repository 根目錄開啟 PowerShell 7：
+
+```powershell
+# 查看站點、store、憑證 ID 與到期日；不會顯示 token。
+pwsh -NoProfile -File .\src\board\scripts\windows-cli.ps1 status workflow-records-private
+
+# 連線與能力查詢。
+pwsh -NoProfile -File .\src\board\scripts\windows-cli.ps1 run workflow-records-private capabilities --json
+
+# 搜尋 workflow；請依名稱調整 --query。
+pwsh -NoProfile -File .\src\board\scripts\windows-cli.ps1 run workflow-records-private find --query '合成 CLI 驗收' --json
+
+# 把 WORKFLOW_ID 換成搜尋結果的 workflow_id。--all 會讀完同一快照的所有頁。
+pwsh -NoProfile -File .\src\board\scripts\windows-cli.ps1 run workflow-records-private context --workflow WORKFLOW_ID --all --json
+```
+
+上述 `run PROFILE` 後面就是本文原有 CLI 命令。送出 command 仍使用完整 JSON
+檔及明確的 operation ID／expected revision，例如
+`run workflow-records-private submit --file .runtime/my-command.json --json`。
+讀取 context 不會自動 claim；送出前先確認 workflow、版本及授權範圍。
+
+安全入口只把秘密注入該次 Node 子程序，不設定永久環境變數、不建立 `.env`、
+不把 token 放入參數或輸出。連線綁定 profile；禁止搭配 `--endpoint`、`--store`、
+`--namespace` 或 `--allow-loopback` 改用其他連線，請另建 profile。
+一般 CLI 的業務結果與 exit code 原樣傳回；profile 缺失、到期或設定錯誤為 exit 2。
+
+### 憑證放在哪裡、何時到期
+
+- Windows「控制台 → 認證管理員 → Windows 認證 → 一般認證」的
+  `WorkflowBoard:workflow-records-private`，包含兩項 token 與連線設定。
+- 保存範圍是目前 Windows 使用者、目前電腦。重開 PowerShell 或重新登入仍可讀取；
+  換帳號、換電腦或 clone repository 不會複製秘密。
+- 本次 Board credential ID：`cli-owner-20261020`，到期時間
+  **2026-11-19 22:38:52（台灣時間）**，即 `2026-11-19T14:38:52.737Z`。
+  以 `status` 的實際讀回為準。Sites token 如由平台撤換，可能需要提前更新。
+- 保存與讀取使用 Windows `CredWriteW`／`CredReadW` 的目前登入使用者 credential set；
+  `CRED_PERSIST_LOCAL_MACHINE` 表示同一使用者在此電腦的後續登入可使用，
+  不代表所有本機使用者共用。[Microsoft Credential API](https://learn.microsoft.com/en-us/windows/win32/api/wincred/ns-wincred-credentialw)
+- 這仍是既有單 owner／共用 Agent；沒有新增獨立 Agent 或人類審核權限。
+
+### 更新、輪替與移除
+
+管理者應先建立新 Board token、設定相應 digest／期限並部署，再透過以下遮蔽輸入更新
+本機 profile，確認 capabilities 成功後撤銷舊的 server entry。**只修改本機 profile
+不會更新伺服器**。不要把 token 放入 PowerShell history、Git、聊天或普通檔案。
+
+```powershell
+# 互動提示 endpoint、store、UTC 到期日，再遮蔽輸入兩項 token。
+pwsh -NoProfile -File .\src\board\scripts\windows-cli.ps1 configure workflow-records-private
+
+# 只刪除此 Windows 使用者的本機認證項目。
+pwsh -NoProfile -File .\src\board\scripts\windows-cli.ps1 remove workflow-records-private
+```
+
+本機 `remove` 不會撤銷 server credential。要全面撤銷，管理者還需在 Sites
+`COLLABORATION_SERVICE_CREDENTIALS` 停用／移除相應 ID，並部署已保存版本。
+若遺失本機秘密，可建立新憑證並撤銷舊的；伺服器只保存 digest，不能回復原 token。
+
+自動配置僅支援 `configure PROFILE --stdin` 的重新導向記憶體 pipe，且不輸出秘密；
+它接受 version=1、endpoint、store、namespace、board_token、sites_token、expires_at
+七個欄位。這是管理整合入口，不要把含秘密的 JSON 存成檔案。
 
 ## 安裝與啟動
 
@@ -64,8 +130,8 @@ visitor identity 或 connected-app consent。2026-10-20 唯讀查核確認既有
 
 ### 後端服務憑證設定
 
-owner 已選定此新增認證方式，**本機實作先完成；線上設定、實際憑證建立與
-部署仍為後續操作**。部署時由授權管理者設定以下 server-only runtime value：
+owner 已選定此新增認證方式，並於 2026-10-20 完成線上配置。
+後續部署或輪替時，由授權管理者設定以下 server-only runtime value：
 
 ```json
 {
@@ -273,6 +339,8 @@ npm --prefix src/board run test:cli
 npm --prefix src/board test
 npm --prefix src/board run build
 npm --prefix src/board run validate
+# Windows 原生認證管理員測試；只建立／移除唯一的合成 profile。
+npm --prefix src/board run test:windows-cli
 ```
 
 `test:cli` 啟動 loopback server，以記憶體 SQLite 模擬 D1，並啟動全新的 CLI
