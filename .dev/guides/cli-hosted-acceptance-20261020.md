@@ -64,7 +64,8 @@ active，T1 已 release、沒有 assignment；T2 因 D1 待人決策而不可 cl
 
 線上 command 共 8 筆 accepted、1 筆持久 rejected。重送與變造 payload 沒有新增
 成功效果。回應遺失的 operation ID 是 `fefde999-91fd-4d8d-b531-b29df368cbae`；
-其原 request、unknown、reconciliation、CLI replay 與 MCP replay 均保留。
+其原 request、unknown、reconciliation、CLI replay 與 MCP replay 在驗收時均保留；
+2026-10-21 清理後改留最小摘要，見下方說明。
 
 ## Windows 憑證入口的原生驗證
 
@@ -79,10 +80,14 @@ JSON 字串解析與 PATH 第一個 Node 後通過。不是所有 PowerShell 7 �
 
 ## 操作證據與未擴大宣稱
 
-本機 `.runtime/integration-20261020/` 保留 command files、清除秘密的 CLI／MCP
+驗收時本機 `.runtime/integration-20261020/` 保留 command files、清除秘密的 CLI／MCP
 回應、`assertions.json`、打包 archive 與執行輔助檔。這些是執行機證據，並非
 GitHub 附件；秘密只在授權的 Windows vault、Sites server digest 配置與程序
 記憶體中。原暫時驗收程序已結束，舊 token 已撤銷。
+
+2026-10-21 再次唯讀核對後，依 owner 授權刪除上述暫存。保留
+[Lesson 與清理說明](../lessons/README.md) 及其最小證據摘要；
+原始 command／response／archive 已不在本機，摘要不是可重播的原始封存。
 
 乾淨安裝第一次因 sandbox DNS 失敗，改用獲准的網路環境後成功。官方包裝 helper
 已推送 source，但預設 bash 處理 Windows 路徑失敗；改用 Git Bash 的 `/c/...`

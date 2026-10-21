@@ -1,0 +1,33 @@
+{
+  "content": {
+    "applies_when": [
+      "另開應用對話、沿用已安裝與已認證的 MCP 連線驗證接手指南"
+    ],
+    "conclusion": "新對話成功接手支持指南與應用層接手可用，不能推論首次安裝、底層新連線或 OAuth 成功。應明列驗收實際重建的層級。",
+    "confidence": "supported",
+    "does_not_apply_when": [
+      "另外取得的 handshake/OAuth 證據需分別評估；不推論多 Agent 隔離或 token 節省"
+    ],
+    "evidence": [
+      {
+        "note": "獨立新對話十次唯讀呼叫及證據邊界；摘要見 notes/lessons/evidence/board-interfaces-20261021.json。",
+        "source": ".dev/guides/mcp-handoff-acceptance-20261020.md"
+      }
+    ],
+    "follow_up": [],
+    "observation": "獨立 Codex 對話沿用 Site plugin，完成十次真實唯讀呼叫並讀回 revision 14、完整頁、文件與交接；未取得新 transport session ID、discovery wire trace 或 OAuth 重新認證證據。",
+    "title": "獨立應用對話不等同新的底層 MCP 連線"
+  },
+  "created_at": "2026-10-21T00:10:21.823341+00:00",
+  "decision": null,
+  "history": [],
+  "id": "lesson-04c7d2afc6cb4840b9042c1e9a89baea",
+  "kind": "lesson",
+  "owner": "project",
+  "provenance": [],
+  "revision": 1,
+  "schema_version": "2.0.0",
+  "status": "candidate",
+  "successor": null,
+  "updated_at": "2026-10-21T00:10:21.823341+00:00"
+}

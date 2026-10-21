@@ -1,0 +1,33 @@
+{
+  "content": {
+    "applies_when": [
+      "私有平台入口之外仍有應用層身分綁定"
+    ],
+    "conclusion": "平台入口可通行不足以證明應用接受可信身分；驗收應分列平台通行、actor/store/scope 綁定與業務拒絕。不能把 bypass token 或手填 header 當成完整 MCP 授權證據。",
+    "confidence": "supported",
+    "does_not_apply_when": [
+      "不推論跨帳號 OAuth、多 Agent 隔離或所有一般 MCP clients 已通過驗證"
+    ],
+    "evidence": [
+      {
+        "note": "AC06、AC07 的正式認證與真實工具來源；非新的安全稽核。",
+        "source": ".dev/guides/cli-hosted-acceptance-20261020.md"
+      }
+    ],
+    "follow_up": [],
+    "observation": "CLI 正式雙層認證成功；錯應用 token 回 invalid_service_credential、錯 store 回 store_mismatch。真實 Site plugin 使用既有可信連線。",
+    "title": "平台通行與應用可信身分需要分層驗證"
+  },
+  "created_at": "2026-10-21T00:10:17.983212+00:00",
+  "decision": null,
+  "history": [],
+  "id": "lesson-21093fcf39ef4b1cac8418816eac8686",
+  "kind": "lesson",
+  "owner": "project",
+  "provenance": [],
+  "revision": 1,
+  "schema_version": "2.0.0",
+  "status": "candidate",
+  "successor": null,
+  "updated_at": "2026-10-21T00:10:17.983212+00:00"
+}

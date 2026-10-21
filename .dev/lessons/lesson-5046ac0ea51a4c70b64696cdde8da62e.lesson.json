@@ -1,0 +1,33 @@
+{
+  "content": {
+    "applies_when": [
+      "Windows 目前使用者、PowerShell 7 與 Board CLI credential profile 由驗收轉入日常使用"
+    ],
+    "conclusion": "一次程序內成功連線不足以交付日常入口。此 Windows 模式需要跨程序安全儲存、狀態查詢、到期資訊與續期/撤銷說明；是否建立自動提醒也需明列。",
+    "confidence": "supported",
+    "does_not_apply_when": [
+      "不推論跨電腦、跨使用者或其他 OS 已驗證，也不等於 Credential Manager 完整安全稽核"
+    ],
+    "evidence": [
+      {
+        "note": "Windows 原生驗證與輪替結果；操作入口見 src/board/CLI.md。",
+        "source": ".dev/guides/cli-hosted-acceptance-20261020.md"
+      }
+    ],
+    "follow_up": [],
+    "observation": "Windows vault profile 在新 PowerShell/Node 程序成功讀取並連線；原生測試涵蓋保存/讀取、override 拒絕、不輸出秘密與移除合成 profile。輪替後新 token 成功、舊 token 回 invalid_service_credential。",
+    "title": "日常憑證交付包含跨程序使用與續期撤銷入口"
+  },
+  "created_at": "2026-10-21T00:10:23.814501+00:00",
+  "decision": null,
+  "history": [],
+  "id": "lesson-5046ac0ea51a4c70b64696cdde8da62e",
+  "kind": "lesson",
+  "owner": "project",
+  "provenance": [],
+  "revision": 1,
+  "schema_version": "2.0.0",
+  "status": "candidate",
+  "successor": null,
+  "updated_at": "2026-10-21T00:10:23.814501+00:00"
+}

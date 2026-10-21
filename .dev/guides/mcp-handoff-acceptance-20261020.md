@@ -86,9 +86,13 @@ MCP 錯 hash → `document_hash_mismatch`；缺 revision 1000 → `snapshot_expi
 | AC06 雙向接手 | 通過上述真實線上合成流程與完整 DTO／receipt／hash 比較 |
 | AC07 證據界限 | 文件已分層；一般 client 認證未支援、tokens／actual debit 未量測 |
 
-原始 request／response 與 `assertions.json` 位於執行機
+驗收時原始 request／response 與 `assertions.json` 位於執行機
 `.runtime/mcp17-20261020/`（Git 忽略），不是 GitHub 附件。所有新增斷言通過；
 文件變更不另新增產品測試或重跑已通過的整套 suite。PR CI 依既有 workflow 執行。
+
+2026-10-21 再次唯讀核對後，依 owner 授權刪除該暫存目錄（含下述新對話報告）。
+現保留 [Lesson 與清理說明](../lessons/README.md) 及最小證據摘要；
+原始回應與輔助腳本已不在本機，摘要不等於可重播的原始封存。
 
 ## 獨立新對話驗收
 
@@ -112,7 +116,7 @@ assignment 都是 null；沒有 claim 或其他寫入。
 10 次業務 MCP 呼叫均成功；探索介面失敗與業務結果分開記錄。
 
 新對話另核對 plan@1 原文與 UTF-8 SHA-256（64 bytes），與上述 hash 相符。
-完整報告與呼叫紀錄保存在同一執行機目錄的 `new-session-result.json`。
+完整報告與呼叫紀錄在驗收時保存在同一執行機目錄的 `new-session-result.json`。
 `assertions.json` 是主對話雙向比較的證據；新對話結果另存，不改寫早先的證據時間點。
 
 結論限 #17 選定的 Codex Site plugin、單 owner／共用 Agent 與合成資料。

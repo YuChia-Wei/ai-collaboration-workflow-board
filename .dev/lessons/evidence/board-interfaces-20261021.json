@@ -1,0 +1,87 @@
+{
+  "verified_at": "2026-10-21T00:07:53.811359+00:00",
+  "method": "Read-only re-evaluation of saved results; no new provider writes or fault injection.",
+  "source_main": "34fd439c0c12dbf4aba2bef3e2f32f9790575dc3",
+  "unknown_recovery": {
+    "client_exit": 5,
+    "status": "unknown",
+    "operation_id": "fefde999-91fd-4d8d-b531-b29df368cbae",
+    "lookup_receipt_equals_original_request_replay": true,
+    "accepted_revision": 8
+  },
+  "credential_rotation": {
+    "old_credential_exit": 4,
+    "business_error": "invalid_service_credential",
+    "limitation": "Windows current-user profile and single owner/shared Agent only; no cross-account audit."
+  },
+  "mode_handoff": {
+    "full_context_equal": true,
+    "final_revision": 14,
+    "handoffs": 3,
+    "assignment": null,
+    "document_sha256_verified": "sha256:0ab06bf64e2ed50a103917456f34d4feb6c6634924e82c0e47ff14b15e87f9f5"
+  },
+  "new_conversation": {
+    "thread_id": "01a159d4-0fab-7182-918e-7233ff10e79d",
+    "turn_id": "01a159d4-12b7-71c2-a803-d575a7a862a3",
+    "status": "completed",
+    "read_only_tool_calls": 10,
+    "transport_handshake": "not observed",
+    "oauth_reauthentication": "not run"
+  },
+  "temporary_checkout_retention": {
+    "site-publish-20261020": {
+      "clean": true,
+      "saved_site_version": 13,
+      "commit": "e2d6b2a13366240412ca202f4d5ac064728fd8f1"
+    },
+    "sites-hosted-source": {
+      "clean": true,
+      "saved_site_version": 12,
+      "commit": "f3079c23067ae22170c7774781530d682f3900e7"
+    }
+  },
+  "source_files": [
+    {
+      "historical_path": ".runtime/integration-20261020/lost-response.json",
+      "sha256": "dc4400f4fefeb779c471763d91e53f632a8a8a5ffc93418a3cd8d731b925f836"
+    },
+    {
+      "historical_path": ".runtime/integration-20261020/lost-response-operation.json",
+      "sha256": "8eb70c5f60f9fbcb0ac0ceb35e8aacb8a92c614245557abcd5af49b34de9a8c0"
+    },
+    {
+      "historical_path": ".runtime/integration-20261020/lost-response-replay.json",
+      "sha256": "8500410f28ce80aed3d80ad5c51d7a9d058e39a460c325cd6d6c22515851ab59"
+    },
+    {
+      "historical_path": ".runtime/integration-20261020/old-token-revoked.json",
+      "sha256": "8eb1f85d20e4b48544f2cb159377d3a40b677f3ed43da89148b29c9955d58ae5"
+    },
+    {
+      "historical_path": ".runtime/mcp17-20261020/mcp17Final.json",
+      "sha256": "ae9b75207be753d5bbea02629f8ad0f4bb2d4c97227bfabccc47289af969d1f1"
+    },
+    {
+      "historical_path": ".runtime/mcp17-20261020/cli-context-final.json",
+      "sha256": "76404614e31ed230e01b50e17c631e652d0345f34d66232c890592e5d5af745f"
+    },
+    {
+      "historical_path": ".runtime/mcp17-20261020/mcp17CliReleaseReplay.json",
+      "sha256": "7a0395832c45100c36966510cf44bad9d9824251aa1ba6a69504759a62baff95"
+    },
+    {
+      "historical_path": ".runtime/mcp17-20261020/cli-release.json",
+      "sha256": "dcf764e3bcd7cc246602c4c43310792ec8dc98b802837c864195262058af556a"
+    },
+    {
+      "historical_path": ".runtime/mcp17-20261020/new-session-result.json",
+      "sha256": "0e0b71c44330767a3d2ef6c30b1835bab5ee38d20536294bf45f73b5d99bd929"
+    },
+    {
+      "historical_path": ".runtime/mcp17-20261020/mcp17-document.json",
+      "sha256": "33d99774d72c0c7ea6b2225eec6c7720b7853fff758672c08c920a860e1350d8"
+    }
+  ],
+  "retention": "This is a bounded verification summary, not retained raw responses or a replayable archive. Raw source files may be deleted by the separately authorized cleanup; see README for the final cleanup result."
+}

@@ -1,0 +1,33 @@
+{
+  "content": {
+    "applies_when": [
+      "系統提供持久化 operation receipt、payload 衝突保護與相同 collaboration 契約"
+    ],
+    "conclusion": "unknown 不能當作拒絕後重建命令。保留原 operation ID、payload、expected revision，查詢或原 envelope 重送；跨介面接手另核對完整 context、receipt 與版本化文件 bytes/hash。",
+    "confidence": "supported",
+    "does_not_apply_when": [
+      "不套用至任意非冪等 API；client 丟棄回應不證明 provider outage 或備份還原已驗收"
+    ],
+    "evidence": [
+      {
+        "note": "2026-10-21 唯讀重算 receipt/context/hash 比較；摘要與來源雜湊不是原始封存。",
+        "source": "notes/lessons/evidence/board-interfaces-20261021.json"
+      }
+    ],
+    "follow_up": [],
+    "observation": "正式 server 處理 checkpoint 後，client 刻意丟棄回應，CLI exit 5 並保留 unknown。查詢與原請求 replay 回執相等，accepted revision 8；後續 CLI/MCP 最終 context revision 14、三筆 handoff，文件 UTF-8 SHA-256 相符。",
+    "title": "unknown 恢復保留原操作，跨介面接手核對回執與內容"
+  },
+  "created_at": "2026-10-21T00:10:19.909186+00:00",
+  "decision": null,
+  "history": [],
+  "id": "lesson-c902922ebdb547348f247294492f9391",
+  "kind": "lesson",
+  "owner": "project",
+  "provenance": [],
+  "revision": 1,
+  "schema_version": "2.0.0",
+  "status": "candidate",
+  "successor": null,
+  "updated_at": "2026-10-21T00:10:19.909186+00:00"
+}
