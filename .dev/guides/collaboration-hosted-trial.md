@@ -116,7 +116,7 @@ Worker SHA-256：`1c9e15074d7d5c54cd8d5a0339105de98a6b35232c27128f98e59602a4d388
 
 ## 已準備的合成資料
 
-產生器：[collaboration-ui-fixture.mjs](../../src/board/scripts/collaboration-ui-fixture.mjs)。它只回傳操作計畫，不連線、不自動執行、不修改 production Worker。
+產生器：[collaboration-ui-fixture.mjs](../../src/Tooling/collaboration-ui-fixture.mjs)。它只回傳操作計畫，不連線、不自動執行、不修改 production Worker。
 
 固定 store：`workflow-records-private-collaboration`；namespace：`personal`；record kind：`collaboration`。
 

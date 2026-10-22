@@ -4,7 +4,7 @@
 
 ## 必須保留的輸入
 
-重建者至少取得本規格目錄、[協作 JSON schema／examples／vectors](../../src/board/contracts/collaboration-v1/)、[local export schema](../../src/local/assets/export-schema.json)、對應來源基線，以及要保留相容性的 SQL migrations。新語言可換內部 classes、函式或表設計，但不能自行改 wire profile、required/null、文字 bytes、digest、狀態機或 operation 意義。
+重建者至少取得本規格目錄、[協作 JSON schema／examples／vectors](../../src/Contracts/CollaborationV1)、[local export schema](../../src/Prototypes/WorkflowRecords/Assets/export-schema.json)、對應來源基線，以及要保留相容性的 SQL migrations。新語言可換內部 classes、函式或表設計，但不能自行改 wire profile、required/null、文字 bytes、digest、狀態機或 operation 意義。
 
 | 基線輸入 | 用途 | 保存規則 |
 | --- | --- | --- |

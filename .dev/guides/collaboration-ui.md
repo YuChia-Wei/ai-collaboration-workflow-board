@@ -16,7 +16,7 @@
 
 ### 本次證據與限制
 
-- `npm --prefix src/board test`、`run build`、`run validate` 通過；其中 UI-01–15 全數通過。
+- `npm test`、`run build`、`run validate` 通過；其中 UI-01–15 全數通過。
 - 新增 UI-13：待決策／已提交結果的清單與空狀態；UI-14：真實本機 query → 草稿 → 確認，保留版本／refs、不發出 command；UI-15：錯誤對象／版本／快照及無效意見拒絕。
 - 本機 Chrome 使用打包 Worker＋合成 SQLite，已確認預設看板、審閱入口、待決策篩選、讀取選項／版本、填寫意見、草稿確認及停用送出。重新讀取觸發未保存草稿 confirm。
 - 瀏覽器下載事件等待逾時；已點選下載，但未確認檔案落地。後續瀏覽器控制逾時，取消提示後的保留行為與截圖未完成驗證，不能列為通過。改用新分頁後已確認手機版成果篩選、指定結果閱讀、填寫意見與確認；390px viewport 的 document width 為 375px，沒有水平溢出，console error 清單為空。CLI 查詢也未成功完成，未新增依賴。
@@ -68,8 +68,8 @@
 從 repository root：
 
 ```powershell
-npm --prefix src/board run build
-npm --prefix src/board run preview:collaboration -- --port 4178
+npm run build
+npm run preview:collaboration -- --port 4178
 ```
 
 開啟 `http://127.0.0.1:4178/?view=collaboration&store=board-ui-preview`。Node.js 需支援 node:sqlite（至少 22.13）。預設輸出至 `.runtime/wb07-ui/<時間>/preview-evidence.json`；若傳 `--output`，路徑相對目前工作目錄，應使用新的獨立資料夾。既有 #5 `.runtime` 證據不作寫入目標。
@@ -81,10 +81,10 @@ Preview 僅監聽 127.0.0.1，檢查 Host／Origin，僅暴露頁面與 queries�
 ## 檢查與證據
 
 ```powershell
-npm --prefix src/board run test:collaboration-ui
-npm --prefix src/board test
-npm --prefix src/board run build
-npm --prefix src/board run validate
+npm run test:collaboration-ui
+npm test
+npm run build
+npm run validate
 ```
 
 UI 測試 `tests/collaboration-ui.mjs` 的 UI-01–09 涵蓋真實本機 HTTP composition root／SQLite 查詢、原文版本、Agent 只讀、缺漏、分頁快照、hash 錯誤、HTML escaping、權限拒絕和空資料。快照／內容毀損案例使用查詢邊界故障注入，不宣稱 hosted 故障證據。

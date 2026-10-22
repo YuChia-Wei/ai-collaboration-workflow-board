@@ -1,0 +1,14 @@
+import {mkdir,readFile,cp,rm} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import {resolve} from 'node:path';
+import {build} from 'esbuild';
+import {standaloneCollaborationValidator} from './collaboration-validator.mjs';
+const projectRoot=resolve(fileURLToPath(new URL('../..',import.meta.url)));
+process.chdir(projectRoot);
+await rm(resolve(projectRoot,'dist'),{recursive:true,force:true});
+await mkdir('dist/server',{recursive:true});await mkdir('dist/.openai',{recursive:true});
+const client=await build({entryPoints:['src/Presentation/Web/entry.mjs'],bundle:true,write:false,format:'iife',platform:'browser',target:'es2022',minify:true});
+const html=(await readFile('src/Presentation/Web/index.html','utf8')).replace('</head>',`<style>${await readFile('src/Presentation/Web/collaboration.css','utf8')}</style></head>`).replace('<!--APP-->',`<script>${client.outputFiles[0].text.replace(/<\/script/gi,'<\\/script')}</script>`);
+await build({stdin:{contents:`import {handle,setPage} from './src/Presentation/WebApi/entry.mjs';setPage(${JSON.stringify(html)});export default {fetch:handle};`,resolveDir:projectRoot,sourcefile:'site-entry.mjs'},outfile:'dist/server/index.js',bundle:true,format:'esm',platform:'browser',target:'es2022',minify:true,plugins:[{name:'standalone-collaboration-schema',setup(build){build.onLoad({filter:/[\\/]collaboration-validation\.mjs$/},()=>({contents:standaloneCollaborationValidator(),loader:'js',resolveDir:projectRoot}));}}]});
+await cp('.openai/hosting.json','dist/.openai/hosting.json');await cp('src/Infrastructure/Persistence/D1/Migrations','dist/.openai/drizzle',{recursive:true});
+console.log('Worker + hosting manifest + schema-only migrations built');

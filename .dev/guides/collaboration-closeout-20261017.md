@@ -16,7 +16,7 @@
 
 ## 相同情境比較（AC06）
 
-[可重跑程式](../../src/board/scripts/collaboration-benchmark.mjs) 使用實際 bundled Worker、暫時的 127.0.0.1 HTTP server、記憶體內 SQLite 與相同的 20 筆 pending tasks。兩個 profile 都先取得 context／workflow detail；文件情境再讀 plan@1。每個情境／profile 執行 5 次，共 20 次。
+[可重跑程式](../../src/Tooling/collaboration-benchmark.mjs) 使用實際 bundled Worker、暫時的 127.0.0.1 HTTP server、記憶體內 SQLite 與相同的 20 筆 pending tasks。兩個 profile 都先取得 context／workflow detail；文件情境再讀 plan@1。每個情境／profile 執行 5 次，共 20 次。
 
 比較的共同 observable outcome 是 goal、授權範圍文字、全部 task ID／title／status，以及指定文件原文。程式逐筆 assert 與同一 oracle 相等；不把人工 profile 宣稱為支援 collaboration 的 assignment／decision／多 Agent 寫入語意。新介面額外資料保留在傳輸量內，未為比較刪除。
 

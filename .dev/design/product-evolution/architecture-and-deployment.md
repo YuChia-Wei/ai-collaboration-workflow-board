@@ -6,7 +6,7 @@
 
 `src/board` 是單一 Sites 系統：前端、Worker 入口、domain／application、D1 adapter 與 contracts 在同一專案建置。domain 不直接依賴 HTTP 或資料庫；application 使用 repository ports 與可信 access context，已具多種入口共用行為的基礎。分層成立不代表已經有桌面安裝程式、常駐本機服務或任意資料庫 adapter。
 
-核心以 Workflow aggregate 管理 Task DAG、Assignment、Document 與 Decision 等語意。延伸時至少保留以下不變量與觀察差異，精確定義仍以 [collaboration/1](../../../src/board/contracts/collaboration-v1/README.md) 及現行規格為準：
+核心以 Workflow aggregate 管理 Task DAG、Assignment、Document 與 Decision 等語意。延伸時至少保留以下不變量與觀察差異，精確定義仍以 [collaboration/1](../../../src/Contracts/CollaborationV1/README.md) 及現行規格為準：
 
 | 契約重點 | 演進時的要求 |
 | --- | --- |

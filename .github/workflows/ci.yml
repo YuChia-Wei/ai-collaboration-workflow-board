@@ -39,17 +39,14 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - run: python -B -m src.local.tests.test_layout
-      - run: python -B -m src.local.tests.test_review_regressions
-      - run: python -B -m src.local.tests.test_acceptance
+      - run: python -B -m src.Prototypes.WorkflowRecords.Tests.test_layout
+      - run: python -B -m src.Prototypes.WorkflowRecords.Tests.test_review_regressions
+      - run: python -B -m src.Prototypes.WorkflowRecords.Tests.test_acceptance
 
   board:
     name: Board contracts and Worker build
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: src/board
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
@@ -59,15 +56,16 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-          cache-dependency-path: src/board/package-lock.json
+          cache-dependency-path: package-lock.json
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - run: npm run test:tooling
       - run: npm run validate
       - uses: actions/upload-artifact@v4
         with:
           name: board-worker-${{ github.sha }}
-          path: src/board/dist/
+          path: dist/
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7

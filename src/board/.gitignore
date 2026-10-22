@@ -1,9 +1,0 @@
-dist/
-node_modules/
-.sites-runtime/
-.sites-checkout/
-.env
-.env.*
-!.env.example
-.wrangler/
-*.tar.gz

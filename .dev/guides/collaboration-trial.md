@@ -6,7 +6,7 @@
 
 已安裝 `software-development-orchestrator@0.2.0` 的 [方法](../../.ai/core/skills/software-development-orchestrator/references/orchestrate.md) 明列 goal、inputs、output、owner、dependencies、check、pending decision 及 resume／handoff。這些資訊足以作為本次 workflow 的來源；具體任務與接受條件仍由本專案決定。
 
-它是 instruction skill，`configuration: null`，沒有自動 workflow writer。`slice-implementer@0.2.0` 也沒有管理自己的 store。本試行由專案的 [trial 入口](../../src/board/scripts/collaboration-trial.mjs) 明確呼叫既有 collaboration DTO 寫入 Board，不改 managed skill、不假裝全部 skills 已自動串接。
+它是 instruction skill，`configuration: null`，沒有自動 workflow writer。`slice-implementer@0.2.0` 也沒有管理自己的 store。本試行由專案的 [trial 入口](../../src/Tooling/collaboration-trial.mjs) 明確呼叫既有 collaboration DTO 寫入 Board，不改 managed skill、不假裝全部 skills 已自動串接。
 
 | Skill 概念 | 本次 Board 表達 |
 | --- | --- |
@@ -28,18 +28,22 @@
 
 ## 執行
 
-前置條件沿用專案：Node.js >=22.13、Python 3.13、已安裝 `src/board` dependencies。從 repository root 執行四個獨立命令，將 run ID 換成新的 ASCII 識別：
+前置條件沿用專案：Node.js >=22.13、Python 3.13、已在 repository root 安裝 dependencies。從 repository root 執行四個獨立命令，將 run ID 換成新的 ASCII 識別：
 
 ```powershell
-npm --prefix src/board run trial:collaboration -- start board-mvp-trial-01
-npm --prefix src/board run trial:collaboration -- validate board-mvp-trial-01
-npm --prefix src/board run trial:collaboration -- resume board-mvp-trial-01
-npm --prefix src/board run trial:collaboration -- status board-mvp-trial-01
+npm run trial:collaboration -- start board-mvp-trial-01
+npm run trial:collaboration -- validate board-mvp-trial-01
+npm run trial:collaboration -- resume board-mvp-trial-01
+npm run trial:collaboration -- status board-mvp-trial-01
 ```
 
 `start` 會先執行既有 build，再建立新的試行目錄、資料庫與 workflow；既有目錄一律拒絕覆蓋。`validate` 執行前後都比對來源，發生漂移、測試失敗或中斷時保留紀錄，修正後使用新的 run ID，避免把不同來源的證據混成一次通過。`resume` 必須由新程序執行；它使用已保存的 Worker／DB，不因工作目錄更新而默默換版。`status` 只讀取並追加觀察紀錄，適合再次啟動後查看。
 
 命令僅在 `127.0.0.1` 的臨時 port 啟動 MCP，使用只存在記憶體的每程序 secret。結束時關閉 listener，不寫入 Codex MCP 設定，也不留下常駐服務。試用資料存放在已忽略的 `.runtime/collaboration-trials/<run-id>/`；沒有自動清理、上傳、Git commit 或線上權威切換。
+
+來源目錄搬移後，`status`／`resume` 依保存的 `source-manifest.json` 辨識舊 `src/board/backend/schema/migrations/` 或新 `src/Infrastructure/Persistence/D1/Migrations/` 快照，驗證 SQL 檔案集合與 hash 後使用原 Worker／DB。不搬動來源快照、不改寫 manifest、舊 snapshots 或已保存證據；新的 session／MCP 紀錄只追加，另建立本次 snapshot。`resume` 仍會依原流程更新 trial DB、產生新的回條與續接證據。`validate` 的目前來源一致性要求保持不變，不能把新來源的驗證附到舊 run。
+
+搬移相容性的合成回歸測試為 `npm run build` 後執行 `npm run test:tooling`；涵蓋新舊格式的獨立程序 `status`／`resume`、既有證據不變，以及已固定 SQL 遭修改時拒絕讀取。測試預設放在 `.runtime/tooling-tests/`，可用 `BOARD_TOOLING_TEST_ROOT` 指定暫存目錄；這不改變產品 trial 的儲存位置。
 
 ## 可離線回查的證據
 

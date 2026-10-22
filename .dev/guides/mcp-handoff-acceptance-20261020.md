@@ -10,7 +10,7 @@ Codex 對話，完成下述新 session 驗收。新對話沿用已安裝連線�
 
 ## 交付與被測版本
 
-- 使用入口：[MCP.md](../../src/board/MCP.md)，含設定、可信授權、版本／支援矩陣、
+- 使用入口：[MCP.md](../../Docs/mcp.md)，含設定、可信授權、版本／支援矩陣、
   只讀接手提示、CLI 映射、unknown／衝突處理及退出方式。
 - GitHub runtime 基線：main `b2a2bf3588cea1bbe4e368b429bc5c8f39c6c7d1`，
   [CI 39442371227](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/actions/runs/39442371227)

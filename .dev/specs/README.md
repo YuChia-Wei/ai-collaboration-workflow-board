@@ -68,7 +68,7 @@
 
 ## 必要的機器可讀契約
 
-詳細 wire 結構仍採用版本化的 [collaboration/1 schema](../../src/board/contracts/collaboration-v1/schema.json)、[examples](../../src/board/contracts/collaboration-v1/examples.json)、[vectors](../../src/board/contracts/collaboration-v1/vectors.json)及[契約 README](../../src/board/contracts/collaboration-v1/README.md)。Local 可攜資料採用自己的 [export schema](../../src/local/assets/export-schema.json)。它們是重建輸入，不能只取本目錄 Markdown 而丟棄；本次未複製出第二套可能漂移的 schema。
+詳細 wire 結構仍採用版本化的 [collaboration/1 schema](../../src/Contracts/CollaborationV1/schema.json)、[examples](../../src/Contracts/CollaborationV1/examples.json)、[vectors](../../src/Contracts/CollaborationV1/vectors.json)及[契約 README](../../src/Contracts/CollaborationV1/README.md)。Local 可攜資料採用自己的 [export schema](../../src/Prototypes/WorkflowRecords/Assets/export-schema.json)。它們是重建輸入，不能只取本目錄 Markdown 而丟棄；本次未複製出第二套可能漂移的 schema。
 
 ## 來源權威與證據界線
 
@@ -81,3 +81,5 @@
 | 來源存在／部分來源／缺口 | 測試程式的對應程度，均不等於本輪執行通過 |
 
 GitHub Issues／Projects 仍為工作權威。[Issue 快照](sources/)保留上一輪讀取版本；本次整理沒有重新判定線上工作狀態。新協作 query、production persistence、可信 Agent 身分、HTTP／MCP 與新 UI 的缺口仍有效。產品測試、hosted CI、部署及真正重建另一套實作均未在這次文件整理中執行。
+
+來源目錄已於 2026-10-22 調整；帶日期文件中的舊定位請參照 [搬移對照](../guides/source-layout-migration.md)。歷史證據不因連結更新而成為本次驗收結果。

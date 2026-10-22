@@ -11,7 +11,7 @@ user's actual authorization.
 Keep development design, specifications and accumulated development resources
 under `.dev/`; use [the development index](.dev/README.md) and
 [product evolution design](.dev/design/product-evolution/README.md) as navigation.
-`docs/` and `notes/`, when used, are for formal project documentation or notes,
+`Docs/` and `Notes/`, when used, are for formal project documentation or notes,
 not the default location for development accumulation. Dated design snapshots
 do not replace live Issues/Projects or authorize implementation.
 
@@ -66,8 +66,8 @@ background and rules are reused; initialized documents remain project-owned.
 
 | Task | Read first |
 | --- | --- |
-| Product purpose and current implementations | [README](README.md), [Board](src/board/README.md), [local prototype](src/local/README.md) |
-| Domain, ports/adapters and available collaboration behavior | [Architecture](ARCHITECTURE.md), [collaboration contract](src/board/contracts/collaboration-v1/README.md), the selected live GitHub Issue |
+| Product purpose and current implementations | [README](README.md), [Board](Docs/board.md), [local prototype](src/Prototypes/WorkflowRecords/README.md) |
+| Domain, ports/adapters and available collaboration behavior | [Architecture](ARCHITECTURE.md), [collaboration contract](src/Contracts/CollaborationV1/README.md), the selected live GitHub Issue |
 | Build and local operation | [README commands](README.md#建置與測試), [local setup](LOCAL-SETUP.md) |
 | Deployment | [Deployment contract](DEPLOYMENT.md); use the user's selected authorization |
 | A first bounded task | [First-task guide](.dev/guides/first-task.md) |
@@ -85,10 +85,17 @@ not select delegation, a stronger model or an additional approval process.
 Board code uses JavaScript ESM, with a TypeScript database schema; the separate
 local prototype uses Python. Current sources specify Node.js >=22.13 and Python
 3.13; CI uses Node.js 24. Run Board commands from the repository root with
-`npm --prefix src/board ...`, and local tests with `python -B -m src.local.tests...`.
-The command definitions and prerequisites were inspected during initialization;
-application tests, builds and deployment were not executed in this operation.
+`npm ...`, and local tests with `python -B -m src.Prototypes.WorkflowRecords.Tests...`.
+The original initialization only inspected command definitions and prerequisites.
+See the current task evidence for later source-layout validation; initialization
+does not prove current runtime or deployment status.
 For current collaboration/1 transport, persistence and client acceptance, read
-`src/board/COLLABORATION-MVP.md`, `src/board/CLI.md`, `src/board/MCP.md` and the
+`Docs/collaboration-mvp.md`, `Docs/cli.md`, `Docs/mcp.md` and the
 relevant live Issues. Distinguish completed bounded client acceptance from
 pending trusted human review, multi-Agent isolation and complete recovery work.
+
+Source directories use PascalCase under `src/Core`, `src/Presentation`, and
+`src/Infrastructure`; the independent prototype is `src/Prototypes/WorkflowRecords`.
+Composition stays with each entry point, without a shared Hosts/CompositionRoots
+project. See `.dev/guides/source-layout-migration.md` for old-path mappings and
+tool-defined naming exceptions.

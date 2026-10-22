@@ -1,7 +1,7 @@
 # Local contract for a later Sites adapter (unverified)
 
 Historical P0/P1 contract for the Python local prototype. The repository now
-also contains a separate Sites Worker/D1 board in `src/board/`; the unimplemented
+also contains a separate Sites Worker/D1 board in `src/`; the unimplemented
 adapter statements below describe the original local prototype, not the current
 board. See [ARCHITECTURE.md](ARCHITECTURE.md) and [DEPLOYMENT.md](DEPLOYMENT.md)
 for current structure and verified deployment capabilities.

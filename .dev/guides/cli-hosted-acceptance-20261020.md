@@ -24,7 +24,7 @@ Profile：`workflow-records-private`。Windows 一般認證項目：
 入口只注入該次 Node 程序環境，未建立秘密檔案、永久環境變數或包含 token 的
 命令歷史；不輸出 token，也不讓 profile 的憑證被 `--endpoint` 改送至其他站點。
 換電腦／Windows 使用者需要重新配置。完整安裝、讀寫命令、續期與移除方式見
-[CLI 說明](../../src/board/CLI.md#這台-windows-電腦的日常用法)。
+[CLI 說明](../../Docs/cli.md#這台-windows-電腦的日常用法)。
 
 ## 整合與部署身分
 

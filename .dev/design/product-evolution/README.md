@@ -29,6 +29,8 @@ Framework 交接入口已建立為 [Proposal #486](https://github.com/YuChia-Wei
 
 ## 專案事實入口
 
-[根目錄說明](../../../README.md)、[架構](../../../ARCHITECTURE.md)、[部署契約](../../../DEPLOYMENT.md)、[Board](../../../src/board/README.md)、[collaboration/1](../../../src/board/contracts/collaboration-v1/README.md)、[MVP 範圍](../../../src/board/COLLABORATION-MVP.md)、[CLI](../../../src/board/CLI.md)、[MCP](../../../src/board/MCP.md)、[獨立本機原型](../../../src/local/README.md)。
+[根目錄說明](../../../README.md)、[架構](../../../ARCHITECTURE.md)、[部署契約](../../../DEPLOYMENT.md)、[Board](../../../Docs/board.md)、[collaboration/1](../../../src/Contracts/CollaborationV1/README.md)、[MVP 範圍](../../../Docs/collaboration-mvp.md)、[CLI](../../../Docs/cli.md)、[MCP](../../../Docs/mcp.md)、[獨立本機原型](../../../src/Prototypes/WorkflowRecords/README.md)。
 
 早期規格及說明若仍保留「transport／persistence 待整合」或舊 PR 狀態，需對照後續 #5／#16／#17 的最終證據；不得僅依舊段落否認已完成能力，也不能由已完成入口推定人類審核、多 Agent 隔離或完整退出能力已完成。
+
+來源目錄已於 2026-10-22 調整；帶日期文件中的舊定位請參照 [搬移對照](../../guides/source-layout-migration.md)。歷史證據不因連結更新而成為本次驗收結果。

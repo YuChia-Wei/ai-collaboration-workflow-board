@@ -9,7 +9,7 @@
 此 repo 的具體流程：
 
 1. 對要發布的同一份 source 執行 `npm ci`、契約測試、`npm run build`、`npm run validate`。
-2. Worker bundle 產生於 `src/board/dist/server/index.js`，archive 包含 hosting manifest 與 `drizzle/` schema migrations；產物不提交到 Git。
+2. Worker bundle 產生於 `dist/server/index.js`，archive 包含 hosting manifest 與 `drizzle/` schema migrations；產物不提交到 Git。
 3. Sites agent 取得短期來源寫入 credential，把對應 source 推到既有 Site 的專用來源 repository。GitHub 的 `origin` 與 Sites 來源是不同的發布通道。
 4. 原生 `save_site_version` 以已推送的 commit SHA 與該 source 的 archive 儲存版本；一般情況優先提交本機可生成的 archive，本機封裝無法完成時工具才允許 remote build fallback。
 5. 原生 deploy 工具部署 saved version。已確認 owner-private 時可使用 combined private save/deploy。確認 deployment status 為 `succeeded` 後才報告發布成功。
