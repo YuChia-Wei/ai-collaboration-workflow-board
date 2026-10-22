@@ -8,6 +8,13 @@ GitHub Issues and Projects remain the work authority. Preserve unrelated changes
 installation, implementation, push, PR, merge, closure and deployment retain the
 user's actual authorization.
 
+Keep development design, specifications and accumulated development resources
+under `.dev/`; use [the development index](.dev/README.md) and
+[product evolution design](.dev/design/product-evolution/README.md) as navigation.
+`docs/` and `notes/`, when used, are for formal project documentation or notes,
+not the default location for development accumulation. Dated design snapshots
+do not replace live Issues/Projects or authorize implementation.
+
 ## Code discovery
 
 Prefer codebase-memory-mcp `search_graph`, `trace_path`, `get_code_snippet`, and
@@ -81,5 +88,7 @@ local prototype uses Python. Current sources specify Node.js >=22.13 and Python
 `npm --prefix src/board ...`, and local tests with `python -B -m src.local.tests...`.
 The command definitions and prerequisites were inspected during initialization;
 application tests, builds and deployment were not executed in this operation.
-The collaboration/1 contract documents pending transport/persistence integration;
-do not advertise its domain/application implementation as a hosted capability.
+For current collaboration/1 transport, persistence and client acceptance, read
+`src/board/COLLABORATION-MVP.md`, `src/board/CLI.md`, `src/board/MCP.md` and the
+relevant live Issues. Distinguish completed bounded client acceptance from
+pending trusted human review, multi-Agent isolation and complete recovery work.

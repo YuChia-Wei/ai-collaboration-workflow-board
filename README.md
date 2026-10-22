@@ -4,6 +4,8 @@
 
 開發協作已選配 Framework v0.20.1 的 15 個 skills 與 `engineering-common@0.3.0`，包含 `ai-context-init@0.2.1`；既有最小協作起點初始化保留。測試設計入口已由 `bdd-gwt-test-designer` 遷移為 `test-designer`。精確清單、驗證及使用限制見 [FRAMEWORK-INSTALLATION.md](FRAMEWORK-INSTALLATION.md)，Agent 入口見 [AGENTS.md](AGENTS.md)，開始方式見 [第一個有界任務](.dev/guides/first-task.md)。這是開發工具採用，不增加 Board runtime 相依。
 
+開發設計、規格與經驗紀錄集中於 [.dev 開發資源](.dev/README.md)。[產品演進初期設計](.dev/design/product-evolution/README.md) 保存 Board 產品範圍、Roadmap、部署選項與 Framework 記憶提案；它是帶日期的設計快照，工作狀態仍以各專案 GitHub Issues／Projects 為準。
+
 | 路徑 | 用途 |
 | --- | --- |
 | `src/board/` | 單一 Sites 系統；`frontend/` 放瀏覽器程式，`backend/` 放 Worker／領域／D1，`contracts/` 放可攜訊息契約 |
