@@ -115,3 +115,29 @@ Browser entry `?view=source-replica` uses the existing project registry and requ
 an explicit project selection. It shows original status/title/source revision,
 completeness, raw metadata and verified text/binary downloads. The fixed-revision
 field can open an older saved source revision without choosing the latest head.
+
+## Reviewed transport and activation bounds
+
+The source-only HTTP route validates this exact profile, schema and route kind
+before the generic application dispatcher runs. Foreign collaboration/1 or /2
+envelopes cannot create native workflows/projects through a replica endpoint.
+Portable response `$defs` describe each query result and receipt. The CLI checks
+these shapes plus exact source/workflow/revision, page offsets, chunk references
+and hashes, operation/outcome and command receipt identity. Misrouted or partial
+command receipts preserve an unknown outcome and the unchanged original request.
+
+Activation privately reads exact manifest references through bound `json_each`
+parameters, preserving manifest order. Each SQL read is capped at 64 references
+and 2097152 raw chunk bytes; the implementation retains one file reconstruction
+buffer plus one bounded chunk batch. Missing, extra, duplicate or wrong returned
+references fail validation before activation. Hash, size and transactional CAS
+checks remain in effect.
+
+At the allowed version/file-count limits there are at most 1682 chunks. A batch
+closed by its byte bound contains at least 42 references and more than 2048000
+raw bytes, so there can be at most 16 such batches. With `C` count-closed and `B`
+byte-closed batches, `64*C + 42*B <= 1682`; therefore at most 31 closed batches plus
+one final batch require **32 chunk SQL reads**. A deterministic 1000-file/32-MiB
+planner test attains this bound. Registry, receipt, version/head reads and the
+transaction statements are additional. Actual hosted request/query limits remain
+unverified; this bound is not hosted tier acceptance.

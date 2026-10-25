@@ -8,6 +8,7 @@ export function createSourceReplicaRepository(db){
  const version=async(owner,r,p)=>{const row=await first('SELECT * FROM source_replica_versions WHERE key=?',key(owner,r,p));return row?{...row,manifest:JSON.parse(row.manifest)}:null;};
  const head=async(owner,r,p)=>(await first('SELECT revision FROM source_replica_heads WHERE key=?',headKey(owner,r,p)))?.revision??0;
  return {operation,version,head,
+ async readChunks(owner,r,p,refs){return (await s(`SELECT c.path,c.position AS "index",c.content_base64,c.chunk_hash FROM json_each(?) requested JOIN source_replica_chunks c ON c.path=json_extract(requested.value,'$.path') AND c.position=json_extract(requested.value,'$.index') WHERE c.version_key=? ORDER BY CAST(requested.key AS INTEGER)`,JSON.stringify(refs),key(owner,r,p)).all()).results;},
  async chunk(owner,r,p,path,index){const row=await first('SELECT content_base64,chunk_hash FROM source_replica_chunks WHERE version_key=? AND path=? AND position=?',key(owner,r,p),path,index);return row??null;},
  async cursor(owner,id){const row=await first('SELECT body FROM source_replica_cursors WHERE id=? AND owner=?',id,owner);return row?JSON.parse(row.body):null;},
  async saveCursor(owner,body){const id=crypto.randomUUID();await db.batch([s('INSERT INTO source_replica_cursors(id,owner,body) VALUES(?,?,?)',id,owner,JSON.stringify(body))]);return id;},

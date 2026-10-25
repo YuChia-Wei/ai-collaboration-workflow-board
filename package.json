@@ -14,7 +14,7 @@
     "trial:collaboration": "node --experimental-sqlite src/Tooling/collaboration-trial.mjs",
     "validate": "node src/Tooling/validate-artifact.mjs && node --experimental-sqlite --disallow-code-generation-from-strings src/Tests/collaboration-transport.mjs --artifact && node --experimental-sqlite --disallow-code-generation-from-strings src/Tests/source-replica-artifact.mjs",
     "db:generate": "drizzle-kit generate",
-    "test": "node src/Tests/architecture.mjs && node src/Tests/platform-ports.mjs && node src/Tests/portable-contract.mjs && python -B src/Tests/portable-vectors.py && node src/Tests/collaboration.mjs && node --experimental-sqlite src/Tests/collaboration-storage.mjs && node --experimental-sqlite src/Tests/collaboration-transport.mjs && node --experimental-sqlite src/Tests/cli.mjs && node --experimental-sqlite src/Tests/contracts.mjs && node --experimental-sqlite src/Tests/board.mjs && node --experimental-sqlite src/Tests/collaboration-ui.mjs && node --experimental-sqlite src/Tests/project-scope.mjs && node --experimental-sqlite src/Tests/source-replica.mjs",
+    "test": "node src/Tests/architecture.mjs && node src/Tests/platform-ports.mjs && node src/Tests/portable-contract.mjs && python -B src/Tests/portable-vectors.py && node src/Tests/collaboration.mjs && node --experimental-sqlite src/Tests/collaboration-storage.mjs && node --experimental-sqlite src/Tests/collaboration-transport.mjs && node --experimental-sqlite src/Tests/cli.mjs && node --experimental-sqlite src/Tests/contracts.mjs && node --experimental-sqlite src/Tests/board.mjs && node --experimental-sqlite src/Tests/collaboration-ui.mjs && node --experimental-sqlite src/Tests/project-scope.mjs && node --experimental-sqlite src/Tests/source-replica.mjs && node --experimental-sqlite src/Tests/source-replica-review-fixes.mjs",
     "test:cli": "node --experimental-sqlite src/Tests/cli.mjs",
     "test:windows-cli": "node src/Tests/windows-cli.mjs",
     "test:tooling": "node --experimental-sqlite src/Tests/tooling.mjs",
@@ -22,7 +22,8 @@
     "preview:collaboration": "node --experimental-sqlite src/Tooling/collaboration-ui-preview.mjs",
     "test:collaboration-ui": "node --experimental-sqlite src/Tests/collaboration-ui.mjs",
     "test:projects": "node --experimental-sqlite src/Tests/project-scope.mjs",
-    "test:source-replica": "node --experimental-sqlite src/Tests/source-replica.mjs"
+    "test:source-replica": "node --experimental-sqlite src/Tests/source-replica.mjs",
+    "test:source-replica-review": "node --experimental-sqlite src/Tests/source-replica-review-fixes.mjs"
   },
   "devDependencies": {
     "ajv": "8.17.1",

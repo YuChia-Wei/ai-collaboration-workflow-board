@@ -29,3 +29,14 @@ export async function validateManifest(p){
  for(const f of m.files){demand(f&&validReplicaPath(f.path)&&!paths.has(f.path),'invalid_or_duplicate_path');paths.add(f.path);demand(typeof f.mode==='string'&&/^[0-7]{6}$/.test(f.mode)&&Number.isSafeInteger(f.size)&&f.size>=0&&f.size<=replicaLimits.file_bytes&&replicaHash(f.sha256),'invalid_file');total+=f.size;}
  demand(total<=replicaLimits.version_bytes,'version_too_large','limit_exceeded');demand(replicaHash(p.manifest_hash)&&await valueDigest(m)===p.manifest_hash,'manifest_hash_mismatch');return m;
 }
+
+// Private activation read plan. Whole version references only; paths remain data.
+export function planReplicaChunkReads(files){
+ const batches=[];let refs=[],size=0;
+ for(const file of files)for(let index=0;index<Math.ceil(file.size/replicaLimits.chunk_bytes);index++){
+  const raw=Math.min(replicaLimits.chunk_bytes,file.size-index*replicaLimits.chunk_bytes);
+  if(refs.length&&(refs.length===64||size+raw>2097152)){batches.push(refs);refs=[];size=0;}
+  refs.push({path:file.path,index});size+=raw;
+ }
+ if(refs.length)batches.push(refs);return batches;
+}

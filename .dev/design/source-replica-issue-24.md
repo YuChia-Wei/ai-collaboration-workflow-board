@@ -27,3 +27,19 @@ Validation commands and final outcomes are returned to the parent integration
 owner. Production D1 migration, Sites deployment, real credential/client plugin
 acceptance, public delivery and actual historical data import remain unexecuted
 by this worker. No Git commit, push, PR or Issue mutation is authorized here.
+
+## Independent review repair of 89f6dd35
+
+Two P2 findings were accepted for repair: the source-only HTTP route could dispatch
+foreign native envelopes, and the source CLI accepted incomplete/misrouted result
+identities. The repair adds pre-dispatch source profile/schema/kind validation,
+operation-specific response schemas and exact CLI identity/hash/page checks.
+Focused adversarial cases include foreign native writes, same-project stale source
+versions, wrong chunks, partial shapes and mismatched accepted/rejected receipts.
+
+An approved private repository port replaces per-chunk activation SELECTs with
+bound JSON reference batches (64 refs / 2 MiB raw bytes). The deterministic worst
+case is 32 chunk SQL reads under existing public limits. This is additional to
+registry/operation/head reads and mutation statements, and does not establish a
+hosted D1 request budget. Existing transactional and raw-byte integrity tests remain
+applicable. No public request shape or capacity limit changed.

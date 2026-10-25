@@ -1,7 +1,7 @@
 import {demand,Fault} from '../Domain/errors.mjs';
 import {requireCapability} from '../Domain/collaboration-workflow.mjs';
 import {valueDigest,canonicalJson} from '../Domain/collaboration-values.mjs';
-import {REPLICA_PROFILE,replicaLimits,replicaCommands,replicaQueries,validateReplica,validateManifest,decodeReplicaChunk,rawDigest,validReplicaPath,validReplicaId,replicaHash} from '../Domain/source-replica.mjs';
+import {REPLICA_PROFILE,planReplicaChunkReads,replicaLimits,replicaCommands,replicaQueries,validateReplica,validateManifest,decodeReplicaChunk,rawDigest,validReplicaPath,validReplicaId,replicaHash} from '../Domain/source-replica.mjs';
 export function createSourceReplica({repository,projects,storeId,validateCommand,validateQuery}){
  const scope=async(a,c,kind)=>{validateReplica(c,kind);demand((kind==='command'?validateCommand:validateQuery)(c),'invalid_replica_envelope');requireCapability(a,'read');demand(c.project_ref.store_id===storeId,'store_mismatch','forbidden');await projects.requireProject(a,c.project_ref.project_id);};
  const inspect=(r,d)=>{if(r)demand(r.request_digest===d,'operation_payload_conflict','conflict');return r;};
@@ -33,10 +33,15 @@ export function createSourceReplica({repository,projects,storeId,validateCommand
     }data=chunks;
    }else{
     demand(replicaHash(p.manifest_hash)&&p.manifest_hash===version.manifest_hash,'manifest_hash_mismatch');demand(!version.published_revision,'immutable_version','conflict');
+    const batches=planReplicaChunkReads(version.manifest.files);let batchIndex=0,rows=[],rowIndex=0;
+    async function nextChunk(path,index){
+     if(rowIndex===rows.length){const refs=batches[batchIndex++];demand(refs,'missing_chunk','conflict');rows=await repository.readChunks(a.owner_id,c.project_ref,p,refs);rowIndex=0;demand(rows.length===refs.length,'missing_chunk','conflict');const seen=new Set();for(let i=0;i<rows.length;i++){const row=rows[i],key=canonicalJson([row.path,row.index]);demand(row.path===refs[i].path&&row.index===refs[i].index&&!seen.has(key),'chunk_reference_mismatch','conflict');seen.add(key);}}
+     const chunk=rows[rowIndex++];demand(chunk.path===path&&chunk.index===index,'chunk_reference_mismatch','conflict');return chunk;
+    }
     for(const file of version.manifest.files){
      const bytes=new Uint8Array(file.size);let offset=0;
      for(let index=0;index<Math.ceil(file.size/replicaLimits.chunk_bytes);index++){
-      const chunk=await repository.chunk(a.owner_id,c.project_ref,p,file.path,index);demand(chunk,'missing_chunk','conflict');const part=decodeReplicaChunk(chunk.content_base64);demand(await rawDigest(part)===chunk.chunk_hash,'chunk_hash_mismatch','conflict');bytes.set(part,offset);offset+=part.length;
+      const chunk=await nextChunk(file.path,index),part=decodeReplicaChunk(chunk.content_base64),size=Math.min(replicaLimits.chunk_bytes,file.size-index*replicaLimits.chunk_bytes);demand(part.length===size&&await rawDigest(part)===chunk.chunk_hash,'chunk_hash_mismatch','conflict');bytes.set(part,offset);offset+=part.length;
      }demand(offset===file.size&&await rawDigest(bytes)===file.sha256,'file_hash_or_size_mismatch','conflict');
     }
    }

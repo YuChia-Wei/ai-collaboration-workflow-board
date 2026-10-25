@@ -1,3 +1,4 @@
+import {verifySourceQuery,verifySourceReceipt} from './source-replica-response.mjs';
 import replicaSchema from '../../Contracts/SourceReplicaV1/schema.json' with {type:'json'};
 import Ajv2020 from 'ajv/dist/2020.js';
 import schemaV2 from '../../Contracts/CollaborationV2/schema.json' with {type:'json'};
@@ -121,8 +122,13 @@ export function createRemoteCollaborationClient(config,fetcher=globalThis.fetch)
   if(!validator(input)||!config.project||!sameRef(r,{store_id:config.store,namespace:config.namespace,project_id:config.project}))return result('error',undefined,'invalid_'+kind+'_or_scope');
   const response=await request('/api/source-replica/v1/'+(command?'commands':'queries'),input);
   const data=response.data;
-  if(response.ok&&sameRef(data?.project_ref,r)&&(!command||data.operation_id===input.operation_id&&data.expected_revision===input.expected_revision&&data.accepted===true))return {...result(command?'accepted':data.outcome==='unknown'?'unknown':'ok',data),...(command?{command_sent:true}:{})};
-  if(response.status>=400&&response.status<500&&data?.error)return result('rejected',data,data.error);
+  const validate=(name,value)=>ajv.getSchema(replicaSchema.$id+'#/$defs/'+name)?.(value)??false;
+  try{
+   if(command){verifySourceReceipt(input,data,validate);if(data.accepted&&response.ok)return {...result('accepted',data),command_sent:true};if(!data.accepted&&response.status>=400&&response.status<500)return {...result('rejected',data,data.error),command_sent:true};}
+   else if(response.ok){await verifySourceQuery(input,data,validate);return result(data.outcome==='unknown'?'unknown':'ok',data);}
+  }catch{/* Wrong or partial source data never establishes a result. */}
+  // A malformed/misrouted receipt cannot become a rejection via its error field.
+  if(response.status>=400&&response.status<500&&data&&Object.keys(data).every(k=>['error','category','details'].includes(k))&&typeof data.error==='string'&&typeof data.category==='string'&&data.details&&typeof data.details==='object')return result('rejected',data,data.error);
   if(!command)return result('error',undefined,response.error??'invalid_response');
   const reconciliation=await replica({service_contract_version:input.service_contract_version,schema_version:input.schema_version,project_ref:r,query:'replica.operation.get',payload:{operation_id:input.operation_id}},false);
   return {...result('unknown',undefined,'command_outcome_unknown'),command_sent:true,reconciliation,next_action:'Keep and replay the SAME command file; never change operation_id or expected_revision.'};
