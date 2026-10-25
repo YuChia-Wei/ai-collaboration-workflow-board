@@ -1,0 +1,2324 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workflow-board.invalid/contracts/source-replica/1",
+  "$defs": {
+    "command": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "const": "workflow-board/source-replica/1"
+            },
+            "schema_version": {
+              "const": "1.0"
+            },
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "command": {
+              "const": "replica.begin"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "workflow_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "source_revision": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "manifest_hash": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-f0-9]{64}$"
+                },
+                "manifest": {
+                  "type": "object",
+                  "properties": {
+                    "source": {
+                      "type": "object"
+                    },
+                    "workflow": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                          "not": {
+                            "enum": [
+                              "constructor",
+                              "prototype",
+                              "__proto__"
+                            ]
+                          }
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "status"
+                      ],
+                      "additionalProperties": true
+                    },
+                    "files": {
+                      "type": "array",
+                      "maxItems": 1000,
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 1024
+                          },
+                          "mode": {
+                            "type": "string",
+                            "pattern": "^[0-7]{6}$"
+                          },
+                          "size": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 16777216
+                          },
+                          "sha256": {
+                            "type": "string",
+                            "pattern": "^sha256:[a-f0-9]{64}$"
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "mode",
+                          "size",
+                          "sha256"
+                        ],
+                        "additionalProperties": true
+                      }
+                    }
+                  },
+                  "required": [
+                    "source",
+                    "workflow",
+                    "files"
+                  ],
+                  "additionalProperties": true
+                }
+              },
+              "required": [
+                "source_id",
+                "workflow_id",
+                "source_revision",
+                "manifest_hash",
+                "manifest"
+              ],
+              "additionalProperties": false
+            },
+            "operation_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "expected_revision": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740990
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "command",
+            "payload",
+            "operation_id",
+            "expected_revision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "const": "workflow-board/source-replica/1"
+            },
+            "schema_version": {
+              "const": "1.0"
+            },
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "command": {
+              "const": "replica.chunk.put"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "workflow_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "source_revision": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "chunks": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 32,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "path": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 1024
+                      },
+                      "index": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "content_base64": {
+                        "type": "string",
+                        "maxLength": 65536
+                      },
+                      "chunk_hash": {
+                        "type": "string",
+                        "pattern": "^sha256:[a-f0-9]{64}$"
+                      }
+                    },
+                    "required": [
+                      "path",
+                      "index",
+                      "content_base64",
+                      "chunk_hash"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "source_id",
+                "workflow_id",
+                "source_revision",
+                "chunks"
+              ],
+              "additionalProperties": false
+            },
+            "operation_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "expected_revision": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740990
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "command",
+            "payload",
+            "operation_id",
+            "expected_revision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "const": "workflow-board/source-replica/1"
+            },
+            "schema_version": {
+              "const": "1.0"
+            },
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "command": {
+              "const": "replica.activate"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "workflow_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "source_revision": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "manifest_hash": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "source_id",
+                "workflow_id",
+                "source_revision",
+                "manifest_hash"
+              ],
+              "additionalProperties": false
+            },
+            "operation_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "expected_revision": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740990
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "command",
+            "payload",
+            "operation_id",
+            "expected_revision"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "query": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "const": "workflow-board/source-replica/1"
+            },
+            "schema_version": {
+              "const": "1.0"
+            },
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "query": {
+              "const": "replica.capabilities"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "const": "workflow-board/source-replica/1"
+            },
+            "schema_version": {
+              "const": "1.0"
+            },
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "query": {
+              "const": "replica.list"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 50
+                },
+                "cursor": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "limit",
+                "cursor"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "const": "workflow-board/source-replica/1"
+            },
+            "schema_version": {
+              "const": "1.0"
+            },
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "query": {
+              "const": "replica.read"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "workflow_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "source_revision": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "source_id",
+                "workflow_id",
+                "source_revision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "const": "workflow-board/source-replica/1"
+            },
+            "schema_version": {
+              "const": "1.0"
+            },
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "query": {
+              "const": "replica.manifest"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "workflow_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "source_revision": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 50
+                }
+              },
+              "required": [
+                "source_id",
+                "workflow_id",
+                "source_revision",
+                "offset",
+                "limit"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "const": "workflow-board/source-replica/1"
+            },
+            "schema_version": {
+              "const": "1.0"
+            },
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "query": {
+              "const": "replica.file.chunk"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "workflow_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "source_revision": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "path": {
+                  "type": "string"
+                },
+                "index": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "source_id",
+                "workflow_id",
+                "source_revision",
+                "path",
+                "index"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "const": "workflow-board/source-replica/1"
+            },
+            "schema_version": {
+              "const": "1.0"
+            },
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "query": {
+              "const": "replica.chunks.read"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "workflow_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "source_revision": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "refs": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 32,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "path": {
+                        "type": "string"
+                      },
+                      "index": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "path",
+                      "index"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "max_response_bytes": {
+                  "type": "integer",
+                  "minimum": 70000,
+                  "maximum": 300000
+                }
+              },
+              "required": [
+                "source_id",
+                "workflow_id",
+                "source_revision",
+                "refs",
+                "max_response_bytes"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "const": "workflow-board/source-replica/1"
+            },
+            "schema_version": {
+              "const": "1.0"
+            },
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "query": {
+              "const": "replica.operation.get"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "operation_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "operation_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "receipt": {
+      "type": "object",
+      "properties": {
+        "accepted": {
+          "type": "boolean"
+        },
+        "project_ref": {
+          "type": "object",
+          "properties": {
+            "store_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "namespace": {
+              "const": "personal"
+            },
+            "project_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            }
+          },
+          "required": [
+            "store_id",
+            "namespace",
+            "project_id"
+          ],
+          "additionalProperties": false
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "command": {
+          "enum": [
+            "replica.begin",
+            "replica.chunk.put",
+            "replica.activate"
+          ]
+        },
+        "request_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "workflow_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "source_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "error": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "accepted",
+        "project_ref",
+        "operation_id",
+        "command",
+        "request_digest",
+        "expected_revision",
+        "revision",
+        "source_id",
+        "workflow_id",
+        "source_revision",
+        "error"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "accepted": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "error": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "error": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "result_replica_capabilities": {
+      "type": "object",
+      "properties": {
+        "service_contract_version": {
+          "const": "workflow-board/source-replica/1"
+        },
+        "project_ref": {
+          "type": "object",
+          "properties": {
+            "store_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "namespace": {
+              "const": "personal"
+            },
+            "project_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            }
+          },
+          "required": [
+            "store_id",
+            "namespace",
+            "project_id"
+          ],
+          "additionalProperties": false
+        },
+        "commands": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "replica.begin",
+              "replica.chunk.put",
+              "replica.activate"
+            ]
+          }
+        },
+        "queries": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "replica.capabilities",
+              "replica.list",
+              "replica.read",
+              "replica.manifest",
+              "replica.file.chunk",
+              "replica.chunks.read",
+              "replica.operation.get"
+            ]
+          }
+        },
+        "limits": {
+          "type": "object",
+          "properties": {
+            "request_bytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "manifest_bytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "chunk_bytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "chunks_per_command": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "file_bytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "version_bytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "files": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "page": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "request_bytes",
+            "manifest_bytes",
+            "chunk_bytes",
+            "chunks_per_command",
+            "file_bytes",
+            "version_bytes",
+            "files",
+            "page"
+          ],
+          "additionalProperties": false
+        },
+        "authority": {
+          "const": "source"
+        },
+        "replica_read_only": {
+          "const": true
+        }
+      },
+      "required": [
+        "service_contract_version",
+        "project_ref",
+        "commands",
+        "queries",
+        "limits",
+        "authority",
+        "replica_read_only"
+      ],
+      "additionalProperties": false
+    },
+    "result_replica_list": {
+      "type": "object",
+      "properties": {
+        "project_ref": {
+          "type": "object",
+          "properties": {
+            "store_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "namespace": {
+              "const": "personal"
+            },
+            "project_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            }
+          },
+          "required": [
+            "store_id",
+            "namespace",
+            "project_id"
+          ],
+          "additionalProperties": false
+        },
+        "items": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "properties": {
+              "source_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                "not": {
+                  "enum": [
+                    "constructor",
+                    "prototype",
+                    "__proto__"
+                  ]
+                }
+              },
+              "workflow_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                "not": {
+                  "enum": [
+                    "constructor",
+                    "prototype",
+                    "__proto__"
+                  ]
+                }
+              },
+              "source_revision": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                "not": {
+                  "enum": [
+                    "constructor",
+                    "prototype",
+                    "__proto__"
+                  ]
+                }
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "manifest_hash": {
+                "type": "string",
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              },
+              "workflow": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                    "not": {
+                      "enum": [
+                        "constructor",
+                        "prototype",
+                        "__proto__"
+                      ]
+                    }
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "title",
+                  "status"
+                ],
+                "additionalProperties": true
+              },
+              "complete": {
+                "const": true
+              }
+            },
+            "required": [
+              "source_id",
+              "workflow_id",
+              "source_revision",
+              "revision",
+              "manifest_hash",
+              "workflow",
+              "complete"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "has_more": {
+          "type": "boolean"
+        },
+        "cursor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "project_ref",
+        "items",
+        "has_more",
+        "cursor"
+      ],
+      "additionalProperties": false
+    },
+    "result_replica_read": {
+      "type": "object",
+      "properties": {
+        "project_ref": {
+          "type": "object",
+          "properties": {
+            "store_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "namespace": {
+              "const": "personal"
+            },
+            "project_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            }
+          },
+          "required": [
+            "store_id",
+            "namespace",
+            "project_id"
+          ],
+          "additionalProperties": false
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "workflow_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "source_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "manifest_hash": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "complete": {
+          "const": true
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "object"
+            },
+            "workflow": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "title": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "status"
+              ],
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "source",
+            "workflow"
+          ],
+          "additionalProperties": true
+        },
+        "file_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "total_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 33554432
+        }
+      },
+      "required": [
+        "project_ref",
+        "source_id",
+        "workflow_id",
+        "source_revision",
+        "revision",
+        "manifest_hash",
+        "complete",
+        "metadata",
+        "file_count",
+        "total_bytes"
+      ],
+      "additionalProperties": false
+    },
+    "result_replica_manifest": {
+      "type": "object",
+      "properties": {
+        "project_ref": {
+          "type": "object",
+          "properties": {
+            "store_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "namespace": {
+              "const": "personal"
+            },
+            "project_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            }
+          },
+          "required": [
+            "store_id",
+            "namespace",
+            "project_id"
+          ],
+          "additionalProperties": false
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "workflow_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "source_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "manifest_hash": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "complete": {
+          "const": true
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "files": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024
+              },
+              "mode": {
+                "type": "string",
+                "pattern": "^[0-7]{6}$"
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 16777216
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "mode",
+              "size",
+              "sha256"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "has_more": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "project_ref",
+        "source_id",
+        "workflow_id",
+        "source_revision",
+        "revision",
+        "manifest_hash",
+        "complete",
+        "offset",
+        "total",
+        "files",
+        "has_more"
+      ],
+      "additionalProperties": false
+    },
+    "result_replica_file_chunk": {
+      "type": "object",
+      "properties": {
+        "project_ref": {
+          "type": "object",
+          "properties": {
+            "store_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "namespace": {
+              "const": "personal"
+            },
+            "project_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            }
+          },
+          "required": [
+            "store_id",
+            "namespace",
+            "project_id"
+          ],
+          "additionalProperties": false
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "workflow_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "source_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "manifest_hash": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "complete": {
+          "const": true
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "content_base64": {
+          "type": "string",
+          "maxLength": 65536
+        },
+        "chunk_hash": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "project_ref",
+        "source_id",
+        "workflow_id",
+        "source_revision",
+        "revision",
+        "manifest_hash",
+        "complete",
+        "path",
+        "index",
+        "content_base64",
+        "chunk_hash"
+      ],
+      "additionalProperties": false
+    },
+    "result_replica_chunks_read": {
+      "type": "object",
+      "properties": {
+        "project_ref": {
+          "type": "object",
+          "properties": {
+            "store_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "namespace": {
+              "const": "personal"
+            },
+            "project_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            }
+          },
+          "required": [
+            "store_id",
+            "namespace",
+            "project_id"
+          ],
+          "additionalProperties": false
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "workflow_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "source_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+          "not": {
+            "enum": [
+              "constructor",
+              "prototype",
+              "__proto__"
+            ]
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "manifest_hash": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "complete": {
+          "const": true
+        },
+        "chunks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024
+              },
+              "index": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "content_base64": {
+                "type": "string",
+                "maxLength": 65536
+              },
+              "chunk_hash": {
+                "type": "string",
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "index",
+              "content_base64",
+              "chunk_hash"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "has_more": {
+          "type": "boolean"
+        },
+        "remaining": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "index": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "path",
+              "index"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "project_ref",
+        "source_id",
+        "workflow_id",
+        "source_revision",
+        "revision",
+        "manifest_hash",
+        "complete",
+        "chunks",
+        "has_more",
+        "remaining"
+      ],
+      "additionalProperties": false
+    },
+    "result_replica_operation_get": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "operation_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "outcome": {
+              "const": "unknown"
+            }
+          },
+          "required": [
+            "project_ref",
+            "operation_id",
+            "outcome"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "project_ref": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+                  "not": {
+                    "enum": [
+                      "constructor",
+                      "prototype",
+                      "__proto__"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            },
+            "operation_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+              "not": {
+                "enum": [
+                  "constructor",
+                  "prototype",
+                  "__proto__"
+                ]
+              }
+            },
+            "outcome": {
+              "enum": [
+                "accepted",
+                "rejected"
+              ]
+            },
+            "receipt": {
+              "$ref": "#/$defs/receipt"
+            }
+          },
+          "required": [
+            "project_ref",
+            "operation_id",
+            "outcome",
+            "receipt"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

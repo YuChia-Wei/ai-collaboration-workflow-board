@@ -1,3 +1,4 @@
+import {validateReplica} from '../../Core/Workflows/Domain/source-replica.mjs';
 import {collaborationTools} from './tools.mjs';
 import {mcpFailure} from './errors.mjs';
 import {httpContractFailure} from '../WebApi/errors.mjs';
@@ -56,8 +57,8 @@ export function createMcpHandler(createServices,resolveAccess){
    const tool=tools.find(t=>t.name===params.name);if(!tool)return error(-32602,'Unknown or unavailable tool');
    try{
     const input=params.arguments,kind=tool.annotations.readOnlyHint?'query':'command';
-    verifyEnvelope(input,tool.name.startsWith('v2_')?2:1);
-    if(input[kind]?.replaceAll('.','_')!==tool.name.replace(/^v2_/,''))return error(-32602,'Tool and operation mismatch');
+    if(tool.name.startsWith('source_v1_'))validateReplica(input,kind);else verifyEnvelope(input,tool.name.startsWith('v2_')?2:1);
+    if(input[kind]?.replaceAll('.','_')!==tool.name.replace(/^(v2_|source_v1_)/,''))return error(-32602,'Tool and operation mismatch');
     const value=await (kind==='query'?services.executeQuery(access,input):services.executeCommand(access,input));
     return result({content:[{type:'text',text:JSON.stringify(value)}],structuredContent:value,isError:value.accepted===false});
    }catch(failure){return result(mcpFailure(failure));}

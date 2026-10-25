@@ -1,0 +1,26 @@
+{
+  "project_ref": {
+    "store_id": "board-store",
+    "namespace": "personal",
+    "project_id": "framework"
+  },
+  "source_ref": {
+    "source_id": "framework-sqlite",
+    "workflow_id": "WF-001",
+    "source_revision": "logical-0001"
+  },
+  "command_names": [
+    "replica.begin",
+    "replica.chunk.put",
+    "replica.activate"
+  ],
+  "query_names": [
+    "replica.capabilities",
+    "replica.list",
+    "replica.read",
+    "replica.manifest",
+    "replica.file.chunk",
+    "replica.chunks.read",
+    "replica.operation.get"
+  ]
+}
