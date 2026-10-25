@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import {Script} from "node:vm";
 import { readFile, readdir } from "node:fs/promises";
 import { resolve, relative } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -39,7 +40,12 @@ assert.equal(
 );
 const page=await workerModule.default.fetch(new Request("https://artifact.test/"),{});
 assert.equal(page.status,200);
-assert.match(await page.text(),/工作紀錄/);
+const pageHtml=await page.text();
+assert.match(pageHtml,/工作紀錄/);
+const browserScripts=[...pageHtml.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)];
+assert.ok(browserScripts.length>0,"Final Worker HTML must contain the browser entry script");
+for(const [index,script] of browserScripts.entries())new Script(script[1],{filename:`embedded-browser-${index}.js`});
+console.log(`Final Worker HTML: ${browserScripts.length} embedded browser script(s) parse successfully`);
 const unsigned=await workerModule.default.fetch(new Request("https://artifact.test/api/workflows"),{});
 assert.equal(unsigned.status,401);
 const importer=await workerModule.default.fetch(new Request("https://artifact.test/api/source-import"),{});
