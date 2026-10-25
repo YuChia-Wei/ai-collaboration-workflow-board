@@ -29,7 +29,7 @@ await test('D01: discovery, legacy initialize and permission-filtered tools thro
  const d=await rpc('server/discover');assert.equal(d.status,200);assert.equal(d.body.result.resultType,'complete');assert.deepEqual(d.body.result.capabilities,{tools:{}});
  const legacy=await post('/mcp',{jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2025-11-25',clientInfo:{name:'test',version:'1'},capabilities:{}}});assert.equal(legacy.body.result.protocolVersion,'2025-11-25');
  const initialized=await post('/mcp',{jsonrpc:'2.0',method:'notifications/initialized'},{'mcp-protocol-version':'2025-11-25'});assert.equal(initialized.status,202);assert.equal(initialized.body,null);
- const list=await rpc('tools/list');assert.equal(list.body.result.tools.length,26);assert.ok(!list.body.result.tools.some(t=>t.name==='decision_resolve'));
+ const list=await rpc('tools/list');assert.equal(list.body.result.tools.filter(t=>!t.name.startsWith('v2_')).length,26);assert.equal(list.body.result.tools.filter(t=>t.name.startsWith('v2_')).length,32);assert.ok(!list.body.result.tools.some(t=>t.name.endsWith('decision_resolve')));
  const create=list.body.result.tools.find(t=>t.name==='workflow_create').inputSchema;
  const textPattern=create.properties.payload.properties.title.pattern;
  const urlPattern=create.$defs.external_ref.properties.url.anyOf.find(v=>v.type==='string').pattern;
@@ -111,8 +111,9 @@ await test('D07: per-request revocation and read-only grants protect existing da
  assert.equal((await post('/api/collaboration/v1/queries',q,{},readonly)).status,200);
  assert.equal((await post('/api/collaboration/v1/commands',c,{},readonly)).status,403);
  const listed=await post('/mcp',{jsonrpc:'2.0',id:1,method:'tools/list'},{'mcp-protocol-version':'2025-11-25'},readonly);
- assert.equal(listed.body.result.tools.length,8);
- assert.ok(!listed.body.result.tools.some(t=>t.name==='workflow_pause'));
+ assert.equal(listed.body.result.tools.filter(t=>!t.name.startsWith('v2_')).length,8);
+ assert.equal(listed.body.result.tools.filter(t=>t.name.startsWith('v2_')).length,12);
+ assert.ok(listed.body.result.tools.every(t=>t.annotations.readOnlyHint));
  for(const configuration of [
   {...env,COLLABORATION_BINDINGS:JSON.stringify({owner:{...binding,enabled:false}})},
   {...env,COLLABORATION_BINDINGS:JSON.stringify({})},
@@ -143,5 +144,22 @@ await test('GAP-17: schema shape rejection differs from valid-shape UTF-8 capaci
  const replay=await call('plan_revise',base);assert.equal(replay.isError,true);assert.deepEqual(replay.structuredContent,capacity.body);
  const context=await query('workflow.context',{workflow_ref:target,limit:20});assert.equal(context.revision,1);assert.equal(context.tasks.items.length,0);
 });
+await test('P09: bundled v2 HTTP/MCP project scopes and one operation namespace',async()=>{
+ const v2={service_contract_version:'workflow-board/collaboration/2',schema_version:'2.0'};
+ for(const project_id of ['artifact-A','artifact-B']){
+  const project_ref={store_id:'local',namespace:'personal',project_id};
+  const created=await call('v2_project_create',{...v2,project_ref,operation_id:'bootstrap',expected_revision:0,command:'project.create',payload:{name:project_id}});assert.equal(created.isError,false,JSON.stringify(created));
+  const workflow_ref={...project_ref,record_kind:'collaboration',workflow_id:'SAME'};
+  const input={...v2,workflow_ref,operation_id:'bootstrap',expected_revision:0,command:'workflow.create',payload:{title:project_id,goal:'isolated',scope:{included:'synthetic',excluded:'hosted'},skill:{id:'test',version:null},external_work_refs:[]}};
+  const collision=await post('/api/collaboration/v2/commands',input);assert.equal(collision.status,409);assert.equal(collision.body.error,'operation_payload_conflict');
+  input.operation_id='same-workflow-create';const first=await post('/api/collaboration/v2/commands',input);assert.equal(first.status,200,JSON.stringify(first));
+  const replay=await call('v2_workflow_create',input);assert.deepEqual(replay.structuredContent,first.body);
+  const context=await call('v2_workflow_context',{...v2,query:'workflow.context',payload:{workflow_ref,limit:1}});assert.equal(context.structuredContent.workflow.title,project_id);
+  const wrong=await call('v2_project_operation_get',{...v2,query:'project.operation.get',payload:{project_ref,operation_id:'same-workflow-create'}});assert.equal(wrong.structuredContent.error,'operation_target_mismatch');
+  const wrongWorkflow=await call('v2_operation_get',{...v2,query:'operation.get',payload:{workflow_ref,operation_id:'bootstrap'}});assert.equal(wrongWorkflow.structuredContent.error,'operation_target_mismatch');
+  const mismatched=await post('/api/collaboration/v1/commands',input);assert.equal(mismatched.status,501);
+ }
+});
+
 console.log(JSON.stringify({scenarios:passed,passed:true,subject:artifact?'bundled Worker (runtime codegen disabled)':'production source composition root',scope:'local synthetic requests; no real client or hosted D1 evidence'}));
 sqlite.close();

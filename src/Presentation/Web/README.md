@@ -17,3 +17,5 @@
 `collaboration-client.mjs` 呼叫既有 collaboration/1 queries，完成有界分頁並核對 workflow 快照；`collaboration-view.mjs` 呈現工作、決策、指定文件與交接。文件讀取與下載都使用精確 revision／hash；內容以文字顯示，不執行文件指令。
 
 目前只提供檢視，沒有審核／認領／接受成果的寫入入口。逐筆進度、session 結束與人類接受紀錄尚未由現行查詢 DTO 提供，不由顏色或完成數推定。可重現的合成預覽、驗收對照與待決策事項見 [UI 試行指南](../../../.dev/guides/collaboration-ui.md)。
+
+專案選擇器使用 collaboration/2 registry，顯示 stable ID 與名稱；沒有 URL 中的明確 project 選擇時，先停留在專案清單。選 legacy-personal 使用 V1。切換會丟棄前一個 project 的 context／cursor／文件，未保存審閱草稿仍走原離開確認。專案管理只建立或改名，不刪除。未知 project 命令結果保留原請求重試並提供下載；重新整理前需保存原請求。

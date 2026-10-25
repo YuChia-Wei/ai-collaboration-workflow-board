@@ -1,12 +1,17 @@
 /**
- * Collaboration/1 ports. Command/query use cases and D1/HTTP/MCP adapters have
+ * Collaboration/1 and /2 ports. Command/query use cases and D1/HTTP/MCP adapters have
  * local integration coverage; hosted deployment and client acceptance are separate.
  * Normative DTOs and state/transaction rules: src/Contracts/CollaborationV1/.
  * SQL rows, HTTP requests, response status and secrets are not port values.
+ * A /2 repository instance is bound to one explicit project ID. Every operation,
+ * snapshot, document, find baseline and cursor is owner/project scoped; ref-taking
+ * methods reject a different project. A /1 instance has no project and retains
+ * the original tables/keys. Project registry operations use the same /2 receipt
+ * scope as workflow operations. They do not grant actor capabilities.
  *
  * @typedef {{subject_id:string,kind:'human'|'agent',binding_id:string}} ActorRef
  * @typedef {{owner_id:string,actor:ActorRef,capabilities:readonly string[]}} AccessContext
- * @typedef {{store_id:string,namespace:'personal',record_kind:'collaboration',workflow_id:string}} WorkflowRef
+ * @typedef {{store_id:string,namespace:'personal',record_kind:'collaboration',workflow_id:string,project_id?:string}} WorkflowRef project_id is required by the /2 schema and forbidden by /1
  * @typedef {{now:()=>string}} Clock
  * @typedef {{next:(kind:'assignment'|'handoff'|'checkpoint')=>string}} IdFactory Returns a fresh, collision-resistant ID, never a reused history ID
  * @typedef {Record<string,any>} CommandState Domain-owned, complete invariant state, never a truncated read projection

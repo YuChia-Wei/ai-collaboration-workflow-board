@@ -1,0 +1,4590 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:workflow-board:collaboration:2",
+  "title": "Workflow Board collaboration/1 contract",
+  "description": "Target contract; current HTTP runtime does not advertise or accept this profile.",
+  "$ref": "#/$defs/command",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$",
+      "not": {
+        "enum": [
+          "__proto__",
+          "prototype",
+          "constructor"
+        ]
+      }
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "positive_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$",
+      "format": "date-time"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "profile": {
+      "const": "workflow-board/collaboration/2"
+    },
+    "schema_version": {
+      "const": "2.0"
+    },
+    "workflow_ref": {
+      "type": "object",
+      "properties": {
+        "store_id": {
+          "$ref": "#/$defs/id"
+        },
+        "namespace": {
+          "const": "personal"
+        },
+        "record_kind": {
+          "const": "collaboration"
+        },
+        "workflow_id": {
+          "$ref": "#/$defs/id"
+        },
+        "project_id": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "store_id",
+        "namespace",
+        "record_kind",
+        "workflow_id",
+        "project_id"
+      ],
+      "additionalProperties": false
+    },
+    "document_ref": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "$ref": "#/$defs/id"
+        },
+        "revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/digest"
+        }
+      },
+      "required": [
+        "document_id",
+        "revision",
+        "content_hash"
+      ],
+      "additionalProperties": false
+    },
+    "actor_ref": {
+      "type": "object",
+      "properties": {
+        "subject_id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "human",
+            "agent"
+          ]
+        },
+        "binding_id": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "subject_id",
+        "kind",
+        "binding_id"
+      ],
+      "additionalProperties": false
+    },
+    "session_ref": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "\\S"
+        },
+        "client": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "\\S"
+        },
+        "skill_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "label",
+        "client",
+        "skill_id"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "included": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "\\S"
+        },
+        "excluded": {
+          "type": "string",
+          "maxLength": 4000
+        }
+      },
+      "required": [
+        "included",
+        "excluded"
+      ],
+      "additionalProperties": false
+    },
+    "external_ref": {
+      "type": "object",
+      "properties": {
+        "original": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000,
+          "pattern": "\\S"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scope": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "work_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^https://",
+              "maxLength": 2000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed_at": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/timestamp"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_version": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "availability": {
+          "enum": [
+            "available",
+            "partial",
+            "unresolved"
+          ]
+        }
+      },
+      "required": [
+        "original",
+        "provider",
+        "scope",
+        "work_id",
+        "url",
+        "observed_at",
+        "source_version",
+        "availability"
+      ],
+      "additionalProperties": false
+    },
+    "input_ref": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "document"
+            },
+            "ref": {
+              "$ref": "#/$defs/document_ref"
+            }
+          },
+          "required": [
+            "kind",
+            "ref"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "external"
+            },
+            "ref": {
+              "$ref": "#/$defs/external_ref"
+            }
+          },
+          "required": [
+            "kind",
+            "ref"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "task_definition": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "\\S"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000,
+          "pattern": "\\S"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "completion_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "\\S"
+          },
+          "maxItems": 32,
+          "minItems": 1
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "maxItems": 32,
+          "uniqueItems": true
+        },
+        "plan_basis": {
+          "$ref": "#/$defs/document_ref"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/input_ref"
+          },
+          "maxItems": 32
+        },
+        "expected_artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "\\S"
+          },
+          "maxItems": 32
+        },
+        "decision_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "maxItems": 32,
+          "uniqueItems": true
+        },
+        "workstream": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "scope",
+        "completion_criteria",
+        "dependencies",
+        "plan_basis",
+        "inputs",
+        "expected_artifacts",
+        "decision_ids",
+        "workstream"
+      ],
+      "additionalProperties": false
+    },
+    "completion_requirement": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        },
+        "task_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "maxItems": 100,
+          "uniqueItems": true
+        },
+        "document_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/document_ref"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "task_ids",
+        "document_refs"
+      ],
+      "additionalProperties": false
+    },
+    "requirement_disposition": {
+      "type": "object",
+      "properties": {
+        "requirement_id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "excluded",
+            "follow_up"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "\\S"
+        },
+        "follow_up_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/external_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "requirement_id",
+        "kind",
+        "reason",
+        "follow_up_ref"
+      ],
+      "additionalProperties": false
+    },
+    "document_write": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "$ref": "#/$defs/id"
+        },
+        "expected_document_revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 256000
+        }
+      },
+      "required": [
+        "document_id",
+        "expected_document_revision",
+        "content"
+      ],
+      "additionalProperties": false
+    },
+    "assignment_ref": {
+      "type": "object",
+      "properties": {
+        "assignment_id": {
+          "$ref": "#/$defs/id"
+        },
+        "generation": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "definition_revision": {
+          "$ref": "#/$defs/positive_revision"
+        }
+      },
+      "required": [
+        "assignment_id",
+        "generation",
+        "definition_revision"
+      ],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "\\S"
+        },
+        "outcome": {
+          "enum": [
+            "passed",
+            "failed",
+            "blocked",
+            "interrupted",
+            "not_run"
+          ]
+        },
+        "observed_at": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/timestamp"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/input_ref"
+          },
+          "maxItems": 32
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "\\S"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "id",
+        "summary",
+        "outcome",
+        "observed_at",
+        "artifact_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000,
+          "pattern": "\\S"
+        },
+        "criterion_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "criterion_index": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 31
+              },
+              "outcome": {
+                "enum": [
+                  "satisfied",
+                  "not_satisfied",
+                  "not_evaluated"
+                ]
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000,
+                "pattern": "\\S"
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/id"
+                },
+                "maxItems": 32
+              }
+            },
+            "required": [
+              "criterion_index",
+              "outcome",
+              "explanation",
+              "evidence_ids"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 32,
+          "minItems": 1
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/input_ref"
+          },
+          "maxItems": 32
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          },
+          "maxItems": 32
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "\\S"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "summary",
+        "criterion_results",
+        "artifacts",
+        "evidence",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "handoff": {
+      "type": "object",
+      "properties": {
+        "completed": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "\\S"
+        },
+        "remaining": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "\\S"
+        },
+        "next_step": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "\\S"
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/input_ref"
+          },
+          "maxItems": 32
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "\\S"
+          },
+          "maxItems": 32
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "\\S"
+          },
+          "maxItems": 32
+        },
+        "next_actor_hint": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "completed",
+        "remaining",
+        "next_step",
+        "artifact_refs",
+        "blockers",
+        "limitations",
+        "next_actor_hint"
+      ],
+      "additionalProperties": false
+    },
+    "decider": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "human"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "subject"
+            },
+            "subject_id": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "required": [
+            "kind",
+            "subject_id"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "decision_scope": {
+      "type": "object",
+      "properties": {
+        "task_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "maxItems": 100,
+          "uniqueItems": true
+        },
+        "workflow_closure": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "task_ids",
+        "workflow_closure"
+      ],
+      "additionalProperties": false
+    },
+    "task_change": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "add"
+            },
+            "definition": {
+              "$ref": "#/$defs/task_definition"
+            }
+          },
+          "required": [
+            "kind",
+            "definition"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "replace"
+            },
+            "expected_definition_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "definition": {
+              "$ref": "#/$defs/task_definition"
+            }
+          },
+          "required": [
+            "kind",
+            "expected_definition_revision",
+            "definition"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "decision_disposition": {
+      "type": "object",
+      "properties": {
+        "decision_id": {
+          "$ref": "#/$defs/id"
+        },
+        "expected_decision_revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "action": {
+          "enum": [
+            "reconsider",
+            "carry_forward",
+            "waive"
+          ]
+        },
+        "basis": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/document_ref"
+          },
+          "maxItems": 32
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "decision_id",
+        "expected_decision_revision",
+        "action",
+        "basis",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "\\S"
+        },
+        "category": {
+          "enum": [
+            "invalid",
+            "not_found",
+            "conflict",
+            "forbidden",
+            "unauthenticated",
+            "limit_exceeded",
+            "unsupported",
+            "unavailable"
+          ]
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "error",
+        "category",
+        "details"
+      ],
+      "additionalProperties": false
+    },
+    "command": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "const": 0
+            },
+            "command": {
+              "const": "workflow.create"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "\\S"
+                },
+                "goal": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "\\S"
+                },
+                "scope": {
+                  "$ref": "#/$defs/scope"
+                },
+                "skill": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 160,
+                      "pattern": "\\S"
+                    },
+                    "version": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160,
+                          "pattern": "\\S"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "version"
+                  ],
+                  "additionalProperties": false
+                },
+                "external_work_refs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/external_ref"
+                  },
+                  "maxItems": 30
+                }
+              },
+              "required": [
+                "title",
+                "goal",
+                "scope",
+                "skill",
+                "external_work_refs"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "workflow.start"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "workflow.pause"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "\\S"
+                }
+              },
+              "required": [
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "workflow.resume"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "workflow.cancel"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "\\S"
+                },
+                "remaining": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "\\S"
+                }
+              },
+              "required": [
+                "reason",
+                "remaining"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "workflow.complete"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "summary": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000,
+                  "pattern": "\\S"
+                },
+                "document_refs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/document_ref"
+                  },
+                  "maxItems": 32
+                }
+              },
+              "required": [
+                "summary",
+                "document_refs"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "plan.revise"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "plan": {
+                  "$ref": "#/$defs/document_write"
+                },
+                "execution_impact": {
+                  "enum": [
+                    "none",
+                    "declared"
+                  ]
+                },
+                "task_changes": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/task_change"
+                  },
+                  "maxItems": 100
+                },
+                "unaffected_task_ids": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "maxItems": 100,
+                  "uniqueItems": true
+                },
+                "decision_dispositions": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/decision_disposition"
+                  },
+                  "maxItems": 100
+                },
+                "completion_requirements": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/completion_requirement"
+                  },
+                  "maxItems": 100
+                },
+                "requirement_dispositions": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/requirement_disposition"
+                  },
+                  "maxItems": 100
+                }
+              },
+              "required": [
+                "plan",
+                "execution_impact",
+                "task_changes",
+                "unaffected_task_ids",
+                "decision_dispositions",
+                "completion_requirements",
+                "requirement_dispositions"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "document.append"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "document": {
+                  "$ref": "#/$defs/document_write"
+                },
+                "purpose": {
+                  "enum": [
+                    "supporting",
+                    "result"
+                  ]
+                }
+              },
+              "required": [
+                "document",
+                "purpose"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "task.claim"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "expected_definition_revision": {
+                  "$ref": "#/$defs/positive_revision"
+                },
+                "session": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/session_ref"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "task_id",
+                "expected_definition_revision",
+                "session"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "task.progress"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "assignment": {
+                  "$ref": "#/$defs/assignment_ref"
+                },
+                "summary": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000,
+                  "pattern": "\\S"
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/evidence"
+                  },
+                  "maxItems": 32
+                }
+              },
+              "required": [
+                "task_id",
+                "assignment",
+                "summary",
+                "evidence"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "task.release"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "assignment": {
+                  "$ref": "#/$defs/assignment_ref"
+                },
+                "handoff": {
+                  "$ref": "#/$defs/handoff"
+                }
+              },
+              "required": [
+                "task_id",
+                "assignment",
+                "handoff"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "task.block"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "assignment": {
+                  "$ref": "#/$defs/assignment_ref"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "\\S"
+                },
+                "handoff": {
+                  "$ref": "#/$defs/handoff"
+                }
+              },
+              "required": [
+                "task_id",
+                "assignment",
+                "reason",
+                "handoff"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "task.unblock"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "resolution": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "\\S"
+                }
+              },
+              "required": [
+                "task_id",
+                "resolution"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "task.complete"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "assignment": {
+                  "$ref": "#/$defs/assignment_ref"
+                },
+                "result": {
+                  "$ref": "#/$defs/result"
+                }
+              },
+              "required": [
+                "task_id",
+                "assignment",
+                "result"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "task.cancel"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "assignment": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/assignment_ref"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "\\S"
+                },
+                "handoff": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/handoff"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "task_id",
+                "assignment",
+                "reason",
+                "handoff"
+              ],
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "assignment": {
+                        "$ref": "#/$defs/assignment_ref"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "handoff": {
+                        "$ref": "#/$defs/handoff"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "decision.open"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "decision_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "question": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "\\S"
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000,
+                    "pattern": "\\S"
+                  },
+                  "maxItems": 16
+                },
+                "required_decider": {
+                  "$ref": "#/$defs/decider"
+                },
+                "blocks": {
+                  "$ref": "#/$defs/decision_scope"
+                },
+                "basis": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/document_ref"
+                  },
+                  "maxItems": 32
+                }
+              },
+              "required": [
+                "decision_id",
+                "question",
+                "options",
+                "required_decider",
+                "blocks",
+                "basis"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "decision.resolve"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "decision_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "expected_decision_revision": {
+                  "$ref": "#/$defs/positive_revision"
+                },
+                "basis": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/document_ref"
+                  },
+                  "maxItems": 32
+                },
+                "outcome": {
+                  "enum": [
+                    "decided",
+                    "waived"
+                  ]
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4000,
+                      "pattern": "\\S"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "\\S"
+                }
+              },
+              "required": [
+                "decision_id",
+                "expected_decision_revision",
+                "basis",
+                "outcome",
+                "value",
+                "reason"
+              ],
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "outcome": {
+                        "const": "decided"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      }
+                    }
+                  },
+                  "else": {
+                    "properties": {
+                      "value": {
+                        "type": "null"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "handoff.record"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/id"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "handoff": {
+                  "$ref": "#/$defs/handoff"
+                }
+              },
+              "required": [
+                "task_id",
+                "handoff"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "checkpoint.append"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "observation": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000,
+                  "pattern": "\\S"
+                },
+                "next_step": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000,
+                  "pattern": "\\S"
+                },
+                "document_refs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/document_ref"
+                  },
+                  "maxItems": 32
+                }
+              },
+              "required": [
+                "observation",
+                "next_step",
+                "document_refs"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "workflow_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "project_ref": {
+              "$ref": "#/$defs/project_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "const": 0
+            },
+            "command": {
+              "const": "project.create"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "\\S"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "project_ref": {
+              "$ref": "#/$defs/project_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            },
+            "expected_revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "command": {
+              "const": "project.rename"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "\\S"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "project_ref",
+            "operation_id",
+            "expected_revision",
+            "command",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "query": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "capabilities"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "project_id": {
+                  "$ref": "#/$defs/id"
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "project_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "workflow.find"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "q": {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 50
+                },
+                "cursor": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "project_id": {
+                  "$ref": "#/$defs/id"
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "q",
+                "limit",
+                "cursor",
+                "project_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "workflow.context"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "workflow_ref": {
+                  "$ref": "#/$defs/workflow_ref"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 20
+                }
+              },
+              "required": [
+                "workflow_ref",
+                "limit"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "context.page"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "workflow_ref": {
+                  "$ref": "#/$defs/workflow_ref"
+                },
+                "section": {
+                  "enum": [
+                    "tasks",
+                    "decisions",
+                    "handoffs"
+                  ]
+                },
+                "cursor": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              },
+              "required": [
+                "workflow_ref",
+                "section",
+                "cursor"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "document.read"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "workflow_ref": {
+                  "$ref": "#/$defs/workflow_ref"
+                },
+                "document_ref": {
+                  "$ref": "#/$defs/document_ref"
+                }
+              },
+              "required": [
+                "workflow_ref",
+                "document_ref"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "operation.get"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "workflow_ref": {
+                  "$ref": "#/$defs/workflow_ref"
+                },
+                "operation_id": {
+                  "$ref": "#/$defs/id"
+                }
+              },
+              "required": [
+                "workflow_ref",
+                "operation_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "task.read"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "workflow_ref": {
+                  "$ref": "#/$defs/workflow_ref"
+                },
+                "task_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "definition_revision": {
+                  "$ref": "#/$defs/positive_revision"
+                },
+                "at_revision": {
+                  "$ref": "#/$defs/positive_revision"
+                }
+              },
+              "required": [
+                "workflow_ref",
+                "task_id",
+                "definition_revision",
+                "at_revision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "decision.read"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "workflow_ref": {
+                  "$ref": "#/$defs/workflow_ref"
+                },
+                "decision_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "decision_revision": {
+                  "$ref": "#/$defs/positive_revision"
+                },
+                "at_revision": {
+                  "$ref": "#/$defs/positive_revision"
+                }
+              },
+              "required": [
+                "workflow_ref",
+                "decision_id",
+                "decision_revision",
+                "at_revision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "project.list"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "namespace": {
+                  "const": "personal"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "cursor": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace",
+                "limit",
+                "cursor"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "project.read"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "project_ref": {
+                  "$ref": "#/$defs/project_ref"
+                }
+              },
+              "required": [
+                "project_ref"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "project.operation.get"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "project_ref": {
+                  "$ref": "#/$defs/project_ref"
+                },
+                "operation_id": {
+                  "$ref": "#/$defs/id"
+                }
+              },
+              "required": [
+                "project_ref",
+                "operation_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "service_contract_version": {
+              "$ref": "#/$defs/profile"
+            },
+            "schema_version": {
+              "$ref": "#/$defs/schema_version"
+            },
+            "query": {
+              "const": "project.legacy.preview"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "store_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "namespace": {
+                  "const": "personal"
+                }
+              },
+              "required": [
+                "store_id",
+                "namespace"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "service_contract_version",
+            "schema_version",
+            "query",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "receipt": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/accepted_receipt"
+        },
+        {
+          "$ref": "#/$defs/rejected_receipt"
+        }
+      ]
+    },
+    "operation_result": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "accepted"
+            },
+            "receipt": {
+              "$ref": "#/$defs/accepted_receipt"
+            }
+          },
+          "required": [
+            "outcome",
+            "receipt"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "rejected"
+            },
+            "receipt": {
+              "$ref": "#/$defs/rejected_receipt"
+            }
+          },
+          "required": [
+            "outcome",
+            "receipt"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unknown"
+            },
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "required": [
+            "outcome",
+            "workflow_ref",
+            "operation_id"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "assignment": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "$ref": "#/$defs/assignment_ref"
+        },
+        "actor": {
+          "$ref": "#/$defs/actor_ref"
+        },
+        "plan_basis": {
+          "$ref": "#/$defs/document_ref"
+        },
+        "session": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/session_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started_at": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "required": [
+        "ref",
+        "actor",
+        "plan_basis",
+        "session",
+        "started_at"
+      ],
+      "additionalProperties": false
+    },
+    "task_summary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "\\S"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "in_progress",
+            "blocked",
+            "completed",
+            "cancelled"
+          ]
+        },
+        "definition_revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "maxItems": 32
+        },
+        "plan_basis": {
+          "$ref": "#/$defs/document_ref"
+        },
+        "assignment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/assignment"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "claimable": {
+          "type": "boolean"
+        },
+        "blocking_decision_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "status",
+        "definition_revision",
+        "dependencies",
+        "plan_basis",
+        "assignment",
+        "ready",
+        "claimable",
+        "blocking_decision_ids"
+      ],
+      "additionalProperties": false
+    },
+    "decision_summary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "\\S"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "decided",
+            "waived"
+          ]
+        },
+        "required_decider": {
+          "$ref": "#/$defs/decider"
+        },
+        "blocks": {
+          "$ref": "#/$defs/decision_scope"
+        },
+        "basis": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/document_ref"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "id",
+        "revision",
+        "question",
+        "status",
+        "required_decider",
+        "blocks",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "handoff_record": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "task_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actor": {
+          "$ref": "#/$defs/actor_ref"
+        },
+        "created_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "workflow_revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "handoff": {
+          "$ref": "#/$defs/handoff"
+        }
+      },
+      "required": [
+        "id",
+        "task_id",
+        "actor",
+        "created_at",
+        "workflow_revision",
+        "handoff"
+      ],
+      "additionalProperties": false
+    },
+    "context_header": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "\\S"
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "\\S"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "active",
+            "paused",
+            "completed",
+            "cancelled"
+          ]
+        },
+        "plan": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/document_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "skill": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "\\S"
+            },
+            "version": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "\\S"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "version"
+          ],
+          "additionalProperties": false
+        },
+        "external_work_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/external_ref"
+          },
+          "maxItems": 30
+        },
+        "completion_requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/completion_requirement"
+          },
+          "maxItems": 100
+        },
+        "requirement_dispositions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/requirement_disposition"
+          },
+          "maxItems": 100
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/workflow_result"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "title",
+        "goal",
+        "scope",
+        "status",
+        "plan",
+        "skill",
+        "external_work_refs",
+        "completion_requirements",
+        "requirement_dispositions",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "service_contract_version": {
+          "$ref": "#/$defs/profile"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/schema_version"
+        },
+        "workflow_ref": {
+          "$ref": "#/$defs/workflow_ref"
+        },
+        "revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "workflow": {
+          "$ref": "#/$defs/context_header"
+        },
+        "tasks": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/task_summary"
+              },
+              "maxItems": 20
+            },
+            "total": {
+              "$ref": "#/$defs/revision"
+            },
+            "has_more": {
+              "type": "boolean"
+            },
+            "cursor": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "items",
+            "total",
+            "has_more",
+            "cursor"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "has_more": {
+                    "const": true
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "cursor": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "cursor": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "decisions": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/decision_summary"
+              },
+              "maxItems": 20
+            },
+            "total": {
+              "$ref": "#/$defs/revision"
+            },
+            "has_more": {
+              "type": "boolean"
+            },
+            "cursor": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "items",
+            "total",
+            "has_more",
+            "cursor"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "has_more": {
+                    "const": true
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "cursor": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "cursor": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "handoffs": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/handoff_record"
+              },
+              "maxItems": 20
+            },
+            "total": {
+              "$ref": "#/$defs/revision"
+            },
+            "has_more": {
+              "type": "boolean"
+            },
+            "cursor": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "items",
+            "total",
+            "has_more",
+            "cursor"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "has_more": {
+                    "const": true
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "cursor": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "cursor": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "pattern": "\\S"
+              },
+              "ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000,
+                "pattern": "\\S"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "kind",
+              "ref",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "service_contract_version",
+        "schema_version",
+        "workflow_ref",
+        "revision",
+        "workflow",
+        "tasks",
+        "decisions",
+        "handoffs",
+        "missing"
+      ],
+      "additionalProperties": false
+    },
+    "context_page": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "section": {
+              "const": "tasks"
+            },
+            "page": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/task_summary"
+                  },
+                  "maxItems": 20
+                },
+                "total": {
+                  "$ref": "#/$defs/revision"
+                },
+                "has_more": {
+                  "type": "boolean"
+                },
+                "cursor": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "items",
+                "total",
+                "has_more",
+                "cursor"
+              ],
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "has_more": {
+                        "const": true
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "cursor": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  },
+                  "else": {
+                    "properties": {
+                      "cursor": {
+                        "type": "null"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "workflow_ref",
+            "revision",
+            "section",
+            "page"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "section": {
+              "const": "decisions"
+            },
+            "page": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/decision_summary"
+                  },
+                  "maxItems": 20
+                },
+                "total": {
+                  "$ref": "#/$defs/revision"
+                },
+                "has_more": {
+                  "type": "boolean"
+                },
+                "cursor": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "items",
+                "total",
+                "has_more",
+                "cursor"
+              ],
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "has_more": {
+                        "const": true
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "cursor": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  },
+                  "else": {
+                    "properties": {
+                      "cursor": {
+                        "type": "null"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "workflow_ref",
+            "revision",
+            "section",
+            "page"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "workflow_ref": {
+              "$ref": "#/$defs/workflow_ref"
+            },
+            "revision": {
+              "$ref": "#/$defs/positive_revision"
+            },
+            "section": {
+              "const": "handoffs"
+            },
+            "page": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/handoff_record"
+                  },
+                  "maxItems": 20
+                },
+                "total": {
+                  "$ref": "#/$defs/revision"
+                },
+                "has_more": {
+                  "type": "boolean"
+                },
+                "cursor": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "items",
+                "total",
+                "has_more",
+                "cursor"
+              ],
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "has_more": {
+                        "const": true
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "cursor": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  },
+                  "else": {
+                    "properties": {
+                      "cursor": {
+                        "type": "null"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "workflow_ref",
+            "revision",
+            "section",
+            "page"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "document": {
+      "type": "object",
+      "properties": {
+        "workflow_ref": {
+          "$ref": "#/$defs/workflow_ref"
+        },
+        "ref": {
+          "$ref": "#/$defs/document_ref"
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 256000
+        },
+        "created_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "actor": {
+          "$ref": "#/$defs/actor_ref"
+        }
+      },
+      "required": [
+        "workflow_ref",
+        "ref",
+        "content",
+        "created_at",
+        "actor"
+      ],
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "service_contract_version": {
+          "$ref": "#/$defs/profile"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/schema_version"
+        },
+        "store_id": {
+          "$ref": "#/$defs/id"
+        },
+        "namespace": {
+          "const": "personal"
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "workflow.create",
+              "workflow.start",
+              "workflow.pause",
+              "workflow.resume",
+              "workflow.cancel",
+              "workflow.complete",
+              "plan.revise",
+              "document.append",
+              "task.claim",
+              "task.progress",
+              "task.release",
+              "task.block",
+              "task.unblock",
+              "task.complete",
+              "task.cancel",
+              "decision.open",
+              "decision.resolve",
+              "handoff.record",
+              "checkpoint.append"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "capabilities",
+              "workflow.find",
+              "workflow.context",
+              "context.page",
+              "document.read",
+              "operation.get",
+              "task.read",
+              "decision.read"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "limits": {
+          "type": "object",
+          "properties": {
+            "request_utf8_bytes": {
+              "const": 300000
+            },
+            "document_utf8_bytes": {
+              "const": 256000
+            },
+            "record_utf8_bytes": {
+              "const": 64000
+            },
+            "context_utf8_bytes": {
+              "const": 64000
+            },
+            "tasks_per_workflow": {
+              "const": 100
+            },
+            "decisions_per_workflow": {
+              "const": 100
+            },
+            "context_page_items": {
+              "const": 20
+            },
+            "header_utf8_bytes": {
+              "const": 16000
+            }
+          },
+          "required": [
+            "request_utf8_bytes",
+            "document_utf8_bytes",
+            "record_utf8_bytes",
+            "context_utf8_bytes",
+            "tasks_per_workflow",
+            "decisions_per_workflow",
+            "context_page_items",
+            "header_utf8_bytes"
+          ],
+          "additionalProperties": false
+        },
+        "contract_status": {
+          "enum": [
+            "implemented"
+          ]
+        },
+        "project_id": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "service_contract_version",
+        "schema_version",
+        "store_id",
+        "namespace",
+        "commands",
+        "queries",
+        "limits",
+        "contract_status",
+        "project_id"
+      ],
+      "additionalProperties": false
+    },
+    "find_result": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "workflow_ref": {
+                "$ref": "#/$defs/workflow_ref"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "pattern": "\\S"
+              },
+              "status": {
+                "enum": [
+                  "draft",
+                  "active",
+                  "paused",
+                  "completed",
+                  "cancelled"
+                ]
+              },
+              "revision": {
+                "$ref": "#/$defs/positive_revision"
+              }
+            },
+            "required": [
+              "workflow_ref",
+              "title",
+              "status",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 50
+        },
+        "has_more": {
+          "type": "boolean"
+        },
+        "cursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "items",
+        "has_more",
+        "cursor"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "has_more": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "cursor": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "cursor": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "service_contract_version": {
+          "$ref": "#/$defs/profile"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/schema_version"
+        },
+        "workflow_ref": {
+          "$ref": "#/$defs/workflow_ref"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/id"
+        },
+        "revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "actor": {
+          "$ref": "#/$defs/actor_ref"
+        },
+        "occurred_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "name": {
+          "enum": [
+            "WorkflowCreated",
+            "WorkflowStarted",
+            "WorkflowPaused",
+            "WorkflowResumed",
+            "WorkflowCompleted",
+            "WorkflowCancelled",
+            "PlanRevised",
+            "DocumentAppended",
+            "TaskClaimed",
+            "TaskProgressRecorded",
+            "TaskReleased",
+            "TaskBlocked",
+            "TaskUnblocked",
+            "TaskCompleted",
+            "TaskCancelled",
+            "DecisionOpened",
+            "DecisionRecorded",
+            "HandoffRecorded",
+            "CheckpointAppended"
+          ]
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "workflow",
+                  "task",
+                  "assignment",
+                  "document",
+                  "decision",
+                  "handoff",
+                  "checkpoint"
+                ]
+              },
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "revision": {
+                "$ref": "#/$defs/positive_revision"
+              }
+            },
+            "required": [
+              "kind",
+              "id",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 400
+        }
+      },
+      "required": [
+        "service_contract_version",
+        "schema_version",
+        "workflow_ref",
+        "operation_id",
+        "revision",
+        "actor",
+        "occurred_at",
+        "name",
+        "effects"
+      ],
+      "additionalProperties": false
+    },
+    "task_record": {
+      "type": "object",
+      "properties": {
+        "workflow_ref": {
+          "$ref": "#/$defs/workflow_ref"
+        },
+        "snapshot_revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "summary": {
+          "$ref": "#/$defs/task_summary"
+        },
+        "definition": {
+          "$ref": "#/$defs/task_definition"
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/completed_result"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "workflow_ref",
+        "snapshot_revision",
+        "summary",
+        "definition",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    "decision_record": {
+      "type": "object",
+      "properties": {
+        "workflow_ref": {
+          "$ref": "#/$defs/workflow_ref"
+        },
+        "snapshot_revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "decision": {
+          "$ref": "#/$defs/decision_summary"
+        },
+        "resolution": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "outcome": {
+                  "enum": [
+                    "decided",
+                    "waived"
+                  ]
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4000
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000
+                },
+                "actor": {
+                  "$ref": "#/$defs/actor_ref"
+                },
+                "decided_at": {
+                  "$ref": "#/$defs/timestamp"
+                }
+              },
+              "required": [
+                "outcome",
+                "value",
+                "reason",
+                "actor",
+                "decided_at"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "workflow_ref",
+        "snapshot_revision",
+        "decision",
+        "resolution",
+        "options"
+      ],
+      "additionalProperties": false
+    },
+    "accepted_receipt": {
+      "type": "object",
+      "properties": {
+        "accepted": {
+          "const": true
+        },
+        "service_contract_version": {
+          "$ref": "#/$defs/profile"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/schema_version"
+        },
+        "workflow_ref": {
+          "$ref": "#/$defs/workflow_ref"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/id"
+        },
+        "request_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "before_revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "actor": {
+          "$ref": "#/$defs/actor_ref"
+        },
+        "accepted_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "workflow",
+                  "task",
+                  "assignment",
+                  "document",
+                  "decision",
+                  "handoff",
+                  "checkpoint"
+                ]
+              },
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "revision": {
+                "$ref": "#/$defs/positive_revision"
+              }
+            },
+            "required": [
+              "kind",
+              "id",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 400
+        }
+      },
+      "required": [
+        "accepted",
+        "service_contract_version",
+        "schema_version",
+        "workflow_ref",
+        "operation_id",
+        "request_digest",
+        "before_revision",
+        "revision",
+        "actor",
+        "accepted_at",
+        "effects"
+      ],
+      "additionalProperties": false
+    },
+    "rejected_receipt": {
+      "type": "object",
+      "properties": {
+        "accepted": {
+          "const": false
+        },
+        "service_contract_version": {
+          "$ref": "#/$defs/profile"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/schema_version"
+        },
+        "workflow_ref": {
+          "$ref": "#/$defs/workflow_ref"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/id"
+        },
+        "request_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "expected_revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "current_revision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/revision"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actor": {
+          "$ref": "#/$defs/actor_ref"
+        },
+        "recorded_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "failure": {
+          "$ref": "#/$defs/error"
+        }
+      },
+      "required": [
+        "accepted",
+        "service_contract_version",
+        "schema_version",
+        "workflow_ref",
+        "operation_id",
+        "request_digest",
+        "expected_revision",
+        "current_revision",
+        "actor",
+        "recorded_at",
+        "failure"
+      ],
+      "additionalProperties": false
+    },
+    "completed_result": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000,
+          "pattern": "\\S"
+        },
+        "criterion_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "criterion_index": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 31
+              },
+              "outcome": {
+                "enum": [
+                  "satisfied",
+                  "not_satisfied",
+                  "not_evaluated"
+                ]
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000,
+                "pattern": "\\S"
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/id"
+                },
+                "maxItems": 32
+              }
+            },
+            "required": [
+              "criterion_index",
+              "outcome",
+              "explanation",
+              "evidence_ids"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 32,
+          "minItems": 1
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/input_ref"
+          },
+          "maxItems": 32
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          },
+          "maxItems": 32
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "\\S"
+          },
+          "maxItems": 32
+        },
+        "definition_revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "plan_basis": {
+          "$ref": "#/$defs/document_ref"
+        },
+        "actor": {
+          "$ref": "#/$defs/actor_ref"
+        },
+        "completed_at": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "required": [
+        "summary",
+        "criterion_results",
+        "artifacts",
+        "evidence",
+        "limitations",
+        "definition_revision",
+        "plan_basis",
+        "actor",
+        "completed_at"
+      ],
+      "additionalProperties": false
+    },
+    "workflow_result": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8000
+            },
+            "document_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/document_ref"
+              },
+              "maxItems": 32
+            },
+            "actor": {
+              "$ref": "#/$defs/actor_ref"
+            },
+            "completed_at": {
+              "$ref": "#/$defs/timestamp"
+            }
+          },
+          "required": [
+            "summary",
+            "document_refs",
+            "actor",
+            "completed_at"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            },
+            "remaining": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            },
+            "actor": {
+              "$ref": "#/$defs/actor_ref"
+            },
+            "completed_at": {
+              "$ref": "#/$defs/timestamp"
+            }
+          },
+          "required": [
+            "reason",
+            "remaining",
+            "actor",
+            "completed_at"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "project_ref": {
+      "type": "object",
+      "properties": {
+        "store_id": {
+          "$ref": "#/$defs/id"
+        },
+        "namespace": {
+          "const": "personal"
+        },
+        "project_id": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "store_id",
+        "namespace",
+        "project_id"
+      ],
+      "additionalProperties": false
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "project_ref": {
+          "$ref": "#/$defs/project_ref"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "revision": {
+          "$ref": "#/$defs/positive_revision"
+        },
+        "workflow_contract": {
+          "enum": [
+            "workflow-board/collaboration/1",
+            "workflow-board/collaboration/2"
+          ]
+        }
+      },
+      "required": [
+        "project_ref",
+        "name",
+        "revision",
+        "workflow_contract"
+      ],
+      "additionalProperties": false
+    },
+    "project_list": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/project"
+          }
+        },
+        "has_more": {
+          "type": "boolean"
+        },
+        "cursor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "items",
+        "has_more",
+        "cursor"
+      ],
+      "additionalProperties": false
+    },
+    "project_receipt": {
+      "type": "object",
+      "properties": {
+        "accepted": {
+          "type": "boolean"
+        },
+        "project_ref": {
+          "$ref": "#/$defs/project_ref"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/id"
+        },
+        "request_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "expected_revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "error": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "accepted",
+        "project_ref",
+        "operation_id",
+        "request_digest",
+        "expected_revision",
+        "revision",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "project_operation_result": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "enum": [
+                "accepted",
+                "rejected"
+              ]
+            },
+            "receipt": {
+              "$ref": "#/$defs/project_receipt"
+            }
+          },
+          "required": [
+            "outcome",
+            "receipt"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unknown"
+            },
+            "project_ref": {
+              "$ref": "#/$defs/project_ref"
+            },
+            "operation_id": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "required": [
+            "outcome",
+            "project_ref",
+            "operation_id"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "legacy_preview": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "$ref": "#/$defs/project"
+        },
+        "mode": {
+          "const": "identity-mapping-no-copy"
+        },
+        "counts": {
+          "type": "object",
+          "properties": {
+            "heads": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "snapshots": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "chunks": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "facts": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "operations": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "cursors": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "heads",
+            "snapshots",
+            "chunks",
+            "facts",
+            "operations",
+            "cursors"
+          ],
+          "additionalProperties": false
+        },
+        "full_restore": {
+          "const": "not-implemented"
+        }
+      },
+      "required": [
+        "project",
+        "mode",
+        "counts",
+        "full_restore"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import schemaV2 from '../../Contracts/CollaborationV2/schema.json' with {type:'json'};
 import schema from '../../Contracts/CollaborationV1/schema.json' with {type:'json'};
 import {availableCommands,collaborationQueries} from '../../Core/Workflows/Application/collaboration-queries.mjs';
 
@@ -18,12 +19,12 @@ const descriptions={
  'task.release':'Save a handoff and release the current assignment for later claim.',
  'handoff.record':'Save information for continuation; does not release an assignment.',
 };
-function inputSchema(kind,name){
- const variant=schema.$defs[kind].oneOf.find(v=>v.properties[kind].const===name);
+function inputSchema(kind,name,contract=schema){
+ const variant=contract.$defs[kind].oneOf.find(v=>v.properties[kind].const===name);
  const defs={};
  function collect(value){
   if(!value||typeof value!=='object')return;
-  if(value.$ref){const key=value.$ref.replace('#/$defs/','');if(!Object.hasOwn(defs,key)){defs[key]=schema.$defs[key];collect(defs[key]);}}
+  if(value.$ref){const key=value.$ref.replace('#/$defs/','');if(!Object.hasOwn(defs,key)){defs[key]=contract.$defs[key];collect(defs[key]);}}
   for(const item of Object.values(value))if(typeof item==='object')collect(item);
  }
  collect(variant);
@@ -40,8 +41,10 @@ function inputSchema(kind,name){
  compatiblePatterns(projected);return projected;
 }
 export function collaborationTools(access){
- return [...collaborationQueries.map(name=>['query',name]),...availableCommands(access).map(name=>['command',name])].map(([kind,name])=>({
-  name:name.replaceAll('.','_'),description:(descriptions[name]??`Execute ${name} under the current workflow contract.`)+(kind==='command'?' Use a new operation ID only for a new request; after an uncertain response query the original operation.':'') ,
-  inputSchema:inputSchema(kind,name),annotations:{readOnlyHint:kind==='query',destructiveHint:kind==='command',idempotentHint:true,openWorldHint:false},
- }));
+ const workflow=[...collaborationQueries.map(name=>['query',name]),...availableCommands(access).map(name=>['command',name])];
+ const project=[...['project.list','project.read','project.operation.get','project.legacy.preview'].map(name=>['query',name]),...(access.capabilities.includes('plan')?['project.create','project.rename'].map(name=>['command',name]):[])];
+ return [[schema,'',workflow],[schemaV2,'v2_',[...workflow,...project]]].flatMap(([contract,prefix,operations])=>operations.map(([kind,name])=>({
+  name:prefix+name.replaceAll('.','_'),description:(prefix?'Project-aware collaboration/2. Select a stable project ID explicitly. ':'Legacy personal collaboration/1. ')+(descriptions[name]??`Execute ${name} under the current contract.`)+(kind==='command'?' Keep the same operation ID and complete request after an uncertain response.':''),
+  inputSchema:inputSchema(kind,name,contract),annotations:{readOnlyHint:kind==='query',destructiveHint:kind==='command',idempotentHint:true,openWorldHint:false},
+ })));
 }

@@ -44,3 +44,25 @@ export const collaborationFacts=sqliteTable('collaboration_facts',{
 export const collaborationCursors=sqliteTable('collaboration_cursors',{
  id:text('id').primaryKey(),owner:text('owner').notNull(),body:text('body').notNull()
 });
+
+// collaboration/2: project identity is an explicit storage dimension.
+const projectScope=()=>({owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),workflowId:text('workflow_id').notNull()});
+export const projectCollaborationHeads=sqliteTable('project_collaboration_heads',{
+ ...projectScope(),revision:integer('revision').notNull(),lastAttempt:text('last_attempt').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId,t.workflowId]})]);
+export const projectCollaborationOperations=sqliteTable('project_collaboration_operations',{
+ key:text('key').primaryKey(),...projectScope(),operationId:text('operation_id').notNull(),digest:text('digest').notNull(),attempt:text('attempt').notNull(),outcome:text('outcome').notNull(),receipt:text('receipt').notNull()
+},t=>[uniqueIndex('idx_project_collaboration_operation_scope').on(t.owner,t.storeId,t.projectId,t.operationId)]);
+export const projectCollaborationSnapshots=sqliteTable('project_collaboration_snapshots',{
+ seq:integer('seq').primaryKey({autoIncrement:true}),...projectScope(),revision:integer('revision').notNull(),summary:text('summary').notNull(),chunkCount:integer('chunk_count').notNull()
+},t=>[uniqueIndex('idx_project_collaboration_snapshot').on(t.owner,t.storeId,t.projectId,t.workflowId,t.revision)]);
+export const projectCollaborationChunks=sqliteTable('project_collaboration_chunks',{
+ ...projectScope(),revision:integer('revision').notNull(),position:integer('position').notNull(),body:text('body').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId,t.workflowId,t.revision,t.position]})]);
+export const projectCollaborationFacts=sqliteTable('project_collaboration_facts',{
+ ...projectScope(),revision:integer('revision').notNull(),kind:text('kind').notNull(),position:integer('position').notNull(),body:text('body').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId,t.workflowId,t.revision,t.kind,t.position]})]);
+export const projectCollaborationCursors=sqliteTable('project_collaboration_cursors',{
+ id:text('id').primaryKey(),owner:text('owner').notNull(),projectId:text('project_id').notNull(),body:text('body').notNull()
+});
+export const projects=sqliteTable('collaboration_projects',{owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),name:text('name').notNull(),revision:integer('revision').notNull(),lastAttempt:text('last_attempt').notNull()},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId]})]);

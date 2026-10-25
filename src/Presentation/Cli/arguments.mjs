@@ -4,9 +4,9 @@ export class CliError extends Error{
  constructor(code,exitCode=2){super(code);this.code=code;this.exitCode=exitCode;}
 }
 const fail=code=>{throw new CliError(code);};
-const general=['endpoint','store','namespace','timeout-ms','json'];
+const general=['endpoint','store','namespace','project','contract','timeout-ms','json'];
 const optionsByCommand={
- capabilities:[],find:['query','limit','cursor'],context:['workflow','limit','all'],
+ projects:['limit','cursor'],capabilities:[],find:['query','limit','cursor'],context:['workflow','limit','all'],
  page:['workflow','section','cursor','at-revision'],
  task:['workflow','task','at-revision','definition-revision'],
  decision:['workflow','decision','at-revision','decision-revision'],
@@ -51,14 +51,23 @@ export function parseArguments(argv,env){
  if(!/^wb1\.[A-Za-z0-9][A-Za-z0-9_-]{0,63}\.[A-Za-z0-9_-]{43}$/.test(token??''))fail('board_credential_required');
  if(!loopback&&(!sitesToken||/[\x00-\x20\x7f]/.test(sitesToken)))fail('sites_credential_required');
  if(loopback&&sitesToken)fail('sites_credential_forbidden_on_loopback');
+ const project=options.project;
+ if(project!==undefined&&!validId(project))fail('invalid_project');
+ const version=options.contract??(project!==undefined&&project!=='legacy-personal'||command==='projects'?'2':'1');
+ if(!['1','2'].includes(version))fail('invalid_contract');
+ if(version==='1'&&(command==='projects'||project!==undefined&&project!=='legacy-personal'))fail('project_contract_mismatch');
+ const scoped=version==='2';
+ const envelope=scoped?{service_contract_version:'workflow-board/collaboration/2',schema_version:'2.0'}:ENVELOPE;
+ const projectScope=scoped&&project!==undefined?{project_id:project}:{};
  const timeoutMs=integer(options['timeout-ms']??'15000',100,120000);
  const required=name=>options[name]??fail('missing_'+name.replaceAll('-','_'));
  const positive=name=>integer(required(name),1,Number.MAX_SAFE_INTEGER);
- const ref=()=>({store_id:store,namespace,record_kind:'collaboration',workflow_id:required('workflow')});
+ const ref=()=>({store_id:store,namespace,record_kind:'collaboration',...projectScope,workflow_id:required('workflow')});
  let query,payload;
  switch(command){
-  case 'capabilities':query='capabilities';payload={store_id:store,namespace};break;
-  case 'find':query='workflow.find';payload={store_id:store,namespace,q:options.query??'',limit:integer(options.limit??'20',1,50),cursor:options.cursor??null};break;
+  case 'projects':query='project.list';payload={store_id:store,namespace,limit:integer(options.limit??'100',1,100),cursor:options.cursor??null};break;
+  case 'capabilities':query='capabilities';payload={store_id:store,namespace,...projectScope};break;
+  case 'find':query='workflow.find';payload={store_id:store,namespace,...projectScope,q:options.query??'',limit:integer(options.limit??'20',1,50),cursor:options.cursor??null};break;
   case 'context':query='workflow.context';payload={workflow_ref:ref(),limit:integer(options.limit??'20',1,20)};break;
   case 'page':query='context.page';payload={workflow_ref:ref(),section:required('section'),cursor:required('cursor')};positive('at-revision');break;
   case 'task':query='task.read';payload={workflow_ref:ref(),task_id:required('task'),at_revision:positive('at-revision'),definition_revision:positive('definition-revision')};break;
@@ -67,14 +76,15 @@ export function parseArguments(argv,env){
   case 'operation':query='operation.get';payload={workflow_ref:ref(),operation_id:required('operation')};break;
   default:required('file');
  }
- return {command,json:!!options.json,all:!!options.all,endpoint:url.origin,store,namespace,timeoutMs,token,sitesToken,
+ return {command,json:!!options.json,all:!!options.all,endpoint:url.origin,store,namespace,project:scoped?(project??null):null,version:envelope.schema_version,timeoutMs,token,sitesToken,
   file:options.file,atRevision:options['at-revision']===undefined?undefined:positive('at-revision'),
-  input:query?{...ENVELOPE,query,payload}:null};
+  input:query?{...envelope,query,payload}:null};
 }
 
 export const HELP=`Workflow Board CLI ${CLI_VERSION}
 Usage: workflow-board <command> [options]
 
+  projects   [--limit 1..100] [--cursor CURSOR]
   capabilities
   find       [--query TEXT] [--limit 1..50] [--cursor CURSOR]
   context    --workflow ID [--limit 1..20] [--all]
@@ -87,6 +97,12 @@ Usage: workflow-board <command> [options]
   submit     --file command.json
   help | version
 
+Project: --project ID selects collaboration/2; --project legacy-personal or omission
+selects the fixed collaboration/1 legacy space. No environment project default.
+Use projects to discover IDs; submit/query files carry their explicit version.
+Use --contract 2 for registry queries without a workflow selection, including
+project.legacy.preview and project.read with --project legacy-personal.
+
 Connection: --endpoint HTTPS_ORIGIN --store ID --namespace personal
 Or WORKFLOW_BOARD_ENDPOINT / WORKFLOW_BOARD_STORE / WORKFLOW_BOARD_NAMESPACE.
 Credentials: WORKFLOW_BOARD_TOKEN and WORKFLOW_BOARD_SITES_TOKEN (environment only).
@@ -95,7 +111,7 @@ Options: --json, --timeout-ms 15000.
 Synthetic local tests only: --allow-loopback with http://127.0.0.1 or http://[::1];
 unset WORKFLOW_BOARD_SITES_TOKEN. Never send a live credential to a test server.
 
-submit reads an immutable full collaboration/1 command envelope. It first reads
+submit reads an immutable full versioned command envelope. It first reads
 the operation receipt, then sends at most one command POST. It never changes the
 operation ID/revision/payload and never automatically retries a command.
 After an uncertain response it queries that operation once and returns unknown;

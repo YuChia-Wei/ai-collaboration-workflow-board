@@ -7,13 +7,14 @@ export function createCollaborationHttpHandler(createServices,resolveAccess){
   try{
    verifyOrigin(request);
    if(request.method!=='POST')return jsonResponse({error:'method_not_allowed'},405,{Allow:'POST'});
-   const access=await resolveAccess(request,env),input=await readJson(request);verifyEnvelope(input);
-   const services=createServices(env),path=new URL(request.url).pathname;
-   if(path==='/api/collaboration/v1/commands'){
+   const path=new URL(request.url).pathname,match=/^\/api\/collaboration\/v([12])\/(commands|queries)$/.exec(path);
+   demand(match,'not_found','not_found');
+   const access=await resolveAccess(request,env),input=await readJson(request);verifyEnvelope(input,Number(match[1]));
+   const services=createServices(env);
+   if(match[2]==='commands'){
     const receipt=await services.executeCommand(access,input);
-    return jsonResponse(receipt,receipt.accepted?200:httpStatus(receipt.failure));
+    return jsonResponse(receipt,receipt.accepted?200:receipt.failure?httpStatus(receipt.failure):409);
    }
-   demand(path==='/api/collaboration/v1/queries','not_found','not_found');
    return jsonResponse(await services.executeQuery(access,input));
   }catch(error){const failure=httpContractFailure(error);return jsonResponse(failure.body,failure.status);}
  };

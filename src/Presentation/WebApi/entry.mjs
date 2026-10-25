@@ -30,7 +30,7 @@ const mcpHandler=createMcpHandler(createCollaborationServices,resolveSitesCollab
 export function handle(request,env){
  const path=new URL(request.url).pathname;
  if(path==='/mcp')return mcpHandler(request,env);
- if(path.startsWith('/api/collaboration/v1/'))return collaborationHandler(request,env);
+ if(/^\/api\/collaboration\/v[12]\//.test(path))return collaborationHandler(request,env);
  return humanHandler(request,env);
 }
 export default {fetch:handle};

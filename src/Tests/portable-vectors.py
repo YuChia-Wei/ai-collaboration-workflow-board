@@ -1,4 +1,4 @@
-"""Independent stdlib implementation of the collaboration/1 integer JSON subset."""
+"""Independent stdlib implementation of the versioned collaboration JSON subset."""
 from pathlib import Path
 import hashlib
 import json
@@ -75,7 +75,15 @@ def main():
                         'authority': request['authority'], 'command': request['command']})
     assert actual == request['canonical']
     assert digest(actual) == request['digest']
+    project_vectors = json.loads((VECTORS.parent.parent / 'CollaborationV2/vectors.json').read_text(encoding='utf-8'))
+    for vector in project_vectors['requests']:
+        actual = canonical({'purpose': vector['purpose'], 'authority': vector['authority'], 'command': vector['command']})
+        assert actual == vector['canonical'], vector['id']
+        assert digest(actual) == vector['digest'], vector['id']
+        ref = vector['command'].get('workflow_ref', vector['command'].get('project_ref'))
+        assert canonical([vector['authority']['owner_id'], ref['store_id'], ref['project_id'], vector['command']['operation_id']]) == vector['operation_key']
     print(json.dumps({'vectors': 28, 'passed': True, 'runtime': 'Python stdlib',
+                      'project_vectors': len(project_vectors['requests']),
                       'scope': 'Portable encoding only; not the separate local prototype provider'}))
 
 

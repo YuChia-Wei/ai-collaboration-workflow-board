@@ -69,3 +69,7 @@ collaboration HTTP 的新增服務認證 adapter 以 server-side token digest �
 [CLI 說明](Docs/cli.md)。
 
 `dist/`、`node_modules/`、preview 狀態與 `.runtime/` 均由根目錄 `.gitignore` 排除。原 repository policy checker 已於 `3e7ee13` 移除；SQL migrations 和唯讀 catalog 是可重現的來源輸入，保留在 Git。
+
+## 同 owner 的 project scope
+
+collaboration/2 保留 Workflow 聚合與 domain reducers，project registry 由 application 管理，D1 adapter 以 owner/store/project/workflow 與 owner/store/project/operation 隔離。Project 管理與 workflow 共用 operation ID 空間及原子 receipt 協定；project 不是 ACL。版本分流留在 HTTP／MCP 與入口組裝；Web／CLI 核對完整 reference。新增資料表不改 collaboration/1 的原 rows、digest 或 receipt。契約、legacy mapping 與 #6 恢復缺口見 [CollaborationV2](src/Contracts/CollaborationV2/README.md)。

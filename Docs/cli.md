@@ -356,3 +356,16 @@ Sites token；正式使用保持 HTTPS。
 的等價 context。Worker artifact 驗證包含服務認證接點與原 Sites/MCP 邊界。
 這是本機 HTTP／程序／SQL 與 artifact 證據；Sites ingress、真實憑證發放、
 線上 header 轉送、hosted D1、一般 MCP client、CI 與產品驗收須分開記錄。
+
+## #22：明確選擇 project（本機版本，尚未部署）
+
+`projects --json` 讀 collaboration/2 registry。`--project PROJECT_ID` 明確選 V2；省略或 `--project legacy-personal` 仍選固定 V1 legacy scope，不讀環境變數中的 project。現有 Windows profile／credential 格式不變，`run workflow-records-private` 後可傳同一旗標。
+
+```powershell
+npm run cli -- projects --json
+npm run cli -- capabilities --project framework --json
+npm run cli -- context --project framework --workflow WF-416 --all --json
+npm run cli -- submit --project framework --file project-create.json --json
+```
+
+連線與 credential 仍使用本文原設定。`project-create.json` 使用 [V2 範例](../src/Contracts/CollaborationV2/examples.json) 的完整 project command；rename 帶 project revision。`submit` 先查 `project.operation.get` 或 `operation.get`，再送原請求驗 digest；輸入 ref 與 `--project` 不符會在 HTTP 前拒絕。project registry queries 可用 `query --contract 2 --project PROJECT_ID --file query.json`；`project.read(legacy-personal)` 使用 `--contract 2 --project legacy-personal`，`project.legacy.preview` 使用 `--contract 2`（不需虛構 project）。未知結果保留原檔案及 project；不能換 project 再重試。CLI stdout／exit codes 保持 `workflow-board-cli/1`。完整 wire／回復邊界見 [V2 契約](../src/Contracts/CollaborationV2/README.md)。

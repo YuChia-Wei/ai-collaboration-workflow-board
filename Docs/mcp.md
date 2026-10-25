@@ -171,3 +171,9 @@ unknown／receipt。#17 新增本次真實 plugin 與 CLI 的雙向交接、文�
 新對話沿用已安裝的 plugin 連線；沒有重新 OAuth，也未取得新的底層 handshake
 trace，不能把新對話驗收擴張為任意 client／認證流程皆已支援。
 未量測 tokens、模型成功率或 actual debit，不宣稱節省。
+
+## #22：project-aware tools（本機版本，尚未部署）
+
+升級後的 `/mcp` 同時提供既有 V1 工具與 `v2_` 前綴工具。先用 `v2_project_list` 取得 stable ID，再用 `v2_capabilities`／`v2_workflow_find`／`v2_workflow_context`；所有 V2 DTO 必須帶 `workflow-board/collaboration/2`／`2.0` 及指定 project。建立／重新命名用 `v2_project_create`／`v2_project_rename`，恢復結果用 `v2_project_operation_get`。V1 工具只能讀寫固定 legacy-personal；工具與 envelope 版本不符明確拒絕。
+
+完整輸入、receipt／cursor scope 與 Framework 接手順序見 [V2 契約](../src/Contracts/CollaborationV2/README.md)。本機一般 MCP HTTP 測試已涵蓋 V2；選定 Sites plugin 的工具重新 discovery、真實新對話與 hosted D1 尚未驗證，本節不覆蓋上方 V1 歷史驗收。

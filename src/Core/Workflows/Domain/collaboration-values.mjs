@@ -45,8 +45,8 @@ export async function contentDigest(content){
  return 'sha256:'+Array.from(new Uint8Array(digest),byte=>byte.toString(16).padStart(2,'0')).join('');
 }
 export const valueDigest=value=>contentDigest(canonicalJson(value));
-export const requestDigest=(authority,command)=>valueDigest({purpose:'workflow-board-command-v1',authority,command});
+export const requestDigest=(authority,command)=>valueDigest({purpose:command.service_contract_version==='workflow-board/collaboration/2'?'workflow-board-command-v2':'workflow-board-command-v1',authority,command});
 
 // The ID is unique within the authenticated owner's store, not each workflow.
 // Target/principal changes therefore encounter the original receipt and digest.
-export const operationKey=(authority,command)=>canonicalJson([authority.owner_id,command.workflow_ref.store_id,command.operation_id]);
+export const operationKey=(authority,command)=>canonicalJson(command.workflow_ref.project_id===undefined?[authority.owner_id,command.workflow_ref.store_id,command.operation_id]:[authority.owner_id,command.workflow_ref.store_id,command.workflow_ref.project_id,command.operation_id]);
