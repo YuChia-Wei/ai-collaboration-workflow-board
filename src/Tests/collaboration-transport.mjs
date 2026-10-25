@@ -29,7 +29,8 @@ await test('D01: discovery, legacy initialize and permission-filtered tools thro
  const d=await rpc('server/discover');assert.equal(d.status,200);assert.equal(d.body.result.resultType,'complete');assert.deepEqual(d.body.result.capabilities,{tools:{}});
  const legacy=await post('/mcp',{jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2025-11-25',clientInfo:{name:'test',version:'1'},capabilities:{}}});assert.equal(legacy.body.result.protocolVersion,'2025-11-25');
  const initialized=await post('/mcp',{jsonrpc:'2.0',method:'notifications/initialized'},{'mcp-protocol-version':'2025-11-25'});assert.equal(initialized.status,202);assert.equal(initialized.body,null);
- const list=await rpc('tools/list');assert.equal(list.body.result.tools.filter(t=>!t.name.startsWith('v2_')).length,26);assert.equal(list.body.result.tools.filter(t=>t.name.startsWith('v2_')).length,32);assert.ok(!list.body.result.tools.some(t=>t.name.endsWith('decision_resolve')));
+ const list=await rpc('tools/list');assert.equal(list.body.result.tools.filter(t=>!t.name.startsWith('v2_')&&!t.name.startsWith('source_v1_')).length,26);assert.equal(list.body.result.tools.filter(t=>t.name.startsWith('v2_')).length,32);assert.ok(!list.body.result.tools.some(t=>t.name.endsWith('decision_resolve')));
+ assert.equal(list.body.result.tools.filter(t=>t.name.startsWith('source_v1_')).length,10);
  const create=list.body.result.tools.find(t=>t.name==='workflow_create').inputSchema;
  const textPattern=create.properties.payload.properties.title.pattern;
  const urlPattern=create.$defs.external_ref.properties.url.anyOf.find(v=>v.type==='string').pattern;
@@ -111,7 +112,7 @@ await test('D07: per-request revocation and read-only grants protect existing da
  assert.equal((await post('/api/collaboration/v1/queries',q,{},readonly)).status,200);
  assert.equal((await post('/api/collaboration/v1/commands',c,{},readonly)).status,403);
  const listed=await post('/mcp',{jsonrpc:'2.0',id:1,method:'tools/list'},{'mcp-protocol-version':'2025-11-25'},readonly);
- assert.equal(listed.body.result.tools.filter(t=>!t.name.startsWith('v2_')).length,8);
+ assert.equal(listed.body.result.tools.filter(t=>!t.name.startsWith('v2_')&&!t.name.startsWith('source_v1_')).length,8);
  assert.equal(listed.body.result.tools.filter(t=>t.name.startsWith('v2_')).length,12);
  assert.ok(listed.body.result.tools.every(t=>t.annotations.readOnlyHint));
  for(const configuration of [

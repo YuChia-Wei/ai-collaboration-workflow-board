@@ -1,7 +1,9 @@
+import {createSourceReplicaRepository} from '../../Infrastructure/Persistence/D1/source-replica-repository.mjs';
+import {createSourceReplica} from '../../Core/Workflows/Application/source-replica.mjs';
 import {createCollaborationRepository} from '../../Infrastructure/Persistence/D1/collaboration-repository.mjs';
 import {createCollaborationCommands} from '../../Core/Workflows/Application/collaboration.mjs';
 import {createCollaborationQueries} from '../../Core/Workflows/Application/collaboration-queries.mjs';
-import {validateCommand,validateQuery,validateCommandV2,validateQueryV2} from '../Shared/collaboration-validation.mjs';
+import {validateCommand,validateQuery,validateCommandV2,validateQueryV2,validateReplicaCommand,validateReplicaQuery} from '../Shared/collaboration-validation.mjs';
 import {createProjectRepository} from '../../Infrastructure/Persistence/D1/project-repository.mjs';
 import {createProjectServices,PROJECT_PROFILE} from '../../Core/Workflows/Application/projects.mjs';
 import {systemClock} from '../../Infrastructure/Runtime/clock.mjs';
@@ -26,8 +28,9 @@ export function createCollaborationServices(env){
  }
  const commandV1=createCollaborationCommands({repository,clock:systemClock,ids:{next:kind=>kind+'-'+crypto.randomUUID()},validateCommand,storeId});
  const queryV1=createCollaborationQueries({repository,validateQuery,storeId});
+ const replica=createSourceReplica({repository:createSourceReplicaRepository(db),projects,storeId,validateCommand:validateReplicaCommand,validateQuery:validateReplicaQuery});
  return {
-  executeCommand:(access,input)=>input.service_contract_version===PROJECT_PROFILE?executeV2('command',access,input):commandV1(access,input),
-  executeQuery:(access,input)=>input.service_contract_version===PROJECT_PROFILE?executeV2('query',access,input):queryV1(access,input),
+  executeCommand:(access,input)=>input.service_contract_version==='workflow-board/source-replica/1'?replica.executeCommand(access,input):input.service_contract_version===PROJECT_PROFILE?executeV2('command',access,input):commandV1(access,input),
+  executeQuery:(access,input)=>input.service_contract_version==='workflow-board/source-replica/1'?replica.executeQuery(access,input):input.service_contract_version===PROJECT_PROFILE?executeV2('query',access,input):queryV1(access,input),
  };
 }

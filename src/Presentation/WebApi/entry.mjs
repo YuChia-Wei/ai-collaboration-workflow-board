@@ -1,3 +1,4 @@
+import {createSourceReplicaHttpHandler} from './source-replica-handler.mjs';
 import {createD1Repositories} from '../../Infrastructure/Persistence/D1/repositories.mjs';
 import {createApplication} from '../../Core/Workflows/Application/services.mjs';
 import {createHttpHandler} from './handler.mjs';
@@ -26,9 +27,11 @@ function browserPage(_request,env){
 }
 const humanHandler=createHttpHandler(createServices,browserPage,resolveSitesOwner);
 const collaborationHandler=createCollaborationHttpHandler(createCollaborationServices,resolveCollaborationHttpAccess);
+const sourceReplicaHandler=createSourceReplicaHttpHandler(createCollaborationServices,resolveCollaborationHttpAccess);
 const mcpHandler=createMcpHandler(createCollaborationServices,resolveSitesCollaborationAccess);
 export function handle(request,env){
  const path=new URL(request.url).pathname;
+ if(path.startsWith('/api/source-replica/'))return sourceReplicaHandler(request,env);
  if(path==='/mcp')return mcpHandler(request,env);
  if(/^\/api\/collaboration\/v[12]\//.test(path))return collaborationHandler(request,env);
  return humanHandler(request,env);

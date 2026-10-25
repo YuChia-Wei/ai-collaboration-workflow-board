@@ -111,6 +111,10 @@ Options: --json, --timeout-ms 15000.
 Synthetic local tests only: --allow-loopback with http://127.0.0.1 or http://[::1];
 unset WORKFLOW_BOARD_SITES_TOKEN. Never send a live credential to a test server.
 
+query/submit also accept workflow-board/source-replica/1 envelopes with explicit
+--project ID. Source queries read immutable published versions; source commands
+require plan capability. Save each exact command file before first dispatch.
+
 submit reads an immutable full versioned command envelope. It first reads
 the operation receipt, then sends at most one command POST. It never changes the
 operation ID/revision/payload and never automatically retries a command.

@@ -1,3 +1,4 @@
+import replicaSchema from '../../Contracts/SourceReplicaV1/schema.json' with {type:'json'};
 import Ajv2020 from 'ajv/dist/2020.js';
 import schemaV2 from '../../Contracts/CollaborationV2/schema.json' with {type:'json'};
 import schema from '../../Contracts/CollaborationV1/schema.json' with {type:'json'};
@@ -6,7 +7,7 @@ import {contentDigest} from '../../Core/Workflows/Domain/collaboration-values.mj
 
 const ajv=new Ajv2020({strict:true,allErrors:false});
 ajv.addFormat('date-time',value=>{const time=new Date(value);return Number.isFinite(time.valueOf())&&Number(value.slice(0,4))>=1&&time.toISOString()===value;});
-ajv.addSchema(schema);ajv.addSchema(schemaV2);
+ajv.addSchema(schema);ajv.addSchema(schemaV2);ajv.addSchema(replicaSchema);
 const queryTypes={'project.list':'project_list','project.read':'project','project.operation.get':'project_operation_result','project.legacy.preview':'legacy_preview','capabilities':'capabilities','workflow.find':'find_result','workflow.context':'context','context.page':'context_page','task.read':'task_record','decision.read':'decision_record','document.read':'document','operation.get':'operation_result'};
 const sameRef=(a,b)=>a&&b&&['store_id','namespace','project_id','record_kind','workflow_id'].every(key=>a[key]===b[key]);
 const sameDocument=(a,b)=>a&&b&&['document_id','revision','content_hash'].every(key=>a[key]===b[key]);
@@ -80,6 +81,7 @@ export function createRemoteCollaborationClient(config,fetcher=globalThis.fetch)
   }
  }
  async function query(input){
+  if(input?.service_contract_version==='workflow-board/source-replica/1')return replica(input,false);
   const error=verifyInput(input,'query');if(error)return error;
   const response=await request(`/api/collaboration/${route}/queries`,input);
   if(!response.ok){
@@ -91,6 +93,7 @@ export function createRemoteCollaborationClient(config,fetcher=globalThis.fetch)
   return result(['operation.get','project.operation.get'].includes(input.query)&&response.data.outcome==='unknown'?'unknown':'ok',response.data);
  }
  async function submit(input){
+  if(input?.service_contract_version==='workflow-board/source-replica/1')return replica(input,true);
   const error=verifyInput(input,'command');if(error)return error;
   const lookup={service_contract_version:input.service_contract_version,schema_version:input.schema_version,query:input.project_ref?'project.operation.get':'operation.get',payload:{...(input.project_ref?{project_ref:input.project_ref}:{workflow_ref:input.workflow_ref}),operation_id:input.operation_id}};
   const before=await query(lookup);
@@ -112,6 +115,17 @@ export function createRemoteCollaborationClient(config,fetcher=globalThis.fetch)
    operation:{...(input.project_ref?{project_ref:input.project_ref}:{workflow_ref:input.workflow_ref}),operation_id:input.operation_id},
    reconciliation:observed,
    next_action:'Keep the original command file. Rerun submit with that same file to verify its digest; never allocate a new operation ID.'};
+ }
+ async function replica(input,command){
+  const kind=command?'command':'query',validator=ajv.getSchema(replicaSchema.$id+'#/$defs/'+kind),r=input.project_ref;
+  if(!validator(input)||!config.project||!sameRef(r,{store_id:config.store,namespace:config.namespace,project_id:config.project}))return result('error',undefined,'invalid_'+kind+'_or_scope');
+  const response=await request('/api/source-replica/v1/'+(command?'commands':'queries'),input);
+  const data=response.data;
+  if(response.ok&&sameRef(data?.project_ref,r)&&(!command||data.operation_id===input.operation_id&&data.expected_revision===input.expected_revision&&data.accepted===true))return {...result(command?'accepted':data.outcome==='unknown'?'unknown':'ok',data),...(command?{command_sent:true}:{})};
+  if(response.status>=400&&response.status<500&&data?.error)return result('rejected',data,data.error);
+  if(!command)return result('error',undefined,response.error??'invalid_response');
+  const reconciliation=await replica({service_contract_version:input.service_contract_version,schema_version:input.schema_version,project_ref:r,query:'replica.operation.get',payload:{operation_id:input.operation_id}},false);
+  return {...result('unknown',undefined,'command_outcome_unknown'),command_sent:true,reconciliation,next_action:'Keep and replay the SAME command file; never change operation_id or expected_revision.'};
  }
  async function context(input,all){
   const first=await query(input);if(first.status!=='ok'||!all)return first;
