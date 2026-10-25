@@ -1,0 +1,24 @@
+// Build an independent literal-value fixture through the actual build entry point.
+import assert from 'node:assert/strict';
+import {cp,mkdir,mkdtemp,readFile,realpath,symlink,writeFile} from 'node:fs/promises';
+import {resolve,join,sep} from 'node:path';
+import {tmpdir} from 'node:os';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+import {spawnSync} from 'node:child_process';
+import {Script} from 'node:vm';
+const root=fileURLToPath(new URL('../..',import.meta.url));
+const scratchRoot=resolve(process.env.BOARD_TOOLING_TEST_ROOT??tmpdir());await mkdir(scratchRoot,{recursive:true});
+const fixture=await mkdtemp(join(scratchRoot,'literal-html-'));
+assert.ok(resolve(fixture,'dist').startsWith(fixture+sep),'Build dist must remain inside the disposable fixture');
+await cp(join(root,'src'),join(fixture,'src'),{recursive:true});await mkdir(join(fixture,'.openai'));await cp(join(root,'.openai/hosting.json'),join(fixture,'.openai/hosting.json'));await writeFile(join(fixture,'package.json'),'{"type":"module"}\n');
+await symlink(await realpath(join(root,'node_modules')),join(fixture,'node_modules'),'junction');
+const literals=['$$','$&','$`',"$'",'</script>'];
+await writeFile(join(fixture,'src/Presentation/Web/entry.mjs'),'globalThis.__embeddingProbe='+JSON.stringify(literals)+';\n');
+const style='.literal-probe{--metacharacters:'+JSON.stringify(literals.slice(0,4).join('|'))+'}';
+await writeFile(join(fixture,'src/Presentation/Web/collaboration.css'),style);
+const built=spawnSync(process.execPath,[join(fixture,'src/Tooling/build.mjs')],{cwd:fixture,encoding:'utf8',windowsHide:true});assert.equal(built.status,0,built.stderr||built.stdout);
+const worker=(await import(pathToFileURL(join(fixture,'dist/server/index.js')).href)).default;
+const response=await worker.fetch(new Request('https://literal.test/?view=source-replica'),{}),html=await response.text();assert.equal(response.status,200);assert.ok(html.includes('<style>'+style+'</style>'),'CSS literal replacement sequences must remain byte-identical');
+const scripts=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)];assert.equal(scripts.length,1,'Escaped script closing text must not split the script');
+const sandbox={};new Script(scripts[0][1],{filename:'literal-browser-fixture.js'}).runInNewContext(sandbox);assert.deepEqual(Array.from(sandbox.__embeddingProbe),literals,'Published HTML must preserve all original JavaScript literal values');
+console.log('PASS actual build/final Worker preserves $$, $&, $`, $\' in scripts/styles and escapes closing script text; '+fixture);
