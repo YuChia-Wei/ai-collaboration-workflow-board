@@ -7,13 +7,18 @@ const messages = {
   document_hash_mismatch:'文件版本或內容識別不符，停止顯示。', invalid_response:'服務回覆不符合查詢的版本，停止顯示。',
 };
 export const queryError = code => Object.assign(new Error(messages[code] || `讀取失敗（${code}），請重試。`), {code});
-const sameRef = (a,b) => a && b && ['store_id','namespace','record_kind','workflow_id'].every(k=>a[k]===b[k]);
+const sameRef = (a,b) => a && b && ['store_id','namespace','project_id','record_kind','workflow_id'].every(k=>a[k]===b[k]);
 const sameDocument = (a,b) => a && b && ['document_id','revision','content_hash'].every(k=>a[k]===b[k]);
 
-export function createCollaborationClient(storeId, fetcher=globalThis.fetch) {
+export function createCollaborationClient(storeId, fetcher=globalThis.fetch, projectId=null) {
+  const project=projectId&&projectId!=='legacy-personal'?projectId:null;
+  const profile=project?{service_contract_version:'workflow-board/collaboration/2',schema_version:'2.0'}:envelope;
+  const scope={store_id:storeId,namespace:'personal',...(project?{project_id:project}:{})};
   async function query(name,payload) {
+    const ref=payload.workflow_ref??payload;
+    if(ref.store_id!==storeId||ref.namespace!=='personal'||(ref.project_id??null)!==project)throw queryError('project_mismatch');
     let response;
-    try { response=await fetcher('/api/collaboration/v1/queries',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...envelope,query:name,payload})}); }
+    try { response=await fetcher(`/api/collaboration/v${project?2:1}/queries`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...profile,query:name,payload})}); }
     catch { throw queryError('network_unavailable'); }
     let data;
     try { data=await response.json(); } catch { throw queryError('invalid_response'); }
@@ -21,8 +26,8 @@ export function createCollaborationClient(storeId, fetcher=globalThis.fetch) {
     return data;
   }
   return {
-    capabilities:()=>query('capabilities',{store_id:storeId,namespace:'personal'}),
-    find:(q='',cursor=null)=>query('workflow.find',{store_id:storeId,namespace:'personal',q,limit:20,cursor}),
+    async capabilities(){const value=await query('capabilities',scope);if(value.store_id!==storeId||value.namespace!=='personal'||(value.project_id??null)!==project||value.service_contract_version!==profile.service_contract_version)throw queryError('invalid_response');return value;},
+    async find(q='',cursor=null){const value=await query('workflow.find',{...scope,q,limit:20,cursor});if(!Array.isArray(value.items)||value.items.some(x=>x.workflow_ref.store_id!==storeId||x.workflow_ref.namespace!=='personal'||(x.workflow_ref.project_id??null)!==project))throw queryError('invalid_response');return value;},
     async context(ref) {
       const c=await query('workflow.context',{workflow_ref:ref,limit:20});
       if(!sameRef(ref,c.workflow_ref)) throw queryError('invalid_response');
@@ -52,6 +57,7 @@ export function createCollaborationClient(storeId, fetcher=globalThis.fetch) {
     },
     async document(ref,documentRef) {
       const doc=await query('document.read',{workflow_ref:ref,document_ref:documentRef});
+      if(!sameRef(doc.workflow_ref,ref)) throw queryError('invalid_response');
       if(!sameDocument(doc.ref,documentRef)) throw queryError('document_hash_mismatch');
       const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(doc.content));
       const digest='sha256:'+Array.from(new Uint8Array(hash),x=>x.toString(16).padStart(2,'0')).join('');

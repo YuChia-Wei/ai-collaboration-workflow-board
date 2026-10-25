@@ -1,9 +1,11 @@
+import {createProjectClient} from './project-client.mjs';
 import {createCollaborationClient} from './collaboration-client.mjs';
 import {esc,listMarkup,detailMarkup,taskMarkup,taskDetailShell,decisionMarkup,emptyCollaborationMarkup} from './collaboration-view.mjs';
 import {reviewTargets,reviewQueueMarkup,reviewEditorMarkup,createReviewDraft,reviewConfirmationMarkup} from './collaboration-review.mjs';
 
 const $=id=>document.getElementById(id);
 let client,items=[],cursor=null,context=null,selected=null,tab='tasks',listSerial=0,selectionSerial=0,documentSerial=0,loadedDocument=null;
+let projectsClient,projects=[],pendingProjectCommand=null;
 let reviewSerial=0,review=null,reviewDraft=null,reviewDirty=false,leaveDialogOpen=false;
 async function leaveReview(){
   if(leaveDialogOpen)return false;
@@ -28,7 +30,7 @@ const preview=document.querySelector('meta[name="collaboration-preview"]')?.cont
 const params=new URLSearchParams(location.search);
 $('app').className='app c-app';
 $('app').innerHTML=`<aside class="rail"><div class="brand"><span class="mark">≡</span>工作紀錄室</div><div><div class="rail-label">我的空間</div><nav><a class="c-nav current" href="?view=collaboration">Workflow 協作</a><a class="c-nav" href="/">人工與來源紀錄 ↗</a></nav></div><span class="stamp">${preview?'本機合成預覽':'私人協作空間'}</span><div class="rail-note"><strong>從進度到接手</strong>查看交辦、待決策問題與指定版本成果。<br>每一種完成，分開確認。</div></aside>
-<section class="list"><div class="list-head"><h1>Workflow 協作</h1><span class="count" id="c-count">—</span></div><form id="c-connect"><label for="c-store">資料空間（store ID）</label><div class="c-connect"><input id="c-store" required placeholder="輸入已設定的 store ID"><button type="submit">讀取</button></div></form><label class="c-label" for="c-search">搜尋 workflow 名稱</label><input id="c-search" class="search" type="search" placeholder="搜尋名稱"><div id="c-list" aria-live="polite"><div class="empty">指定資料空間後讀取協作紀錄。</div></div><button id="c-more" hidden>載入更多</button><p class="small">唯讀檢視 · 不會自動認領工作<br>人工與來源快照另有獨立入口。</p></section>
+<section class="list"><div class="list-head"><h1>Workflow 協作</h1><span class="count" id="c-count">—</span></div><form id="c-connect"><label for="c-store">資料空間（store ID）</label><div class="c-connect"><input id="c-store" required placeholder="輸入已設定的 store ID"><button type="submit">讀取</button></div></form><label class="c-label" for="c-project">專案</label><select id="c-project"><option value="">請先讀取資料空間</option></select><p id="c-project-identity" class="small"></p><details class="c-project-management"><summary>建立或重新命名專案</summary><form id="c-project-form"><label for="c-project-id">新專案 ID（建立後固定）</label><input id="c-project-id" maxlength="160" placeholder="例如 framework"><label for="c-project-name">顯示名稱</label><input id="c-project-name" required maxlength="160"><button type="submit">建立專案</button><button type="button" id="c-project-rename">更新目前專案名稱</button></form><div id="c-project-message" role="status"></div></details><label class="c-label" for="c-search">搜尋 workflow 名稱</label><input id="c-search" class="search" type="search" placeholder="搜尋名稱"><div id="c-list" aria-live="polite"><div class="empty">指定資料空間後讀取協作紀錄。</div></div><button id="c-more" hidden>載入更多</button><p class="small">Workflow 檢視不會自動認領工作<br>人工與來源快照另有獨立入口。</p></section>
 <main class="detail" id="c-detail"><div class="empty">從左側選擇 workflow，查看交辦與接手資訊。</div></main>`;
 if(preview) {
   const notice=document.createElement('div');notice.className='c-preview';notice.textContent='本機合成資料 · 透過真實 Worker 查詢與本機 SQLite · 不代表線上資料、PO 核准或產品驗收';
@@ -40,15 +42,62 @@ $('c-store').value=params.get('store')||document.querySelector('meta[name="colla
 function errorMarkup(e,retry='c-retry'){return `<div class="notice" role="alert">${esc(e.message)}<br><button id="${retry}">重新讀取</button></div>`;}
 function renderList(){$('c-list').innerHTML=listMarkup(items,selected);$('c-count').textContent=`${items.length}${cursor?'+':''}`;$('c-more').hidden=!cursor;}
 function invalidateSelection(){selectionSerial++;documentSerial++;context=null;selected=null;modal.close();$('c-detail').innerHTML='<div class="empty">選擇 workflow 查看詳情。</div>';}
-async function connect(){
-  if(!await leaveReview())return;
-  ++listSerial;invalidateSelection();items=[];cursor=null;renderList();
-  const store=$('c-store').value.trim();if(!store)return;
-  client=createCollaborationClient(store);const serial=listSerial;
-  $('c-list').innerHTML='<div class="loader">正在確認資料空間…</div>';
-  try{await client.capabilities();if(serial!==listSerial)return;const url=new URL(location.href);url.searchParams.set('store',store);history.replaceState(null,'',url);await loadList(false);}
-  catch(e){if(serial===listSerial){$('c-list').innerHTML=errorMarkup(e);$('c-retry').onclick=connect;}}
+async function selectProject(id){
+  if(pendingProjectCommand)return;
+  if(!await leaveReview()){$('c-project').value=client?.projectId??'';return;}
+  ++listSerial;invalidateSelection();items=[];cursor=null;client=null;renderList();
+  const project=projects.find(p=>p.project_ref.project_id===id);
+  $('c-project').value=project?id:'';
+  $('c-project-identity').textContent=project?`${project.name} · ${id}${id==='legacy-personal'?' · 既有 collaboration/1':''}`:'';
+  const url=new URL(location.href);if(project)url.searchParams.set('project',id);else url.searchParams.delete('project');history.replaceState(null,'',url);
+  if(!project)return;
+  const current=createCollaborationClient(project.project_ref.store_id,globalThis.fetch,id);current.projectId=id;client=current;
+  const serial=listSerial;
+  try{await current.capabilities();if(serial===listSerial)await loadList(false);}
+  catch(e){if(serial===listSerial){$('c-list').innerHTML=errorMarkup(e);$('c-retry').onclick=()=>selectProject(id);}}
 }
+async function connect(){
+  if(pendingProjectCommand||!await leaveReview())return;
+  ++listSerial;invalidateSelection();items=[];cursor=null;client=null;renderList();
+  projects=[];projectsClient=null;$('c-project').innerHTML='<option value="">請選擇專案</option>';$('c-project-identity').textContent='';
+  const store=$('c-store').value.trim();if(!store)return;
+  projectsClient=createProjectClient(store);const serial=listSerial;
+  $('c-list').innerHTML='<div class="loader">正在讀取專案…</div>';
+  try{
+    const values=await projectsClient.list();if(serial!==listSerial)return;projects=values;
+    $('c-project').innerHTML='<option value="">請選擇專案</option>'+projects.map(p=>`<option value="${esc(p.project_ref.project_id)}">${esc(p.name)} · ${esc(p.project_ref.project_id)}</option>`).join('');
+    const url=new URL(location.href),id=url.searchParams.get('store')===store?url.searchParams.get('project'):null;url.searchParams.set('store',store);history.replaceState(null,'',url);
+    $('c-list').innerHTML='<div class="empty">選擇專案後讀取 workflow。</div>';await selectProject(id);
+  }catch(e){if(serial===listSerial){$('c-list').innerHTML=errorMarkup(e);$('c-retry').onclick=connect;}}
+}
+async function saveProject(rename=false){
+  if(!projectsClient||!await leaveReview())return;
+  if(!pendingProjectCommand){
+    const current=projects.find(p=>p.project_ref.project_id===$('c-project').value);
+    const id=rename?current?.project_ref.project_id:$('c-project-id').value.trim(),name=$('c-project-name').value.trim();
+    if(!id||id==='legacy-personal'||!name||!/^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$/.test(id)){$('c-project-message').textContent='請填寫有效的新專案 ID 與名稱；既有 personal 映射不可重新命名。';return;}
+    pendingProjectCommand=projectsClient.command(rename?'project.rename':'project.create',id,name,rename?current.revision:0);
+  }
+  const command=pendingProjectCommand;
+  $('c-project').disabled=true;$('c-store').disabled=true;
+  $('c-project-id').disabled=true;$('c-project-name').disabled=true;
+  try{
+    const result=await projectsClient.submit(command);pendingProjectCommand=null;
+    $('c-project-message').textContent=result.accepted?'專案已保存。':`未保存（${result.error}），請重新讀取專案版本。`;
+    if(result.accepted){const url=new URL(location.href);url.searchParams.set('project',command.project_ref.project_id);history.replaceState(null,'',url);}
+    await connect();
+  }catch(e){
+    if(e.definitive){pendingProjectCommand=null;$('c-project-message').textContent=`未保存（${e.code}）。請核對輸入或權限。`;return;}
+    $('c-project-message').textContent=`結果尚未確認（${e.code}）。再次按保存會沿用原請求 ${command.operation_id}；離開前請下載原請求。`;
+    const download=document.createElement('button');download.textContent='下載原請求';download.onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(command,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='project-command.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};$('c-project-message').append(download);
+  }finally{
+    const pending=!!pendingProjectCommand;$('c-project').disabled=pending;$('c-store').disabled=pending;$('c-project-id').disabled=pending;$('c-project-name').disabled=pending;
+  }
+}
+$('c-project').onchange=()=>selectProject($('c-project').value);
+$('c-project-form').onsubmit=e=>{e.preventDefault();saveProject(false);};
+$('c-project-rename').onclick=()=>saveProject(true);
+window.addEventListener('beforeunload',e=>{if(pendingProjectCommand){e.preventDefault();e.returnValue='';}});
 async function loadList(more=false){
   if(!client)return;
   const serial=++listSerial,currentClient=client;

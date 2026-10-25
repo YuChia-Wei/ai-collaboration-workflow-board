@@ -8,11 +8,12 @@ const eventNames={
 };
 
 /** Command use case only. Query/storage/identity adapters are independent ports. */
-export function createCollaborationCommands({repository,clock,ids,validateCommand,storeId}){
+export function createCollaborationCommands({repository,clock,ids,validateCommand,storeId,projectId=null,profile=COLLABORATION_PROFILE,schemaVersion='1.0'}){
  return async function executeCommand(accessContext,input){
   // Detach caller-owned objects before any asynchronous hash or persistence IO.
   const c=structuredClone(input),access=structuredClone(accessContext);
-  demand(validateCommand(c),'invalid_command');
+  demand(validateCommand(c)&&c.service_contract_version===profile,'invalid_command');
+  demand((c.workflow_ref.project_id??null)===projectId,'project_mismatch','forbidden');
   demand(new TextEncoder().encode(canonicalJson(c)).length<=300000,'limit_exceeded','limit_exceeded');
   requireCapability(access,'read');authorizeCollaborationCommand(access,c.command);
   demand(c.workflow_ref.store_id===storeId,'store_mismatch','forbidden');
@@ -30,7 +31,7 @@ export function createCollaborationCommands({repository,clock,ids,validateComman
   const loaded=await repository.loadForCommand(access.owner_id,c.workflow_ref,c);
   demand(!loaded||loaded.invariants_complete===true,'incomplete_command_state','unavailable');
   const time=clock.now();let change;
-  const base={service_contract_version:COLLABORATION_PROFILE,schema_version:'1.0',workflow_ref:c.workflow_ref,operation_id:c.operation_id,request_digest:digest,actor:access.actor};
+  const base={service_contract_version:profile,schema_version:schemaVersion,workflow_ref:c.workflow_ref,operation_id:c.operation_id,request_digest:digest,actor:access.actor};
   try{
    change=await applyCollaborationCommand(loaded?.state??null,c,{access,time,newId:kind=>ids.next(kind),documentRefs:loaded?.document_refs??[],evidence:loaded?.evidence??[]});
   }catch(error){
@@ -46,7 +47,7 @@ export function createCollaborationCommands({repository,clock,ids,validateComman
    throw new Fault('storage_unavailable','unavailable');
   }
   const receipt={accepted:true,...base,before_revision:change.before_revision,revision:change.state.revision,accepted_at:time,effects:change.effects};
-  const event={service_contract_version:COLLABORATION_PROFILE,schema_version:'1.0',workflow_ref:c.workflow_ref,operation_id:c.operation_id,revision:change.state.revision,actor:access.actor,occurred_at:time,name:eventNames[c.command],effects:change.effects};
+  const event={service_contract_version:profile,schema_version:schemaVersion,workflow_ref:c.workflow_ref,operation_id:c.operation_id,revision:change.state.revision,actor:access.actor,occurred_at:time,name:eventNames[c.command],effects:change.effects};
   try{
    const result=inspect(await repository.accept({owner_id:access.owner_id,ref:c.workflow_ref,expected_revision:c.expected_revision,operation_key:key,digest,actor:access.actor,next_state:change.state,facts:change.facts,events:[event],receipt}));
    if(result)return result;

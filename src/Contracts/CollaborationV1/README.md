@@ -184,3 +184,7 @@ npm test 包含 Python 3 的獨立編碼向量檢查；CI 明確配置 Python 3.
 命令核心及替代 repository 的 BDD 驗證已完成本次範圍；接續以相同契約接入 D1、可信 Agent 身分、HTTP／MCP 與 Web。Assignment 歷史以 ref＋workflow_revision 追加每次 lifecycle 事實，結束時不覆寫原認領快照。生產 repository 必須補齊併發、原子交易與失敗注入證據；query 的 B05／B14 仍待 automation，不以本機替代 storage 通過代替 hosted D1 證據。
 
 方法來源：[JSON Schema 2020-12](https://json-schema.org/draft/2020-12/json-schema-validation)、上述 RFC 8785；產品規則與取捨以 #2／#3 為準。
+
+## collaboration/2 的相容關係
+
+[V2 契約](../CollaborationV2/README.md) 新增明確 project scope。V1 wire、digest、原表及 receipt 保持原樣，固定映射為 legacy-personal；不跟隨 UI 最近選擇。V1 客戶端不能省略 project 後寫入 V2 專案。新版程式的本機驗證不表示現有 hosted Site 已升級。

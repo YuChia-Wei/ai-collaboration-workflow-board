@@ -1,0 +1,70 @@
+{
+  "project_create": {
+    "service_contract_version": "workflow-board/collaboration/2",
+    "schema_version": "2.0",
+    "project_ref": {
+      "store_id": "local",
+      "namespace": "personal",
+      "project_id": "A"
+    },
+    "operation_id": "project-create",
+    "expected_revision": 0,
+    "command": "project.create",
+    "payload": {
+      "name": "專案 A"
+    }
+  },
+  "workflow_create": {
+    "service_contract_version": "workflow-board/collaboration/2",
+    "schema_version": "2.0",
+    "workflow_ref": {
+      "store_id": "local",
+      "namespace": "personal",
+      "project_id": "A",
+      "record_kind": "collaboration",
+      "workflow_id": "WF"
+    },
+    "operation_id": "workflow-create",
+    "expected_revision": 0,
+    "command": "workflow.create",
+    "payload": {
+      "title": "Workflow A",
+      "goal": "Cross-session continuation",
+      "scope": {
+        "included": "Synthetic scope",
+        "excluded": "Hosted data"
+      },
+      "skill": {
+        "id": "test",
+        "version": null
+      },
+      "external_work_refs": []
+    }
+  },
+  "project_list": {
+    "service_contract_version": "workflow-board/collaboration/2",
+    "schema_version": "2.0",
+    "query": "project.list",
+    "payload": {
+      "store_id": "local",
+      "namespace": "personal",
+      "limit": 100,
+      "cursor": null
+    }
+  },
+  "workflow_context": {
+    "service_contract_version": "workflow-board/collaboration/2",
+    "schema_version": "2.0",
+    "query": "workflow.context",
+    "payload": {
+      "workflow_ref": {
+        "store_id": "local",
+        "namespace": "personal",
+        "project_id": "A",
+        "record_kind": "collaboration",
+        "workflow_id": "WF"
+      },
+      "limit": 20
+    }
+  }
+}

@@ -24,7 +24,7 @@ export function createReviewDraft(c,target,record,{outcome,reason}){
   const identity=target.kind==='decision'?record.decision:record.summary;
   if(!match||match.version!==target.version||record.snapshot_revision!==c.revision||identity.id!==target.id||
     (target.kind==='decision'?identity.revision:identity.definition_revision)!==target.version||
-    !['store_id','namespace','record_kind','workflow_id'].every(k=>record.workflow_ref?.[k]===c.workflow_ref[k]))throw Error('審閱資料與目前快照不符，請重新讀取。');
+    !['store_id','namespace','project_id','record_kind','workflow_id'].every(k=>record.workflow_ref?.[k]===c.workflow_ref[k]))throw Error('審閱資料與目前快照不符，請重新讀取。');
   return {format:'workflow-board/review-draft/1',status:'unsent',workflow_ref:structuredClone(c.workflow_ref),snapshot_revision:c.revision,
     target:{kind:target.kind,id:target.id,revision:target.version},
     basis:structuredClone(target.kind==='decision'?record.decision.basis:[record.summary.plan_basis].filter(Boolean)),

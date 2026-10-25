@@ -3,20 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "bin": {"workflow-board": "src/Presentation/Cli/main.mjs"},
-  "engines": {"node": ">=22.13.0"},
+  "bin": {
+    "workflow-board": "src/Presentation/Cli/main.mjs"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "scripts": {
     "build": "node src/Tooling/build.mjs",
     "trial:collaboration": "node --experimental-sqlite src/Tooling/collaboration-trial.mjs",
     "validate": "node src/Tooling/validate-artifact.mjs && node --experimental-sqlite --disallow-code-generation-from-strings src/Tests/collaboration-transport.mjs --artifact",
     "db:generate": "drizzle-kit generate",
-    "test": "node src/Tests/architecture.mjs && node src/Tests/platform-ports.mjs && node src/Tests/portable-contract.mjs && python -B src/Tests/portable-vectors.py && node src/Tests/collaboration.mjs && node --experimental-sqlite src/Tests/collaboration-storage.mjs && node --experimental-sqlite src/Tests/collaboration-transport.mjs && node --experimental-sqlite src/Tests/cli.mjs && node --experimental-sqlite src/Tests/contracts.mjs && node --experimental-sqlite src/Tests/board.mjs && node --experimental-sqlite src/Tests/collaboration-ui.mjs",
+    "test": "node src/Tests/architecture.mjs && node src/Tests/platform-ports.mjs && node src/Tests/portable-contract.mjs && python -B src/Tests/portable-vectors.py && node src/Tests/collaboration.mjs && node --experimental-sqlite src/Tests/collaboration-storage.mjs && node --experimental-sqlite src/Tests/collaboration-transport.mjs && node --experimental-sqlite src/Tests/cli.mjs && node --experimental-sqlite src/Tests/contracts.mjs && node --experimental-sqlite src/Tests/board.mjs && node --experimental-sqlite src/Tests/collaboration-ui.mjs && node --experimental-sqlite src/Tests/project-scope.mjs",
     "test:cli": "node --experimental-sqlite src/Tests/cli.mjs",
     "test:windows-cli": "node src/Tests/windows-cli.mjs",
     "test:tooling": "node --experimental-sqlite src/Tests/tooling.mjs",
     "cli": "node src/Presentation/Cli/main.mjs",
     "preview:collaboration": "node --experimental-sqlite src/Tooling/collaboration-ui-preview.mjs",
-    "test:collaboration-ui": "node --experimental-sqlite src/Tests/collaboration-ui.mjs"
+    "test:collaboration-ui": "node --experimental-sqlite src/Tests/collaboration-ui.mjs",
+    "test:projects": "node --experimental-sqlite src/Tests/project-scope.mjs"
   },
   "devDependencies": {
     "ajv": "8.17.1",

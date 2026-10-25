@@ -1,0 +1,149 @@
+{
+  "description": "Frozen synthetic collaboration/2 requests; V1 encoding rules remain unchanged.",
+  "requests": [
+    {
+      "id": "project-A",
+      "purpose": "workflow-board-project-command-v2",
+      "authority": {
+        "owner_id": "owner",
+        "actor": {
+          "subject_id": "agent",
+          "kind": "agent",
+          "binding_id": "binding"
+        }
+      },
+      "command": {
+        "service_contract_version": "workflow-board/collaboration/2",
+        "schema_version": "2.0",
+        "project_ref": {
+          "store_id": "local",
+          "namespace": "personal",
+          "project_id": "A"
+        },
+        "operation_id": "project-create",
+        "expected_revision": 0,
+        "command": "project.create",
+        "payload": {
+          "name": "專案 A"
+        }
+      },
+      "canonical": "{\"authority\":{\"actor\":{\"binding_id\":\"binding\",\"kind\":\"agent\",\"subject_id\":\"agent\"},\"owner_id\":\"owner\"},\"command\":{\"command\":\"project.create\",\"expected_revision\":0,\"operation_id\":\"project-create\",\"payload\":{\"name\":\"專案 A\"},\"project_ref\":{\"namespace\":\"personal\",\"project_id\":\"A\",\"store_id\":\"local\"},\"schema_version\":\"2.0\",\"service_contract_version\":\"workflow-board/collaboration/2\"},\"purpose\":\"workflow-board-project-command-v2\"}",
+      "digest": "sha256:ed4e5ea09302c1ac581a55a11750fb756eaeaf72bffed3528284fd70a16cb6cf",
+      "operation_key": "[\"owner\",\"local\",\"A\",\"project-create\"]"
+    },
+    {
+      "id": "workflow-A",
+      "purpose": "workflow-board-command-v2",
+      "authority": {
+        "owner_id": "owner",
+        "actor": {
+          "subject_id": "agent",
+          "kind": "agent",
+          "binding_id": "binding"
+        }
+      },
+      "command": {
+        "service_contract_version": "workflow-board/collaboration/2",
+        "schema_version": "2.0",
+        "workflow_ref": {
+          "store_id": "local",
+          "namespace": "personal",
+          "project_id": "A",
+          "record_kind": "collaboration",
+          "workflow_id": "WF"
+        },
+        "operation_id": "workflow-create",
+        "expected_revision": 0,
+        "command": "workflow.create",
+        "payload": {
+          "title": "Workflow A",
+          "goal": "Cross-session continuation",
+          "scope": {
+            "included": "Synthetic scope",
+            "excluded": "Hosted data"
+          },
+          "skill": {
+            "id": "test",
+            "version": null
+          },
+          "external_work_refs": []
+        }
+      },
+      "canonical": "{\"authority\":{\"actor\":{\"binding_id\":\"binding\",\"kind\":\"agent\",\"subject_id\":\"agent\"},\"owner_id\":\"owner\"},\"command\":{\"command\":\"workflow.create\",\"expected_revision\":0,\"operation_id\":\"workflow-create\",\"payload\":{\"external_work_refs\":[],\"goal\":\"Cross-session continuation\",\"scope\":{\"excluded\":\"Hosted data\",\"included\":\"Synthetic scope\"},\"skill\":{\"id\":\"test\",\"version\":null},\"title\":\"Workflow A\"},\"schema_version\":\"2.0\",\"service_contract_version\":\"workflow-board/collaboration/2\",\"workflow_ref\":{\"namespace\":\"personal\",\"project_id\":\"A\",\"record_kind\":\"collaboration\",\"store_id\":\"local\",\"workflow_id\":\"WF\"}},\"purpose\":\"workflow-board-command-v2\"}",
+      "digest": "sha256:0388e617657d948bc98735c8be8887a48611d20096d40ee81a23fa0de9857105",
+      "operation_key": "[\"owner\",\"local\",\"A\",\"workflow-create\"]"
+    },
+    {
+      "id": "project-B",
+      "purpose": "workflow-board-project-command-v2",
+      "authority": {
+        "owner_id": "owner",
+        "actor": {
+          "subject_id": "agent",
+          "kind": "agent",
+          "binding_id": "binding"
+        }
+      },
+      "command": {
+        "service_contract_version": "workflow-board/collaboration/2",
+        "schema_version": "2.0",
+        "project_ref": {
+          "store_id": "local",
+          "namespace": "personal",
+          "project_id": "B"
+        },
+        "operation_id": "project-create",
+        "expected_revision": 0,
+        "command": "project.create",
+        "payload": {
+          "name": "專案 B"
+        }
+      },
+      "canonical": "{\"authority\":{\"actor\":{\"binding_id\":\"binding\",\"kind\":\"agent\",\"subject_id\":\"agent\"},\"owner_id\":\"owner\"},\"command\":{\"command\":\"project.create\",\"expected_revision\":0,\"operation_id\":\"project-create\",\"payload\":{\"name\":\"專案 B\"},\"project_ref\":{\"namespace\":\"personal\",\"project_id\":\"B\",\"store_id\":\"local\"},\"schema_version\":\"2.0\",\"service_contract_version\":\"workflow-board/collaboration/2\"},\"purpose\":\"workflow-board-project-command-v2\"}",
+      "digest": "sha256:f3d58fd12b1ecfa80f54c3369b20cca0355db42fb173393af31f336f9210be22",
+      "operation_key": "[\"owner\",\"local\",\"B\",\"project-create\"]"
+    },
+    {
+      "id": "workflow-B",
+      "purpose": "workflow-board-command-v2",
+      "authority": {
+        "owner_id": "owner",
+        "actor": {
+          "subject_id": "agent",
+          "kind": "agent",
+          "binding_id": "binding"
+        }
+      },
+      "command": {
+        "service_contract_version": "workflow-board/collaboration/2",
+        "schema_version": "2.0",
+        "workflow_ref": {
+          "store_id": "local",
+          "namespace": "personal",
+          "project_id": "B",
+          "record_kind": "collaboration",
+          "workflow_id": "WF"
+        },
+        "operation_id": "workflow-create",
+        "expected_revision": 0,
+        "command": "workflow.create",
+        "payload": {
+          "title": "Workflow B",
+          "goal": "Cross-session continuation",
+          "scope": {
+            "included": "Synthetic scope",
+            "excluded": "Hosted data"
+          },
+          "skill": {
+            "id": "test",
+            "version": null
+          },
+          "external_work_refs": []
+        }
+      },
+      "canonical": "{\"authority\":{\"actor\":{\"binding_id\":\"binding\",\"kind\":\"agent\",\"subject_id\":\"agent\"},\"owner_id\":\"owner\"},\"command\":{\"command\":\"workflow.create\",\"expected_revision\":0,\"operation_id\":\"workflow-create\",\"payload\":{\"external_work_refs\":[],\"goal\":\"Cross-session continuation\",\"scope\":{\"excluded\":\"Hosted data\",\"included\":\"Synthetic scope\"},\"skill\":{\"id\":\"test\",\"version\":null},\"title\":\"Workflow B\"},\"schema_version\":\"2.0\",\"service_contract_version\":\"workflow-board/collaboration/2\",\"workflow_ref\":{\"namespace\":\"personal\",\"project_id\":\"B\",\"record_kind\":\"collaboration\",\"store_id\":\"local\",\"workflow_id\":\"WF\"}},\"purpose\":\"workflow-board-command-v2\"}",
+      "digest": "sha256:2017e7c8792e06e02ad47b2dda32640d8399d604e13e3ba773b2347a286b2b6f",
+      "operation_key": "[\"owner\",\"local\",\"B\",\"workflow-create\"]"
+    }
+  ]
+}

@@ -1,24 +1,24 @@
 import Ajv2020 from 'ajv/dist/2020.js';
+import schemaV2 from '../../Contracts/CollaborationV2/schema.json' with {type:'json'};
 import schema from '../../Contracts/CollaborationV1/schema.json' with {type:'json'};
 import {parseContractJson} from '../Shared/strict-json.mjs';
 import {contentDigest} from '../../Core/Workflows/Domain/collaboration-values.mjs';
 
 const ajv=new Ajv2020({strict:true,allErrors:false});
 ajv.addFormat('date-time',value=>{const time=new Date(value);return Number.isFinite(time.valueOf())&&Number(value.slice(0,4))>=1&&time.toISOString()===value;});
-ajv.addSchema(schema);
-const validators=new Map();
-const valid=(name,value)=>{
- if(!validators.has(name))validators.set(name,ajv.getSchema(schema.$id+'#/$defs/'+name));
- return validators.get(name)(value);
-};
-const queryTypes={'capabilities':'capabilities','workflow.find':'find_result','workflow.context':'context','context.page':'context_page','task.read':'task_record','decision.read':'decision_record','document.read':'document','operation.get':'operation_result'};
-const sameRef=(a,b)=>a&&b&&['store_id','namespace','record_kind','workflow_id'].every(key=>a[key]===b[key]);
+ajv.addSchema(schema);ajv.addSchema(schemaV2);
+const queryTypes={'project.list':'project_list','project.read':'project','project.operation.get':'project_operation_result','project.legacy.preview':'legacy_preview','capabilities':'capabilities','workflow.find':'find_result','workflow.context':'context','context.page':'context_page','task.read':'task_record','decision.read':'decision_record','document.read':'document','operation.get':'operation_result'};
+const sameRef=(a,b)=>a&&b&&['store_id','namespace','project_id','record_kind','workflow_id'].every(key=>a[key]===b[key]);
 const sameDocument=(a,b)=>a&&b&&['document_id','revision','content_hash'].every(key=>a[key]===b[key]);
 const result=(status,data,error)=>({status,...(data===undefined?{}:{data}),...(error?{error:{code:error}}:{})});
 const invalid=()=>{throw new Error('invalid_response');};
 
 /** Shared HTTP client for the terminal entry, never a direct database client. */
 export function createRemoteCollaborationClient(config,fetcher=globalThis.fetch){
+ const contract=config.version==='2.0'||config.project?schemaV2:schema;
+ const validators=new Map();
+ const valid=(name,value)=>{if(!validators.has(name))validators.set(name,ajv.getSchema(contract.$id+'#/$defs/'+name));return validators.get(name)?.(value)??false;};
+ const route=contract===schemaV2?'v2':'v1';
  const headers={'Content-Type':'application/json',Accept:'application/json',Authorization:'Bearer '+config.token};
  if(config.sitesToken)headers['OAI-Sites-Authorization']='Bearer '+config.sitesToken;
  async function request(path,input){
@@ -44,24 +44,29 @@ export function createRemoteCollaborationClient(config,fetcher=globalThis.fetch)
   }catch{return {ok:false,status:response?.status??null,error:response?'invalid_or_interrupted_response':'network_or_timeout'};}
  }
  const matchesScope=input=>{
-  const ref=input.workflow_ref??input.payload?.workflow_ref;
-  return ref?ref.store_id===config.store&&ref.namespace===config.namespace:input.payload?.store_id===config.store&&input.payload?.namespace===config.namespace;
+  const ref=input.workflow_ref??input.project_ref??input.payload?.workflow_ref??input.payload?.project_ref;
+  return ref?ref.store_id===config.store&&ref.namespace===config.namespace&&(ref.project_id??null)===(config.project??null):input.payload?.store_id===config.store&&input.payload?.namespace===config.namespace&&(input.query?.startsWith('project.')||(input.payload?.project_id??null)===(config.project??null));
  };
  function verifyInput(input,kind){
   if(!valid(kind,input)||!matchesScope(input))return result('error',undefined,'invalid_'+kind+'_or_scope');
   return null;
  }
  function verifyReceipt(receipt,input){
+  if(input.project_ref){if(!valid('project_receipt',receipt)||!sameRef(receipt.project_ref,input.project_ref)||receipt.operation_id!==input.operation_id||receipt.expected_revision!==input.expected_revision)invalid();return;}
   if(!valid('receipt',receipt)||!sameRef(receipt.workflow_ref,input.workflow_ref)||receipt.operation_id!==input.operation_id)invalid();
   if((receipt.accepted?receipt.before_revision:receipt.expected_revision)!==input.expected_revision)invalid();
  }
  async function verifyQuery(input,data){
   if(!valid(queryTypes[input.query],data))invalid();
   const p=input.payload;
-  if(input.query==='capabilities'){
-   if(data.store_id!==p.store_id||data.namespace!==p.namespace)invalid();
+  if(input.query==='project.list'){if(data.items.some(x=>x.project_ref.store_id!==p.store_id||x.project_ref.namespace!==p.namespace))invalid();
+  }else if(input.query==='project.legacy.preview'){if(data.project.project_ref.store_id!==p.store_id)invalid();
+  }else if(input.query==='project.read'){if(!sameRef(data.project_ref,p.project_ref))invalid();
+  }else if(input.query==='project.operation.get'){const v=data.receipt??data;if(!sameRef(v.project_ref,p.project_ref)||v.operation_id!==p.operation_id)invalid();
+  }else if(input.query==='capabilities'){
+   if(data.store_id!==p.store_id||data.namespace!==p.namespace||data.project_id!==p.project_id)invalid();
   }else if(input.query==='workflow.find'){
-   if(data.items.some(item=>item.workflow_ref.store_id!==p.store_id||item.workflow_ref.namespace!==p.namespace))invalid();
+   if(data.items.some(item=>item.workflow_ref.store_id!==p.store_id||item.workflow_ref.namespace!==p.namespace||item.workflow_ref.project_id!==p.project_id))invalid();
   }else if(input.query==='document.read'){
    if(!sameRef(data.workflow_ref,p.workflow_ref)||!sameDocument(data.ref,p.document_ref)||await contentDigest(data.content)!==p.document_ref.content_hash)invalid();
   }else if(input.query==='operation.get'){
@@ -76,35 +81,35 @@ export function createRemoteCollaborationClient(config,fetcher=globalThis.fetch)
  }
  async function query(input){
   const error=verifyInput(input,'query');if(error)return error;
-  const response=await request('/api/collaboration/v1/queries',input);
+  const response=await request(`/api/collaboration/${route}/queries`,input);
   if(!response.ok){
    const structured=valid('error',response.data??{});
    const refusal=structured&&response.status>=400&&(response.status<500||(response.status===501&&response.data.category==='unsupported'));
    return result(refusal?'rejected':'error',structured?response.data:undefined,structured?response.data.error:response.error??'service_unavailable');
   }
   try{await verifyQuery(input,response.data);}catch{return result('error',undefined,'invalid_response');}
-  return result(input.query==='operation.get'&&response.data.outcome==='unknown'?'unknown':'ok',response.data);
+  return result(['operation.get','project.operation.get'].includes(input.query)&&response.data.outcome==='unknown'?'unknown':'ok',response.data);
  }
  async function submit(input){
   const error=verifyInput(input,'command');if(error)return error;
-  const lookup={service_contract_version:input.service_contract_version,schema_version:input.schema_version,query:'operation.get',payload:{workflow_ref:input.workflow_ref,operation_id:input.operation_id}};
+  const lookup={service_contract_version:input.service_contract_version,schema_version:input.schema_version,query:input.project_ref?'project.operation.get':'operation.get',payload:{...(input.project_ref?{project_ref:input.project_ref}:{workflow_ref:input.workflow_ref}),operation_id:input.operation_id}};
   const before=await query(lookup);
   if(!['ok','unknown'].includes(before.status))return {...before,command_sent:false};
   // Even an existing receipt needs the original POST to verify its principal-
   // bound digest. Matching only the public operation ID could accept a different
   // payload. The application's receipt check is idempotent and precedes CAS.
-  const response=await request('/api/collaboration/v1/commands',input);
+  const response=await request(`/api/collaboration/${route}/commands`,input);
   try{
    verifyReceipt(response.data,input);
    if(response.data.accepted&&response.ok)return {...result('accepted',response.data),command_sent:true};
-   if(!response.data.accepted&&response.status>=400&&response.status<500)return {...result('rejected',response.data,response.data.failure.error),command_sent:true};
+   if(!response.data.accepted&&response.status>=400&&response.status<500)return {...result('rejected',response.data,response.data.failure?.error??response.data.error),command_sent:true};
   }catch{/* An unverified body is never a successful command result. */}
   if(!response.ok&&valid('error',response.data??{})&&response.status>=400&&(response.status<500||(response.status===501&&response.data.category==='unsupported'))){
    return {...result('rejected',response.data,response.data.error),command_sent:true};
   }
   const observed=await query(lookup);
   return {...result('unknown',undefined,'command_outcome_unknown'),command_sent:true,
-   operation:{workflow_ref:input.workflow_ref,operation_id:input.operation_id},
+   operation:{...(input.project_ref?{project_ref:input.project_ref}:{workflow_ref:input.workflow_ref}),operation_id:input.operation_id},
    reconciliation:observed,
    next_action:'Keep the original command file. Rerun submit with that same file to verify its digest; never allocate a new operation ID.'};
  }

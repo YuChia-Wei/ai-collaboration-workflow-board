@@ -61,3 +61,5 @@ Actions 在 push、pull request 與手動執行時，於 Linux／Windows 執行�
 2026-10-07 核對結果：Sites 原生支援建置、儲存版本與部署；符合資格的帳號另有短期推送後私有發布能力。公開文件尚未建立可由一般 GitHub Actions 長期、無人值守直接發布既有 Sites 的 CLI／API 契約。完整流程、已確認能力與尚待確認事項見 [DEPLOYMENT.md](DEPLOYMENT.md)。
 
 歷史 P0/P1 平台評估保留於 [PLATFORM-CONTRACT.md](PLATFORM-CONTRACT.md)，其中未實作的平台敘述屬於當時本機 prototype 的範圍。
+
+[#22 專案範圍契約](src/Contracts/CollaborationV2/README.md) 新增 collaboration/2、同 owner 的穩定 project ID 與 UI／CLI／MCP 選擇。既有 collaboration/1 明確保留為 legacy-personal；本次本機實作及證據不表示線上 Site 已升級。

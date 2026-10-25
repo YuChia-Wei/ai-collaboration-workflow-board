@@ -22,7 +22,7 @@ const env={DB:db,COLLABORATION_STORE_ID:'local',COLLABORATION_BINDINGS:JSON.stri
 const envelope={service_contract_version:'workflow-board/collaboration/1',schema_version:'1.0'};
 const ref={store_id:'local',namespace:'personal',record_kind:'collaboration',workflow_id:'CLI-WF'};
 const scope={included:'Synthetic CLI acceptance',excluded:'Hosted data and deployment'};
-const runtimeParent=resolve(root,'.runtime');
+const runtimeParent=resolve(process.env.WORKFLOW_BOARD_TEST_ROOT??resolve(root,'.runtime'));
 await (await import('node:fs/promises')).mkdir(runtimeParent,{recursive:true});
 const runtime=await mkdtemp(resolve(runtimeParent,'cli-test-'));
 const requests=[];

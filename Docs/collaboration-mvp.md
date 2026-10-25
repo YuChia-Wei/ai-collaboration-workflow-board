@@ -93,3 +93,7 @@ npm run validate
 2026-10-15 已在同一 owner-private Site 第 10 版、environment revision 3，使用真實 Codex plugin 完成兩組合成資料。17 筆命令 accepted，active／completed workflows 分別為 revision 11／6；另有一筆預期 revision_conflict。接受／拒絕重送、操作查回、文件 hash、分頁、游標錯配、歷史快照及 D1 逐筆讀回均完成。2026-10-17 使用者確認合成畫面，並完成本機權限／撤銷補測及同情境介面比較；tokens／debit 未量測，未宣稱節省。版本與 hosted 證據見 [線上試行指南](../.dev/guides/collaboration-hosted-trial.md)，完整範圍及 T／AC 對照見 [結案紀錄](../.dev/guides/collaboration-closeout-20261017.md)。
 
 Site source 已由官方 helper 推送並部署；2026-10-15 前端對話已另依使用者授權建立本機整合 commit `4dc65ce49f467cdf9d734e6b6cc95be79e9f6b3e`。本輪只執行合成驗證與更新紀錄，沒有 GitHub push／PR／merge 或關閉 Issues。Site audience 保持僅本人。
+
+## #22 project scope 的本機擴充
+
+新增的 [collaboration/2](../src/Contracts/CollaborationV2/README.md) 要求 explicit project ID，保留本文件的 V1 hosted 證據邊界。V1 原表／receipts 留在 legacy-personal 映射；沒有清空正式資料或把它們歸入任意新專案。Project identity 不提供獨立 Agent／人類能力；完整備份／還原仍屬 #6。

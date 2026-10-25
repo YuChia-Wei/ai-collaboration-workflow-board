@@ -21,26 +21,27 @@ const page=(items,start,count)=>({items:items.slice(start,start+count),total:ite
 
 /** Queries materialize one immutable revision. Cursors are opaque, owner-bound
  * repository records; neither a supplied cursor nor a SessionRef grants access. */
-export function createCollaborationQueries({repository,validateQuery,storeId}){
+export function createCollaborationQueries({repository,validateQuery,storeId,projectId=null,profile=COLLABORATION_PROFILE,schemaVersion='1.0'}){
  return async function executeQuery(accessContext,input){
   const access=structuredClone(accessContext),q=structuredClone(input);
-  demand(validateQuery(q),'invalid_command');requireCapability(access,'read');
+  demand(validateQuery(q)&&q.service_contract_version===profile,'invalid_command');requireCapability(access,'read');
   const p=q.payload;
   const ref=p.workflow_ref;
   demand((ref?.store_id??p.store_id)===storeId,'store_mismatch','forbidden');
+  demand((ref?.project_id??p.project_id??null)===projectId,'project_mismatch','forbidden');
   const owner=access.owner_id;
   const readSnapshot=async revision=>{const w=await repository.snapshot(owner,ref,revision);demand(w,revision===undefined?'workflow_not_found':'snapshot_expired',revision===undefined?'not_found':'conflict');return w;};
   const readCursor=async()=>{const c=await repository.cursor(owner,p.cursor);demand(c,'snapshot_expired','conflict');return c;};
   const collections=async w=>({tasks:Object.values(w.tasks).map(t=>taskSummary(w,t)),decisions:Object.values(w.decisions).map(decisionSummary),handoffs:await repository.facts(owner,ref,w.revision,'handoffs')});
   const persistCursor=async(w,section,start,limit)=>repository.saveCursor(owner,{kind:'context',ref,revision:w.revision,section,start,limit});
   if(q.query==='capabilities')return {
-   service_contract_version:COLLABORATION_PROFILE,schema_version:'1.0',store_id:storeId,namespace:'personal',commands:availableCommands(access),queries:collaborationQueries,
+   service_contract_version:profile,schema_version:schemaVersion,store_id:storeId,namespace:'personal',...(projectId===null?{}:{project_id:projectId}),commands:availableCommands(access),queries:collaborationQueries,
    limits:{request_utf8_bytes:300000,document_utf8_bytes:256000,record_utf8_bytes:64000,context_utf8_bytes:64000,tasks_per_workflow:100,decisions_per_workflow:100,context_page_items:20,header_utf8_bytes:16000},contract_status:'implemented'
   };
   if(q.query==='operation.get'){
    const result=await repository.operation(owner,storeId,p.operation_id);
    if(result.outcome==='unknown')return {outcome:'unknown',workflow_ref:ref,operation_id:p.operation_id};
-   demand(same(result.receipt.workflow_ref,ref),'operation_target_mismatch','forbidden');return result;
+   demand(result.receipt.workflow_ref&&same(result.receipt.workflow_ref,ref),'operation_target_mismatch','forbidden');return result;
   }
   if(q.query==='document.read'){
    const doc=await repository.document(owner,ref,p.document_ref);demand(doc,'revision_not_found','not_found');
@@ -49,11 +50,11 @@ export function createCollaborationQueries({repository,validateQuery,storeId}){
   }
   if(q.query==='workflow.find'){
    let baseline,after='';
-   if(p.cursor){const c=await readCursor();demand(c.kind==='find'&&c.store===storeId&&c.q===p.q&&c.limit===p.limit,'invalid_cursor','forbidden');({baseline,after}=c);}
+   if(p.cursor){const c=await readCursor();demand(c.kind==='find'&&(c.project??null)===projectId&&c.store===storeId&&c.q===p.q&&c.limit===p.limit,'invalid_cursor','forbidden');({baseline,after}=c);}
    else baseline=await repository.baseline(owner,storeId);
    const items=await repository.find(owner,storeId,p.q,baseline,after,p.limit+1),has_more=items.length>p.limit;
    if(has_more)items.pop();
-   const cursor=has_more?await repository.saveCursor(owner,{kind:'find',store:storeId,q:p.q,limit:p.limit,baseline,after:items.at(-1).workflow_ref.workflow_id}):null;
+   const cursor=has_more?await repository.saveCursor(owner,{kind:'find',store:storeId,...(projectId===null?{}:{project:projectId}),q:p.q,limit:p.limit,baseline,after:items.at(-1).workflow_ref.workflow_id}):null;
    return bounded({items,has_more,cursor});
   }
   if(q.query==='task.read'||q.query==='decision.read'){
@@ -88,7 +89,7 @@ export function createCollaborationQueries({repository,validateQuery,storeId}){
   for(const d of Object.values(w.decisions))d.basis.forEach(checkDoc);
   for(const r of w.completion_requirements)r.document_refs.forEach(checkDoc);
   demand(missing.length<=100,'limit_exceeded','limit_exceeded');
-  const value={service_contract_version:COLLABORATION_PROFILE,schema_version:'1.0',workflow_ref:ref,revision:w.revision,workflow,missing};
+  const value={service_contract_version:profile,schema_version:schemaVersion,workflow_ref:ref,revision:w.revision,workflow,missing};
   // Reserve one item in every nonempty section before filling additional slots.
   for(const section of sections)value[section]=page(items[section],0,Math.min(1,items[section].length));
   bounded(value);

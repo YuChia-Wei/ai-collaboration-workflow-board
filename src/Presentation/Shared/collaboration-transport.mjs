@@ -5,9 +5,10 @@ import {parseContractJson} from './strict-json.mjs';
 
 export const jsonResponse=(body,status=200,headers={})=>Response.json(body,{status,headers:{'Cache-Control':'no-store',...headers}});
 export function verifyOrigin(request){const origin=request.headers.get('origin');demand(!origin||origin===new URL(request.url).origin,'forbidden','forbidden');}
-export function verifyEnvelope(value){
- demand(value?.service_contract_version===COLLABORATION_PROFILE,'unsupported_profile','unsupported');
- demand(value.schema_version==='1.0','unsupported_schema','unsupported');
+export function verifyEnvelope(value,version=null){
+ const v=value?.service_contract_version==='workflow-board/collaboration/2'?2:1;
+ demand(value?.service_contract_version===(v===2?'workflow-board/collaboration/2':COLLABORATION_PROFILE)&&(version===null||version===v),'unsupported_profile','unsupported');
+ demand(value.schema_version===(v===2?'2.0':'1.0'),'unsupported_schema','unsupported');
  demand(new TextEncoder().encode(canonicalJson(value)).length<=300000,'limit_exceeded','limit_exceeded');
 }
 export async function readJson(request,limit=300000){

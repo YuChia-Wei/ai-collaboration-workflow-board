@@ -70,7 +70,7 @@ try {
     await assert.rejects(stale.context(active.workflow_ref),e=>e.code==='snapshot_expired');
   });
   await scenario('UI-07 / integrity: altered document bytes are rejected before rendering',async()=>{
-    const corrupt=fakeClient(()=>({ref:active.workflow.plan,content:'altered'}));
+    const corrupt=fakeClient(()=>({workflow_ref:active.workflow_ref,ref:active.workflow.plan,content:'altered'}));
     await assert.rejects(corrupt.document(active.workflow_ref,active.workflow.plan),e=>e.code==='document_integrity_error');
   });
   await scenario('UI-08 / presentation: untrusted markup and unsafe source URLs cannot become executable HTML',async()=>{
