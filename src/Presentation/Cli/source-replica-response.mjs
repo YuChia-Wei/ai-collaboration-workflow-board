@@ -25,6 +25,11 @@ export async function verifySourceQuery(input,data,validate){
   const seen=new Set();for(const item of data.items){const key=canonicalJson([item.source_id,item.workflow_id]);if(seen.has(key)||item.workflow.id!==item.workflow_id)fail();seen.add(key);}return;
  }
  if(!source(data,p))fail();
+ if(input.query==='replica.board'){
+  if(data.offset!==p.offset||data.tasks.length>p.limit||data.has_more!==(p.offset+data.tasks.length<data.total)||data.has_more&&!data.tasks.length||p.offset+data.tasks.length>Math.max(p.offset,data.total))fail();
+  if(data.projection_complete!==(data.issue_count===0)||data.issues.length>data.issue_count)fail();
+  const ids=new Set();for(const task of data.tasks){if(ids.has(task.id)||task.source_path!==null&&!validReplicaPath(task.source_path))fail();ids.add(task.id);}return;
+ }
  if(input.query==='replica.read'){if(data.metadata.workflow.id!==p.workflow_id||Object.hasOwn(data.metadata,'files'))fail();return;}
  if(input.query==='replica.manifest'){
   const remaining=Math.max(0,data.total-p.offset);if(data.offset!==p.offset||data.files.length!==Math.min(p.limit,remaining)||data.has_more!==(p.offset+data.files.length<data.total))fail();

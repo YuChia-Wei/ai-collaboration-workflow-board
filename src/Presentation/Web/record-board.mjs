@@ -7,7 +7,7 @@ const readable=x=>typeof x==='string'?x:JSON.stringify(x);
 export function recordBoardMarkup(w){
   const tasks=Object.values(w.steps||{}),editable=w.record_mode==='board'&&w.status!=='completed';
   const status=t=>t.status||'unrecorded';
-  const columns=['pending','in_progress','completed',...new Set(tasks.map(status).filter(s=>!['pending','in_progress','completed'].includes(s)))];
+  const columns=['pending','in_progress','blocked','completed',...new Set(tasks.map(status).filter(s=>!['pending','in_progress','blocked','completed'].includes(s)))];
   return `<section class="record-board"><div class="c-board-heading"><div><h2>任務看板</h2><p class="small">${tasks.length} 項 task · 點選卡片查看詳情</p></div>${editable?'<button data-action="addTask">＋ 新增任務</button>':''}</div>
   ${!tasks.length?`<div class="warn"><strong>這個 workflow 目前沒有 task</strong><br>${w.record_mode==='board'?'你已建立工作流程，但還沒有新增任務。使用「新增任務」後，卡片會出現在待處理欄。':'這份來源紀錄沒有可辨識的結構化任務；請在「文件」查閱原始計畫。'}</div>`:''}
   <div class="c-board" role="region" aria-label="任務進度看板" tabindex="0">${columns.map(s=>{

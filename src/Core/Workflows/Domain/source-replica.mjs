@@ -3,7 +3,7 @@ import {canonicalJson,valueDigest} from './collaboration-values.mjs';
 export const REPLICA_PROFILE='workflow-board/source-replica/1';
 export const replicaLimits=Object.freeze({request_bytes:300000,manifest_bytes:240000,chunk_bytes:49152,chunks_per_command:32,file_bytes:16777216,version_bytes:33554432,files:1000,page:50});
 export const replicaCommands=['replica.begin','replica.chunk.put','replica.activate'];
-export const replicaQueries=['replica.capabilities','replica.list','replica.read','replica.manifest','replica.file.chunk','replica.chunks.read','replica.operation.get'];
+export const replicaQueries=['replica.capabilities','replica.list','replica.read','replica.board','replica.manifest','replica.file.chunk','replica.chunks.read','replica.operation.get'];
 export const validReplicaId=x=>typeof x==='string'&&/^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$/.test(x)&&!['constructor','prototype','__proto__'].includes(x);
 export const validReplicaPath=x=>typeof x==='string'&&x.length<=1024&&x.length>0&&!/[\\\x00-\x1f\x7f:]/.test(x)&&!x.startsWith('/')&&x.split('/').every(p=>p&&p!=='.'&&p!=='..');
 export const replicaHash=x=>typeof x==='string'&&/^sha256:[a-f0-9]{64}$/.test(x);
@@ -19,7 +19,7 @@ export function validateReplica(input,kind){
  demand(input.payload&&typeof input.payload==='object'&&!Array.isArray(input.payload),'invalid_payload');
  if(kind==='command')demand(validReplicaId(input.operation_id)&&Number.isSafeInteger(input.expected_revision)&&input.expected_revision>=0&&input.expected_revision<Number.MAX_SAFE_INTEGER,'invalid_operation');
  const p=input.payload;
- if(['replica.begin','replica.chunk.put','replica.activate','replica.read','replica.manifest','replica.file.chunk','replica.chunks.read'].includes(input[kind]))demand(['source_id','workflow_id','source_revision'].every(k=>validReplicaId(p[k])),'invalid_source_ref');
+ if(['replica.begin','replica.chunk.put','replica.activate','replica.read','replica.board','replica.manifest','replica.file.chunk','replica.chunks.read'].includes(input[kind]))demand(['source_id','workflow_id','source_revision'].every(k=>validReplicaId(p[k])),'invalid_source_ref');
 }
 export async function validateManifest(p){
  const m=p.manifest;demand(m&&typeof m==='object'&&!Array.isArray(m)&&m.source&&typeof m.source==='object'&&!Array.isArray(m.source)&&m.workflow&&m.workflow.id===p.workflow_id&&typeof m.workflow.title==='string'&&typeof m.workflow.status==='string','invalid_manifest');

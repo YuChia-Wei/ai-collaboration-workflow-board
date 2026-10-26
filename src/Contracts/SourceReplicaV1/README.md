@@ -74,6 +74,7 @@ All queries include the envelope `project_ref`:
 | `replica.capabilities` | `{}` | Project, available operations, exact limits |
 | `replica.list` | `{limit,cursor:null}` | Current published workflow summaries, opaque owner/project-bound cursor |
 | `replica.read` | Source/workflow/revision IDs | Complete metadata excluding files, manifest hash/count/bytes and Board revision |
+| `replica.board` | Same IDs, `offset`, `limit` (1–50) | Fixed-version task cards, total/has_more, projection diagnostics |
 | `replica.manifest` | Same IDs, `offset`, `limit` | Fixed-version file records, total, offset, has_more |
 | `replica.file.chunk` | Same IDs, `path`, `index` | Raw-base64 chunk and raw-byte hash |
 | `replica.chunks.read` | Same IDs, `refs:[{path,index}]`, `max_response_bytes` | Bounded chunks, `has_more`, remaining refs |
@@ -112,9 +113,41 @@ Git commit history. Production migration/deploy/import and real client acceptanc
 are separate from local test evidence.
 
 Browser entry `?view=source-replica` uses the existing project registry and requires
-an explicit project selection. It shows original status/title/source revision,
-completeness, raw metadata and verified text/binary downloads. The fixed-revision
-field can open an older saved source revision without choosing the latest head.
+an explicit project selection. It opens the task board by default, using the same
+`replica.board` query available through CLI and MCP/plugin
+`source_v1_replica_board`. Card details expose descriptions, results and the exact
+source document. Original metadata and verified downloads remain available under
+documents/source details. The fixed-revision field opens an older saved revision.
+
+### Imported task compatibility (bug fix)
+
+Successful replica writes must be readable as a Board task board, including
+replicas accepted before this query existed. The shared read projection derives
+cards from the stored immutable manifest and hash-verified files; it does not
+require a second import or a native lifecycle replay. Existing write envelopes,
+receipts, manifest hashes and stored bytes are unchanged.
+
+`source-board/1` recognizes task JSON/YAML (including nested `metadata`), explicit
+`tasks` arrays/maps in workflow files or manifest metadata, workflow `steps`, and
+Markdown YAML frontmatter. Canonical `tasks/` definitions take precedence over
+inline summaries. The original status is retained: `done`, `deferred`, unknown
+values and missing status are not converted to native lifecycle transitions.
+Each card carries `source_path`, `source_selector` and `identity_basis`.
+
+The query is paginated by task offset, with at most 50 cards and 260000 canonical
+JSON bytes per response. Follow `has_more` using `offset + tasks.length`; a page
+may contain fewer than the requested limit. Every page is bound to the same
+project/source/workflow/revision/manifest hash and `projection_version`.
+
+Parsing is bounded to regular UTF-8 JSON/YAML/Markdown files of at most 1 MiB,
+5000 distinct tasks, 4000 characters per display field and 50 dependencies
+(200 characters each). Long display fields set `details_truncated`; originals
+remain available. Unsupported, malformed, oversized or conflicting definitions
+set `projection_complete: false` and `issue_count` with at most the first 50
+diagnostics (32 KiB combined, so a diagnostic-heavy page still fits a task);
+the UI must show that partial result rather than imply an empty/complete board.
+`complete: true` still describes replica byte integrity, independently of parsing.
+YAML uses the core schema with bounded aliases; links are never followed.
 
 ## Reviewed transport and activation bounds
 

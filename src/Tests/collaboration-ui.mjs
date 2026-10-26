@@ -99,7 +99,7 @@ try {
   });
   await scenario('UI-11 / existing records: empty manual workflow offers task creation; source statuses remain distinct',async()=>{
     const empty=recordBoardMarkup({record_mode:'board',status:'pending',steps:{}});
-    assert.match(empty,/目前沒有 task/);assert.match(empty,/data-action="addTask"/);assert.equal((empty.match(/c-column-empty/g)||[]).length,3);
+    assert.match(empty,/目前沒有 task/);assert.match(empty,/data-action="addTask"/);assert.equal((empty.match(/c-column-empty/g)||[]).length,4);assert.match(empty,/c-column-blocked/);
     const source=recordBoardMarkup({record_mode:'source_snapshot',steps:{a:{id:'a',title:'未記錄',status:null},b:{id:'b',title:'延期',status:'deferred'},c:{id:'c',title:'歷史完成',status:'done'}}});
     for(const status of ['unrecorded','deferred','done'])assert.ok(source.includes(`c-column-${status}`));
     assert.doesNotMatch(source,/data-action="addTask"|data-task=/);

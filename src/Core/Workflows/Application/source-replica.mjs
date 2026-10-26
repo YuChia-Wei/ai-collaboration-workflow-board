@@ -1,8 +1,9 @@
 import {demand,Fault} from '../Domain/errors.mjs';
+import {readSourceBoard} from './source-board.mjs';
 import {requireCapability} from '../Domain/collaboration-workflow.mjs';
 import {valueDigest,canonicalJson} from '../Domain/collaboration-values.mjs';
 import {REPLICA_PROFILE,planReplicaChunkReads,replicaLimits,replicaCommands,replicaQueries,validateReplica,validateManifest,decodeReplicaChunk,rawDigest,validReplicaPath,validReplicaId,replicaHash} from '../Domain/source-replica.mjs';
-export function createSourceReplica({repository,projects,storeId,validateCommand,validateQuery}){
+export function createSourceReplica({repository,projects,storeId,validateCommand,validateQuery,sourceBoard}){
  const scope=async(a,c,kind)=>{validateReplica(c,kind);demand((kind==='command'?validateCommand:validateQuery)(c),'invalid_replica_envelope');requireCapability(a,'read');demand(c.project_ref.store_id===storeId,'store_mismatch','forbidden');await projects.requireProject(a,c.project_ref.project_id);};
  const inspect=(r,d)=>{if(r)demand(r.request_digest===d,'operation_payload_conflict','conflict');return r;};
  return {
@@ -61,6 +62,7 @@ export function createSourceReplica({repository,projects,storeId,validateCommand
   }
   const version=await repository.version(owner,r,p);demand(version?.published_revision,'source_revision_not_found','not_found');
   const base={project_ref:r,source_id:p.source_id,workflow_id:p.workflow_id,source_revision:p.source_revision,revision:version.published_revision,manifest_hash:version.manifest_hash,complete:true};
+  if(q.query==='replica.board')return readSourceBoard({repository,sourceBoard,owner,scope:r,ref:p,manifest:version.manifest,base,offset:p.offset,limit:p.limit});
   if(q.query==='replica.read'){const {files,...metadata}=version.manifest;return {...base,metadata,file_count:files.length,total_bytes:files.reduce((n,f)=>n+f.size,0)};}
   if(q.query==='replica.manifest'){demand(Number.isSafeInteger(p.offset)&&p.offset>=0&&Number.isSafeInteger(p.limit)&&p.limit>=1&&p.limit<=50,'invalid_page');const files=version.manifest.files;return {...base,offset:p.offset,total:files.length,files:files.slice(p.offset,p.offset+p.limit),has_more:p.offset+p.limit<files.length};}
   if(q.query==='replica.chunks.read'){

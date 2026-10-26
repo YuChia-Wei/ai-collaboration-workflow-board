@@ -26,9 +26,18 @@ async function harness(width){
  const document={getElementById:id=>nodes.get(id)??null,querySelector:()=>null,createElement:()=>new Element(),createTextNode:value=>value};
  const project_ref={store_id:'local',namespace:'personal',project_id:'A'},item={source_id:'sqlite',workflow_id:'WF',source_revision:'fixed-1',revision:1,workflow:{id:'WF',title:'Source detail',status:'done'}};
  const header={project_ref,...item,metadata:{source:{kind:'sqlite'},workflow:item.workflow},file_count:0,total_bytes:0};
- const clients={createProjectClient:()=>({list:async()=>['A','B'].map(project_id=>({project_ref:{...project_ref,project_id},name:project_id}))}),createSourceReplicaClient:ref=>({query:async(name)=>{if(name==='replica.list')return {items:[item],cursor:null,has_more:false};if(pending){const current=pending;pending=null;return current.promise;}return {...header,project_ref:ref};},manifest:async()=>[]}),esc:value=>String(value??'').replaceAll('<','&lt;')};
+ const clients={createProjectClient:()=>({list:async()=>['A','B'].map(project_id=>({project_ref:{...project_ref,project_id},name:project_id}))}),createSourceReplicaClient:ref=>({query:async(name)=>{if(name==='replica.list')return {items:[item],cursor:null,has_more:false};if(pending){const current=pending;pending=null;return current.promise;}return {...header,project_ref:ref};},manifest:async()=>[],board:async()=>({tasks:[],issues:[],issue_count:0})}),esc:value=>String(value??'').replaceAll('<','&lt;')};
  const location={href:'https://ui.test/?view=source-replica',search:'?view=source-replica'},context=createContext({document,location,history:{replaceState(){}},URL,URLSearchParams,innerWidth:width});
- const module=new SourceTextModule(source,{context});await module.link(async specifier=>{const name=specifier.includes('source-replica-client')?'createSourceReplicaClient':specifier.includes('project-client')?'createProjectClient':'esc';return new SyntheticModule([name],function(){this.setExport(name,clients[name]);},{context});});await module.evaluate();
+ const cache=new Map();
+ async function link(specifier){
+  if(cache.has(specifier))return cache.get(specifier);
+  if(['./source-replica-view.mjs','./record-board.mjs'].includes(specifier)){
+   const m=new SourceTextModule(await readFile(new URL('../Presentation/Web/'+specifier.slice(2),import.meta.url),'utf8'),{context});cache.set(specifier,m);await m.link(link);return m;
+  }
+  const name=specifier.includes('source-replica-client')?'createSourceReplicaClient':specifier.includes('project-client')?'createProjectClient':'esc';
+  const m=new SyntheticModule([name],function(){this.setExport(name,clients[name]);},{context});cache.set(specifier,m);return m;
+ }
+ const module=new SourceTextModule(source,{context});await module.link(link);await module.evaluate();
  const get=id=>nodes.get(id),settle=async()=>{for(let i=0;i<5;i++)await tick();};
  get('r-store').value='local';get('r-connect').onsubmit({preventDefault(){}});await settle();get('r-project').value='A';await get('r-project').onchange();
  const visibility=()=>{const detail=get('app').classList.contains('show-detail');return width<=650?{list:!detail,detail}:{list:true,detail:true};};
