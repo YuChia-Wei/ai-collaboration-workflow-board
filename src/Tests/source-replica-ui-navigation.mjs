@@ -31,6 +31,10 @@ async function harness(width){
  const cache=new Map();
  async function link(specifier){
   if(cache.has(specifier))return cache.get(specifier);
+  if(['./document-view.mjs','./content-view.mjs'].includes(specifier)){
+   const exports=await import('../Presentation/Web/'+specifier.slice(2));
+   const m=new SyntheticModule(Object.keys(exports),function(){for(const [name,value] of Object.entries(exports))this.setExport(name,value);},{context});cache.set(specifier,m);return m;
+  }
   if(['./source-replica-view.mjs','./record-board.mjs'].includes(specifier)){
    const m=new SourceTextModule(await readFile(new URL('../Presentation/Web/'+specifier.slice(2),import.meta.url),'utf8'),{context});cache.set(specifier,m);await m.link(link);return m;
   }
@@ -52,6 +56,9 @@ for(const width of [515,1200]){
  const stale=h.wait();h.click();back.onclick();stale.resolve({metadata:{workflow:{title:'STALE'}},project_ref:{}});await h.settle();assert.equal(h.get('app').classList.contains('show-detail'),false);assert.doesNotMatch(h.get('r-content').innerHTML,/STALE/);passed++;
  const otherProject=h.wait();h.click();h.get('r-project').value='B';await h.get('r-project').onchange();otherProject.resolve({metadata:{workflow:{title:'OLD PROJECT'}},project_ref:{}});await h.settle();assert.equal(h.get('app').classList.contains('show-detail'),false);assert.doesNotMatch(h.get('r-content').innerHTML,/OLD PROJECT/);h.get('r-project').value='';await h.get('r-project').onchange();assert.equal(h.visibility().list,true);assert.equal(h.get('app').classList.contains('show-detail'),false);assert.doesNotMatch(h.get('r-list').innerHTML,/data-index/);assert.equal(h.get('r-more').hidden,true);passed++;
  h.get('r-project').value='A';await h.get('r-project').onchange();h.click();await h.settle();h.get('r-connect').onsubmit({preventDefault(){}});await h.settle();assert.equal(h.get('app').classList.contains('show-detail'),false);assert.equal(h.visibility().list,true);passed++;
- console.log(`PASS source detail navigation at ${width}px: loading/success/back, error/back, stale response, project change/clear and reconnect`);
+ h.get('r-project').value='A';await h.get('r-project').onchange();
+ h.get('r-search').value='no such workflow';h.get('r-search').oninput();assert.doesNotMatch(h.get('r-list').innerHTML,/data-index/);assert.match(h.get('r-list').innerHTML,/沒有符合/);
+ h.get('r-search').value='SOURCE DETAIL';h.get('r-search').oninput();assert.match(h.get('r-list').innerHTML,/data-index="0"/);assert.match(h.get('r-count').textContent,/1 \/ 1 已載入/);h.click();await h.settle();assert.match(h.get('r-list').innerHTML,/aria-pressed="true"/);passed++;
+ console.log(`PASS source detail navigation at ${width}px: loading/success/back, error/back, stale response, project change/clear, reconnect and loaded-record search`);
 }
 console.log(`${passed} focused navigation scenarios passed; CSS/state harness, no rendered-browser or hosted acceptance claim`);

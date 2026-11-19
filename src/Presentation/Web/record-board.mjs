@@ -1,6 +1,12 @@
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const labels={pending:'待處理',in_progress:'進行中',completed:'已完成',deferred:'延期',done:'done · 歷史狀態',planned:'尚未開始',active:'active · 來源狀態',blocked:'有阻礙',unrecorded:'來源未記錄'};
-const readable=x=>typeof x==='string'?x:JSON.stringify(x);
+const readable=x=>{
+  if(typeof x==='string'){try{const parsed=JSON.parse(x);if(parsed&&typeof parsed==='object')return readable(parsed);}catch{}return x;}
+  if(x===null||x===undefined)return '';
+  if(Array.isArray(x))return x.map(readable).join(' · ');
+  if(typeof x==='object')return readable(x.summary??x.result_summary??x.description??x.explanation??Object.values(x));
+  return String(x);
+};
 
 // Present the selected record's own statuses; never normalize historical or
 // deferred states to another profile's lifecycle.
