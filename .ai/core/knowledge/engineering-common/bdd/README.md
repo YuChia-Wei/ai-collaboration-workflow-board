@@ -18,6 +18,7 @@ Complete supplied scenarios may already support implementation.
 | Connect examples to meaningful executed checks | [Automation](automation.md) | Choosing a new runner when the target has one |
 | Write or review requested Gherkin | [Gherkin](gherkin.md) | Gherkin for a prose-only request |
 | Follow one example across these activities | [Library renewal](examples/library-renewal.md) | Copying the example's rules into another product |
+| Relate scenarios to DDD, CA or selected Inbox/Outbox | [Architecture boundaries](architecture-boundaries.md) | Adopting a pattern or runner from an example |
 
 ## Shared boundaries
 

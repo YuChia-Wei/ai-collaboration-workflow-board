@@ -13,7 +13,7 @@ Read [the installed skill](../../../.ai/core/skills/lesson-author/SKILL.md) for 
 Resolve [the installed metadata](../../../.ai/core/skills/lesson-author/skill-package.yaml) with the installed skill
 directory as the explicit `package_root`.
 
-Obtain the caller's explicit `project_root`, configuration selection and operation. The project-owned `.ai/custom/framework.json` is not supplied by this entry. Pass the chosen configuration path explicitly under the installed skill's contract; do not infer it from the current working directory.
+Obtain the caller's explicit `project_root`, configuration selection and operation. The project-owned `.ai/project/framework.json` is not supplied by this entry. Pass the chosen configuration path explicitly under the installed skill's contract; do not infer it from the current working directory.
 
 Selected installed skill members:
 

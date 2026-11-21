@@ -5,7 +5,7 @@ description: "Establish a usable project collaboration starting point with exist
 
 # ai-context-init
 
-Codex runtime entry for `ai-context-init@0.2.1`. This generated projection does not
+Codex runtime entry for `ai-context-init@0.2.6`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 

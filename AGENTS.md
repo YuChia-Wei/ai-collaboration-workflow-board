@@ -23,7 +23,7 @@ the graph is insufficient, and text search for literals, configuration and prose
 
 ## Installed skills
 
-Framework v0.20.1 is selected in `.ai/custom/installation.json` and verified by
+Framework v0.23.1 is selected in `.ai/project/installation.json` and verified by
 `.ai/framework.lock`. Codex entries are `.agents/skills/<id>/SKILL.md`; read the
 selected entry and only its applicable references. Installed resources under
 `.ai/core/` and runtime entries are managed; change selection and reinstall through
@@ -33,12 +33,13 @@ the pinned installer rather than editing those files.
 | --- | --- |
 | Establish or refresh the collaboration starting point | `ai-context-init` |
 | Requirements and specifications | `requirement-author`, `spec-author`, `problem-frame-author` |
-| Architecture, test design and formal test specifications | `ddd-ca-hex-architect`, `test-designer` |
+| Domain modeling and software architecture | `domain-model-designer`, `software-architect` |
+| Test design and formal test specifications | `test-designer` |
 | Diagnosis, implementation and review | `diagnostic-analyst`, `local-change-implementer`, `slice-implementer`, `code-reviewer` |
 | Compliance and stage selection | `spec-compliance-validator`, `software-development-orchestrator` |
 | Decisions, observations and PR content | `adr-author`, `lesson-author`, `pr-author` |
 
-`engineering-common@0.3.0` is installed as optional guidance. No normative
+`engineering-common@0.4.3` is installed as optional guidance. No normative
 knowledge bindings are adopted. Select relevant resources explicitly and preserve
 Board's existing decisions. .NET coverage is unavailable; do not substitute a
 source checkout or impose another technology stack. `ai-context-auditor`,

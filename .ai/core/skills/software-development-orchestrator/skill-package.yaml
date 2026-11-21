@@ -1,6 +1,6 @@
 metadata_version: 4
 id: software-development-orchestrator
-version: 0.3.2
+version: 0.5.0
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -19,12 +19,26 @@ runtime:
   - orchestrate
   - resume
   on_missing: unavailable
-configuration: null
+configuration:
+  kind: instruction-settings
+  namespace: software-development-orchestrator
+  schema:
+    id: software-development-orchestrator.settings
+    version: 1.0.0
+    path: schemas/issue-control-settings.schema.json
+  defaults:
+    issue_control: ''
 artifact_roles: []
 resources:
   references:
   - references/orchestrate.md
-  schemas: []
+  - references/issue-control.md
+  schemas:
+  - id: software-development-orchestrator.settings
+    version: 1.0.0
+    path: schemas/issue-control-settings.schema.json
+    owner: software-development-orchestrator
+    migration: unsupported; settings changes do not migrate work items
   templates: []
   tools: []
 operations:

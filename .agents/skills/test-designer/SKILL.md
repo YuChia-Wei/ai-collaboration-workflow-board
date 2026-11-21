@@ -5,7 +5,7 @@ description: "Design or review tests and formal test specifications from source 
 
 # test-designer
 
-Codex runtime entry for `test-designer@0.4.1`. This generated projection does not
+Codex runtime entry for `test-designer@0.4.15`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 

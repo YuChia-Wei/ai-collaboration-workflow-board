@@ -31,8 +31,10 @@ There is no mandatory sequence of requirement, design, specification and tests.
 
 Templates are ordinary prose guidance, not machine schemas. Honor a selected
 target schema/version, template and destination. Without a destination, return
-conversation output. This package has no configuration, store, tool, direct
-method-knowledge consumption or mandatory programming runtime.
+conversation output. This package has no configuration, store, tool or mandatory
+programming runtime. For requested optional method knowledge, follow the
+[verified resource protocol](references/knowledge.md) and metadata-4 allowlist.
+Missing coverage is unavailable without source fallback; selection does not adopt rules.
 
 Authoring does not approve business or architecture decisions, implement code,
 execute tests, establish acceptance or prove specification compliance.

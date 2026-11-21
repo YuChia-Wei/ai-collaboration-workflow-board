@@ -68,3 +68,7 @@ If the selected format has no place for source or uncertainty notes, return
 them alongside the document without changing a closed target schema.
 Acceptance criteria describe expectations; record actual execution results only
 when separately supplied and bound to the relevant target and observation.
+
+For public requirements, apply the authoring method's mandatory content boundary.
+Source and product decision status belong here; execution authorization and
+agent handoff belong in the workflow mechanism, never in Issue fields/comments.

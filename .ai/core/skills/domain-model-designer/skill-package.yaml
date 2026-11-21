@@ -1,0 +1,108 @@
+metadata_version: 4
+id: domain-model-designer
+version: 0.1.12
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read the selected instructions and permitted caller sources
+  for_operations:
+  - explore
+  - design
+  - review
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/design.md
+  - references/explore.md
+  - references/knowledge.md
+  - references/review.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: explore
+  execution: instruction
+  inputs:
+  - Bounded domain question, permitted sources, language, examples and current authority
+  - Existing rules and model decisions with acceptance status and unresolved questions
+  outputs:
+  - Sourced vocabulary, rules, counterexamples, ambiguity and model hypotheses
+  - Bounded owner questions, coverage limits and the smallest next step
+  instructions: references/explore.md
+  implementation_status: implemented
+- id: design
+  execution: instruction
+  inputs:
+  - Bounded modeling goal, behavior and accepted decisions, existing model and constraints
+  - Source identities, current authority and any selected output destination
+  outputs:
+  - Proposed model responsibilities, invariants, state, behavior and events with example mappings
+  - Alternatives, consistency obligations, evolution impact and unresolved owner decisions
+  instructions: references/design.md
+  implementation_status: implemented
+- id: review
+  execution: instruction
+  inputs:
+  - Fixed model identity and permitted evidence, source rules and accepted decisions
+  - Requested coverage, applicable target authority and reviewer relationship
+  outputs:
+  - Read-only findings with location, criterion, trigger, impact, evidence and uncertainty
+  - Review classification, coverage, valid alternatives and bounded handoff
+  instructions: references/review.md
+  implementation_status: implemented
+knowledge_consumption:
+- id: common-domain-discovery
+  package: engineering-common
+  version: 0.4.3
+  operations:
+  - explore
+  resources:
+  - member:bdd/discovery.md
+  - member:ddd/README.md
+  - member:ddd/domain-discovery.md
+  - member:ddd/examples/order-cancellation.md
+  - member:discovery/collaborative-discovery.md
+  requirement: optional
+  on_missing: unavailable
+- id: common-domain-model
+  package: engineering-common
+  version: 0.4.3
+  operations:
+  - design
+  - review
+  resources:
+  - engineering-rule-catalog
+  - member:bdd/discovery.md
+  - member:bdd/formulation.md
+  - member:ddd/README.md
+  - member:ddd/domain-discovery.md
+  - member:ddd/examples/order-cancellation.md
+  - member:ddd/model-evolution.md
+  - member:ddd/strategic-design.md
+  - member:ddd/tactical-design.md
+  - member:domain-language/README.MD
+  - member:domain-language/templates/aggregate-vocabulary-template.md
+  - member:domain-language/templates/bounded-context-language-template.md
+  - member:domain-language/templates/domain-event-language-template.md
+  - member:operations/CONTEXT-MAP-GUIDE.MD
+  requirement: optional
+  on_missing: unavailable
+- id: dotnet-domain-model
+  package: dotnet
+  version: 0.3.5
+  operations:
+  - design
+  - review
+  resources:
+  - engineering-rule-catalog
+  - member:architecture/ddd-cqrs/aggregate-standards.md
+  - member:core/design-by-contract.md
+  - member:references/policy-rationale.md
+  requirement: optional
+  on_missing: unavailable

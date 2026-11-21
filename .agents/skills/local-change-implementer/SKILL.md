@@ -5,7 +5,7 @@ description: "Implement one authorized operation on one technical target and its
 
 # local-change-implementer
 
-Codex runtime entry for `local-change-implementer@0.2.5`. This generated projection does not
+Codex runtime entry for `local-change-implementer@0.2.19`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 

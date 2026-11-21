@@ -9,13 +9,14 @@ semantic authority. File count alone does not decide local versus slice scope.
 | --- | --- | --- |
 | One technical target and operation, including its direct call sites and immediate tests in the allowed module/radius | `local-change-implementer` | A private implementation helper type may remain local only when it keeps the accepted target, radius, behavior, responsibility, dependency direction, lifetime, and transaction boundary unchanged. Public contract or domain-language change routes onward. Several files can remain one local change. |
 | One accepted behavior/refactoring goal that needs coordinated implementation steps or a public, responsibility-changing, dependency/lifetime/transaction-affecting type | `slice-implementer` | Select one command/query/reactor/generic mode; do not reopen an already settled architecture decision merely because a type is added. |
-| Missing or changed responsibility, module/aggregate boundary, dependency direction or business-language decision | `ddd-ca-hex-architect` | Stop the dependent implementation and resolve that decision; a prior unrelated approval is insufficient. |
+| Missing or changed business language, state, aggregate or invariant ownership | `domain-model-designer` | Resolve the model question and its actual owner; do not infer a new business rule from implementation. |
+| Missing or changed software responsibility, port, dependency, lifetime or technical consistency mechanism | `software-architect` | Resolve the technical question against accepted behavior/model; a prior unrelated approval is insufficient. |
 | Unexplained failure or performance symptom without a bounded causal finding | `diagnostic-analyst` | Diagnosis does not grant repair authority. |
 | Several independent behavior goals or work whose needed tasks cannot yet be bounded | The project-selected orchestration route | Bound and sequence the work before implementing it as if it were one slice. |
 
 When one concrete missing semantic, compatibility or architecture decision is
-already identified, route that decision to `ddd-ca-hex-architect` first, even
-across services. Module count alone does not require orchestration or a new
+already identified, route the model question to `domain-model-designer` or the
+software mechanism/structure question to `software-architect`, even across services. Module count alone does not require orchestration or a new
 requirement document. Add an authoring stage only when its artifact is requested
 or is a demonstrated missing input to the current decision.
 

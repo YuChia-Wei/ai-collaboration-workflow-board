@@ -1,6 +1,7 @@
 # Artifact Design And Review Contract
 
-This contract is shared by `ddd-ca-hex-architect` and `test-designer`.
+This contract is shared by `domain-model-designer`, `software-architect` and
+`test-designer`.
 Each skill owns its artifact criteria. This contract adds no mandatory stage,
 new skill, implementation authority, or specification-compliance claim.
 
@@ -9,8 +10,8 @@ new skill, implementation authority, or specification-compliance claim.
 - Select `design` for a request to create or revise a design; keep the existing
   authoring output and the user's write scope. Revision needs authorization,
   which may already be present in the request.
-- Select `review` for a request to assess an existing architecture or test-design
-  artifact. Fix its path/version and digest (or quote a bounded inline input)
+- Select `review` for a request to assess an existing domain-model, software-architecture
+  or test-design artifact. Fix its path/version and digest (or quote a bounded inline input)
   before reviewing. Record the requirements, constraints and rule authority
   separately from the artifact: an artifact's claims do not validate themselves.
 - In `review`, leave the submitted artifact unchanged. Return findings and

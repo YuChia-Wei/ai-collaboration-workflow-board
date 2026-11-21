@@ -1,6 +1,6 @@
 metadata_version: 4
 id: requirement-author
-version: 0.2.1
+version: 0.2.6
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -61,7 +61,7 @@ operations:
 knowledge_consumption:
 - id: common-requirement-authoring
   package: engineering-common
-  version: 0.3.0
+  version: 0.4.3
   operations:
   - draft
   - normalize
@@ -73,7 +73,7 @@ knowledge_consumption:
   on_missing: unavailable
 - id: common-requirement-exploration
   package: engineering-common
-  version: 0.3.0
+  version: 0.4.3
   operations:
   - explore
   resources:

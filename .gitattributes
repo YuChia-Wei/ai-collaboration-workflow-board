@@ -3,4 +3,4 @@
 .ai/framework.lock -text
 .agents/skills/** -text
 # The project-owned selection is a raw-hash input to the installed reader.
-.ai/custom/installation.json text eol=lf
+.ai/project/installation.json text eol=lf

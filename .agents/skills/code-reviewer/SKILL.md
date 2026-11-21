@@ -5,7 +5,7 @@ description: "Review selected code, a diff or concrete implementation guidance f
 
 # code-reviewer
 
-Codex runtime entry for `code-reviewer@0.2.4`. This generated projection does not
+Codex runtime entry for `code-reviewer@0.2.17`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 

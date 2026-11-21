@@ -9,7 +9,7 @@ Use `design` to produce or explicitly revise a bounded test design through
 [the design method](references/design.md). Use `review` to assess a fixed test
 design through [the review method](references/review.md).
 
-`test-designer@0.4.0` is the selected canonical capability; it supplies no alias
+`test-designer` is the selected canonical capability; it supplies no alias
 or implicit fallback for the retired ID.
 
 The requested result may be test notes, examples, a decision table, a state or
@@ -46,3 +46,10 @@ Existing authority for a later implementation can travel with a complete design;
 this package creates neither new authority nor a duplicate approval checkpoint.
 A discovery-only request can end with bounded questions and provisional examples.
 Do not force a test set or resolve business policy on its owner's behalf.
+
+Requirements, Stories, domain models and system specifications can contain
+behavioral examples in GWT or other forms. That format does not transfer their
+authoring ownership here. Select this skill when the requested output designs
+verification boundaries, data, isolation, independent oracle machinery or coverage.
+A counterexample that exposes ambiguous policy or invariant ownership returns
+to the source/model owner; do not rewrite the requirement merely to make a test pass.

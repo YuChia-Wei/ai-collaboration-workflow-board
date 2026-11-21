@@ -1,22 +1,23 @@
 {
   "selection_version": 2,
   "catalog": {
-    "identity": "catalog:1:0.20.1:fba2f031f1c969cd5788af924e307ffebf553422:66ba50538eacba621a08fc3cc413ded6bc3d1dd39fa36e878ac311feecf2beac",
-    "catalog_sha256": "a5f336f29e3b9da401fbe9abf57c9db244286c7b820f807f9a4b3ee9de870088",
-    "files_sha256": "a60fe308a994c76e4628a499174f32addfbb9e637e4f94c40b28ded861a74d90"
+    "identity": "catalog:1:0.23.1:5616b9236ab15cf41d16e16eca79f9171e039f3d:fc8e6aa4ef496a06587ba748f3da1b309c30c3f33889aaff31bff66f1ff2380d",
+    "catalog_sha256": "bcc2456a4f0655c915b1c09b71730cc8c921bf5181ff3516f715e1e4c7c6cfbd",
+    "files_sha256": "061d8f74998e91800b9a159e1827e94a3943fef058031b99f34eb7bc51b41402"
   },
   "skills": [
     "adr-author",
     "ai-context-init",
     "code-reviewer",
-    "ddd-ca-hex-architect",
     "diagnostic-analyst",
+    "domain-model-designer",
     "lesson-author",
     "local-change-implementer",
     "pr-author",
     "problem-frame-author",
     "requirement-author",
     "slice-implementer",
+    "software-architect",
     "software-development-orchestrator",
     "spec-author",
     "spec-compliance-validator",

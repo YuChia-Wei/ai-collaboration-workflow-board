@@ -1,4 +1,4 @@
-# pr-author.github 0.1.0
+# pr-author.github 0.1.2
 
 Entry: `python <absolute-package>/scripts/github.py --request <absolute-request.json|->`. This is a package-owned public tool. It calls `pr-author.fs` inspect/render/explain through JSON subprocess requests using the selected installed package; it imports no private skill module. The selected executable must match package_root.
 
@@ -21,6 +21,13 @@ The local proposal supplies provider_target (provider,host,repository,base_ref,h
 write_mode must be coordinated-single-writer. Any request for server CAS or another mode is unsupported. A mode string does not prove exclusion; the caller is responsible for actual coordination.
 
 grant is {source,operation,target,body_sha256}. Source is the caller's actual permission reference. Target equals the proposal's full provider_target with repository normalized lowercase; update also includes number. Operation and body digest must match this request. Config is not authority. A grant string cannot authenticate human permission: the runtime enforces authorization before dispatch; this tool checks the supplied binding and reports authorization_attestation=not-performed. Existing authority may be reused when it still covers the exact action/target/candidate; no automatic repeated approval gate is introduced. Do not put credentials in grant references.
+
+Grant and workflow inputs are execution context, not public PR prose. Apply the
+SKILL.md public content boundary to the actual rendered body before create/update;
+do not copy grant sources, approval history or continuation instructions into its
+summary, validation notes or references. Preserve relevant technical evidence.
+After publication, read back the public content as well as the tool result;
+provider success alone does not establish semantic compliance.
 
 ## Observation and conflict behavior
 

@@ -1,6 +1,6 @@
 metadata_version: 4
 id: test-designer
-version: 0.4.1
+version: 0.4.15
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -31,10 +31,8 @@ operations:
   - Bounded behavior, selected testing conventions and existing authoring authority
   - Optional caller-selected scenario format and output destination
   outputs:
-  - Traceable general test designs or formal test specifications with target-selected
-    expressions
-  - Expected-value sources, data, boundaries, test levels, gaps and bounded implementation
-    handoff
+  - Traceable general test designs or formal test specifications with target-selected expressions
+  - Expected-value sources, data, boundaries, test levels, gaps and bounded implementation handoff
   instructions: references/design.md
   implementation_status: implemented
 - id: review
@@ -43,15 +41,14 @@ operations:
   - Fixed scenario artifact identity, source behavior and acceptance
   - Applicable target rules, selected testing conventions and requested coverage
   outputs:
-  - Read-only test-design or formal-test-specification findings with evidence and
-    uncertainty
+  - Read-only test-design or formal-test-specification findings with evidence and uncertainty
   - Coverage, independence limits and bounded implementation handoff
   instructions: references/review.md
   implementation_status: implemented
 knowledge_consumption:
 - id: common-test-design
   package: engineering-common
-  version: 0.3.0
+  version: 0.4.3
   operations:
   - design
   - review
@@ -68,13 +65,15 @@ knowledge_consumption:
   requirement: optional
   on_missing: unavailable
 - id: dotnet-test-design
-  package: dotnet-backend
-  version: 0.1.4
+  package: dotnet
+  version: 0.3.5
   operations:
   - design
   - review
   resources:
   - engineering-rule-catalog
-  - member:standards/coding-standards/test-standards.md
+  - member:references/policy-rationale.md
+  - member:testing/test-scenario-review.md
+  - member:testing/test-standards.md
   requirement: optional
   on_missing: unavailable

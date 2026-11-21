@@ -78,3 +78,13 @@ Continue independent work where an unknown does not block it. Do not repeatedly
 ask for existing authorization or imply that exploration authorizes implementation,
 external writes, experiments or acceptance. Persist only to the caller's chosen
 authorized destination; otherwise return concise conversation notes.
+
+## Preserve the modeling boundary
+
+Explore what a rule means and how its observable examples distinguish outcomes.
+Do not treat the use of DDD vocabulary as permission to choose model ownership.
+If context/aggregate/state/invariant responsibility is the actual unresolved
+question, carry its sources, examples and acceptance status to domain-model design.
+A settled model with a port, dependency or feasibility question needs software
+architecture instead. Return this semantic handoff if no matching skill is
+available; no complete pipeline or extra approval is introduced.

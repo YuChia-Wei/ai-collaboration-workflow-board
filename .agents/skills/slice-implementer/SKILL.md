@@ -5,7 +5,7 @@ description: "Implement one authorized behavior, coordinated refactor or concret
 
 # slice-implementer
 
-Codex runtime entry for `slice-implementer@0.2.5`. This generated projection does not
+Codex runtime entry for `slice-implementer@0.2.19`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 

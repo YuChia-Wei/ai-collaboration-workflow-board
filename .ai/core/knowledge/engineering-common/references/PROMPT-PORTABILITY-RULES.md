@@ -10,8 +10,11 @@ Use these rules when creating or updating canonical shared materials and delegat
 - Keep project-specific decisions as "Project Decision Slot" notes, not fixed policy text.
 
 ## Allowed References
-- Shared standards and repo-init templates that are intentionally copied with `.ai` and `.dev`.
-- Generated target-repository truth such as `.dev/project-config.yaml` must be rebuilt after copying.
+- Shared standards and initialization templates supplied by the selected package or adopted by the target project.
+- When a target uses a repository inventory, such as `.dev/project-config.yaml`,
+  reference only the target's own inventory and preserve its location and format.
+  The target may create or update it when the task calls for it, using verified
+  target facts and accepted decisions.
 - Generic architecture patterns (DDD, CQRS, Outbox, Event Sourcing).
 - Technology constraints explicitly declared by the target framework profile.
 
@@ -26,6 +29,12 @@ Use these rules when creating or updating canonical shared materials and delegat
 - After: `RTK Query Cache Rules (Project Decision Slot: Cache Invalidation Policy)`
 
 ## Pre-Commit Checklist
-- Searches for repository-specific decision IDs inside portable prompt assets should return no results.
-- `rg -n "ProjectNameA|ProjectNameB|DomainTermA|DomainTermB" <selected-common-resource-root>` returns no results.
+- Collect the actual project, solution, bounded-context, domain, route, aggregate
+  and folder names and decision IDs from the repository contexts used to
+  author or adapt the assets. Include relevant spelling and casing variants.
+- Search the selected portable assets for those literal identifiers. For
+  tracked files, an existing pattern list outside the search root can be used
+  with `git grep -n -F -f <pattern-file> -- <selected-common-resource-root>`.
+  Inspect each match for a dependency on the original project.
+  A search with no matches covers only the literals and paths searched.
 - Example code uses neutral names and can be copied without domain rewrite.

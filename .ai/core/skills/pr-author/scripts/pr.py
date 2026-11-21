@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""pr-author.fs 0.1.0. Owned standalone JSON-request tool; no cross-skill imports."""
+"""pr-author.fs 0.1.2. Owned standalone JSON-request tool; no cross-skill imports."""
 from __future__ import annotations
 import argparse
 import copy
@@ -416,7 +416,7 @@ def load_package(package):
     fields(metadata, ("metadata_version", "id", "version", "delivery_status", "entrypoint", "dependencies", "runtime", "configuration", "artifact_roles", "resources", "operations"), label="metadata")
     if type(metadata["metadata_version"]) is not int or metadata["metadata_version"] != 2:
         fail("metadata-version", "This package requires exact metadata_version 2.", "unsupported")
-    if (metadata["id"], metadata["version"], metadata["delivery_status"], metadata["entrypoint"]) != (PACKAGE, "0.1.0", "implemented", "SKILL.md"):
+    if (metadata["id"], metadata["version"], metadata["delivery_status"], metadata["entrypoint"]) != (PACKAGE, "0.1.2", "implemented", "SKILL.md"):
         fail("package-identity", "Unsupported package identity or delivery state.", "unsupported")
     if not exact_equal(metadata["dependencies"], {"required": [], "optional": []}):
         fail("dependencies", "This package has no skill dependencies.", "unsupported")

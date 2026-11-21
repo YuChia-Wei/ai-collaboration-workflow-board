@@ -4,9 +4,9 @@
 
 ## Skill 提供什麼
 
-已安裝 `software-development-orchestrator@0.2.0` 的 [方法](../../.ai/core/skills/software-development-orchestrator/references/orchestrate.md) 明列 goal、inputs、output、owner、dependencies、check、pending decision 及 resume／handoff。這些資訊足以作為本次 workflow 的來源；具體任務與接受條件仍由本專案決定。
+已安裝的 `software-development-orchestrator` [方法](../../.ai/core/skills/software-development-orchestrator/references/orchestrate.md) 明列 goal、inputs、output、owner、dependencies、check、pending decision 及 resume／handoff。具體任務與接受條件由本專案決定。
 
-它是 instruction skill，`configuration: null`，沒有自動 workflow writer。`slice-implementer@0.2.0` 也沒有管理自己的 store。本試行由專案的 [trial 入口](../../src/Tooling/collaboration-trial.mjs) 明確呼叫既有 collaboration DTO 寫入 Board，不改 managed skill、不假裝全部 skills 已自動串接。
+本試行由專案的 [trial 入口](../../src/Tooling/collaboration-trial.mjs) 呼叫既有 collaboration DTO 寫入 Board。每次新試行會保存當時的專案選配和 skill 套件中繼資料，從快照讀取 `software-development-orchestrator` 與 `slice-implementer` 的版本，並用於 workflow、對照表和試行計畫。
 
 | Skill 概念 | 本次 Board 表達 |
 | --- | --- |

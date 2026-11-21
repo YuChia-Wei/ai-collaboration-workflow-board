@@ -33,6 +33,14 @@ boundary. Sequence dependencies; parallelize only independent work with suitable
 isolation and available delegation. Keep one integration owner and comply with
 the project's writer and review isolation rules.
 
+## Resolve issue operations
+
+For both `orchestrate` and `resume`, read and validate the current optional
+[issue-operation settings](issue-control.md) before selecting issue tools. Missing
+or empty settings choose no framework route. An explicit experimental or project
+route must be available; never silently fall back. Configuration changes do not
+migrate items, change their provider references or grant permission.
+
 ## Resolve capabilities and sequence stages
 
 Plan only the stages needed to reach the accepted outcome. For each, identify
@@ -61,7 +69,8 @@ bundled IDs are candidates when installed, not mandatory dependencies:
 | User Stories | `user-story-author` | Independent plan/draft/normalize or whole/selected-AC requirement review when available; no required upstream authoring stage. |
 | Specifications | `spec-author` | Production, entity or adapter system specifications grounded in requirements and accepted design. |
 | Problem framing | `problem-frame-author` | Commanded behavior and identified sources. |
-| Architecture | `ddd-ca-hex-architect` | Domain/dependency decisions or architecture artifact review. |
+| Domain modeling | `domain-model-designer` | Explore language/model uncertainty; design/review responsibility, state, invariants and business consistency. |
+| Software architecture | `software-architect` | Design/review software structure, dependencies, ports and technical mechanisms against accepted behavior/model. |
 | Test design | `test-designer` | General test designs and formal test specifications; design/review, without implementation or execution. |
 | Slice implementation | `slice-implementer` | One accepted behavior, coordinated refactor or concrete test slice and its immediate checks. |
 | Local change | `local-change-implementer` | One technical target and operation preserving public contracts and the bounded dependency radius. |
@@ -70,8 +79,8 @@ bundled IDs are candidates when installed, not mandatory dependencies:
 | Selected compliance | `spec-compliance-validator` | Complete criterion/evidence coverage or assessment in a fixed scope, when requested or required. |
 
 Test execution uses target-owned commands and prerequisites; no dedicated test
-skill is required. Architecture and scenario artifact reviews stay with their
-respective owners. Do not route every review to the code reviewer or introduce
+skill is required. Domain-model, software-architecture and test-design artifact
+reviews stay with their respective owners. Do not route every review to the code reviewer or introduce
 compliance solely because this skill was selected.
 
 Read the selected owner's entry and applicable operation before applying it.
@@ -81,6 +90,51 @@ required capability, permission or evidence is unavailable, mark that stage
 blocked and continue independent authorized work. A similarly named skill is not
 proof of equivalent scope, availability or output.
 
+## Choose the next work from the unresolved question
+
+| What blocks the selected outcome? | Needed judgment |
+| --- | --- |
+| Value, expected behavior, business policy or acceptance | Requirement/Story authoring and the actual stakeholder decision owner. |
+| Language, state, consistency requirement or model responsibility | Domain-model exploration/design; do not choose storage to resolve business ambiguity. |
+| Dependencies, integration, quality or a mechanism/model conflict | Software architecture; return any required business-rule change to its owner. |
+| Accepted decisions need a precise contract | Specification authoring; reuse the existing sources and IDs. |
+| Technical feasibility lacks evidence | A bounded authorized lookup or experiment with a question, scope, success/refutation signals and stopping condition. |
+| Verification boundary, data or independent oracle is unclear | Test design; unresolved expected business behavior returns to its source owner. |
+| Observed failure has no established cause | Diagnosis before assuming a repair. |
+| Accepted behavior and implementation authority are sufficient | Direct local/slice implementation and necessary checks. |
+
+Select one observable increment and solve only its blocking unknowns. Existing
+requirements/models/designs/specs can be reused without a fresh authoring pass.
+An experiment reports actual observations and limitations; a prototype does not
+become production and an AI-generated hypothesis is not stakeholder agreement.
+
+Use feedback to select the next work: an example contradicting a rule returns
+to requirements; unclear invariant ownership to domain modeling; an infeasible
+mechanism to architecture; a test environment/control issue to the test/execution
+owner. Do not change an assertion or implementation simply to hide a semantic
+conflict. Keep the affected decision open and continue independent authorized work.
+
+Behavioral examples can remain in requirements, Stories, models and specs. GWT
+alone does not route to test design; requested levels, data, isolation, oracle
+machinery or coverage do. Preserve the same source/example IDs and accepted,
+proposed, observed and unknown status across these handoffs. Complete one coherent
+increment, obtain its necessary verification, then use actual feedback for the
+next increment. No fixed domain-to-architecture-to-spec-to-test chain, extra
+record family or per-skill task/agent is required.
+
+## Public requirements and workflow records
+
+Public Issues, Epics, Features and Stories MUST contain understandable requirements,
+functional discussion, dependencies and feature completion summaries. Execution authorization
+and its approval/revision history, agent handoff and resume checkpoints MUST use the selected
+workflow mechanism; never publish them in an Issue body or comment. If the workflow
+is unavailable, report the missing persistence or blocked handoff instead of falling
+back to the Issue system. Do not force a particular provider or storage product.
+Product decisions, supported requirement revisions/status and product
+permission/approval behavior remain valid requirement content. Before
+any public work-item update, check this semantic boundary and keep execution
+context separate; a requirement link does not itself authorize execution.
+
 ## Execute and hand off
 
 Carry existing approval and the user's constraints into every stage. Resolve a
@@ -89,6 +143,27 @@ implementation. Do not ask again when current authorization already covers the
 action. A plan, diagnosis, review or installed capability supplies no additional
 permission. Push, PR, merge, release, provider writes, credentials and adoption
 use their actual owners and separately applicable authorization.
+
+Before delegation, select the least costly model and supported reasoning effort
+sufficient for the concrete task under the target's adopted model policy. Prefer
+deterministic tools for mechanical work. Include task category, model, effort,
+selection reason and existing authority in the handoff. Never substitute parent
+inheritance for missing selection. Reconcile runtime profile/environment overrides
+and confirm actual invocation identity; static selection is not availability or
+billing evidence. Use fresh bounded context when full-history forks cannot change
+model. Missing policy or unavailable choice stops that delegation. Escalation
+outside the approved model/effort range needs explicit authority. Keep rapid model
+preferences project-owned, separate from managed skill/role bytes; package updates
+do not adopt or replace them. Reuse an existing approved choice without asking again.
+
+When the target has selected a sub-agent resource registry, resolve the purpose
+and adapter through its explicit route before selecting the model. Verify the
+project package and runtime projection or the selected installed framework entry.
+Keep custom authoring outside managed core. An overlapping upstream capability
+is a comparison candidate, not automatic replacement authority. Use the selected
+resource manager for project-entry adoption/rebinding and the installation owner
+for managed drift; preserve baseline, local intent and unknown entries. Coverage,
+owner adoption, file readback and runtime discovery are distinct observations.
 
 Give each specialist or delegated worker a bounded handoff: goal and non-goals,
 source/artifact identities, accepted decisions and current approval, owned

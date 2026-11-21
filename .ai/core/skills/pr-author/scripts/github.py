@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""pr-author.github 0.1.0: explicit GitHub PR operations via existing gh authentication.
+"""pr-author.github 0.1.2: explicit GitHub PR operations via existing gh authentication.
 Public local interaction uses pr-author.fs JSON requests; no private module imports.
 """
 from __future__ import annotations

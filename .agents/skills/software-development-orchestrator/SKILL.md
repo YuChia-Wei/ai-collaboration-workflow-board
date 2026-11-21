@@ -5,7 +5,7 @@ description: "Coordinate software development from high-level intent or an exist
 
 # software-development-orchestrator
 
-Codex runtime entry for `software-development-orchestrator@0.3.2`. This generated projection does not
+Codex runtime entry for `software-development-orchestrator@0.5.0`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 
@@ -13,11 +13,13 @@ Read [the installed skill](../../../.ai/core/skills/software-development-orchest
 Resolve [the installed metadata](../../../.ai/core/skills/software-development-orchestrator/skill-package.yaml) with the installed skill
 directory as the explicit `package_root`.
 
-This package declares `configuration: null`. It needs no framework configuration file or managed record store. Obtain only the target inputs required by the selected operation.
+This package has optional project-owned instruction settings. Read the explicitly selected project configuration anew for each operation and validate only its declared namespace/schema. With no selected settings, use the package defaults; an empty issue route is fully unspecified. Do not create a configuration file or record store implicitly. Settings select no credentials or execution authority.
 
 Selected installed skill members:
 
+- [references/issue-control.md](../../../.ai/core/skills/software-development-orchestrator/references/issue-control.md)
 - [references/orchestrate.md](../../../.ai/core/skills/software-development-orchestrator/references/orchestrate.md)
+- [schemas/issue-control-settings.schema.json](../../../.ai/core/skills/software-development-orchestrator/schemas/issue-control-settings.schema.json)
 
 For metadata versions 4 and 5, `knowledge_consumption` declares exact knowledge package
 versions, operations and resource IDs. Follow the installed skill's selected

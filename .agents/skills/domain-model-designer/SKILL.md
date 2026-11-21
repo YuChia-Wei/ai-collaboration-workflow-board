@@ -1,24 +1,26 @@
 ---
-name: ddd-ca-hex-architect
-description: "Design or review architecture artifacts using domain language, invariant ownership, dependency direction and ports/adapters; compare alternatives against explicit target requirements and decisions."
+name: domain-model-designer
+description: "Explore, design or review a bounded domain model using business language, behavioral examples, invariant ownership and consistency requirements. Preserve accepted rules and expose unresolved business decisions without selecting software mechanisms."
 ---
 
-# ddd-ca-hex-architect
+# domain-model-designer
 
-Codex runtime entry for `ddd-ca-hex-architect@0.3.1`. This generated projection does not
+Codex runtime entry for `domain-model-designer@0.1.12`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 
-Read [the installed skill](../../../.ai/core/skills/ddd-ca-hex-architect/SKILL.md) for its declared operations.
-Resolve [the installed metadata](../../../.ai/core/skills/ddd-ca-hex-architect/skill-package.yaml) with the installed skill
+Read [the installed skill](../../../.ai/core/skills/domain-model-designer/SKILL.md) for its declared operations.
+Resolve [the installed metadata](../../../.ai/core/skills/domain-model-designer/skill-package.yaml) with the installed skill
 directory as the explicit `package_root`.
 
 This package declares `configuration: null`. It needs no framework configuration file or managed record store. Obtain only the target inputs required by the selected operation.
 
 Selected installed skill members:
 
-- [references/design.md](../../../.ai/core/skills/ddd-ca-hex-architect/references/design.md)
-- [references/review.md](../../../.ai/core/skills/ddd-ca-hex-architect/references/review.md)
+- [references/design.md](../../../.ai/core/skills/domain-model-designer/references/design.md)
+- [references/explore.md](../../../.ai/core/skills/domain-model-designer/references/explore.md)
+- [references/knowledge.md](../../../.ai/core/skills/domain-model-designer/references/knowledge.md)
+- [references/review.md](../../../.ai/core/skills/domain-model-designer/references/review.md)
 
 For metadata versions 4 and 5, `knowledge_consumption` declares exact knowledge package
 versions, operations and resource IDs. Follow the installed skill's selected

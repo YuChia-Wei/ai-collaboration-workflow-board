@@ -1,17 +1,23 @@
 content_package_version: 1
 id: engineering-common
-version: 0.3.0
+version: 0.4.3
 entrypoint: README.md
 members:
 - path: README.md
   kind: index
 - path: bdd/README.md
   kind: index
+- path: bdd/architecture-boundaries.md
+  kind: knowledge
 - path: bdd/automation.md
   kind: knowledge
 - path: bdd/discovery.md
   kind: knowledge
+- path: bdd/examples/library-renewal.feature
+  kind: example
 - path: bdd/examples/library-renewal.md
+  kind: example
+- path: bdd/examples/transactional-message.feature
   kind: example
 - path: bdd/formulation.md
   kind: knowledge
@@ -151,6 +157,22 @@ resources:
   - normalize
   - review
   technology_profile: null
+- id: member:bdd/architecture-boundaries.md
+  path: bdd/architecture-boundaries.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - requirements
+  - test-design
+  operations:
+  - design
+  - draft
+  - explore
+  - normalize
+  - plan
+  - review
+  technology_profile: null
 - id: member:bdd/automation.md
   path: bdd/automation.md
   kind: knowledge
@@ -168,6 +190,22 @@ resources:
 - id: member:bdd/discovery.md
   path: bdd/discovery.md
   kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - requirements
+  - test-design
+  operations:
+  - design
+  - draft
+  - explore
+  - normalize
+  - plan
+  - review
+  technology_profile: null
+- id: member:bdd/examples/library-renewal.feature
+  path: bdd/examples/library-renewal.feature
+  kind: example
   rule_ids: []
   capabilities:
   - requirements
@@ -193,12 +231,28 @@ resources:
   - normalize
   - review
   technology_profile: null
+- id: member:bdd/examples/transactional-message.feature
+  path: bdd/examples/transactional-message.feature
+  kind: example
+  rule_ids: []
+  capabilities:
+  - requirements
+  - test-design
+  operations:
+  - design
+  - draft
+  - explore
+  - normalize
+  - review
+  technology_profile: null
 - id: member:bdd/formulation.md
   path: bdd/formulation.md
   kind: knowledge
   rule_ids: []
   capabilities:
+  - architecture
   - requirements
+  - specification
   - test-design
   operations:
   - design
@@ -249,6 +303,7 @@ resources:
   - draft
   - explore
   - normalize
+  - plan
   - review
   technology_profile: null
 - id: member:ddd/examples/order-cancellation.md
@@ -324,6 +379,7 @@ resources:
   - draft
   - explore
   - normalize
+  - plan
   - review
   technology_profile: null
 - id: member:domain-language/README.MD
@@ -922,6 +978,14 @@ references:
   requirement: required
   on_missing: unavailable
 - from: bdd/README.md
+  resource_id: member:bdd/architecture-boundaries.md
+  target:
+    package: engineering-common
+    path: bdd/architecture-boundaries.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: bdd/README.md
   resource_id: member:bdd/automation.md
   target:
     package: engineering-common
@@ -961,11 +1025,51 @@ references:
     anchor: null
   requirement: required
   on_missing: unavailable
+- from: bdd/architecture-boundaries.md
+  resource_id: member:bdd/automation.md
+  target:
+    package: engineering-common
+    path: bdd/automation.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: bdd/architecture-boundaries.md
+  resource_id: member:bdd/examples/library-renewal.md
+  target:
+    package: engineering-common
+    path: bdd/examples/library-renewal.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: bdd/architecture-boundaries.md
+  resource_id: member:bdd/examples/transactional-message.feature
+  target:
+    package: engineering-common
+    path: bdd/examples/transactional-message.feature
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: bdd/architecture-boundaries.md
+  resource_id: member:ddd/tactical-design.md
+  target:
+    package: engineering-common
+    path: ddd/tactical-design.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
 - from: bdd/discovery.md
   resource_id: member:bdd/examples/library-renewal.md
   target:
     package: engineering-common
     path: bdd/examples/library-renewal.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: bdd/examples/library-renewal.md
+  resource_id: member:bdd/examples/library-renewal.feature
+  target:
+    package: engineering-common
+    path: bdd/examples/library-renewal.feature
     anchor: null
   requirement: required
   on_missing: unavailable
@@ -982,6 +1086,22 @@ references:
   target:
     package: engineering-common
     path: bdd/automation.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: bdd/gherkin.md
+  resource_id: member:bdd/examples/library-renewal.feature
+  target:
+    package: engineering-common
+    path: bdd/examples/library-renewal.feature
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: bdd/gherkin.md
+  resource_id: member:bdd/examples/library-renewal.md
+  target:
+    package: engineering-common
+    path: bdd/examples/library-renewal.md
     anchor: null
   requirement: required
   on_missing: unavailable

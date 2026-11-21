@@ -1,10 +1,10 @@
 # Pull Request configuration v2
 
-The selected package is pr-author@0.1.0, metadata_version 2. Its sole writable/readable schema is pr.record@1.0.0. Package/config/record versions are separate; there is no conversion or schema fallback.
+The selected package is pr-author@0.1.2, metadata_version 2. Its sole writable/readable schema is pr.record@1.0.0. Package/config/record versions are separate; there is no conversion or schema fallback.
 
 The caller supplies absolute existing project_root/package_root and optional explicit project_config/local_config. Config filenames may be absolute or project-relative. Omitted config means defaults; an explicitly missing file fails. No upward/cwd search, environment interpolation, source policy or credential store is consulted. The running executable must belong to the selected package; all exact declared resources must exist.
 
-Project JSON has exact integer config_version=2, optional skills and constraints, and no other root keys. Local JSON has config_version=2 and optional skills only; constraints are forbidden. Every namespace key matches `[a-z][a-z0-9-]*(\.[a-z][a-z0-9-]*)*` and every value is an object. Strict parsing rejects duplicate keys, invalid Unicode, non-finite numbers and boolean/float versions. Only `pr` settings/constraints are validated deeply; other valid object namespaces are inert and are never loaded, executed, merged into permission or reported as valid capabilities. Selected v1 config is unsupported. No config file is written by this tool.
+Project JSON has exact integer config_version=2, optional skills and constraints, and no other root keys. Local JSON has config_version=2 and optional skills only; constraints are forbidden. Every namespace key matches `[a-z][a-z0-9-]*(\.[a-z][a-z0-9-]*)*` and every value is an object. Strict parsing rejects duplicate keys, invalid Unicode, non-finite numbers and boolean/float versions. Only `skills.pr-author` settings and `constraints.pr-author` constraints are validated deeply; other valid object namespaces are inert and are never loaded, executed, merged into permission or reported as valid capabilities. Selected v1 config is unsupported. No config file is written by this tool.
 
 | Setting | Default / behavior |
 | --- | --- |

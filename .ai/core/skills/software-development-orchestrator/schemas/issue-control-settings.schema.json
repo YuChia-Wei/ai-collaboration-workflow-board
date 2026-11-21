@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Optional issue operation route settings",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "issue_control": {
+      "anyOf": [
+        {
+          "const": ""
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "route"
+          ],
+          "properties": {
+            "mode": {
+              "const": "experimental"
+            },
+            "route": {
+              "const": "issue-control"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "route"
+          ],
+          "properties": {
+            "mode": {
+              "const": "project"
+            },
+            "route": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096,
+              "pattern": "^\\S(?:[^\\r\\n]*\\S)?(?![\\s\\S])"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

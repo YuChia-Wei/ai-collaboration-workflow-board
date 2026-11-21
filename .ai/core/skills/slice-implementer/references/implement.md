@@ -32,12 +32,17 @@ the exact saved selection rows. Returned authorities have
 `status: raw-hash-matched`; semantic applicability remains target-owned.
 
 Treat metadata-4 `knowledge_consumption` resources as an allowed set, not an
-instruction to load all of them. Intersect it with the verified selected
-packages/resources, saved bindings, matching capability/operation/execution-mode,
-path-prefix, technology-profile and file-type selectors, and this task. Read
-only needed installed `.ai/core/knowledge/<id>/<member>` bytes with bounded
-direct reads matching the returned raw SHA-256. Re-observe the exact lock,
-markers and authority hashes around those reads; discard the result on drift.
+instruction to load all of them. Match verified selected packages/resources,
+capability, operation and this task. Selected `skill-guidance` and the
+non-normative resources it names supply optional navigation without requiring a
+saved binding. Those named resources must have empty `rule_ids` and must not be
+`normative-rule` or `rule-catalog`; the consumption allowlist still applies.
+Respect any saved binding's execution-mode, path-prefix, technology-profile,
+file-type and authority constraints on the selected resource. Other requested
+coverage requires the matching saved bindings and their selectors. Read only
+needed installed `.ai/core/knowledge/<id>/<member>` bytes with bounded direct
+reads matching the returned raw SHA-256. Re-observe the exact lock, markers and
+authority hashes around those reads; discard the result on drift.
 
 Knowledge explains and examples illustrate. Normative rules require adopted
 binding and the existing target-owned resolver/gate; an index or source catalog
@@ -58,6 +63,24 @@ predicate required for requested coverage. Optional absence is unavailable;
 required specialist gaps cannot be reported as covered. Continue unaffected
 common work with that limit disclosed. Persist only when the actual task
 authorizes a destination; no new record family or implicit config write.
+
+## Selected knowledge references
+
+After the installed-resource reader succeeds, intersect returned `skill-guidance`
+resources with this skill's consumption allowlist, matching operations and the
+current task. For each needed resource, read the managed copy at
+`references/knowledge/<package>/<resource.path>` under this installed skill's
+package root, using the returned Resource's package-relative `path`, not the
+index row's installed `member` path. Its bytes must match the returned SHA-256;
+observe the same
+lock, marker and authority checks around the read. Copies supply navigation to
+knowledge, not additional rules or authority. Resolve their resource IDs through
+the same installed-resource protocol; do not load every selected reference.
+
+No selected applicable guidance means no reference files to read, not a missing
+prerequisite for common work. Report missing or changed copies only for requested
+coverage. Do not infer tool installation, adopt rules or fall back to a source
+checkout. The operation method and skill entry remain technology-neutral.
 
 ## Intake and source layers
 
@@ -114,37 +137,35 @@ not erased by a common-method result.
 3. Plan the smallest coherent change across that slice and implement it. Keep
    internal local edits under the slice owner; optional local collaboration is
    for a separable useful subtask, not every method or file.
-4. Implement necessary regression protection within authority. Preserve supplied
-   scenarios and assertion intent. Test design, concrete code and actual test
-   execution remain separate results, even when all are already authorized.
-5. Confirm test necessity before execution from the actual diff, semantics,
-   direct dependencies and target-owned gates. Ordinary prose or whitespace with no parsing,
-   schema, output or behavior effect needs no test merely because of its path,
-   extension or existence. Whitespace affecting those contracts needs relevant
-   checks; investigate unclear impact first. Run necessary authorized checks
-   using actual supported commands. Do not invent a runner, acquire credentials
-   or weaken a guard. Preserve failures, interruptions and missing evidence.
-6. Inspect the resulting diff, acceptance coverage and touched radius. Record
-   adjacent unrelated issues without silently broadening the slice.
+4. Reuse protection; add uncovered sourced behavior/boundaries or defect cases. Keep cases
+   required by accepted criteria or target gates, supplied outcomes, real subjects
+   and independent oracles. Cover all contract-required fields, not inferred
+   guarantees; tolerate behavior-preserving refactors. Inspect affected dependencies for source gaps;
+   ask a focused inclusion question before adding unsourced cases/assertions.
+   Sourced boundaries need no approval; omit speculation.
+5. Select checks from the actual diff, semantics, direct dependencies and target
+   gates. An edit, path, extension, report or SHA alone selects no test; prose
+   and whitespace need checks for actual parsing, schema, output or behavior
+   effects. Investigate unclear impact. Run necessary authorized checks with
+   actual target commands, working directory, prerequisites and output scope;
+   invent no runner, acquire no credentials and weaken no guard. Retain failures
+   and missing evidence. Test design, code and execution are separate results.
+6. Inspect the diff, acceptance coverage and touched radius. Stop dependent work
+   for unaccepted wider operations or semantic/architecture decisions; return
+   them to the coordination or task owner without unrelated cleanup.
 
-Use any supplied validation plan as an initial expectation, and revise
-conditional checks as actual edits reveal or remove impacts. Before execution,
-confirm which checks are necessary; after the change, confirm required
-acceptance evidence is complete. Do not silently cancel mandatory target gates
-or accepted acceptance requirements. Return newly discovered wider impacts or
-cross-task scheduling changes to the orchestration owner when one is selected;
-otherwise reconcile them through the existing task owner, without requiring an
-orchestrator installation. A change to accepted requirements needs its owner's
-decision. Bug reproduction, TDD and incremental checks may run before or during
-edits for a concrete purpose; the numbered steps do not require all testing to
-wait until implementation ends.
+Revise conditional validation as edits reveal or remove impacts; confirm
+necessity before execution and required evidence afterward. Bug reproduction,
+TDD and incremental checks may run before or during edits for a concrete purpose.
+Preserve mandatory gates, accepted cases, security and release obligations;
+changing accepted requirements needs their owner's decision.
 
-Large integration, E2E, usability, full installation/upgrade and high-cost AI checks
-need a clearly affected behavior/boundary or an explicit user request or accepted
-acceptance criterion; do not expand to a full matrix by default. Preserve
-mandatory target gates, security and release obligations. Reports, handoffs or
-SHA changes alone do not select tests. Explain an unnecessary check briefly in
-the existing result, without a new receipt, ledger or complete hash inventory.
+Large integration, E2E, usability, full installation/upgrade and high-cost AI
+checks need an affected boundary or explicit user/accepted requirement, not a
+default matrix. Weigh added detection against false failures and upkeep. Keep
+required real integration evidence; isolated checks cannot replace it, and
+unavailable facilities remain blocked/not-run. Explain omitted checks briefly
+in the existing result; no new form, ledger, hash inventory or skill is required.
 
 An unavailable editor prevents implementation. Missing validation tools or
 environment leaves checks blocked/not-run; keep the implementation result and

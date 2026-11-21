@@ -1,0 +1,78 @@
+metadata_version: 4
+id: software-architect
+version: 0.1.12
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read the selected instructions and permitted caller sources
+  for_operations:
+  - design
+  - review
+  on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+  - references/design.md
+  - references/knowledge.md
+  - references/review.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+- id: design
+  execution: instruction
+  inputs:
+  - Bounded software goal, sourced behavior, accepted model and quality constraints
+  - Existing dependencies, technology decisions, compatibility, authority and optional output destination
+  outputs:
+  - Software components, dependencies, ports and adapters, interaction and failure mechanisms
+  - Alternatives, quality arguments, feasibility conflicts, evolution impact and validation needs
+  instructions: references/design.md
+  implementation_status: implemented
+- id: review
+  execution: instruction
+  inputs:
+  - Fixed architecture identity, permitted evidence and requested coverage
+  - Source behavior, accepted model, quality constraints, selected rules and reviewer relationship
+  outputs:
+  - Read-only findings with location, criterion, trigger, impact, evidence and uncertainty
+  - Review classification, criterion coverage, valid alternatives and unresolved owner decisions
+  instructions: references/review.md
+  implementation_status: implemented
+knowledge_consumption:
+- id: common-software-architecture
+  package: engineering-common
+  version: 0.4.3
+  operations:
+  - design
+  - review
+  resources:
+  - engineering-rule-catalog
+  - member:references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md
+  - member:references/AUTHORING-BOUNDARY-CONTRACT.md
+  - member:references/TECHNOLOGY-SELECTION-POLICY.md
+  requirement: optional
+  on_missing: unavailable
+- id: dotnet-software-architecture
+  package: dotnet
+  version: 0.3.5
+  operations:
+  - design
+  - review
+  resources:
+  - engineering-rule-catalog
+  - member:application-types/web-api/controller-standards.md
+  - member:architecture/ddd-cqrs/building-blocks-reconstruction.md
+  - member:architecture/ddd-cqrs/project-structure.md
+  - member:architecture/ddd-cqrs/usecase-standards.md
+  - member:core/design-by-contract.md
+  - member:integration/messaging/transactional-messaging-standards.md
+  - member:integration/persistence/repository-standards.md
+  - member:references/policy-rationale.md
+  requirement: optional
+  on_missing: unavailable

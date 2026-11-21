@@ -17,8 +17,10 @@ wording selects it automatically.
 | An inbound/outbound adapter or interface, mapping and failure contract | adapter | [Adapter template](adapter-template.md) |
 
 
-Formal-test specifications, scenario notes, matrices and assertion/test design
-belong to `test-designer`. Preserve existing test-design identities and references
+Formal-test specifications, test-case matrices, fixture/oracle and assertion
+design belong to `test-designer`. Observable contract examples, including GWT,
+may be authored here; their format does not make them a test-design artifact.
+Preserve existing test-design identities and references
 when they explain system acceptance; do not author or redesign those artifacts
 as an incidental part of a system specification. Requirements, problem frames
 and compliance verdicts remain distinct outputs. Explicit skill selection with
@@ -141,3 +143,19 @@ questions, authorization state and requested next output. Optional future
 implementation or test work is not an authoring prerequisite. Another skill's
 document cannot supply missing stakeholder approval, and authoring itself
 grants no implementation, test execution, review or compliance authority.
+
+## Selected methods and feedback
+
+For requested optional knowledge follow [the installed protocol](knowledge.md)
+with capability `specification` and operation `draft` or `normalize`. BDD
+formulation supports precise observable examples; DDD discovery/tactical guidance
+helps interpret and express accepted language, responsibility and invariants.
+Read only needed allowlisted resources. These methods do not authorize choosing
+new aggregates, transaction owners, business rules, persistence or failure policy.
+
+If an example contradicts a requirement, preserve the conflict for its requirement
+owner. If accepted state or invariant ownership is unclear, identify the domain
+model question; if the mechanism cannot honor the contract, identify the software
+architecture question. Complete unaffected sections with explicit status instead
+of silently changing accepted behavior. Test levels/data/isolation/oracle machinery
+remain test-design work, using the same source/example IDs and original authority.

@@ -14,8 +14,21 @@ const directory=join(root,'.runtime','collaboration-trials',runId);
 const session={id:randomUUID(),pid:process.pid,action,started_at:new Date().toISOString(),node:process.version,platform:process.platform};
 const envelope={service_contract_version:'workflow-board/collaboration/1',schema_version:'1.0'};
 const ref={store_id:'board-project-trial',namespace:'personal',record_kind:'collaboration',workflow_id:runId};
-const skillRoot='.ai/core/skills/software-development-orchestrator';
-const selectedSources=['package.json','package-lock.json','drizzle.config.ts','.openai/hosting.json','AGENTS.md','README.md','ARCHITECTURE.md','PLATFORM-CONTRACT.md','.gitignore','.ai/custom/installation.json','.ai/framework.lock',`${skillRoot}/SKILL.md`,`${skillRoot}/skill-package.yaml`,`${skillRoot}/references/orchestrate.md`,'.agents/skills/software-development-orchestrator/SKILL.md','.agents/skills/slice-implementer/SKILL.md','.ai/core/skills/slice-implementer/SKILL.md','.ai/core/skills/slice-implementer/skill-package.yaml','.ai/core/skills/slice-implementer/references/implement.md','.ai/core/skills/slice-implementer/references/modes/generic.md','.dev/guides/collaboration-trial.md'];
+const selectionPath='.ai/project/installation.json';
+const lockPath='.ai/framework.lock';
+const orchestratorId='software-development-orchestrator';
+const sliceId='slice-implementer';
+const orchestratorRoot=`.ai/core/skills/${orchestratorId}`;
+const sliceRoot=`.ai/core/skills/${sliceId}`;
+const selectedSources=[
+ 'package.json','package-lock.json','drizzle.config.ts','.openai/hosting.json',
+ 'AGENTS.md','README.md','ARCHITECTURE.md','PLATFORM-CONTRACT.md','.gitignore',
+ selectionPath,lockPath,`${orchestratorRoot}/SKILL.md`,`${orchestratorRoot}/skill-package.yaml`,
+ `${orchestratorRoot}/references/orchestrate.md`,`.agents/skills/${orchestratorId}/SKILL.md`,
+ `.agents/skills/${sliceId}/SKILL.md`,`${sliceRoot}/SKILL.md`,`${sliceRoot}/skill-package.yaml`,
+ `${sliceRoot}/references/implement.md`,`${sliceRoot}/references/modes/generic.md`,
+ '.dev/guides/collaboration-trial.md',
+];
 const writeJson=(name,value,options={})=>writeFile(join(directory,name),JSON.stringify(value,null,2)+'\n',options);
 const readJson=async name=>JSON.parse(await readFile(join(directory,name),'utf8'));
 const exists=async path=>{try{await access(path);return true;}catch(error){if(error.code==='ENOENT')return false;throw error;}};
@@ -79,7 +92,7 @@ async function command(operation,name,payload,allowRejected=false){
 async function document(id,content){await command('document-'+id,'document.append',{document:{document_id:id,expected_document_revision:0,content},purpose:'supporting'});return {document_id:id,revision:1,content_hash:sha256(Buffer.from(content))};}
 const handoff={completed:'本機驗證輸出及來源已保存',remaining:'以新程序讀回同一工作並驗證重新認領',next_step:'執行 trial:collaboration resume；先讀 context、plan、指定 task definition，再認領',artifact_refs:[],blockers:[],limitations:['只有本機 loopback HTTP 與 SQLite；不代表 Sites 認證或不同模型 Agent session'],next_actor_hint:'同一可信本機試用 binding 的新程序'};
 async function assignment(taskId){return (await context()).tasks.items.find(t=>t.id===taskId)?.assignment?.ref;}
-async function claim(taskId,operation){return command(operation,'task.claim',{task_id:taskId,expected_definition_revision:1,session:{label:session.id,client:'local-trial-node-process',skill_id:taskId==='VALIDATE'?'slice-implementer':'software-development-orchestrator'}});}
+async function claim(taskId,operation){return command(operation,'task.claim',{task_id:taskId,expected_definition_revision:1,session:{label:session.id,client:'local-trial-node-process',skill_id:taskId==='VALIDATE'?sliceId:orchestratorId}});}
 async function complete(taskId,operation,summary,artifact){
  return command(operation,'task.complete',{task_id:taskId,assignment:await assignment(taskId),result:{summary,criterion_results:[{criterion_index:0,outcome:'satisfied',explanation:summary,evidence_ids:[]}],artifacts:artifact?[{kind:'document',ref:artifact}]:[],evidence:[],limitations:['本機試行證據；不代表 hosted 驗收、獨立 review 或使用者正式採用']}});
 }
@@ -90,13 +103,33 @@ try{
  const capabilities=await query('capabilities',{store_id:ref.store_id,namespace:'personal'});assert.ok(capabilities.commands.includes('task.claim'));
  if(action==='start'){
   const manifest=await readJson('source-manifest.json');
-  const selection=JSON.parse(await readFile(join(directory,'source/.ai/custom/installation.json'),'utf8'));assert.ok(selection.skills.includes('software-development-orchestrator'));assert.ok(selection.skills.includes('slice-implementer'));
-  const skill=await readFile(join(directory,'source',skillRoot,'SKILL.md'),'utf8');assert.match(skill,/does not prescribe a/);assert.match(skill,/does\s+not implement the retired/);
-  const mapping={source_skill:'software-development-orchestrator@0.2.0',mapping:[['goal','Workflow.goal'],['inputs / accepted artifacts','plan 原文、指定 document refs 與 source-manifest'],['output / check','TaskDefinition.completion_criteria 與 Result'],['owner / specialist','plan 內的 skill ID；實際 actor 由可信 adapter 提供'],['dependencies','TaskDefinition.dependencies'],['pending decision','Decision 與未完成項目'],['resume / handoff','context、指定版次讀取、handoff／assignment generation']],limits:['Skill 是流程指引，沒有自動 store writer；本專案 trial adapter 明確執行 DTO 寫入。','不宣稱全部已安裝 skills 已自動整合。'],sources:manifest.sources.filter(s=>s.path.startsWith(skillRoot)||s.path==='.ai/custom/installation.json'||s.path==='.ai/framework.lock')};
+  const selection=JSON.parse(await readFile(join(directory,'source',selectionPath),'utf8'));
+  assert.ok(selection.skills.includes(orchestratorId));
+  assert.ok(selection.skills.includes(sliceId));
+  const {parse}=await import('yaml');
+  const orchestrator=parse(await readFile(join(directory,'source',orchestratorRoot,'skill-package.yaml'),'utf8'));
+  const slice=parse(await readFile(join(directory,'source',sliceRoot,'skill-package.yaml'),'utf8'));
+  assert.equal(orchestrator.id,orchestratorId);
+  assert.equal(slice.id,sliceId);
+  assert.ok(typeof orchestrator.version==='string'&&orchestrator.version,'Orchestrator package version is missing');
+  assert.ok(typeof slice.version==='string'&&slice.version,'Slice implementer package version is missing');
+  const orchestratorRef=`${orchestrator.id}@${orchestrator.version}`;
+  const sliceRef=`${slice.id}@${slice.version}`;
+  const skill=await readFile(join(directory,'source',orchestratorRoot,'SKILL.md'),'utf8');assert.match(skill,/does not prescribe a/);assert.match(skill,/does\s+not implement the retired/);
+  const mapping={source_skill:orchestratorRef,mapping:[['goal','Workflow.goal'],['inputs / accepted artifacts','plan 原文、指定 document refs 與 source-manifest'],['output / check','TaskDefinition.completion_criteria 與 Result'],['owner / specialist','plan 內的 skill ID；實際 actor 由可信 adapter 提供'],['dependencies','TaskDefinition.dependencies'],['pending decision','Decision 與未完成項目'],['resume / handoff','context、指定版次讀取、handoff／assignment generation']],limits:['Skill 是流程指引，沒有自動 store writer；本專案 trial adapter 明確執行 DTO 寫入。','不宣稱全部已安裝 skills 已自動整合。'],sources:manifest.sources.filter(s=>s.path.startsWith(`${orchestratorRoot}/`)||s.path===selectionPath||s.path===lockPath)};
   await writeJson('skill-workflow-map.json',mapping,{flag:'wx'});
   const scope={included:'本專案 skill-workflow 對照、本機 MCP/SQLite 試用、保存多來源證據及跨程序續接',excluded:'push、merge、部署、線上權威切換、框架安裝變更、真實多人或多 Agent 身分隔離'};
-  await command('workflow-create','workflow.create',{title:'Workflow Board 專案內試用',goal:'讓本專案以已安裝 skill 指引操作 collaboration MVP，保留可離線回查的證據',scope,skill:{id:'software-development-orchestrator',version:'0.2.0'},external_work_refs:[]});
-  const planText=['# 專案內試行計畫','授權：使用者同意在自己專案測試試用，並要求不要以線上來源作唯一證據。','MAP：核對已安裝 skill 指引與 workflow 資訊。Owner：software-development-orchestrator@0.2.0。','VALIDATE：執行現有 Board test/build/validate，保留輸出及来源 hash。Owner：slice-implementer@0.2.0（generic）。','RESUME：新 OS process 讀回計畫與交接、重新認領，確認舊 assignment 被拒絕。Owner：software-development-orchestrator@0.2.0 resume。','單一可信本機測試 binding；程序 session 僅為描述資訊。','證據：source-manifest.json、source/、SQLite、mcp-transcript.jsonl、operations/、執行 logs。線上 Issues 的工作權威不被 trial store 取代。','結案只代表本機試行條件完成；hosted、真實 Agent session 與正式採用仍待另行驗證。'].join('\n');
+  await command('workflow-create','workflow.create',{title:'Workflow Board 專案內試用',goal:'讓本專案以已安裝 skill 指引操作 collaboration MVP，保留可離線回查的證據',scope,skill:{id:orchestrator.id,version:orchestrator.version},external_work_refs:[]});
+  const planText=[
+   '# 專案內試行計畫',
+   '授權：使用者同意在自己專案測試試用，並要求不要以線上來源作唯一證據。',
+   `MAP：核對已安裝 skill 指引與 workflow 資訊。Owner：${orchestratorRef}。`,
+   `VALIDATE：執行現有 Board test/build/validate，保留輸出及來源 hash。Owner：${sliceRef}（generic）。`,
+   `RESUME：新 OS process 讀回計畫與交接、重新認領，確認舊 assignment 被拒絕。Owner：${orchestratorRef} resume。`,
+   '單一可信本機測試 binding；程序 session 僅為描述資訊。',
+   '證據：source-manifest.json、source/、SQLite、mcp-transcript.jsonl、operations/、執行 logs。線上 Issues 的工作權威不被 trial store 取代。',
+   '結案只代表本機試行條件完成；hosted、真實 Agent session 與正式採用仍待另行驗證。',
+  ].join('\n');
   const plan={document_id:'plan',revision:1,content_hash:sha256(Buffer.from(planText))};
   const tasks=[['MAP','核對 skill 與 workflow 對照',[], '保存可回查的 skill 來源與欄位對照'],['VALIDATE','執行本機專案驗證',['MAP'],'固定來源下 test/build/validate 通過並保存輸出'],['RESUME','新程序續接與 generation fence',['VALIDATE'],'讀回原版並重新認領，舊 assignment 拒絕且保留回條']];
   await command('plan-revise','plan.revise',{plan:{document_id:'plan',expected_document_revision:0,content:planText},execution_impact:'declared',task_changes:tasks.map(([id,title,dependencies,criterion])=>({kind:'add',definition:{id,title,description:title+'；owner／inputs／checks 詳見固定版次 plan 與本機 guide。',scope,completion_criteria:[criterion],dependencies,plan_basis:plan,inputs:[],expected_artifacts:[],decision_ids:[],workstream:null}})),unaffected_task_ids:[],decision_dispositions:[],completion_requirements:tasks.map(([id,title])=>({id:'R-'+id,description:title,task_ids:[id],document_refs:[]})),requirement_dispositions:[]});

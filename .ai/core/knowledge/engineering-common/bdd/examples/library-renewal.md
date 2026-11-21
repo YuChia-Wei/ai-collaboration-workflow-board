@@ -61,17 +61,8 @@ If a real target supplies such a conflict, return it to the decision owner.
 
 ## Optional Gherkin expression
 
-```gherkin
-Feature: Renew a library loan
-  Rule: Another member's reservation prevents renewal
-    @R1 @AC1
-    Scenario: Refuse renewal and preserve the due date
-      Given Ada has borrowed loan L7 due on 20 October
-      And Ben has reserved the item on loan L7
-      When Ada requests renewal of loan L7
-      Then renewal of loan L7 is refused
-      And the due date of loan L7 remains 20 October
-```
+The [Gherkin file](library-renewal.feature) expresses S-R1-01 with the same
+R1/AC1 source and both observable outcomes.
 
 Use this expression when requested; scenario notes are sufficient otherwise.
 Tags retain useful identifiers but do not prove traceability by themselves.

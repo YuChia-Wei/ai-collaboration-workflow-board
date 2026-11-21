@@ -5,7 +5,7 @@ description: "Explore bounded requirements, or draft or normalize a requirement 
 
 # requirement-author
 
-Codex runtime entry for `requirement-author@0.2.1`. This generated projection does not
+Codex runtime entry for `requirement-author@0.2.6`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 

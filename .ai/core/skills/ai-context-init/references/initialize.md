@@ -145,6 +145,32 @@ structure and normative meaning. Preserve existing language ownership. A new
 CLAUDE entry is thin and imports the actual canonical file; it needs no copied
 rules. Other runtimes need their own selected adapter, not an invented equivalent.
 
+## After a framework update
+
+An installation result may provide `details.context_follow_up` with semantic
+assessment not performed. Treat it as a review prompt, not confirmed policy drift
+or permission to edit. An unchanged managed payload can coexist with an older
+project entry; do not limit this review to newly added files.
+
+For a selected refresh, verify the target's actual installation selection,
+configuration, model policy and any selected resource registries. Update their
+purpose and reading triggers in the existing root fact zone and project index.
+Resolve the actual layout, including supported legacy locations; link only
+existing resources. Their presence alone does not establish policy adoption.
+
+Compare relevant starter clauses with current project meaning and adopted
+decisions. Report missing navigation separately from changed collaboration rules.
+Apply authorized factual corrections, then hand off the concrete remaining rule
+differences, current clauses, candidate wording and decision sources to the
+target's maintenance owner. Existing `ai-context-governance propose/apply` may
+serve that owner when available; installing it is not required. Keep unresolved
+adoption choices visible. Do not silently expand refresh into baseline replacement.
+
+Report installation evidence, facts refreshed, policy maintenance performed or
+pending, intentional differences and unresolved decisions separately. Reuse an
+existing maintenance result when it still covers the current meaning; no duplicate
+ledger, mandatory new workflow or automatic whole-file template merge is needed.
+
 ## Apply and verify
 
 Prepare the exact file/directory changes and preserve the evidence for material

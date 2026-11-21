@@ -29,16 +29,8 @@ When identifies the event.
 Then describes what can be observed at the selected boundary.
 Use And or But to continue a role without hiding an unrelated behavior.
 
-```gherkin
-Feature: Renew a library loan
-  Rule: Another member's reservation prevents renewal
-    Scenario: Refuse renewal without changing the due date
-      Given Ada has borrowed loan L7 due on 20 October
-      And Ben has reserved the item on loan L7
-      When Ada requests renewal of loan L7
-      Then renewal of loan L7 is refused
-      And its due date remains 20 October
-```
+See the [library renewal feature](examples/library-renewal.feature) and its
+[rule and outcome reasoning](examples/library-renewal.md).
 
 The rule is illustrative unless supplied and agreed by the actual target.
 Both refusal and the unchanged date need supported expected outcomes.
@@ -49,6 +41,9 @@ A lower-level test can inspect a domain result or exception when that is its
 selected boundary; it must not be presented as end-to-end evidence.
 
 ## Keep scenarios independent
+
+Group examples under the business rule they illustrate. Add scenarios for
+distinct outcomes and boundary conditions.
 
 A scenario may be ordered for readability without relying on a preceding run.
 Establish its own loan, reservation and date state.

@@ -109,23 +109,23 @@ what meaning was retained, and unresolved gaps; do not claim new execution.
 
 ## Reason about the test before selecting its expression
 
-1. Map each selected criterion, risk or invariant to a planned check or explicit
-   gap. Use stable design/case/row IDs; a local ID must not impersonate an AC.
-2. Identify the real subject and observable result, including each important
-   state, relation, event or error. Preserve every accepted Then/And outcome
-   even when the final expression changes.
-3. State the independent oracle for each outcome or property. Bind exact values,
-   relations, ranges or exceptions to a source. If an oracle is missing, retain
-   an unresolved case with the needed decision instead of inventing its result.
-4. Select meaningful input partitions, edge values and specified failures.
-   Include ordering, duplicate, timeout, cancellation, concurrency or recovery
-   only when supported by the behavior and selected verification goal.
-5. Choose the test boundary against both the claim and actual target facilities.
-   Identify what can be controlled, what must be real and what is unavailable.
-6. Define data, identity, permissions, time, dependency responses, isolation and
-   cleanup needed for a repeatable check. Expose nondeterminism and unknowns.
-7. Select a proportionate expression and output format; record why it preserves
-   the reasoning above. Self-check coverage and feasibility without claiming a run.
+1. Map selected criteria, risks and invariants to existing protection, planned
+   cases or gaps. Retain source/case IDs; local IDs must not impersonate ACs.
+2. Identify the subject, observable outcomes and concrete failure each case
+   detects. Distinct failures, including boundary errors on shared paths, justify cases.
+3. Bind each assertion to an independent source. Missing or conflicting oracles
+   stay unresolved. Cover all contract-required fields, not inferred guarantees.
+4. Select sourced partitions, boundaries and failures; reuse adequate checks.
+   Inspect affected dependencies for risks missing from the sources; ask whether
+   to include them before adding cases/assertions. Sourced boundaries need no
+   new approval; omit speculative lists.
+5. Choose a credible boundary and repeatable fixture: data, identity, permissions,
+   time, responses, isolation and cleanup. Expose nondeterminism and missing facilities.
+6. Assert contracts; incidental structure, wording, order or call counts need a
+   source requirement. Behavior-preserving refactors should leave assertions valid.
+7. Weigh added detection against false failures, execution and maintenance cost.
+   Keep accepted outcomes and cases required by accepted criteria or target gates;
+   changing them needs their owner. Omit redundancy; self-check coverage without claiming a run.
 
 ## Choose a credible and feasible test level
 
@@ -137,15 +137,12 @@ what meaning was retained, and unresolved gaps; do not claim new execution.
 | Integration | Actual dependency interaction | Needs the selected real dependency and configuration |
 | Journey or cross-context | Coupled behavior across necessary boundaries | Needs the relevant real path and observable outcomes |
 
-These are reasoning options, not required folders or a fixed test pyramid.
-Use target-owned evidence to identify existing test facilities; do not infer
-availability from a profile name, dependency declaration or a method example.
-State a planned level separately from currently executable facilities.
-If required infrastructure is unavailable, preserve the required claim as
-blocked or not yet executable and name what is missing. A cheaper isolated test
-may address a separate bounded claim; it does not replace required integration.
-Prefer the smallest credible fixture that can establish the intended claim.
-A mock may isolate a dependency but must not replace the subject being verified.
+These boundaries are options, not required folders or a fixed pyramid. Verify
+actual target facilities; declarations and examples do not prove availability.
+Keep planned levels separate from executable facilities. Missing infrastructure
+leaves required claims blocked/not executable; isolated checks can establish
+only their own claims, not replace required integration. Use the smallest credible
+fixture, and never mock the subject being verified.
 
 ## Express the design in the selected form
 
@@ -198,3 +195,16 @@ Do not invent future files, commands, discovered tests or passing results.
 Implementation, executable-test review, actual execution and target acceptance
 remain distinct. An author using [review criteria](review.md) records self-check,
 not independent review or specification compliance.
+
+## Feedback from examples
+
+Reuse source/example IDs across requirement, model and system-specification work.
+Their GWT wording alone does not require another test-design operation. When the
+request is test design, add the necessary boundary, level, data, isolation, oracle
+and coverage decisions without replacing accepted behavioral outcomes.
+
+A counterexample may reveal an ambiguous business rule, disputed invariant owner,
+or infeasible technical mechanism. Return respectively to the requirement owner,
+domain-model designer or software architect with the trigger, evidence and impact.
+Keep affected expectations unresolved; do not revise tests or production behavior
+merely to hide the contradiction. A handoff carries existing permission unchanged.

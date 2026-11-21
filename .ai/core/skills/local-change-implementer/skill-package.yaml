@@ -1,6 +1,6 @@
 metadata_version: 4
 id: local-change-implementer
-version: 0.2.5
+version: 0.2.19
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -41,7 +41,7 @@ operations:
 knowledge_consumption:
 - id: common-local-change
   package: engineering-common
-  version: 0.3.0
+  version: 0.4.3
   operations:
   - implement
   resources:
@@ -49,17 +49,20 @@ knowledge_consumption:
   requirement: optional
   on_missing: unavailable
 - id: dotnet-local-change
-  package: dotnet-backend
-  version: 0.1.4
+  package: dotnet
+  version: 0.3.5
   operations:
   - implement
   resources:
-  # Controller is guidance only; access does not adopt a normative rule.
   - engineering-rule-catalog
-  - member:standards/coding-standards/aggregate-standards.md
-  - member:standards/coding-standards/controller-standards.md
-  - member:standards/coding-standards/repository-standards.md
-  - member:standards/coding-standards/test-standards.md
-  - member:standards/coding-standards/usecase-standards.md
+  - member:application-types/web-api/controller-standards.md
+  - member:architecture/ddd-cqrs/aggregate-standards.md
+  - member:architecture/ddd-cqrs/usecase-standards.md
+  - member:integration/persistence/repository-standards.md
+  - member:references/policy-rationale.md
+  - member:testing/test-standards.md
+  - member:tooling/development-tools.md
+  - member:tooling/generation/README.md
+  - member:tooling/implementation-guidance.md
   requirement: optional
   on_missing: unavailable

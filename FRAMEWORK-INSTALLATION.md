@@ -1,6 +1,63 @@
 # Framework 開發工具採用
 
-## 目前安裝：v0.20.1（#18，2026-10-20）
+## 目前安裝 v0.23.1（2026-11-21）
+
+Workflow Board 直接從 v0.20.1 升級至正式
+[v0.23.1](https://github.com/YuChia-Wei/ai-collaboration-framework/releases/tag/v0.23.1)，
+來源 commit 為 `5616b9236ab15cf41d16e16eca79f9171e039f3d`。
+原 `ddd-ca-hex-architect` 已退役，選配 `domain-model-designer` 和
+`software-architect` 接續既有領域建模與架構用途。其餘 skill ID 沿用。
+選擇為 Codex、original naming、`engineering-common`、`bindings: []`。
+
+| 套件 | 版本 |
+| --- | --- |
+| adr-author | 0.1.0 |
+| ai-context-init | 0.2.6 |
+| code-reviewer | 0.2.17 |
+| diagnostic-analyst | 0.1.0 |
+| domain-model-designer | 0.1.12 |
+| lesson-author | 0.2.0 |
+| local-change-implementer | 0.2.19 |
+| pr-author | 0.1.2 |
+| problem-frame-author | 0.1.0 |
+| requirement-author | 0.2.6 |
+| slice-implementer | 0.2.19 |
+| software-architect | 0.1.12 |
+| software-development-orchestrator | 0.5.0 |
+| spec-author | 0.3.3 |
+| spec-compliance-validator | 0.1.0 |
+| test-designer | 0.4.15 |
+| engineering-common | 0.4.3 |
+| Codex adapter | 0.1.0 |
+
+專案選配儲存在 [.ai/project/installation.json](.ai/project/installation.json)。
+安裝器將原 `.ai/custom/` 搬到 `.ai/project/`，保留
+[初次採用證據](.ai/project/adoption-evidence.json) 的原始位元組。
+Codex 入口位於 `.agents/skills/<id>/SKILL.md`。`.ai/framework.lock`
+記錄受管清單並綁定新路徑的選配檔。既有 Board 協作規則與初始化沿用。
+
+### 本機升級驗證
+
+- GitHub 資產、sidecar 與 release manifest 的 ZIP SHA-256 相符，並逐檔核對了
+  378 個封存成員。計畫為 19 新增、53 更新、5 移除與 95 相同的受管檔案。
+- 安裝器回報 `directory-drift` 後，使用同一份 engine、pin 與原 journal
+  執行 `recover finish` 完成。最終 `inspect` 確認 167 個受管檔案
+  `managed-bytes-consistent`，安裝前後 285 個其餘既有 tracked
+  檔案的 raw SHA-256 相符。
+- 官方 reader 讀回 36 個 resources、0 bindings。已安裝的 `adr-author explain`
+  回報 `succeeded`，`mutation_state` 為 `none`。
+- 本機協作試行 `start → validate → resume` 完成。來源快照讀取新路徑的
+  選配檔，並記錄 `software-development-orchestrator@0.5.0` 與
+  `slice-implementer@0.2.19`。試行執行的 `npm test`、`npm run build` 與
+  `npm run validate` 均通過，另有 5 項 `npm run test:tooling` 檢查通過。
+- 新 Codex 對話的自動 skill discovery 留待實際載入時確認。
+
+Lock SHA-256 為
+`f9b92e77f2ad3cb98852d55c8faf2bb0ed9cfb5f8bce10853fbd67ed845dc676`。
+原始封存檔、計畫、回應與本次復原紀錄存放在 RAMDISK
+`F:\wb-aicf-0231-20261121`。
+
+## v0.20.1 升級歷史（#18，2026-10-20）
 
 依 owner「開始處理」授權，從 v0.19.1 直接升級至正式
 [v0.20.1](https://github.com/YuChia-Wei/ai-collaboration-framework/releases/tag/v0.20.1)。
@@ -8,7 +65,7 @@
 原 15 項 skill 選配保留；依該版手冊將退役 ID
 `bdd-gwt-test-designer` 明確替換為 `test-designer`，沒有安裝 alias。
 
-| 套件 | 目前版本 |
+| 套件 | 當時版本 |
 | --- | --- |
 | adr-author | 0.1.0 |
 | ai-context-init | 0.2.1 |
@@ -76,7 +133,7 @@ sub-agent profiles、Claude、`user-story-author` 或 `workflow-records`。
 
 ## v0.19.1 安裝與初始化歷史（#9）
 
-以下保留當時的版本、驗證與維護紀錄；目前安裝狀態以上節為準。
+以下保留當時的版本、驗證與維護紀錄。目前安裝狀態見本頁首節。
 
 2026-10-12 依專案擁有者指示完成選配安裝。來源為正式發布的
 [Framework v0.19.1](https://github.com/YuChia-Wei/ai-collaboration-framework/releases/tag/v0.19.1)，
@@ -136,7 +193,7 @@ Framework 安裝工具需要 Python ≥3.10 與 PyYAML 6.x；已裝 ADR／Lesson
 AGENTS；它們不是 installer 覆寫的內容。Board 應用程式與原有契約 bytes 未變。
 ZIP、engine、candidate、操作 journal 及原始測試輸出不提交；本機證據在已忽略的
 `.runtime/framework-install/`，公開可審核摘要為
-[adoption-evidence.json](.ai/custom/adoption-evidence.json)。
+[adoption-evidence.json](.ai/project/adoption-evidence.json)。
 
 ## 使用與 spec 起點
 

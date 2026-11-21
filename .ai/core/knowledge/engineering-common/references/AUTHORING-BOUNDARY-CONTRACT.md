@@ -11,11 +11,16 @@ distinct. Select the requested output before using the format of the input.
 | Bounded requirement exploration, stakeholder goals, business rules and acceptance criteria | `requirement-author` | Code is observed current behavior, not confirmation of business intent. |
 | A production, entity or adapter system specification from requirements and accepted design | `spec-author` | Preserve design source identities, decisions and the selected system-spec contract. |
 | A CBF/SWF model and its required file set for a selected use case/workpiece | `problem-frame-author` | Preserve source bindings and distinguish observed/inferred behavior from approved requirements. Drafting is not compliance validation. |
-| General test designs, GWT scenarios or formal test specifications | `test-designer` | One owner controls test-design semantics and selected formal-test output; implementation and execution remain separate. |
-| An unresolved responsibility, aggregate, port or dependency-direction decision | `ddd-ca-hex-architect` | Resolve the specific architecture decision; do not rewrite already accepted requirements. |
+| General test designs, GWT test scenarios or formal test specifications | `test-designer` | One owner controls test-design semantics and selected formal-test output; implementation and execution remain separate. |
+| A dedicated Story plan, draft, normalization or whole/selected-AC review | `user-story-author` | Preserve value, sources and observable AC; no upstream authoring stage is required. |
+| An unresolved domain-language, state, aggregate or invariant-ownership decision | `domain-model-designer` | Explore/design/review the model; do not select software mechanisms or rewrite accepted business policy. |
+| An unresolved software-boundary, port, dependency or technical consistency decision | `software-architect` | Design/review mechanisms against accepted behavior/model; return feasibility conflicts to the relevant owner. |
 
-A generic word such as "spec", shared input files, file count or the presence of
-code does not identify the requested artifact. If the artifact or necessary
+A generic word such as "spec", shared input files, file count, GWT wording or
+the presence of code does not identify the requested artifact. Requirements,
+Stories, models and system specs may contain observable examples. Test boundary,
+level, data, isolation, oracle machinery and coverage design belong to test-designer.
+Reuse shared example IDs; do not create a second owner merely from their format. If the artifact or necessary
 authority cannot be determined from the request and current context, ask one
 focused question before authoring an assumed document type. Honor an explicit
 skill selection; if it conflicts with the requested artifact, explain the
