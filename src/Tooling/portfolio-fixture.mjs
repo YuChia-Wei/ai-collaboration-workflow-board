@@ -2,13 +2,6 @@ import {contentDigest} from '../Core/Workflows/Domain/collaboration-values.mjs';
 
 // All product names, work items and observations in this preview are fictional.
 export async function seedPortfolioPreview(call, store) {
-  await call('/api/commands', {
-    service_contract_version:'framework-board/1', type:'create_workflow', workflow_id:'opening-hours',
-    operation_id:'seed-opening-hours', expected_revision:0, payload:{
-      title:'確認場地開放時間', goal:'對照公告與預約時段。', workflow_kind:'場地維護', owner_skill:'場地管理',
-      authorized_scope:'此合成範例', next_step:'核對週末時段。', next_owner:'值班人員'
-    }
-  });
   const v2 = {service_contract_version:'workflow-board/collaboration/2', schema_version:'2.0'};
   const observedAt = '2026-01-07T08:00:00.000Z';
   function pbi(repository_id, number, title, project_status) {
@@ -53,4 +46,7 @@ export async function seedPortfolioPreview(call, store) {
     await send('handoff.record', {task_id:null, handoff:{completed:flow.evidence, remaining:flow.next, next_step:flow.next,
       artifact_refs:[{kind:'document',ref:plan}], blockers:[], limitations:[], next_actor_hint:null}});
   }
+  await call('/api/portfolio/v1/command', {store_id:store, project_id:'river', operation_id:'create-WF-33',
+    command:'workflow.create', workflow_id:'WF-33', expected_revision:0, title:'準備夜間開放計畫',
+    goal:'安排夜間開放需要的人力。', pbis:[]});
 }

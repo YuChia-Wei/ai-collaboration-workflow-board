@@ -41,7 +41,7 @@ assert.equal(
 const page=await workerModule.default.fetch(new Request("https://artifact.test/"),{});
 assert.equal(page.status,200);
 const pageHtml=await page.text();
-assert.match(pageHtml,/工作紀錄/);
+assert.match(pageHtml,/<title>Workflow Board<\/title>/);
 const browserScripts=[...pageHtml.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)];
 assert.ok(browserScripts.length>0,"Final Worker HTML must contain the browser entry script");
 for(const [index,script] of browserScripts.entries())new Script(script[1],{filename:`embedded-browser-${index}.js`});

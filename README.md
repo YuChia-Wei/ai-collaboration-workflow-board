@@ -1,6 +1,6 @@
 # AI Collaboration Workflow Board
 
-工作流程、任務與文件紀錄專案。所有程式碼專案都位於 `src/`；網站建置結果、preview、SQLite、憑證與測試證據不進入 Git。
+Workflow Board 讓人從首頁看到有哪些產品、哪些 workflow 正在進行。選一個產品，在 **Scrum Board** 查看產品工作項目（PBI），在 **Workflow Board** 查看實作進度。從 PBI 可找到共用的工作流程，也能將調查中的 workflow 補連回適當的 PBI，讓下一個 session 從原工作繼續。[網頁使用方式](src/Presentation/Web/README.md)
 
 開發協作選配 Framework v0.23.1 的 16 個 skills 與 `engineering-common@0.4.3`。原架構 skill 的用途由 `domain-model-designer` 與 `software-architect` 接續。精確清單與驗證見 [FRAMEWORK-INSTALLATION.md](FRAMEWORK-INSTALLATION.md)，Agent 入口見 [AGENTS.md](AGENTS.md)，開始方式見 [第一個有界任務](.dev/guides/first-task.md)。
 
@@ -16,7 +16,7 @@
 | `src/Prototypes/WorkflowRecords/` | Python 本機紀錄服務：SQLite、HTTP CLI、MCP stdio、可攜匯出／還原與合成資料測試 |
 | `.github/workflows/ci.yml` | GitHub Actions 測試、建置、產物保存 |
 
-兩個實作有自己的契約與儲存模型，沒有隱含的雙向同步。網站保存既有 framework 來源快照與人工 board 紀錄；本機服務使用合成 fixture。資料來源的權威切換與真實資料遷移需要各自的驗證。
+正式網站的產品與工作由 Sites D1 保存。本機預覽另外建立合成 fixture。Python 原型有自己的契約與儲存模型。
 
 程式依領域規則、應用案例、輸入／輸出 adapters 分類。具體依賴方向與保留的限制見 [ARCHITECTURE.md](ARCHITECTURE.md)。詳細契約見 [網站說明](Docs/board.md) 與 [本機服務說明](src/Prototypes/WorkflowRecords/README.md)。
 
@@ -69,10 +69,8 @@ npm run preview:portfolio
 
 ## 部署
 
-目前保留同一個 ChatGPT Sites project、D1 binding 與私有存取方式。`.openai/hosting.json` 只保存平台連結與邏輯 binding，沒有憑證。GitHub Actions 的建置成功與 Sites 的發布成功是兩個不同狀態。
-
-2026-10-07 核對結果：Sites 原生支援建置、儲存版本與部署；符合資格的帳號另有短期推送後私有發布能力。公開文件尚未建立可由一般 GitHub Actions 長期、無人值守直接發布既有 Sites 的 CLI／API 契約。完整流程、已確認能力與尚待確認事項見 [DEPLOYMENT.md](DEPLOYMENT.md)。
+先將已驗證的變更推到 GitHub `main`，讀回遠端 commit，再以相同的完整 Git tree 建置並部署到既有私人 Site。發布前核對產物，發布後核對正式版本與 GitHub commit。[部署流程](DEPLOYMENT.md)
 
 歷史 P0/P1 平台評估保留於 [PLATFORM-CONTRACT.md](PLATFORM-CONTRACT.md)，其中未實作的平台敘述屬於當時本機 prototype 的範圍。
 
-[#22 專案範圍契約](src/Contracts/CollaborationV2/README.md) 新增 collaboration/2、同 owner 的穩定 project ID 與 UI／CLI／MCP 選擇。既有 collaboration/1 明確保留為 legacy-personal；本次本機實作及證據不表示線上 Site 已升級。
+一個產品對應一個 Board project。CLI／MCP 的專案識別及既有協作資料讀取規則見 [collaboration/2 契約](src/Contracts/CollaborationV2/README.md)。

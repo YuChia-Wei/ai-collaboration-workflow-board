@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {isAbsolute} from 'node:path';
-import {startCollaborationPreview} from '../Tooling/collaboration-ui-preview.mjs';
+import {startPortfolioPreview} from '../Tooling/collaboration-ui-preview.mjs';
 
 // The only server is a loopback preview of the built Worker, backed by a new
 // in-memory database. The driver uses an installed Chromium browser.
@@ -16,7 +16,7 @@ if (scratch) {
 const {chromium} = await import('playwright-core');
 const executablePath = process.env.BOARD_BROWSER_PATH;
 const launch = executablePath ? {executablePath} : {channel:process.platform==='win32'?'msedge':'chrome'};
-const preview = await startCollaborationPreview({portfolio:true});
+const preview = await startPortfolioPreview();
 let browser;
 try {
   browser = await chromium.launch({...launch, headless:true});
@@ -34,6 +34,11 @@ try {
     page.on('response', response=>{
       if (response.status()>=400) faults.push(response.status()+' '+response.url());
     });
+    page.on('request', request=>{
+      if (new URL(request.url()).pathname==='/api/portfolio/v1/query' && request.postDataJSON()?.project_id==='legacy-personal') {
+        faults.push('The product UI requested a virtual personal workspace.');
+      }
+    });
     await page.goto(preview.url);
     return {page, context};
   }
@@ -47,82 +52,52 @@ try {
     await region.waitFor();
     assert.deepEqual((await region.getByRole('link').allTextContents()).sort(), [...expected].sort());
   }
-  const workspaceLabels = ['產品總覽','Workflow 協作','專案來源副本','人工與歷史來源'];
-  const workspaceNav = page => page.getByRole('banner').getByRole('navigation',{name:'工作空間'});
-  async function expectWorkspace(page, name, pageHeading=name) {
-    await heading(page,pageHeading);
-    assert.deepEqual(await page.getByRole('heading',{level:1}).allTextContents(),[pageHeading]);
-    assert.equal(await page.title(),pageHeading+' · 工作紀錄室');
-    const nav = workspaceNav(page);
-    await nav.waitFor();
-    assert.deepEqual(await nav.getByRole('link').allTextContents(),workspaceLabels);
-    assert.equal(await nav.locator('[aria-current="page"]').innerText(),name);
-    const menu = await nav.boundingBox();
-    const title = await page.getByRole('heading',{level:1}).boundingBox();
-    assert.ok(menu.y+menu.height<=title.y,'Workspace navigation should appear above the page heading.');
-    for (const label of workspaceLabels) {
-      const href = await link(nav,label).getAttribute('href');
-      assert.equal(new URL(href,preview.url).searchParams.get('store'),'board-ui-preview');
-    }
-  }
+  const boardNav = page => page.getByRole('navigation',{name:'產品看板'});
+  const retiredNames = /Workflow 協作|專案來源副本|人工與歷史來源|既有 personal 紀錄/;
   const writer = await openSession();
   const page = writer.page;
-  await heading(page,'產品總覽');
-  await link(workspaceNav(page),'人工與歷史來源').click();
-  const recordTabs = page.getByRole('navigation',{name:'紀錄內容'});
-  await recordTabs.getByRole('button',{name:/^文件/}).click();
-  await recordTabs.getByRole('button',{name:'交接',exact:true}).click();
-  await expectWorkspace(page,'人工與歷史來源');
-  await page.reload();
-  await recordTabs.waitFor();
-  await expectWorkspace(page,'人工與歷史來源');
+  for (const view of ['collaboration','source-replica','records']) {
+    await page.goto(preview.origin+'/?view='+view+'&store=board-ui-preview&project=legacy-personal');
+    await heading(page,'產品總覽');
+    await link(section(page,'產品'),'澄河').waitFor();
+    assert.doesNotMatch(await page.locator('body').innerText(),retiredNames);
+  }
+  const products = section(page,'產品').getByRole('article');
+  assert.equal(await products.count(),2);
+  for (const name of ['澄河','石庭']) {
+    const product = products.filter({has:link(page,name)});
+    await link(product,'Scrum Board').waitFor();
+    await link(product,'Workflow Board').waitFor();
+  }
   const desktopSize = page.viewportSize();
   await page.setViewportSize({width:390,height:844});
+  await link(products.filter({has:link(page,'澄河')}),'Workflow Board').click();
+  await heading(page,'澄河');
+  assert.equal(await boardNav(page).locator('[aria-current="page"]').innerText(),'Workflow Board');
+  await link(section(page,'工作流程'),solo).click();
+  await heading(page,solo);
   await page.reload();
-  const manualRecord = page.getByRole('button',{name:/確認場地開放時間/});
-  await manualRecord.waitFor();
-  await expectWorkspace(page,'人工與歷史來源');
-  await manualRecord.click();
-  await recordTabs.waitFor();
-  await expectWorkspace(page,'人工與歷史來源');
-  await page.getByRole('button',{name:/回到紀錄列表/}).click();
-  await manualRecord.waitFor();
-  await expectWorkspace(page,'人工與歷史來源');
+  await heading(page,solo);
+  await link(boardNav(page),'Scrum Board').click();
+  await link(section(page,'產品待辦項目'),first).waitFor();
+  assert.equal(await boardNav(page).locator('[aria-current="page"]').innerText(),'Scrum Board');
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),
+    'Mobile boards must fit the viewport; columns may scroll inside their board.');
   await page.setViewportSize(desktopSize);
-  await link(workspaceNav(page),'專案來源副本').click();
-  await page.getByRole('combobox',{name:'目前專案'}).selectOption('river');
-  await page.getByText(/此專案尚無已公布的來源副本/).waitFor();
-  await expectWorkspace(page,'專案來源副本');
-  await page.reload();
-  await page.getByText(/此專案尚無已公布的來源副本/).waitFor();
-  await expectWorkspace(page,'專案來源副本');
-  await link(workspaceNav(page),'Workflow 協作').click();
-  await page.getByRole('combobox',{name:'專案',exact:true}).selectOption('river');
-  await page.getByRole('button',{name:new RegExp(solo)}).click();
-  await page.getByRole('navigation',{name:'Workflow 詳情'}).getByRole('button',{name:/^交接/}).click();
-  await expectWorkspace(page,'Workflow 協作');
-  await page.reload();
-  await page.getByRole('navigation',{name:'Workflow 詳情'}).waitFor();
-  await expectWorkspace(page,'Workflow 協作');
-  await link(workspaceNav(page),'產品總覽').click();
-  await expectWorkspace(page,'產品總覽');
-  await page.reload();
-  await expectWorkspace(page,'產品總覽');
-  await expectLinks(section(page,'產品'),['澄河','石庭']);
+  await page.goto(preview.url);
   const active = section(page,'進行中的工作');
   const cards = active.locator('article');
-  assert.equal(await cards.count(),2);
+  await expectLinks(active,[shared,solo]);
   assert.doesNotMatch(await cards.filter({has:link(page,shared)}).innerText(),/預約頁顯示時區/);
   assert.match(await cards.filter({has:link(page,solo)}).innerText(),/待決：預約頁顯示時區/);
   await link(section(page,'產品'),'澄河').click();
-  await expectWorkspace(page,'產品總覽','澄河');
-  await expectLinks(section(page,'Scrum 工作項目（PBI）'),[first,second,third]);
+  await heading(page,'澄河');
+  await expectLinks(section(page,'產品待辦項目'),[first,second,third]);
   await link(page,third).click();
   await expectLinks(section(page,'關聯工作流程'),[]);
-  await link(page,'澄河').click();
-  await link(page,'Workflow 執行看板').click();
-  await expectLinks(section(page,'Workflow 執行看板'),[shared,solo]);
-  await link(page,'Scrum 工作項目（PBI）').click();
+  await link(boardNav(page),'Workflow Board').click();
+  await expectLinks(section(page,'工作流程'),[shared,solo,'準備夜間開放計畫']);
+  await link(boardNav(page),'Scrum Board').click();
   await link(page,first).click();
   await expectLinks(section(page,'關聯工作流程'),[shared]);
   await link(page,shared).click();
@@ -168,7 +143,7 @@ try {
   await expectLinks(section(other,'關聯工作流程'),['覆核目錄範例']);
   await reader.context.close();
   assert.deepEqual(faults,[]);
-  console.log('PASS: workspace navigation and reload across all four views, stable page names with selected records, shared workflow, link and unlink, fresh-context read-back of evidence and handoff, same-number issue isolation, and workflow creation from a PBI.');
+  console.log('PASS: product overview and active work, retired entry points, mobile board navigation, scoped Scrum and Workflow Boards, shared PBI links, cross-session evidence and handoff, unlink and create from a PBI.');
 } finally {
   try {await browser?.close();} finally {await preview.close();}
 }

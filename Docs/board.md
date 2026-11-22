@@ -1,4 +1,8 @@
-# 工作紀錄室：Framework workflow board
+# Workflow Board
+
+從首頁的產品總覽選取產品，再進入 Scrum Board 查看 PBI，或進入 Workflow Board 查看執行、證據與交接。首頁也能直接打開一筆進行中的工作。[網頁入口與操作](../src/Presentation/Web/README.md) · [合成資料預覽](../README.md#試用產品總覽與兩種看板)
+
+## 早期版本的匯入與人工紀錄
 
 本人私有的繁體中文工作流程紀錄網站。呈現 ai-collaboration-framework 的 Git 工作紀錄快照，保留來源 ID、狀態、task 原始 metadata 與文件原文；匯入資料為唯讀，原 repo 保持原狀。另可建立本人的網站紀錄。
 
@@ -60,7 +64,7 @@ Domain 不依賴 HTTP 或資料庫；application 使用 repository ports，D1 ad
 
 建置使用 esbuild 封裝 Worker ESM 於 `dist/server/index.js`，並將 schema migrations 放在 Sites 使用的 `dist/.openai/drizzle/`。`.openai/hosting.json` 保留既有 Sites project 的 metadata。[GitHub Actions CI](../.github/workflows/ci.yml) 負責可重現的安裝、測試、建置與 artifact 驗證；部署環境與身分設定請參閱 repository 根目錄的部署說明。GitHub repo 的 push／merge 與遠端部署為各自的操作。
 
-## 新版 board
+## 歷史實作：來源快照與人工看板
 
 來源快照與線上人工紀錄有不同 namespace。畫面按來源 workflow ID 顯示最近紀錄，支援名稱、ID、Issue／PR、kind、owner skill、status 及來源篩選，API 分頁回傳最多 50 筆摘要。文件按需載入，不把所有原文混入詳情回應。Markdown 支援表格、程式碼區塊及連結，渲染後清理 HTML；同 workflow 的相對連結開啟保存的來源文件。
 

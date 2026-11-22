@@ -4,7 +4,7 @@
 
 ## GitHub 第一版的使用方式
 
-打開 Board 先看到自己有哪些產品、哪些 workflow 進行中或受阻、哪件事待決，以及最後一次取得狀態的時間。可以直接接手一個 workflow，也可以循「產品 → Scrum Board（產品待辦看板）→ PBI → Workflow Board（執行看板）」查清它正在解決的問題。第一版一個產品對應一個 Board 專案。已有 GitHub Project 的產品可沿用欄位與排序；只有 repository Issues 的產品也能開始工作。
+打開 Board 先看到自己有哪些產品、哪些 workflow 進行中或受阻、哪件事待決，以及最後一次取得狀態的時間。第一版一個產品對應一個明確的 Board 專案。每個產品都有平行的 Scrum Board（產品待辦看板）與 Workflow Board（執行看板）。前者從 PBI 找到實作，後者從工作流程查看它支援的 PBI。首頁也能直接接手一個產品的 workflow。GitHub 整合階段，有 Project 的產品可沿用欄位與排序，只有 repository Issues 的產品也能開始工作。
 
 | 領域與畫面 | 使用者在此做的事 | 資料與行為的歸屬 |
 | --- | --- | --- |

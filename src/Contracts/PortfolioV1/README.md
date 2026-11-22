@@ -4,7 +4,7 @@
 
 ## 讀取
 
-`POST /api/portfolio/v1/query` 接受 `{store_id,project_id}`，需要 read。回應有 `product`（project_id、name）、`catalog` 與 `workflows`。每個 workflow 恰有一筆；以其 `workflow_ref` 打開原生協作紀錄。專案內的 collaboration/2 工作及 legacy-personal 對應的 collaboration/1 工作都可讀。來源副本與人工歷史仍由既有入口查閱。
+`POST /api/portfolio/v1/query` 接受 `{store_id,project_id}`，需要 read。回應有 `product`（project_id、name）、`catalog` 與 `workflows`。每個 workflow 恰有一筆，並以 `workflow_ref` 識別。服務可讀取專案內的 collaboration/2 工作，以及 legacy-personal 對應的 collaboration/1 工作。產品首頁只列明確建立的專案，從產品看板開啟該產品的 PBI 和 workflow。
 
 首頁在同一請求加入 `view: "overview"` 可取得 `workflow_count`（所有生命週期狀態）及 `workflows`（只含 active 的工作卡）。卡片提供 workflow_ref、workflow_id、title、status、revision、source、updated_at、pbi_count、blocked_tasks 與 pending_decisions。catalog 在這個檢視只提供 coverage、observed_at 與 revision。讀取既有 active 工作時，服務可從該工作目前修訂的快照還原卡片。兩種讀取均回傳 `can_plan`，供介面按實際權限呈現規劃操作；寫入時服務再次驗證。
 

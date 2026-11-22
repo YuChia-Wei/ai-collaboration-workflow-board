@@ -1,12 +1,13 @@
-// Preserve bookmarked manual and collaboration workspaces.
-const params = new URLSearchParams(location.search);
-const view = params.get('view');
-if (view === 'source-replica') {
-  import('./source-replica-app.mjs');
-} else if (view === 'collaboration') {
-  import('./collaboration-app.mjs');
-} else if (view === 'portfolio' || (!view && !location.hash && [...params.keys()].every(key => key === 'store'))) {
-  import('./portfolio-app.mjs');
-} else {
-  import('./app.mjs');
+const url = new URL(location.href);
+const params = url.searchParams;
+const product = params.get('product');
+const otherView = params.has('view') && params.get('view') !== 'portfolio';
+if (otherView || product === 'legacy-personal' || (!product && (params.has('project') || params.has('workflow') || url.hash))) {
+  const store = params.get('store');
+  url.hash = '';
+  url.search = '';
+  if (store) url.searchParams.set('store', store);
+  history.replaceState(null, '', url);
 }
+
+import('./portfolio-app.mjs');

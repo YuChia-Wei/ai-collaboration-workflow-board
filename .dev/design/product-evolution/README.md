@@ -2,7 +2,7 @@
 
 ## 目前從這裡開始（2026-11-22）
 
-先開啟[產品總覽互動樣稿](github-v1-demo.html)，選一個產品、查看 PBI、接手 workflow。樣稿使用虛構資料，可以重設。接著閱讀[產品範圍](product-scope.md)、[第一版 PBI、順序與現有 Issues 對照](board-roadmap.md)及[合成驗收範例](github-v1-examples.md)。首個里程碑是可以操作的畫面與領域行為；GitHub Issues／Projects 的整合及寫回接在其後。
+先啟動[實際 Web UI 的合成預覽](../../../README.md#試用產品總覽與兩種看板)，從產品總覽選一個產品，在 Scrum Board 查看 PBI、在 Workflow Board 接手工作。兩者共用同一份工作關聯。接著閱讀[產品範圍](product-scope.md)、[第一版 PBI、順序與現有 Issues 對照](board-roadmap.md)及[合成驗收範例](github-v1-examples.md)。GitHub Issues／Projects 的整合及寫回接在畫面驗收之後。[初期離線樣稿](github-v1-demo.html)
 
 本輪承接四段歷史討論：保留 Board 的進度與交接職責、各入口共用的領域規則、協作優先於執行管理，以及交付與實際部署各自的證據。2026-11-22 的範圍修訂取代早期只保存外部 PBI 引用的決定。[設計與 Issues](codex://threads/01a1695f-9b8f-7791-83d2-45a5b2096306) · [核心與展現層](codex://threads/01a163de-8baf-71a3-8616-5432296b47e2) · [本機 APP 與 ADE](codex://threads/01a15947-03ec-7380-b1e2-94ae5c77f5b5) · [來源架構與部署](codex://threads/01a11682-b2ec-7823-9596-57f3d51696e2)
 

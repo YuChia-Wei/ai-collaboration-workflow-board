@@ -1,5 +1,4 @@
 import {structuredMarkup,rawDisclosure} from './content-view.mjs';
-import {workspaceHref,workspaceLabel} from './workspace-shell.mjs';
 export const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const labels={draft:'草稿',active:'執行中',paused:'已暫停',cancelled:'已取消',completed:'已完成',pending:'待處理',in_progress:'執行中',blocked:'受阻',decided:'已決定',waived:'已豁免'};
 export const badge=s=>`<span class="badge ${esc(s)}">${esc(labels[s]||s)}</span>`;
@@ -14,13 +13,6 @@ const artifacts=items=>(items||[]).map(a=>a.kind==='document'?documentButton(a.r
 
 export function listMarkup(items,selected) {
   return items.map(w=>`<button class="item ${w.workflow_ref.workflow_id===selected?'selected':''}" data-workflow="${esc(w.workflow_ref.workflow_id)}"><div class="c-row">${badge(w.status)}<span class="small">r${w.revision}</span></div><h2>${esc(w.title)}</h2><p class="monospace">${esc(w.workflow_ref.workflow_id)}</p><span class="c-open">查看進度與交接 →</span></button>`).join('')||'<div class="empty">沒有符合的協作 workflow。此處不會改讀人工或來源快照資料。</div>';
-}
-
-export function emptyCollaborationMarkup(search=false,store=''){
-  return `<div class="topline"><button id="c-back" class="subtle">← 工作流程列表</button></div>
-    <div class="c-board-heading"><h2>工作看板</h2><a href="${esc(workspaceHref('records',store))}">${workspaceLabel('records')}</a></div>
-    <div class="warn"><strong>${search?'沒有符合搜尋條件的協作工作流程':'目前尚無協作工作流程'}</strong><p>${search?'請調整搜尋條件。':'可以切換專案，或從「人工與歷史來源」查閱人工紀錄與歷史快照。'}</p></div>
-    <div class="c-board" role="region" aria-label="工作進度看板">${['pending','in_progress','blocked','completed'].map(s=>`<section class="c-column c-column-${s}" aria-label="${labels[s]}"><header><h3><span class="c-dot"></span>${labels[s]}</h3><span class="c-column-count">0</span></header><p class="c-column-empty">目前沒有工作</p></section>`).join('')}</div>`;
 }
 
 export function detailMarkup(c,tab) {
