@@ -3886,6 +3886,8 @@
         "name": {
           "enum": [
             "WorkflowCreated",
+            "PortfolioPbisLinked",
+            "PortfolioPbisUnlinked",
             "WorkflowStarted",
             "WorkflowPaused",
             "WorkflowResumed",

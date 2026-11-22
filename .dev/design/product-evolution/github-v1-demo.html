@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>產品總覽 · 工作看板示例</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #f5f5ef;
+  color: #202d28;
+  font: 1rem/1.65 system-ui,sans-serif;
+}
+header {
+  background: #203e36;
+  color: white;
+  padding: 1rem max(5vw,calc((100vw - 960px)/2));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+header strong {
+  font-size: 1.15rem;
+}
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 2rem 20px 5rem;
+}
+h1 {
+  font-size: clamp(2rem,5vw,3rem);
+  line-height: 1.2;
+  margin: 1rem 0;
+}
+h2 {
+  margin: 2rem 0 .65rem;
+  font-size: 1.25rem;
+}
+p {
+  margin: .5rem 0;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,260px),1fr));
+  gap: .8rem;
+}
+.card {
+  background: white;
+  border: 1px solid #cdd5cc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: .55rem 0;
+}
+.grid .card {
+  margin: 0;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #768b81;
+  border-radius: 5px;
+  padding: .35rem .75rem;
+  color: #174a39;
+  background: white;
+}
+button:hover {
+  background: #e1f1e7;
+}
+button:focus-visible {
+  outline: 3px solid #b26700;
+  outline-offset: 3px;
+}
+.link {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: .22em;
+  font-weight: 650;
+}
+.muted {
+  color: #52645b;
+}
+.action {
+  margin: .65rem 0 0;
+}
+small {
+  display: block;
+}
+h1:focus {
+  outline: none;
+}
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin: 1.2rem 0;
+}
+.scenario {
+  border-left: .3rem solid #397253;
+  padding: .75rem 1rem;
+  background: #eaf1e8;
+}
+.card p { max-width: 62ch; }
+fieldset {
+  margin: 1rem 0;
+  border: 1px solid #c1cec2;
+  border-radius: 8px;
+}
+label { display: block; padding: .3rem 0; cursor: pointer; }
+</style>
+<header><strong>工作看板</strong><button id="reset">重設示例</button></header>
+<main id="view"></main>
+<script>
+const products = {
+  river: {name:'澄河', items:{
+    11:{title:'列出可預約時段', sprint:'迭代一', status:'進行中'},
+    12:{title:'匯出預約明細', sprint:'迭代一', status:'待辦'},
+    13:{title:'顯示場地說明', sprint:'迭代二', status:'待辦'}
+  }},
+  court: {name:'石庭', items:{11:{title:'產生範例目錄'}}}
+};
+const flows = {
+  'WF-31': {product:'river', title:'整理時段資料', evidence:'已整理平日與假日兩組示例時段。', handoff:'下一位協作者請核對兩組時段的起訖時間。'},
+  'WF-32': {product:'river', title:'調查時區差異', evidence:'已記下跨日換算時，畫面可能顯示不同日期的例子。', handoff:'請先確認預約頁要使用哪個時區，再補齊跨日範例。'}
+};
+const originalLinks = () => ({'WF-31':['11','12'], 'WF-32':[]});
+const flowFacts = {
+  'WF-31': {source:'時段整理工作單', updated:'09:20', attention:''},
+  'WF-32': {source:'協作者主動調查', updated:'10:05', attention:'待決：預約頁顯示時區'}
+};
+const draftSnapshot = [
+  {id:'11', acceptance:'可查詢平日與假日', review:'驗收通過', work:'時段清單覆核', result:'已完成'},
+  {id:'12', acceptance:'匯出明細含場地與日期', review:'待驗收', work:'匯出欄位覆核', result:'已完成'}
+];
+const initialDraft = () => ({together:false, deferred:false});
+let draft = initialDraft();
+let links = originalLinks();
+let historyStack = [{page:'home'}];
+const main = document.querySelector('#view');
+const button = (label,action,data='',style='link') =>
+  '<button class="'+style+'" data-action="'+action+'" data-key="'+data+'">'+label+'</button>';
+const card = content => '<article class="card">'+content+'</article>';
+function itemLink(product,id){
+  return button('#'+id+' '+products[product].items[id].title,'item',product+'/'+id);
+}
+function flowCard(id){
+  const flow=flows[id];
+  const associated=links[id].map(key=>'#'+key).join('、') || '尚未關聯 PBI';
+  return card(button(id+' '+flow.title,'flow',id)+'<small>'+products[flow.product].name+' · 進行中 · '+associated+'</small>'+flowSource(id));
+}
+function flowSource(id){
+  const facts = flowFacts[id];
+  return '<small class="muted">來源：'+facts.source+' ｜ 最近更新：示例第 1 天 '+facts.updated+'</small>'+
+    (facts.attention ? '<small>'+facts.attention+'</small>' : '');
+}
+function home(){
+  return '<h1>產品總覽</h1><p class="muted">離線設計示例。所有資料均為虛構，操作只保留在本頁。</p><h2>產品</h2><div class="grid">'+
+    Object.entries(products).map(([key,p])=>card(button(p.name,'product',key)+'<small>'+Object.keys(p.items).length+' 個 PBI · '+(key==='river'?'Issues 與 Project':'僅 Issues')+'</small>')).join('')+
+    '</div><h2>進行中的工作</h2>'+Object.keys(flows).map(flowCard).join('');
+}
+function productPage(key){
+  const p=products[key];
+  const navigation = '<nav aria-label="產品功能">'+button('Workflow 執行看板','board',key,'')+
+    (key==='river' ? button('交付草案','draft',key,'') : '')+'</nav>';
+  return '<h1>'+p.name+'</h1>'+navigation+'<h2>Scrum 工作項目（PBI）</h2>'+
+    Object.entries(p.items).map(([id,item])=>card(itemLink(key,id)+(item.sprint?'<small>迭代：'+item.sprint+'　Project 狀態：'+item.status+'</small>':''))).join('');
+}
+function boardPage(key){
+  const ids = Object.keys(flows).filter(id => flows[id].product === key);
+  return '<p class="muted">'+products[key].name+'</p><h1>Workflow 執行看板</h1><h2>進行中</h2>'+
+    (ids.length ? ids.map(flowCard).join('') : '<p>目前沒有進行中的工作。</p>');
+}
+function draftPage(){
+  const checked = condition => condition ? ' checked' : '';
+  const controls = '<fieldset><legend>交付條件</legend>'+
+    '<label><input type="radio" name="coupling" value="independent"'+checked(!draft.together)+'> 可獨立交付</label>'+
+    '<label><input type="radio" name="coupling" value="together"'+checked(draft.together)+'> 必須共同生效</label></fieldset>';
+  const evidence = draftSnapshot.map(row => card('<strong>#'+row.id+' '+products.river.items[row.id].title+'</strong>'+
+    '<p>驗收條件：'+row.acceptance+'（'+row.review+'）</p><p>必要工作：'+row.work+'（'+row.result+'）</p>')).join('');
+  let result;
+  if(draft.together){
+    result = '<p>就緒候選：無。#12 尚待驗收，兩項必須共同生效，#11 無法單獨交付。</p>';
+  } else if(draft.deferred){
+    result = '<p>就緒候選：#11 列出可預約時段。</p><p>延期：#12 匯出預約明細。原因：匯出欄位已覆核，仍待驗收。</p>';
+  } else {
+    result = '<p>目前草案含 #11、#12，整份草案仍待 #12 驗收。</p>'+
+      button('將 #12 延至下次交付','defer','','');
+  }
+  return '<p class="muted">澄河 ／ 交付演練</p><h1>交付草案</h1>'+
+    '<p class="scenario">交付演練時點：示例第 3 天 16:00。以下使用獨立的固定快照；首頁與執行看板呈現第 1 天的工作。</p>'+
+    '<h2>原計畫與驗收證據</h2>'+evidence+controls+'<h2>草案結果</h2>'+card(result)+
+    '<p>部署紀錄：0 筆。草案操作只調整本次候選清單。</p>';
+}
+function itemPage(key,id){
+  const p=products[key], item=p.items[id];
+  const matched=Object.keys(flows).filter(flow=>flows[flow].product===key && links[flow].includes(id));
+  return '<p class="muted">'+p.name+' ／ PBI</p><h1>#'+id+' '+item.title+'</h1>'+
+    (item.sprint?'<p>迭代：'+item.sprint+'　Project 狀態：'+item.status+'</p>':'')+
+    '<h2>關聯工作流程</h2>'+(matched.length?matched.map(flowCard).join(''):'<p>尚無關聯工作流程。</p>');
+}
+function flowPage(id){
+  const flow=flows[id];
+  return '<p class="muted">'+products[flow.product].name+' ／ 工作流程 ／ 進行中</p><h1>'+id+' '+flow.title+'</h1>'+flowSource(id)+
+    '<h2>關聯 PBI</h2>'+(links[id].length?links[id].map(key=>card(itemLink(flow.product,key))).join(''):
+    '<p>尚未關聯 PBI</p><div class="action">'+button('補連澄河 #11','associate',id,'')+'</div>')+
+    '<h2>工作證據</h2>'+card(flow.evidence)+'<h2>交接事項</h2>'+card(flow.handoff);
+}
+function render(){
+  const s=historyStack.at(-1);
+  let content;
+  if(s.page==='home') content=home();
+  if(s.page==='product') content=productPage(s.key);
+  if(s.page==='item') content=itemPage(...s.key.split('/'));
+  if(s.page==='flow') content=flowPage(s.key);
+  if(s.page==='board') content=boardPage(s.key);
+  if(s.page==='draft') content=draftPage();
+  main.innerHTML=(historyStack.length>1?button('回上一層','back','',''):'')+content;
+  const heading=main.querySelector('h1');
+  document.title=heading.textContent+' · 工作看板示例';
+  heading.tabIndex=-1;
+  heading.focus({preventScroll:true});
+  window.scrollTo(0,0);
+}
+main.addEventListener('click',event=>{
+  const target=event.target.closest('button');
+  if(!target) return;
+  const {action,key}=target.dataset;
+  if(action==='back') historyStack.pop();
+  else if(action==='defer') draft.deferred=true;
+  else if(action==='associate'){
+    if(key==='WF-32' && !links[key].includes('11')) links[key].push('11');
+  }else historyStack.push({page:action,key});
+  render();
+});
+main.addEventListener('change', event => {
+  if(event.target.name !== 'coupling') return;
+  const value = event.target.value;
+  draft.together = value === 'together';
+  render();
+  main.querySelector('input[value="'+value+'"]').focus();
+});
+document.querySelector('#reset').addEventListener('click',()=>{
+  links=originalLinks();
+  draft=initialDraft();
+  historyStack=[{page:'home'}];
+  render();
+});
+render();
+</script>
+</html>

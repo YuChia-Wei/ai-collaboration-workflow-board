@@ -31,7 +31,7 @@ async function harness(width){
  const cache=new Map();
  async function link(specifier){
   if(cache.has(specifier))return cache.get(specifier);
-  if(['./document-view.mjs','./content-view.mjs'].includes(specifier)){
+  if(['./document-view.mjs','./content-view.mjs','./workspace-shell.mjs'].includes(specifier)){
    const exports=await import('../Presentation/Web/'+specifier.slice(2));
    const m=new SyntheticModule(Object.keys(exports),function(){for(const [name,value] of Object.entries(exports))this.setExport(name,value);},{context});cache.set(specifier,m);return m;
   }

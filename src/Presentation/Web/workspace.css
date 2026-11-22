@@ -21,3 +21,36 @@ body{background:#f8f9f6}button,input,select,textarea{font:inherit}button{transit
 /* Main workflow purpose: readable prose instead of a muted raw excerpt. */
 .workflow-summary{margin:22px 0 24px;padding:22px 24px;border:1px solid #dce5d5;border-radius:10px;background:#fff;color:#314536}.summary-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}.app .summary-heading h2{margin:0;font-size:16px;font-weight:650;color:#314c38}.summary-heading button{font-size:12px;color:#315b3c;border-color:#cbdac0;white-space:nowrap;background:#f3f7ee}.summary-origin{font-size:12px;color:#65745e;line-height:1.7;margin:12px 0 16px;overflow-wrap:anywhere}.summary-body .document-prose,.summary-more .document-prose{font-size:15px;line-height:1.85;color:#35483a;max-width:78ch}.summary-body .document-prose p{margin:0 0 12px}.summary-body .document-prose p:last-child{margin-bottom:0}.workflow-summary .document-prose code{font-size:.87em;background:#edf3e7;color:#36512b;box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere;white-space:normal}.summary-more{border-top:1px solid #e1e9da;padding-top:14px;margin-top:18px}.summary-more>summary{cursor:pointer;font-size:13px;font-weight:600;color:#42663a;padding:4px 0}.summary-more[open]>.document-prose{margin-top:16px}.summary-note{font-size:12px;line-height:1.7;color:#8b632d;margin-bottom:0}.next-text .document-prose{font-size:14px;color:#3c5432}.next-text .document-prose p{margin:0}.next-owner{overflow-wrap:anywhere}
 @media(max-width:650px){.workflow-summary{padding:18px}.summary-heading{align-items:flex-start;flex-direction:column;gap:10px}.summary-body .document-prose,.summary-more .document-prose{font-size:15px}.summary-heading button{min-height:40px}}
+
+/* Product portfolio and scoped workflow planning. */
+.pf-app {min-height:100vh;color:var(--ink);background:#f5f7fa}
+.workspace-header {background:#172b48;color:white;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px max(5vw,calc((100vw - 1100px)/2))}
+.workspace-header strong {font-size:20px;white-space:nowrap}
+.workspace-header nav,.pf-tabs {display:flex;flex-wrap:wrap;gap:8px 20px}
+.workspace-header a {color:#dce6ff;text-decoration:none;padding:6px 0}
+.workspace-header a:hover,.pf-main a:hover {text-decoration:underline}
+.workspace-header a[aria-current="page"] {color:#fff;font-weight:650;text-decoration:underline;text-underline-offset:6px}
+.pf-tabs a[aria-current="page"] {font-weight:650;text-decoration:underline;text-underline-offset:4px}
+.pf-main {max-width:1140px;padding:32px 20px 64px;margin:auto;overflow-wrap:anywhere}
+.pf-main h1 {font-size:clamp(28px,4vw,42px);letter-spacing:-.035em;margin:10px 0 24px}
+.pf-main h2 {font-size:20px;margin:0 0 15px}
+.pf-main h3 {font-size:17px;margin:8px 0}
+.pf-main a {color:#2447a4;text-underline-offset:3px}
+.pf-section {margin:26px 0 36px}
+.pf-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:14px}
+.pf-card,.pf-main form[data-command],.pf-history {background:white;border:1px solid var(--line);border-radius:12px;padding:17px 20px}
+.pf-product-work {min-width:0}
+.pf-product-work>.pf-card {margin-top:8px}
+.pf-main fieldset {border:1px solid var(--line);border-radius:8px;margin:16px 0;padding:10px 14px}
+.pf-check {display:flex;align-items:center;gap:10px;margin:8px 0;color:var(--ink)}
+.pf-main .pf-check input {width:auto}
+.pf-check small {color:var(--muted)}
+.pf-main form {max-width:720px}
+.pf-main form label input,.pf-main form textarea {margin-top:4px}
+.pf-main .pf-card form {border:0;padding:0;margin-top:10px}
+.pf-main .pf-tabs {border-bottom:1px solid var(--line);padding-bottom:12px}
+.pf-history {padding-left:42px;line-height:1.6}
+.pf-history li+li {margin-top:12px}
+.pf-history p {margin:.2em 0}
+#pf-message:not(:empty) {margin-bottom:16px;border-left:4px solid var(--blue);padding:12px;background:#edf2ff}
+@media(max-width:650px){.workspace-header{align-items:flex-start;flex-direction:column;gap:6px}.workspace-header nav{gap:7px 14px}.pf-main{padding-top:18px}.pf-section{margin:20px 0 28px}}

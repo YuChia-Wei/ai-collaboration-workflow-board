@@ -1,8 +1,43 @@
 # Workflow Board Roadmap
 
-狀態快照：2026-10-22；全部既有 Issue 均已逐筆讀回。階段／Epic／Feature 是本文件的規劃分組，Story 是可供後續拆解的 PBI 摘要，**不是本次新建的 GitHub 工作或已承諾日期**。既有 Issue 的完整 Tasks／AC、授權與最新狀態仍以連結為準。Framework 的工作另見 [記憶提案](framework-memory-proposal.md)。
+## GitHub 第一版（2026-11-22）
 
-## 已完成基線
+第一個里程碑是 **owner 看得到、點得動、能判斷是否符合日常工作的產品與執行看板**。先以合成資料走通正常入口和領域行為，再接入 GitHub adapter。以下「01–07」是本地規劃順序，可以交付的成果各有自己的查驗方式；GitHub 尚未建立這些新 Issue。這裡的「第一版」指 Workflow Board 的產品範圍。[產品範圍](product-scope.md) · [互動樣稿](github-v1-demo.html) · [案例與驗收方式](github-v1-examples.md)
+
+| 順序與 PBI 建議 | 交付內容及可觀察的完成條件 | 依賴與情境 |
+| --- | --- | --- |
+| 01 新增「從首頁找到產品與進行中的工作」 | 首頁按可見專案列出產品、工作狀態、受阻／待決及更新時間；可直接開啟工作，也可進入產品的 PBI 與執行看板。兩張卡引用同一工作，首頁只算一次。可區分零筆、尚未讀取與來源過期。 | 第一片，使用受控來源。沿用 #22 的專案邊界。例 1、3。 |
+| 02 新增「在 PBI 與實作流程間規劃、補連及接手」 | 可從一或多項 PBI 建立 workflow、從兩側查回；調查可先不連 PBI。後續補連／解除後，原始工作範圍與交接仍可讀。另一個 session 依產品與 workflow 參照取得同一份關聯、證據及下一步。 | 接 01。01＋02 是首個產品切片，先以合成服務驗收。例 1–3。 |
+| 03 新增「以 repository Issues 建立產品待辦」 | 選來源後讀到 Issue、開關狀態、可取得的原生父子關係與分頁。有相同 Issue 號的兩個來源仍能精確定位；沒有 Project 也能瀏覽與連 workflow。讀取失敗顯示可用範圍。 | 接 01／02 的資料邊界，先完成受控 GitHub 讀取。例 3、4。 |
+| 04 新增「沿用 GitHub Project 規劃欄位與順序」 | 將可選的 Project 綁到產品，顯示該 Project 的排序、欄位與可用選項。區分 Issue 狀態與 Project item 狀態；欄位未配置或無權讀取時仍能解釋畫面。 | 接 03；有 Project 和只有 Issues 共用同一個產品入口。例 3、4。 |
+| 05 新增「在 Board 建立及維護 GitHub Issue」 | 建立、編輯、關閉、重開，可從來源重新讀回。權限不足、資料已被修改或回應遺失時呈現實際結果，保留使用者輸入；變更 Issue 不會代為完成 workflow。 | 接 03，可先於 04 的寫回。例 4、5。 |
+| 06 新增「將 Issue 排入 Project 並調整計畫」 | 加入 Project、調整順序、修改已選欄位，重新開啟仍可讀回；Issue 建立成功而加入 Project 失敗時只補後一步。同一操作重送後仍只有一張 Issue 和一筆成員關係。 | 接 04、05。例 5。 |
+| 07 擴充 #8「規劃本次交付並追到環境結果」 | 可選 PBI 的部分成果、列出必要工作及相依；依 A/B 可分性保存候選範圍和延期原因。可用同一版本讀回不同環境的結果，失敗重試保有歷史。若尚無產物或環境證據，狀態應如實顯示。 | 草案可先用合成快照在 01／02 階段展示；完整增量接 02–06 的身分與關聯。例 6、7。 |
+
+**里程碑與退出條件**
+
+1. **先驗證基本用法（01、02）。** 同一個人在首頁找到兩個產品，由 PBI 開啟共享工作，由首頁找到尚未連 PBI 的工作，補連後能回到原卡。樣稿供現在討論；產品切片再經正常入口、獨立 Board 測試儲存與新 session 讀回。兩者的證據分開記載。
+2. **完成 GitHub 日常操作（03–06）。** 分別走「只有 Issues」和「已有 Project」兩條路。受控 adapter 核對實際請求、失敗與重送，瀏覽器驗證使用者看見的結果。有需要驗證真正 GitHub 權限、欄位或寫回時，只選獨立的專用測試資源與虛構資料。
+3. **驗證交付取捨（07）。** 使用明示的合成成果、依賴方向、版本與環境回報，從 PBI 追到交付或延期原因。GitHub 版 UI 與上述操作完成後，才另行安排 Azure DevOps Server／Services。接手用例與完整 GitHub 整合的驗收均不以三個實際專案上線為條件。
+
+### 與現有 Workflow Board Issues 的對照
+
+2026-11-22 讀回共 18 張 Issue，8 張開啟、10 張已關閉。此盤點只用於產品規劃，禁止將這份 Issue 清單、正文或 Board 自己的 Project 載入展示或測試。[GitHub Issues 清單](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues)
+
+| 既有工作 | 建議處置 |
+| --- | --- |
+| [#2 產品界線](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/2)、[#3 領域模型](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/3)、[#4 核心契約](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/4)（已關閉） | 以 02–06 承接新範圍。保留多 PBI 引用、指定版本與舊工作可讀性；取消近期只由 Agent 帶入外部引用的限制。既有結案仍對應當時的範圍。 |
+| [#22 專案範圍](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/22)、[#24 來源副本](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/24)（開啟） | 01、02 沿用 #22 已有的專案識別與隔離，專案選擇及來源副本已有合併紀錄。首頁、可增減的 PBI 關聯及 GitHub adapter 另立 PBI。#24 的不可變副本僅能證明截至某版的來源狀態。[專案實作與驗收](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/pull/23) · [副本實作](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/pull/25) |
+| [#8 交付與部署](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/8)（開啟） | 建議補入 07 的「預定交付、部分成果、必要依賴、延後原因」與例 6、7；沿用既有的不可變產物、環境、失敗與回復範圍。 |
+| [#6 可靠性與完整恢復](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/6)（開啟） | 05、06 就外部操作增加可對帳的結果；#6 繼續負責完整備份／恢復。Board 的回執本身無法證明 GitHub 已接受寫入。 |
+| [#11 Agent 身分](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/11)、[#12 session 觀察](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/12)、[#13 成果接受](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/13)、[#14 可信人審](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/14)（開啟） | 依各自授權與證據延續。首頁可先報工作狀態，07 可先呈現已知驗收或缺件。完成這四張 Issue 均非首個畫面的前置。 |
+| 其餘已關閉項目 | #5、#7、#16、#17 已有協作入口、審閱草稿和接手基礎，可重用既有行為；#9、#18 為開發工具維護。#1 為退役總覽。詳見下方歷史基線。 |
+
+## 2026-10-22 初期路線（歷史快照）
+
+以下保留當時的階段、已完成範圍和後續候選，以供回查。11 月首版的排程與驗收以上方為準。Framework 的工作另見[記憶提案](framework-memory-proposal.md)。
+
+### 當時已完成的基線
 
 | 階段／Epic | Feature | User Story／PBI 摘要 | 既有 Issue 與完成範圍 |
 | --- | --- | --- | --- |
@@ -19,7 +54,7 @@
 
 已完成範圍不包含全域 npm 發布、通用 external auth、跨帳號 OAuth、多 Agent 隔離、人類正式審核、token 節省或完整備份還原。#17 最終 capabilities 是 **18 commands／8 queries，不暴露 `decision.resolve`**；核心規格中的 19 個 domain commands 是不同證據層。
 
-## 現有開啟工作與產品旅程
+### 當時開啟的工作與產品旅程
 
 以下六張 Issue 在 10/22 已重整主文，仍為 Open、AC 尚未驗收；其內容是後續待審核工作範圍，不能由開啟狀態推定實作已獲授權。
 
@@ -33,11 +68,11 @@
 | B2 | Session 觀察 | 作為協作者，我希望看到 session 狀態的來源、時間與可信度，辨別未知或過期資訊 | [#12](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/12)；provider、自述政策、狀態、更新／過期／保留待定；不自動改任務或接受成果 |
 | B2 | 交付／部署追溯 | 作為維護者，我希望從不可變產物連到環境部署、失敗、回復與實際 read-back 證據 | [#8](https://github.com/YuChia-Wei/ai-collaboration-workflow-board/issues/8)；首個情境與 provider 待選；建紀錄不會自動部署 |
 
-建議下一個完整產品成果是「Agent 提交明確版本 → 可信人類核准或要求修改 → Agent 依決定接手 → owner 接受成果」。這是排序建議，不是新增實作授權。
+10 月曾建議接著串起「Agent 提交明確版本 → 可信人類核准或要求修改 → Agent 依決定接手 → owner 接受成果」。11 月已將產品入口與可操作的領域流程排在這條人審旅程之前。
 
 依賴不應變成人為的全串行 gate：#6 與 #14 的盤點可獨立展開；#13 可先用明示的測試 principal 驗證業務規則，真實人類整合依 #14，可靠性依 #6 所屬機制。#11 不阻擋人類／Agent 區分，#12 不阻擋審核；沒有 session provider 時保持未知即可。#8 是獨立後續增量，不倒掛為 CLI／MCP 結案條件。
 
-## 後續候選 Roadmap
+### 當時的後續候選 Roadmap
 
 | 階段／Epic | Feature | User Story／PBI 摘要 | 前提與狀態 |
 | --- | --- | --- | --- |

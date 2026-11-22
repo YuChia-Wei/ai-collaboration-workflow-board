@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>離線工作看板樣稿驗收</title>
+<style>
+body { max-width: 64rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.65 system-ui,sans-serif; color: #243831 }
+button { font: inherit; padding: .3rem 1rem }
+iframe { width: 100%; height: 27rem; border: 1px solid #a9b7b0 }
+li { margin: .5rem 0 }
+</style>
+<h1>離線工作看板樣稿驗收</h1>
+<p>用虛構資料操作下方樣稿，檢查澄河與石庭的導覽與關聯。每次執行都會重新載入樣稿。</p>
+<button id="run">重新執行</button>
+<p id="status" role="status"></p>
+<ol id="results"></ol>
+<div id="preview"></div>
+<script>
+const run = document.querySelector('#run');
+const status = document.querySelector('#status');
+const results = document.querySelector('#results');
+const preview = document.querySelector('#preview');
+const sample = 'github-v1-demo.html';
+const first = '#11 列出可預約時段';
+const second = '#12 匯出預約明細';
+const shared = 'WF-31 整理時段資料';
+const solo = 'WF-32 調查時區差異';
+const stone = '#11 產生範例目錄';
+
+function equal(actual, expected, label) {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw Error(label + '；預期 ' + JSON.stringify(expected) + '，實際 ' + JSON.stringify(actual));
+  }
+}
+
+async function checkGroup(label, steps) {
+  const row = results.appendChild(document.createElement('li'));
+  row.textContent = label + '：執行中';
+  const frame = document.createElement('iframe');
+  frame.title = label + '的測試畫面';
+  const controller = new AbortController();
+  const faults = [];
+  let timer;
+  try {
+    const deadline = new Promise((_, reject) => {
+      timer = setTimeout(() => {
+        reject(Error('八秒內未完成載入或驗收'));
+        controller.abort();
+      }, 8000);
+    });
+    await Promise.race([deadline, (async () => {
+      const response = await fetch(sample, {signal:controller.signal, cache:'no-store'});
+      if (!response.ok) throw Error('樣稿讀取失敗，HTTP ' + response.status);
+      const source = await response.text();
+      const doctype = /^\s*<!doctype html>/i.exec(source);
+      if (!doctype) throw Error('收到的內容缺少 HTML 文件宣告');
+      // 同源 srcdoc 使錯誤監聽從樣稿第一行腳本執行前就生效。
+      const capture = '<script>addEventListener("error",e=>parent.reportDemoFault(window,e.message||"資源載入失敗"),true);addEventListener("unhandledrejection",e=>parent.reportDemoFault(window,String(e.reason)));<\/script>';
+      window.reportDemoFault = (sender, message) => {
+        if (sender === frame.contentWindow) faults.push(message);
+      };
+      const loaded = new Promise((resolve, reject) => {
+        frame.onload = resolve;
+        frame.onerror = () => reject(Error('iframe 載入失敗'));
+      });
+      frame.srcdoc = source.replace(doctype[0], doctype[0] + capture);
+      preview.replaceChildren(frame);
+      await loaded;
+      const doc = frame.contentDocument;
+      const view = doc.querySelector('main');
+      if (!view) throw Error('樣稿缺少主畫面');
+      const visible = element => element.getClientRects().length > 0;
+      const names = selector => [...view.querySelectorAll(selector)].filter(visible).map(el => el.innerText.trim()).sort();
+      function heading(name) { equal(names('h1'), [name], '所在畫面'); }
+      function click(name) {
+        const buttons = [...doc.querySelectorAll('button')].filter(el => visible(el) && !el.disabled && el.innerText.trim() === name);
+        equal(buttons.length, 1, '可操作的「' + name + '」數量');
+        buttons[0].click();
+      }
+      function links(kind, expected) {
+        const prefix = kind === '流程' ? /^WF-/ : /^#/;
+        equal(names('button').filter(name => prefix.test(name)), [...expected].sort(), kind + '清單');
+      }
+      function content(part, expected = true) {
+        equal(view.innerText.includes(part), expected, '畫面含「' + part + '」');
+      }
+      heading('產品總覽');
+      function choice(label) {
+        const matches = [...view.querySelectorAll('label')].filter(el => visible(el) && el.innerText.trim() === label);
+        equal(matches.length, 1, '交付條件「' + label + '」數量');
+        const radio = matches[0].control;
+        equal(radio?.type, 'radio', '交付條件控制項');
+        equal(radio.disabled, false, '交付條件停用狀態');
+        return radio;
+      }
+      steps({heading, click, links, content, choice});
+      await new Promise(resolve => setTimeout(resolve, 0));
+      if (faults.length) throw Error(faults.join('／'));
+    })()]);
+    row.textContent = '通過｜' + label;
+    return true;
+  } catch (error) {
+    row.textContent = '失敗｜' + label + '。' + error.message + (faults.length ? '。頁面錯誤：' + faults.join('／') : '');
+    return false;
+  } finally {
+    clearTimeout(timer);
+    controller.abort();
+  }
+}
+
+async function runChecks() {
+  run.disabled = true;
+  results.replaceChildren();
+  try {
+    if (location.protocol === 'file:') {
+      status.textContent = '未執行。請從資料夾內直接開啟 github-v1-demo.html 手動操作。要執行自動驗收，請從儲存庫根目錄執行 python -B -m http.server 8000 --bind 127.0.0.1 --directory .dev/design/product-evolution，再開啟 http://127.0.0.1:8000/github-v1-demo-check.html。';
+      return;
+    }
+    status.textContent = '執行中';
+    const river = await checkGroup('澄河：首頁兩個流程、共用流程雙向導覽、補連後讀回及返回', ({heading, click, links, content}) => {
+      links('流程', [shared, solo]);
+      click(shared); heading(shared); links('PBI', [first, second]);
+      for (const item of [first, second]) {
+        click(item); heading(item); links('流程', [shared]);
+        click(shared); heading(shared); links('PBI', [first, second]);
+        click('回上一層'); heading(item);
+        click('回上一層'); heading(shared);
+      }
+      click('回上一層'); heading('產品總覽');
+      click(solo); heading(solo); content('尚未關聯 PBI'); links('PBI', []);
+      click('補連澄河 #11'); heading(solo); links('PBI', [first]);
+      click(first); heading(first); links('流程', [shared, solo]);
+      click('回上一層'); heading(solo); links('PBI', [first]);
+    });
+    const court = await checkGroup('石庭：同號 Issue 隔離、無 Project 欄位、重設還原關聯', ({heading, click, links, content}) => {
+      click(solo); heading(solo); click('補連澄河 #11'); links('PBI', [first]);
+      click('回上一層'); heading('產品總覽');
+      click('石庭'); heading('石庭'); links('PBI', [stone]); content('Project', false); content('迭代', false);
+      click(stone); heading(stone); content('石庭 ／ PBI'); content('Project', false); content('迭代', false);
+      links('流程', []); content('尚無關聯工作流程。');
+      click('重設示例'); heading('產品總覽'); links('流程', [shared, solo]);
+      click(solo); heading(solo); links('PBI', []); content('尚未關聯 PBI');
+      click('回上一層'); heading('產品總覽');
+      click(shared); heading(shared); links('PBI', [first, second]);
+    });
+    const delivery = await checkGroup('交付草案：共用流程可先交已驗收的 #11，必須共同生效時兩項都待定', ({heading, click, links, content, choice}) => {
+      click(shared); heading(shared); links('PBI', [first, second]);
+      click('回上一層'); click('澄河'); click('交付草案'); heading('交付草案');
+      equal(choice('可獨立交付').checked, true, '預設交付條件');
+      content('驗收條件：可查詢平日與假日（驗收通過）');
+      content('驗收條件：匯出明細含場地與日期（待驗收）');
+      content('目前草案含 #11、#12，整份草案仍待 #12 驗收。');
+      click('將 #12 延至下次交付');
+      const ready = '就緒候選：#11 列出可預約時段。';
+      const blocked = '就緒候選：無。#12 尚待驗收，兩項必須共同生效，#11 無法單獨交付。';
+      content(ready); content(blocked, false);
+      content('延期：#12 匯出預約明細。原因：匯出欄位已覆核，仍待驗收。');
+      content('部署紀錄：0 筆。');
+      choice('必須共同生效').click();
+      equal(choice('必須共同生效').checked, true, '選定共同生效');
+      content(blocked); content(ready, false); content('部署紀錄：0 筆。');
+    });
+    status.textContent = '離線樣稿驗收：' + (Number(river) + Number(court) + Number(delivery)) + '／3 組通過。';
+  } catch (error) {
+    status.textContent = '驗收頁執行失敗：' + error.message;
+  } finally {
+    run.disabled = false;
+  }
+}
+run.addEventListener('click', runChecks);
+runChecks();
+</script>
+</html>

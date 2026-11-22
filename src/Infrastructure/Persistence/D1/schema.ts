@@ -72,3 +72,9 @@ export const sourceReplicaHeads=sqliteTable('source_replica_heads',{key:text('ke
 export const sourceReplicaChunks=sqliteTable('source_replica_chunks',{version_key:text('version_key').notNull(),path:text('path').notNull(),position:integer('position').notNull(),content_base64:text('content_base64').notNull(),chunk_hash:text('chunk_hash').notNull()},t=>[primaryKey({columns:[t.version_key,t.path,t.position]})]);
 export const sourceReplicaOperations=sqliteTable('source_replica_operations',{key:text('key').notNull(),owner:text('owner').notNull(),store_id:text('store_id').notNull(),project_id:text('project_id').notNull(),operation_id:text('operation_id').notNull(),digest:text('digest').notNull(),attempt:text('attempt').notNull(),accepted:integer('accepted').notNull(),receipt:text('receipt').notNull()},t=>[primaryKey({columns:[t.key]})]);
 export const sourceReplicaCursors=sqliteTable('source_replica_cursors',{id:text('id').notNull(),owner:text('owner').notNull(),body:text('body').notNull()},t=>[primaryKey({columns:[t.id]})]);
+
+// Last explicitly observed backlog for each owner, store and project.
+export const portfolioCatalogs=sqliteTable('portfolio_catalogs',{
+ owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),
+ revision:integer('revision').notNull(),body:text('body').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId]})]);

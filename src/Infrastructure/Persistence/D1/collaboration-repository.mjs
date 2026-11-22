@@ -1,5 +1,6 @@
 import {demand} from '../../../Core/Workflows/Domain/errors.mjs';
 import {canonicalJson,contentDigest} from '../../../Core/Workflows/Domain/collaboration-values.mjs';
+import {workflowAttention} from '../../../Core/Workflows/Domain/portfolio.mjs';
 
 const decode=row=>row?JSON.parse(row.body):null;
 
@@ -70,6 +71,7 @@ export function createCollaborationRepository(db,projectId=null){
    const body=JSON.stringify(state),chunks=[];
    for(let start=0;start<body.length;){let end=Math.min(start+16000,body.length);if(end<body.length&&/[\uD800-\uDBFF]/.test(body[end-1]))end--;chunks.push(body.slice(start,end));start=end;}
    const summary={workflow_ref:ref,title:state.title,status:state.status,revision:state.revision};
+   if(state.status==='active')summary.attention=workflowAttention(state);
    statements.push(statement(`INSERT INTO ${names.snapshots}(${columns},revision,summary,chunk_count) SELECT ${slots},?,?,? WHERE EXISTS(${gate})`,...args,state.revision,JSON.stringify(summary),chunks.length,...gateArgs));
    chunks.forEach((chunk,i)=>statements.push(statement(`INSERT INTO ${names.chunks}(${columns},revision,position,body) SELECT ${slots},?,?,? WHERE EXISTS(${gate})`,...args,state.revision,i,chunk,...gateArgs)));
    for(const [kind,items] of Object.entries({...change.facts,events:change.events}))items.forEach((item,i)=>statements.push(statement(`INSERT INTO ${names.facts}(${columns},revision,kind,position,body) SELECT ${slots},?,?,?,? WHERE EXISTS(${gate})`,...args,state.revision,kind,i,JSON.stringify(item),...gateArgs)));
@@ -87,7 +89,7 @@ export function createCollaborationRepository(db,projectId=null){
   async cursor(owner,id){return decode(await first(`SELECT body FROM ${names.cursors} WHERE owner=?${scoped?' AND project_id=?':''} AND id=?`,owner,...(scoped?[projectId]:[]),id));},
   async baseline(owner,store){return (await first(`SELECT COALESCE(MAX(seq),0) AS value FROM ${names.snapshots} WHERE ${storeWhere}`,...storeArgs(owner,store))).value;},
   async find(owner,store,q,baseline,after,limit){
-   const result=await rows(`SELECT s.summary AS body FROM ${names.snapshots} s WHERE s.owner=? AND s.store_id=?${scoped?' AND s.project_id=?':''} AND s.seq<=? AND s.workflow_id>?
+   const result=await rows(`SELECT json_remove(s.summary,'$.attention') AS body FROM ${names.snapshots} s WHERE s.owner=? AND s.store_id=?${scoped?' AND s.project_id=?':''} AND s.seq<=? AND s.workflow_id>?
     AND s.revision=(SELECT MAX(n.revision) FROM ${names.snapshots} n WHERE n.owner=s.owner AND n.store_id=s.store_id${scoped?' AND n.project_id=s.project_id':''} AND n.workflow_id=s.workflow_id AND n.seq<=?)
     AND instr(lower(json_extract(s.summary,'$.title')),lower(?))>0 ORDER BY s.workflow_id LIMIT ?`,...storeArgs(owner,store),baseline,after,baseline,q,limit);
    return result.map(decode);

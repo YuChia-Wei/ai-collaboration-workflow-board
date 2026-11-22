@@ -6,11 +6,12 @@ import {resolveSitesOwner} from '../../Infrastructure/Identity/sites-identity.mj
 import {systemClock} from '../../Infrastructure/Runtime/clock.mjs';
 import {sourceProjection} from '../../Infrastructure/SourceCatalog/source-projection.mjs';
 import {demand} from '../../Core/Workflows/Domain/errors.mjs';
-import {createCollaborationServices} from './collaboration-services.mjs';
+import {createCollaborationServices,createPortfolioServices} from './collaboration-services.mjs';
 import {resolveSitesCollaborationAccess} from '../../Infrastructure/Identity/collaboration-identity.mjs';
 import {resolveCollaborationHttpAccess} from '../../Infrastructure/Identity/collaboration-service-identity.mjs';
 import {createCollaborationHttpHandler} from './collaboration-handler.mjs';
 import {createMcpHandler} from '../Mcp/handler.mjs';
+import {createPortfolioHandler} from './portfolio-handler.mjs';
 
 // Composition root is the only production code that wires inward and outward adapters.
 let page='';
@@ -27,10 +28,12 @@ function browserPage(_request,env){
 }
 const humanHandler=createHttpHandler(createServices,browserPage,resolveSitesOwner);
 const collaborationHandler=createCollaborationHttpHandler(createCollaborationServices,resolveCollaborationHttpAccess);
+const portfolioHandler=createPortfolioHandler(createPortfolioServices,resolveCollaborationHttpAccess);
 const sourceReplicaHandler=createSourceReplicaHttpHandler(createCollaborationServices,resolveCollaborationHttpAccess);
 const mcpHandler=createMcpHandler(createCollaborationServices,resolveSitesCollaborationAccess);
 export function handle(request,env){
  const path=new URL(request.url).pathname;
+ if(path.startsWith('/api/portfolio/'))return portfolioHandler(request,env);
  if(path.startsWith('/api/source-replica/'))return sourceReplicaHandler(request,env);
  if(path==='/mcp')return mcpHandler(request,env);
  if(/^\/api\/collaboration\/v[12]\//.test(path))return collaborationHandler(request,env);

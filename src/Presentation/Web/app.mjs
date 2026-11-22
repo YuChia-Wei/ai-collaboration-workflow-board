@@ -4,7 +4,51 @@ import {structuredMarkup} from './content-view.mjs';
 import {marked} from 'marked';
 import DOMPurify from 'dompurify';
 import {recordBoardMarkup} from './record-board.mjs';
+import {workspaceHeader,workspaceLabel,workspaceTitle} from './workspace-shell.mjs';
 const $=id=>document.getElementById(id);
+const store = new URLSearchParams(location.search).get('store') || document.querySelector('meta[name="collaboration-store"]')?.content || '';
+document.title = workspaceTitle('records');
+$('app').className = 'app workspace-app record-app';
+$('app').innerHTML = `
+  <div id="workspace-header">${workspaceHeader('records',store)}</div>
+  <main class="workspace-main">
+    <h1 class="workspace-heading">${workspaceLabel('records')}</h1>
+    <div class="workspace-panes">
+      <aside class="list" aria-label="紀錄列表">
+        <div class="list-head">
+          <h2>紀錄列表</h2>
+          <button class="primary" id="createButton" aria-label="建立工作流程">＋ 新增</button>
+        </div>
+        <input class="search" type="search" id="search" placeholder="搜尋名稱、ID 或 Issue" aria-label="搜尋工作流程">
+        <div class="filterbar" id="filters">
+          <button class="chosen" data-filter="all">全部</button>
+          <button data-filter="in_progress">進行中</button>
+          <button data-filter="completed">已完成</button>
+          <button data-filter="deferred">延期</button>
+        </div>
+        <details class="connection-settings">
+          <summary>更多篩選條件</summary>
+          <div class="selectors">
+            <select id="kindFilter" aria-label="工作流程類型"><option value="">全部類型</option></select>
+            <select id="ownerFilter" aria-label="負責 skill"><option value="">全部負責 skill</option></select>
+            <select id="modeFilter" aria-label="紀錄來源">
+              <option value="">全部來源</option><option value="source_snapshot">framework 快照</option><option value="board">線上人工紀錄</option>
+            </select>
+            <select id="statusFilter" aria-label="其他狀態">
+              <option value="">狀態快捷篩選</option><option value="pending">待處理</option>
+              <option value="unrecorded">來源狀態未記錄</option><option value="done">歷史 done</option>
+            </select>
+          </div>
+        </details>
+        <p id="total" class="small"></p>
+        <div id="items"><div class="loader">正在讀取紀錄…</div></div>
+        <div class="pagination">
+          <button id="prevPage">上一頁</button><span id="pageInfo" class="small"></span><button id="nextPage">下一頁</button>
+        </div>
+      </aside>
+      <section class="detail" id="detail" aria-label="紀錄內容"><div class="empty">選擇紀錄即可查看任務、文件與交接。</div></section>
+    </div>
+  </main>`;
 export const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const names={board:'看板',overview:'概覽',tasks:'任務列表',documents:'文件',logs:'日誌',handoff:'交接',evidence:'證據'};
 const statusName={pending:'待處理',in_progress:'進行中',completed:'已完成',deferred:'延期',done:'done · 歷史狀態',planned:'尚未開始',active:'進行中',blocked:'有阻礙',unrecorded:'來源未記錄'};
@@ -35,10 +79,10 @@ function linkItems(w){return (w.work_items||[]).filter(x=>/^https:\/\//.test(x.u
 function query(){const p=new URLSearchParams({offset:String(offset),limit:'30'});for(const [k,v] of Object.entries({q:$('search').value.trim(),status:filter,kind:$('kindFilter').value,owner_skill:$('ownerFilter').value,mode:$('modeFilter').value}))if(v)p.set(k,v);return p;}
 function updateFacets(){for(const [id,key,label] of [['kindFilter','kinds','全部類型'],['ownerFilter','owners','全部負責 skill']]){const chosen=$(id).value;$(id).innerHTML=`<option value="">${label}</option>`+(facets[key]||[]).map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');$(id).value=chosen;}}
 async function loadList(){const serial=++loadSerial;$('items').setAttribute('aria-busy','true');try{const data=await api('/api/workflows?'+query());if(serial!==loadSerial)return;records=data.items;total=data.total;allTotal=data.all_total;hasMore=data.has_more;facets=data.facets;updateFacets();renderList();}catch(e){if(serial===loadSerial)$('items').innerHTML=`<div class="notice">${esc(e.message)}<br><button id="retryList">重新讀取</button></div>`;if($('retryList'))$('retryList').onclick=loadList;}finally{if(serial===loadSerial)$('items').removeAttribute('aria-busy');}}
-function renderList(){$('total').textContent=total;$('navCount').textContent=allTotal;$('pageInfo').textContent=total?`${offset+1}–${Math.min(offset+30,total)} / ${total}`:'0 筆';$('prevPage').disabled=offset===0;$('nextPage').disabled=!hasMore;
+function renderList(){$('total').textContent=total===allTotal?`共 ${total} 筆紀錄`:`符合 ${total} 筆，共 ${allTotal} 筆`;$('pageInfo').textContent=total?`${offset+1}–${Math.min(offset+30,total)} / ${total}`:'0 筆';$('prevPage').disabled=offset===0;$('nextPage').disabled=!hasMore;
  $('items').innerHTML=records.map(w=>`<button class="item ${selected?.id===w.id&&selected?.record_mode===w.record_mode?'selected':''}" data-wid="${esc(w.id)}" data-mode="${esc(w.record_mode)}"><h2>${esc(w.title)}</h2>${badge(w.status)}<p class="monospace">${esc(w.id)}</p><div class="small">${esc(w.workflow_kind||'類型未記錄')}<br>${esc(w.owner_skill||'owner skill 未記錄')}</div><div class="item-meta" style="margin-top:10px"><span>${esc(progressText(w))}</span></div><div class="item-meta" style="margin-top:7px"><span>${esc(modeName[w.record_mode])}</span><span>${w.document_count} 文件</span></div></button>`).join('')||'<div class="empty">沒有符合的 workflow。請調整篩選或建立線上紀錄。</div>';
  $('items').querySelectorAll('[data-wid]').forEach(b=>b.onclick=()=>choose(b.dataset.wid,b.dataset.mode));renderPending();}
-async function choose(id,mode='board'){const serial=++selectionSerial;$('detail').innerHTML='<div class="loader">正在讀取 workflow…</div>';$('app').classList.add('show-detail');try{const data=await api(`/api/workflows/${encodeURIComponent(id)}?mode=${encodeURIComponent(mode)}`);if(serial!==selectionSerial)return;selected=data.workflow;sourceSummary={loading:!!planDocument(selected)};sourceSummaryDocument=null;documentId=null;revisionPick=0;loadedDocument=null;tab='board';focusedTask=null;renderList();renderDetail();if(sourceSummary.loading)loadSourceSummary(selected);if(innerWidth<=650)scrollTo(0,0);}catch(e){if(serial===selectionSerial)$('detail').innerHTML=`<div class="notice">${esc(e.message)}<br><button id="backError">回到列表</button></div>`;if($('backError'))$('backError').onclick=()=>{$('app').classList.remove('show-detail');};}}
+async function choose(id,mode='board',reveal=true){const serial=++selectionSerial;$('detail').innerHTML='<div class="loader">正在讀取 workflow…</div>';if(reveal)$('app').classList.add('show-detail');try{const data=await api(`/api/workflows/${encodeURIComponent(id)}?mode=${encodeURIComponent(mode)}`);if(serial!==selectionSerial)return;selected=data.workflow;sourceSummary={loading:!!planDocument(selected)};sourceSummaryDocument=null;documentId=null;revisionPick=0;loadedDocument=null;tab='board';focusedTask=null;renderList();renderDetail();if(sourceSummary.loading)loadSourceSummary(selected);if(innerWidth<=650)scrollTo(0,0);}catch(e){if(serial===selectionSerial)$('detail').innerHTML=`<div class="notice">${esc(e.message)}<br><button id="backError">回到列表</button></div>`;if($('backError'))$('backError').onclick=()=>{$('app').classList.remove('show-detail');};}}
 async function refreshAfterSave(id){await loadList();try{await choose(id,'board');}catch{notify('伺服器已儲存；請重新讀取畫面。');}}
 function sourceButton(id,label='查閱來源文件'){return id?`<button class="subtle" data-doc="${esc(id)}">${label} ↗</button>`:'';}
 function sourceFile(w,path){return Object.values(w.documents||{}).find(d=>d.name===path||d.source_path===path);}
@@ -86,8 +130,8 @@ function renderDetail(){if(!selected)return;const w=selected,source=w.record_mod
  if(tab==='handoff')content=`<div class="sectionhead"><h2>交接紀錄</h2>${editable?'<button data-action="handoff">保存交接</button>':''}</div>${source?relatedFiles(w,'handoff'):[...(w.handoffs||[])].reverse().map(h=>`<section class="panel"><span class="small">${date(h.at)} · ${esc(h.next_owner)}</span><h3>${esc(h.next_step)}</h3>${[['blockers','阻礙'],['failures','失敗'],['limitations','限制']].map(([k,label])=>`<p class="small"><strong>${label}</strong><br>${h[k].length?h[k].map(esc).join('<br>'):'無'}</p>`).join('')}</section>`).join('')||'<div class="empty">尚無線上交接紀錄。</div>'}`;
  if(tab==='evidence')content=`<div class="sectionhead"><h2>結果與證據</h2>${editable?'<button data-action="addEvidence">＋ 新增文字證據</button>':''}</div>${source?relatedFiles(w,'evidence'):Object.values(w.evidence||{}).map(e=>`<article class="evidence"><strong>${esc(e.id)}</strong> <span class="badge">${esc(e.outcome)}</span><p>${esc(e.result)}</p><div class="small scope">${esc(e.command)}<br>來源：${esc(e.source_commit||'未提供')}<br>${structuredMarkup(e.environment)}<br>${date(e.observed_at)}</div></article>`).join('')||'<div class="empty">尚無文字證據。任務完成由結果摘要及 findings 結論判定。</div>'}`;
  const next=source?w.next_action?.text:w.next_step;
- $('app').classList.add('record-app');$('detail').classList.toggle('record-board-view',tab==='board');
- $('detail').innerHTML=`<div class="topline"><button class="mobile-back" id="back">‹ 工作流程</button><span>${esc(w.namespace||'personal')} / workflow</span><span class="demo-label">${modeName[w.record_mode]}</span></div><div class="hero"><div><span class="eyebrow">${badge(w.status)}　${source?'此 Git 版本':'修訂 '+w.revision}</span><h1>${esc(w.title)}</h1><p class="monospace">${esc(w.id)}</p></div>${editable?'<button data-action="editWorkflow">編輯紀錄</button>':''}</div><div class="linked-items">${linkItems(w)}</div><div id="workflow-summary">${workflowSummaryMarkup(w,sourceSummary)}</div><div class="next"><div><div class="next-label">${source?'來源中的下一步':w.status==='completed'?'最後記錄的後續處置':'接續這份工作'}</div><div class="next-text">${next?richTextMarkup(next):'下一步尚未記錄，請閱讀完整計畫與交接文件。'}</div><div class="next-owner">${source?w.next_action?esc(w.next_action.source_path+' · '+w.next_action.path):'':`下一位：${esc(w.next_owner)}`}</div>${source?w.next_action?sourceButton(w.next_action.document_id,'開啟下一步來源'):sourceButton(sourceFile(w,w.entrypoint)?.id,'閱讀完整計畫'):''}</div>${editable?'<button data-action="handoff">更新交接</button>':''}</div>${source&&w.status===null?'<div class="warn">來源沒有 workflow locator。狀態、phase 與 lifecycle contract 保持未記錄。</div>':''}<nav class="tabs" aria-label="紀錄內容">${Object.entries(names).map(([key,label])=>`<button class="${tab===key?'on':''}" data-tab="${key}">${label}${key==='documents'?' '+Object.keys(w.documents||{}).length:''}</button>`).join('')}</nav><div id="tabContent">${content}</div><details class="advanced"><summary>來源與資料契約</summary><p class="small">${source?'快照原文保留於文件；共通欄位為來源投影，領域延伸欄位以原始文件為準。':'此服務使用 framework 共通欄位及人工記錄契約，保存文字文件與修訂。'}</p>${structuredMarkup({workflow_id:w.id,namespace:w.namespace,schema_version:w.schema_version,lifecycle_contract:w.lifecycle_contract,service_contract_version:w.service_contract_version,template_source:w.template_source,template_version:w.template_version,source:w.source,extensions:w.extensions})}</details>`;
+ $('detail').classList.toggle('record-board-view',tab==='board');
+ $('detail').innerHTML=`<div class="topline"><button class="mobile-back" id="back">‹ 回到紀錄列表</button><span>${esc(w.namespace||'personal')} / workflow</span><span class="demo-label">${modeName[w.record_mode]}</span></div><div class="hero"><div><span class="eyebrow">${badge(w.status)}　${source?'此 Git 版本':'修訂 '+w.revision}</span><h2>${esc(w.title)}</h2><p class="monospace">${esc(w.id)}</p></div>${editable?'<button data-action="editWorkflow">編輯紀錄</button>':''}</div><div class="linked-items">${linkItems(w)}</div><div id="workflow-summary">${workflowSummaryMarkup(w,sourceSummary)}</div><div class="next"><div><div class="next-label">${source?'來源中的下一步':w.status==='completed'?'最後記錄的後續處置':'接續這份工作'}</div><div class="next-text">${next?richTextMarkup(next):'下一步尚未記錄，請閱讀完整計畫與交接文件。'}</div><div class="next-owner">${source?w.next_action?esc(w.next_action.source_path+' · '+w.next_action.path):'':`下一位：${esc(w.next_owner)}`}</div>${source?w.next_action?sourceButton(w.next_action.document_id,'開啟下一步來源'):sourceButton(sourceFile(w,w.entrypoint)?.id,'閱讀完整計畫'):''}</div>${editable?'<button data-action="handoff">更新交接</button>':''}</div>${source&&w.status===null?'<div class="warn">來源沒有 workflow locator。狀態、phase 與 lifecycle contract 保持未記錄。</div>':''}<nav class="tabs" aria-label="紀錄內容">${Object.entries(names).map(([key,label])=>`<button class="${tab===key?'on':''}" data-tab="${key}">${label}${key==='documents'?' '+Object.keys(w.documents||{}).length:''}</button>`).join('')}</nav><div id="tabContent">${content}</div><details class="advanced"><summary>來源與資料契約</summary><p class="small">${source?'快照原文保留於文件；共通欄位為來源投影，領域延伸欄位以原始文件為準。':'此服務使用 framework 共通欄位及人工記錄契約，保存文字文件與修訂。'}</p>${structuredMarkup({workflow_id:w.id,namespace:w.namespace,schema_version:w.schema_version,lifecycle_contract:w.lifecycle_contract,service_contract_version:w.service_contract_version,template_source:w.template_source,template_version:w.template_version,source:w.source,extensions:w.extensions})}</details>`;
  $('back').onclick=()=>{$('app').classList.remove('show-detail');};$('detail').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;focusedTask=null;renderDetail();if(tab==='documents'&&documentId){if(loadedDocument)renderDocumentPane();else loadDocument();}});
  $('detail').querySelectorAll('[data-open-task]').forEach(b=>b.onclick=()=>{focusedTask=b.dataset.openTask;tab='tasks';renderDetail();$('tabContent').scrollIntoView({block:'start'});});
  $('detail').querySelectorAll('[data-action]').forEach(b=>b.onclick=()=>action(b.dataset.action));$('detail').querySelectorAll('[data-task]').forEach(b=>b.onclick=()=>editTask(b.dataset.task));bindDocumentLinks($('detail'));if(tab==='documents'&&loadedDocument)renderDocumentPane();}
@@ -114,5 +158,9 @@ $('form').onsubmit=async e=>{e.preventDefault();if($('saveButton').disabled)retu
 $('closeModal').onclick=$('cancelModal').onclick=()=>$('modal').close();$('createButton').onclick=()=>action('create');let debounce;$('search').oninput=()=>{clearTimeout(debounce);debounce=setTimeout(()=>{offset=0;loadList();},220);};
 $('filters').querySelectorAll('button').forEach(b=>b.onclick=()=>{filter=b.dataset.filter==='all'?'':b.dataset.filter;$('statusFilter').value='';offset=0;$('filters').querySelectorAll('button').forEach(x=>x.classList.toggle('chosen',x===b));loadList();});
 for(const id of ['kindFilter','ownerFilter','modeFilter','statusFilter'])$(id).onchange=()=>{if(id==='statusFilter'){filter=$(id).value;$('filters').querySelectorAll('button').forEach(x=>x.classList.remove('chosen'));}offset=0;loadList();};
-$('prevPage').onclick=()=>{offset=Math.max(0,offset-30);loadList();};$('nextPage').onclick=()=>{offset+=30;loadList();};$('allNav').onclick=()=>{$('app').classList.remove('show-detail');};
-(async()=>{await loadList();renderPending();if(records.length){await choose(records[0].id,records[0].record_mode);}else $('detail').innerHTML='<div class="empty">選擇 workflow 或建立線上紀錄。</div>';})();
+$('prevPage').onclick=()=>{offset=Math.max(0,offset-30);loadList();};$('nextPage').onclick=()=>{offset+=30;loadList();};
+(async()=>{
+  await loadList();
+  renderPending();
+  if(records.length && innerWidth>650) await choose(records[0].id,records[0].record_mode,false);
+})();

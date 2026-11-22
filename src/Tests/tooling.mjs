@@ -28,7 +28,7 @@ async function checkout(name){
  // Two levels keep even the old ../../.runtime bug inside this disposable suite.
  const directory=join(evidence,name,'checkout');await mkdir(directory,{recursive:true});
  await json(join(directory,'package.json'),{type:'module'});
- for(const file of ['src/Tooling/collaboration-ui-preview.mjs','src/Tooling/collaboration-ui-fixture.mjs','src/Tooling/collaboration-trial.mjs','src/Tooling/Lib/trial-runtime.mjs','src/Tests/Fixtures/collaboration-sqlite.mjs']){
+ for(const file of ['src/Tooling/collaboration-ui-preview.mjs','src/Tooling/collaboration-ui-fixture.mjs','src/Tooling/portfolio-fixture.mjs','src/Tooling/collaboration-trial.mjs','src/Tooling/Lib/trial-runtime.mjs','src/Tests/Fixtures/collaboration-sqlite.mjs']){
   await mkdir(dirname(join(directory,file)),{recursive:true});await copyFile(join(root,file),join(directory,file));
  }
  await cp(join(root,'src/Core'),join(directory,'src/Core'),{recursive:true});

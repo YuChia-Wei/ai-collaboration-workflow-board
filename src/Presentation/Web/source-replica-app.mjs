@@ -4,15 +4,48 @@ import {esc} from './collaboration-view.mjs';
 import {replicaBoardMarkup,replicaTaskMarkup} from './source-replica-view.mjs';
 import {documentMarkup,fileLibraryMarkup,resolveReplicaLink} from './document-view.mjs';
 import {structuredMarkup,rawDisclosure} from './content-view.mjs';
+import {workspaceHeader,workspaceLabel,workspaceTitle} from './workspace-shell.mjs';
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search);
+const view='source-replica';
+const initialStore=params.get('store')||document.querySelector('meta[name="collaboration-store"]')?.content||'';
 let client=null,items=[],cursor=null,serial=0,selection=0,selectedIndex=null;
-$('app').className='app c-app';
-$('app').innerHTML=`<aside class="rail"><div class="brand"><span class="mark" aria-hidden="true">≡</span>工作紀錄室</div><div><div class="rail-label">WORKSPACE</div><nav aria-label="工作空間"><a class="c-nav current" aria-current="page" href="?view=source-replica"><span class="nav-icon" aria-hidden="true">▦</span>專案來源副本</a><a class="c-nav" href="?view=collaboration"><span class="nav-icon" aria-hidden="true">◷</span>Workflow 協作</a><a class="c-nav" href="/"><span class="nav-icon" aria-hidden="true">▤</span>人工與歷史來源</a></nav></div><span class="stamp">私人工作空間</span><div class="rail-note"><strong>每一份工作，都有脈絡。</strong>保留來源、任務與交接，<br>從上次停下的地方繼續。</div></aside>
-<section class="list" aria-label="來源工作流程"><div class="list-head"><h1>專案來源副本</h1></div><details class="connection-settings"><summary>資料連線設定</summary><form id="r-connect"><label for="r-store">資料空間（store ID）</label><input id="r-store" required><button>讀取專案</button></form></details><div class="project-picker"><label for="r-project">目前專案</label><select id="r-project"><option value="">請先讀取資料空間</option></select></div><label class="sr-only" for="r-search">搜尋已載入的工作流程</label><input class="search r-search" type="search" id="r-search" placeholder="搜尋已載入的名稱或 ID"><div class="list-divider"><span>工作流程</span><span id="r-count">—</span></div><div id="r-list" aria-live="polite"></div><button id="r-more" hidden>載入更多</button></section>
-<main class="detail" id="r-detail"><div class="topline"><button type="button" class="subtle" id="r-back">← 來源副本列表</button><span>工作空間 / 來源紀錄</span></div><div id="r-content" tabindex="-1"><section class="welcome"><div class="welcome-mark" aria-hidden="true">▦</div><p class="workspace-kicker">YOUR WORK, IN CONTEXT</p><h1>接續每一段工作。</h1><p>從左側選擇專案與工作流程，<br>讓任務進度、成果與原始文件回到同一個畫面。</p><ol><li>選擇專案</li><li>開啟工作流程</li><li>點選任務，查看成果與來源</li></ol></section></div></main>`;
-$('r-store').value=params.get('store')||document.querySelector('meta[name="collaboration-store"]')?.content||'';
+document.title=workspaceTitle(view);
+$('app').className='app c-app workspace-app';
+$('app').innerHTML=`<div id="workspace-header">${workspaceHeader(view,initialStore)}</div>
+<main class="workspace-main"><h1 class="workspace-heading">${workspaceLabel(view)}</h1>
+<div class="workspace-panes"><aside class="list" aria-labelledby="r-list-heading">
+  <div class="list-head"><h2 id="r-list-heading">來源工作流程</h2></div>
+  <details class="connection-settings"><summary>資料連線設定</summary><form id="r-connect"><label for="r-store">資料空間（store ID）</label><input id="r-store" required><button>讀取專案</button></form></details>
+  <div class="project-picker"><label for="r-project">目前專案</label><select id="r-project"><option value="">請先讀取資料空間</option></select></div>
+  <label for="r-search">搜尋已載入的工作流程</label><input class="search" type="search" id="r-search" placeholder="搜尋名稱或 ID">
+  <div class="list-divider"><span>工作流程</span><span id="r-count">—</span></div><div id="r-list" aria-live="polite"></div><button id="r-more" hidden>載入更多</button>
+</aside><section class="detail" id="r-detail" aria-label="來源副本詳情">
+  <div class="topline"><button type="button" class="subtle" id="r-back">← 來源副本列表</button></div>
+  <div id="r-content" tabindex="-1">選擇專案與工作流程後，可查看任務、文件與來源版本。</div>
+</section></div></main>`;
+$('r-store').value=initialStore;
 const showError=(id,e)=>{$(id).textContent='讀取失敗：'+e.message;};
-async function connect(){const turn=++serial;selection++;selectedIndex=null;$('app').classList.remove('show-detail');client=null;items=[];cursor=null;$('r-list').textContent='讀取專案…';$('r-content').textContent='請選擇專案。';$('r-project').innerHTML='<option value="">請選擇專案</option>';try{const projects=await createProjectClient($('r-store').value.trim()).list();if(turn!==serial)return;for(const p of projects.filter(p=>p.project_ref.project_id!=='legacy-personal')){const o=document.createElement('option');o.value=p.project_ref.project_id;o.textContent=p.name+' · '+o.value;$('r-project').append(o);} $('r-list').textContent='選擇明確專案後讀取副本。';const selected=params.get('project');if(projects.some(p=>p.project_ref.project_id===selected)){$('r-project').value=selected;await chooseProject();}}catch(e){if(turn===serial)showError('r-list',e);}}
+async function connect(){
+ const turn=++serial,store=$('r-store').value.trim(),url=new URL(location.href);
+ const project=(url.searchParams.get('store')||initialStore)===store?url.searchParams.get('project'):null;
+ selection++;selectedIndex=null;client=null;items=[];cursor=null;
+ $('app').classList.remove('show-detail');
+ $('r-list').textContent='讀取專案…';$('r-count').textContent='—';$('r-more').hidden=true;
+ $('r-content').textContent='選擇專案後，可查閱已匯入的工作流程與來源文件。';
+ $('r-project').innerHTML='<option value="">請選擇專案</option>';
+ try{
+  const projects=await createProjectClient(store).list();
+  if(turn!==serial)return;
+  const available=projects.filter(p=>p.project_ref.project_id!=='legacy-personal');
+  for(const p of available){
+   const option=document.createElement('option');
+   option.value=p.project_ref.project_id;option.textContent=p.name+' · '+option.value;$('r-project').append(option);
+  }
+  $('workspace-header').innerHTML=workspaceHeader(view,store);
+  $('r-project').value=available.some(p=>p.project_ref.project_id===project)?project:'';
+  await chooseProject();
+ }catch(e){if(turn===serial)showError('r-list',e);}
+}
 async function chooseProject(){serial++;selection++;selectedIndex=null;$('app').classList.remove('show-detail');items=[];cursor=null;$('r-list').textContent='選擇明確專案後讀取副本。';$('r-more').hidden=true;$('r-content').textContent='選擇來源 workflow。';const project=$('r-project').value,store=$('r-store').value.trim();client=project?createSourceReplicaClient({store_id:store,namespace:'personal',project_id:project}):null;const u=new URL(location.href);u.searchParams.set('store',store);if(project)u.searchParams.set('project',project);else u.searchParams.delete('project');history.replaceState(null,'',u);await list(false);}
 function renderList(){
  const query=$('r-search').value.trim().toLocaleLowerCase();
@@ -29,7 +62,7 @@ async function choose(index,revision){
  try{
   const value=await current.query('replica.read',ref),files=await current.manifest(ref,value);
   if(turn!==selection)return;
-  $('r-content').innerHTML=`<p class="workspace-kicker">PROJECT WORKFLOW</p><div class="hero"><h1>${esc(value.metadata.workflow.title)}</h1><span class="badge">${esc(value.metadata.workflow.status)}</span></div>
+  $('r-content').innerHTML=`<div class="hero"><h2>${esc(value.metadata.workflow.title)}</h2><span class="badge">${esc(value.metadata.workflow.status)}</span></div>
    <div class="workspace-meta"><span>${esc(value.project_ref.project_id)}</span><span>唯讀來源副本</span><span>${value.file_count} 份文件</span></div>
    <nav class="workspace-tabs" aria-label="工作流程內容"><strong>任務看板</strong><a href="#r-documents">文件與原文 ↓</a><a href="#r-source">來源與版本 ↓</a></nav>
    <div id="r-board" aria-live="polite">讀取任務看板…</div>
@@ -48,7 +81,7 @@ async function choose(index,revision){
    button.disabled=true;
    try{
     const bytes=await current.file(ref,file);if(turn!==selection||fileTurn!==fileSerial)return;
-    const target=$('r-file');target.className='document-reader panel';target.innerHTML=`<div class="document-heading"><span class="workspace-kicker">DOCUMENT</span><h2>${esc(file.path.split('/').at(-1))}</h2><p class="small">${esc(file.path)}</p></div>`;
+    const target=$('r-file');target.className='document-reader panel';target.innerHTML=`<div class="document-heading"><h2>${esc(file.path.split('/').at(-1))}</h2><p class="small">${esc(file.path)}</p></div>`;
     const download=document.createElement('button');download.textContent='下載 '+file.path;
     download.onclick=()=>{const url=URL.createObjectURL(new Blob([bytes],{type:'application/octet-stream'})),a=document.createElement('a');a.href=url;a.download=file.path.split('/').at(-1);a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};target.append(download);
     try{const text=new TextDecoder('utf-8',{fatal:true}).decode(bytes);if(!text.includes('\u0000')){const reading=document.createElement('div');reading.innerHTML=documentMarkup(text,{name:file.path,resolveLink:href=>resolveReplicaLink(href,file.path,files)});target.append(reading);}else target.append(document.createTextNode('二進位附件可完整下載。'));}

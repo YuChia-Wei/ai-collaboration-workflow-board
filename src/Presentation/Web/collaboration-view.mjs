@@ -1,4 +1,5 @@
 import {structuredMarkup,rawDisclosure} from './content-view.mjs';
+import {workspaceHref,workspaceLabel} from './workspace-shell.mjs';
 export const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const labels={draft:'草稿',active:'執行中',paused:'已暫停',cancelled:'已取消',completed:'已完成',pending:'待處理',in_progress:'執行中',blocked:'受阻',decided:'已決定',waived:'已豁免'};
 export const badge=s=>`<span class="badge ${esc(s)}">${esc(labels[s]||s)}</span>`;
@@ -15,8 +16,11 @@ export function listMarkup(items,selected) {
   return items.map(w=>`<button class="item ${w.workflow_ref.workflow_id===selected?'selected':''}" data-workflow="${esc(w.workflow_ref.workflow_id)}"><div class="c-row">${badge(w.status)}<span class="small">r${w.revision}</span></div><h2>${esc(w.title)}</h2><p class="monospace">${esc(w.workflow_ref.workflow_id)}</p><span class="c-open">查看進度與交接 →</span></button>`).join('')||'<div class="empty">沒有符合的協作 workflow。此處不會改讀人工或來源快照資料。</div>';
 }
 
-export function emptyCollaborationMarkup(search=false){
-  return `<div class="c-board-heading"><h1>協作看板</h1><a href="/">查看既有工作看板 →</a></div><div class="warn"><strong>${search?'沒有符合搜尋條件的協作工作流程':'目前尚無協作工作流程'}</strong><p>${search?'請調整左側搜尋條件。':'這個資料空間目前沒有協作 task。你在原畫面建立的人工紀錄與既有來源快照，請從「查看既有工作看板」開啟。'}</p></div><div class="c-board" role="region" aria-label="工作進度看板">${['pending','in_progress','blocked','completed'].map(s=>`<section class="c-column c-column-${s}" aria-label="${labels[s]}"><header><h3><span class="c-dot"></span>${labels[s]}</h3><span class="c-column-count">0</span></header><p class="c-column-empty">目前沒有工作</p></section>`).join('')}</div>`;
+export function emptyCollaborationMarkup(search=false,store=''){
+  return `<div class="topline"><button id="c-back" class="subtle">← 工作流程列表</button></div>
+    <div class="c-board-heading"><h2>工作看板</h2><a href="${esc(workspaceHref('records',store))}">${workspaceLabel('records')}</a></div>
+    <div class="warn"><strong>${search?'沒有符合搜尋條件的協作工作流程':'目前尚無協作工作流程'}</strong><p>${search?'請調整搜尋條件。':'可以切換專案，或從「人工與歷史來源」查閱人工紀錄與歷史快照。'}</p></div>
+    <div class="c-board" role="region" aria-label="工作進度看板">${['pending','in_progress','blocked','completed'].map(s=>`<section class="c-column c-column-${s}" aria-label="${labels[s]}"><header><h3><span class="c-dot"></span>${labels[s]}</h3><span class="c-column-count">0</span></header><p class="c-column-empty">目前沒有工作</p></section>`).join('')}</div>`;
 }
 
 export function detailMarkup(c,tab) {
@@ -24,7 +28,7 @@ export function detailMarkup(c,tab) {
   const next=handoffs.at(-1)?.handoff.next_step;
   const counts=['completed','in_progress','blocked','pending'].map(s=>({s,n:tasks.filter(t=>t.status===s).length}));
   return `<div class="topline"><button id="c-back" class="subtle">← 工作流程列表</button><span>協作紀錄 · workflow revision ${c.revision}</span><button id="c-refresh">重新讀取</button></div>
-  <div class="hero"><div><div class="eyebrow">WORKFLOW / 協作進度</div><h1>${esc(w.title)}</h1></div>${badge(w.status)}</div><p class="goal">${esc(w.goal)}</p>
+  <div class="hero"><h2>${esc(w.title)}</h2>${badge(w.status)}</div><p class="goal">${esc(w.goal)}</p>
   <div class="c-stats">${counts.map(({s,n})=>`<div><strong>${n}</strong><span>${labels[s]}工作</span></div>`).join('')}</div><p class="small">工作數量是執行狀態統計，不代表業務驗收進度。</p>
   <div class="next"><div><div class="next-label">交接紀錄中的下一步</div><div class="next-text">${text(next??'尚無交接下一步；請先查閱工作與計畫。')}</div><div class="next-owner">${esc(handoffs.at(-1)?.handoff.next_actor_hint||'下一位尚未指定')} · 交接不擴大允許範圍</div></div></div>
   ${c.missing.length?`<div class="warn" role="alert"><strong>接手資料有缺漏，不能視為完整內容</strong>${lines(c.missing.map(m=>`${m.kind} · ${m.ref}：${m.reason}`))}</div>`:''}

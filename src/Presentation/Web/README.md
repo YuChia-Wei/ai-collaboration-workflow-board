@@ -1,6 +1,15 @@
 # Board 前端來源
 
-此目錄負責瀏覽器 HTML／CSS、DOM 互動、呈現、Markdown 清理與 HTTP client。`index.html` 是頁面模板，`entry.mjs` 依入口選擇人工／來源紀錄的 `app.mjs` 或協作檢視的 `collaboration-app.mjs`；目前以相對 `/api/` 路徑呼叫同一 Sites 服務。
+此目錄負責瀏覽器 HTML／CSS、DOM 互動、呈現、Markdown 清理與 HTTP client。`index.html` 是頁面模板，`entry.mjs` 載入所選工作空間，共用同源 HTTP 服務。
+
+| 入口 | 用途 |
+| --- | --- |
+| `/`、`/?view=portfolio` | 產品總覽、進行中的工作、產品 PBI 與執行看板 |
+| `/?view=records` | 人工與歷史來源 |
+| `/?view=collaboration` | 協作快照、工作證據、審閱草稿與交接 |
+| `/?view=source-replica` | 已匯入的專案來源副本 |
+
+產品總覽讀取可見專案，再依產品讀取 `/api/portfolio/v1/query`。PBI 以產品、repository 與 Issue 的識別定位；頁面顯示來源觀察時間及涵蓋狀態。工作流程可在建立時選擇零至多個 PBI，或從任一側補連／解除。命令提交至 `/api/portfolio/v1/command`，使用版本與操作識別，接受後重新讀取；回覆中斷時，可在同一頁重送相同請求。既有 personal 空間提供協作讀取，人工紀錄與來源副本各有獨立入口。
 
 - 可依賴前端套件及 `../../Contracts/` 的公開訊息定義。
 - 不 import Core、Infrastructure 或其他 Presentation 模組，不讀 D1、server 身分來源或 server secrets。
@@ -12,7 +21,7 @@
 
 ## Workflow 協作檢視（#7 本機切片）
 
-入口為 `/?view=collaboration&store=<已設定的 store ID>`，也可從人工／來源紀錄側欄進入後指定 store。Store 只是資料空間識別，不提供身分或權限。查詢失敗不改讀另一種 profile，也不顯示合成 fallback。
+入口為 `/?view=collaboration&store=<已設定的 store ID>`。四個工作空間共用頁首導覽；切換時保留目前的 store，頁首標出作用中的工作空間。Store 只是資料空間識別，不提供身分或權限。查詢失敗不改讀另一種 profile，也不顯示合成 fallback。
 
 `collaboration-client.mjs` 呼叫既有 collaboration/1 queries，完成有界分頁並核對 workflow 快照；`collaboration-view.mjs` 呈現工作、決策、指定文件與交接。文件讀取與下載都使用精確 revision／hash；內容以文字顯示，不執行文件指令。
 

@@ -6,10 +6,12 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 import {sqliteCollaboration} from '../Tests/Fixtures/collaboration-sqlite.mjs';
 import {collaborationUiFixture} from './collaboration-ui-fixture.mjs';
+import {seedPortfolioPreview} from './portfolio-fixture.mjs';
 
 const root=fileURLToPath(new URL('../../',import.meta.url));
 const envelope={service_contract_version:'workflow-board/collaboration/1',schema_version:'1.0'};
-export async function startCollaborationPreview({port=0,output=null,projects=false}={}) {
+export async function startCollaborationPreview({port=0,output=null,projects=false,portfolio=false}={}) {
+  if(projects && portfolio) throw Error('Select either projects or portfolio preview.');
   const workerPath=resolve(root,'dist/server/index.js');
   const worker=(await import(pathToFileURL(workerPath).href)).default;
   const {sqlite,db}=sqliteCollaboration();
@@ -21,9 +23,10 @@ export async function startCollaborationPreview({port=0,output=null,projects=fal
     const data=await response.json();if(!response.ok)throw Error('Preview setup failed: '+JSON.stringify(data));return data;
   }
   const query=(name,payload)=>call('/api/collaboration/v1/queries',{...envelope,query:name,payload});
-  const plan=await collaborationUiFixture(store,'wb07-local-ui','2026-10-14T00:00:00.000Z');
+  const plan=portfolio ? {steps:[],workflow_refs:[]} : await collaborationUiFixture(store,'wb07-local-ui','2026-10-14T00:00:00.000Z');
   const receipts=[];
   try{
+    if(portfolio) await seedPortfolioPreview(call,store);
     for(const step of plan.steps){
       const request=structuredClone(step.request);
       if(step.assignment_task){const c=await query('workflow.context',{workflow_ref:request.workflow_ref,limit:20});request.payload.assignment=c.tasks.items.find(t=>t.id===step.assignment_task).assignment.ref;}
@@ -42,22 +45,25 @@ export async function startCollaborationPreview({port=0,output=null,projects=fal
         }
       }
     }
-    // Default preview is read-only. Explicit project preview permits only
-    // project metadata writes in this disposable synthetic database.
-    env.COLLABORATION_BINDINGS=JSON.stringify({[owner]:{...binding,capabilities:projects?['read','plan']:['read']}});
+    // Each editable preview exposes only the commands allowed below.
+    env.COLLABORATION_BINDINGS=JSON.stringify({[owner]:{...binding,capabilities:projects||portfolio?['read','plan']:['read']}});
     let origin;
     const server=createServer(async(req,res)=>{
       const reject=status=>{res.writeHead(status,{'content-type':'application/json'});res.end(JSON.stringify({error:'preview_route_forbidden'}));};
       if(req.headers.host!==new URL(origin).host)return reject(403);
       const path=new URL(req.url,origin).pathname;
       const isPage=req.method==='GET'&&path==='/';
+      const recordRead=portfolio&&req.method==='GET'&&/^\/api\/workflows(?:\/[^/]+)?$/.test(path);
       const projectCommand=projects&&path==='/api/collaboration/v2/commands';
-      if(!isPage && !(req.method==='POST'&&(projectCommand||/^\/api\/collaboration\/v[12]\/queries$/.test(path))))return reject(403);
-      if(!isPage && req.headers.origin!==origin)return reject(403);
+      const portfolioRoute=portfolio&&['/api/portfolio/v1/query','/api/portfolio/v1/command'].includes(path);
+      const replicaRead=portfolio&&path==='/api/source-replica/v1/queries';
+      if(!isPage && !recordRead && !(req.method==='POST'&&(portfolioRoute||replicaRead||projectCommand||/^\/api\/collaboration\/v[12]\/queries$/.test(path))))return reject(403);
+      if(req.method==='POST' && req.headers.origin!==origin)return reject(403);
       try{
         const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>300000)return reject(413);chunks.push(chunk);}
         if(projectCommand&&!['project.create','project.rename'].includes(JSON.parse(Buffer.concat(chunks).toString()).command))return reject(403);
-        const response=await worker.fetch(new Request(origin+req.url,{method:req.method,headers:{'content-type':'application/json','oai-authenticated-user-id':owner,...(!isPage?{origin}:{})},...(!isPage?{body:Buffer.concat(chunks)}:{})}),env);
+        if(portfolioRoute && path.endsWith('/command') && !['workflow.create','workflow.link','workflow.unlink'].includes(JSON.parse(Buffer.concat(chunks).toString()).command))return reject(403);
+        const response=await worker.fetch(new Request(origin+req.url,{method:req.method,headers:{'content-type':'application/json','oai-authenticated-user-id':owner,...(req.method==='POST'?{origin}:{})},...(req.method==='POST'?{body:Buffer.concat(chunks)}:{})}),env);
         const headers=Object.fromEntries(response.headers);headers['cache-control']='no-store';
         res.writeHead(response.status,headers);
         res.end(isPage?(await response.text()).replace('</head>','<meta name="collaboration-preview" content="synthetic-local"></head>'):Buffer.from(await response.arrayBuffer()));
@@ -65,7 +71,7 @@ export async function startCollaborationPreview({port=0,output=null,projects=fal
     });
     await new Promise((done,fail)=>{server.once('error',fail);server.listen(port,'127.0.0.1',done);});
     origin='http://127.0.0.1:'+server.address().port;
-    const url=origin+'/?view=collaboration&store='+store+'&project='+(projects?'preview-A':'legacy-personal');
+    const url=portfolio?origin+'/':origin+'/?view=collaboration&store='+store+'&project='+(projects?'preview-A':'legacy-personal');
     const evidence={source:'local synthetic / bundled Worker / in-memory SQLite',observed_at:new Date().toISOString(),url,worker_sha256:createHash('sha256').update(await readFile(workerPath)).digest('hex'),receipts,contexts};
     if(output){await mkdir(output,{recursive:true});await writeFile(resolve(output,'preview-evidence.json'),JSON.stringify(evidence,null,2));}
     return {url,origin,evidence,close:async()=>{await new Promise(done=>server.close(done));sqlite.close();}};
@@ -73,8 +79,10 @@ export async function startCollaborationPreview({port=0,output=null,projects=fal
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
   const option=name=>{const i=process.argv.indexOf(name);return i<0?null:process.argv[i+1];};
-  const output=resolve(option('--output')||resolve(root,'.runtime/wb07-ui',new Date().toISOString().replace(/[:.]/g,'-')));
-  const preview=await startCollaborationPreview({port:Number(option('--port')||4177),output,projects:process.argv.includes('--projects')});
-  console.log('Synthetic local preview: '+preview.url);console.log('Evidence: '+output);
+  const portfolio=process.argv.includes('--portfolio');
+  const outputArg=option('--output');
+  const output=outputArg?resolve(outputArg):portfolio?null:resolve(root,'.runtime/wb07-ui',new Date().toISOString().replace(/[:.]/g,'-'));
+  const preview=await startCollaborationPreview({port:Number(option('--port')||4177),output,projects:process.argv.includes('--projects'),portfolio});
+  console.log('Synthetic local preview: '+preview.url);if(output)console.log('Evidence: '+output);
   for(const signal of ['SIGINT','SIGTERM'])process.on(signal,async()=>{await preview.close();process.exit(0);});
 }

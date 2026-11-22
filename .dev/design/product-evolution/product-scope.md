@@ -1,6 +1,25 @@
 # 產品範圍與責任
 
-日期：2026-10-22。狀態：初期設計；整體方向已接受，細部選型依 [待決事項](decisions-and-questions.md) 收斂。
+初稿 2026-10-22，GitHub 第一版範圍修訂於 2026-11-22。已確認產品方向；以下畫面、PBI 拆分與驗收例是開發設計。可從[離線樣稿](github-v1-demo.html)體驗基本用法。
+
+## GitHub 第一版的使用方式
+
+打開 Board 先看到自己有哪些產品、哪些 workflow 進行中或受阻、哪件事待決，以及最後一次取得狀態的時間。可以直接接手一個 workflow，也可以循「產品 → Scrum Board（產品待辦看板）→ PBI → Workflow Board（執行看板）」查清它正在解決的問題。第一版一個產品對應一個 Board 專案。已有 GitHub Project 的產品可沿用欄位與排序；只有 repository Issues 的產品也能開始工作。
+
+| 領域與畫面 | 使用者在此做的事 | 資料與行為的歸屬 |
+| --- | --- | --- |
+| 產品總覽 | 找產品，看到各產品的工作，直接開啟一筆待接手的調查 | Board 依使用者可見的產品／專案範圍彙總。共享 workflow 按其完整識別只計一次。無關聯工作仍可見；能確認沒有工作才顯示零筆，部分載入或舊副本顯示範圍與時間。 |
+| Scrum Board | 建立、編輯、關閉或重開 Issue；查看父子項目，將 Issue 加入選定 Project，排序、更新可用欄位 | GitHub 保存 Issue 及 Project item。Issue 的開關、Project 狀態與 Sprint／迭代各有語意。可用功能隨所選來源及權限顯示；產品內不假造缺少的欄位。 |
+| Workflow Board | 從一或多個 PBI 規劃工作、留下任務進度、證據與交接；也可以先開始調查，稍後補連 PBI | Board 保存 workflow 與目前關聯；同一個 PBI 可由多個 workflow 推進。保留建立時的外部引用，後來的補連或解除可追溯，兩側都能讀回。同號 Issue 以來源 repository 與穩定識別區分。 |
+| 交付與部署（Scrum Board 的交付檢視） | 選定本次承諾的成果，檢視依賴、缺件與延期原因；追查某版本進入哪個環境 | 交付計畫保存範圍，成果達到要求並能指向確切產物才可交付。部署另記產物、目標環境及實際結果。Sprint 是可選的團隊規劃節奏。 |
+
+原生 workflow 的「進行中」表示 Board 目前記錄的狀態。阻礙和待決事項可同時存在於進行中的工作；Agent 此刻是否在線，須有獨立的 session 觀察。讀到歷史來源副本時保留其版本及觀察時間。即使工作計畫已完成，PBI 結案、成果接受和部署仍需各自的決定或事實。[現行 Workflow 實體契約](../../specs/collaboration/workflow/entity/workflow.spec.md) · [歷史領域地圖](../../specs/domain-map.md)
+
+由 PBI 建立 workflow 時，Board 保存當時實際讀到的標題、來源識別及觀察版本，供接手者查閱。GitHub 上的名稱、成員關係或欄位改變後，Scrum Board 重新讀取現況；原始選取快照仍可辨識。對來源未提供不可變 revision 的資料，使用 Board 自己的快照識別與取得時間，畫面明示其出處。
+
+**交付的預設取捨**：A 已就緒且可以獨立使用與交付，就把 B 移出本次計畫，記下原因。A 需要 B 時，先確認目標環境是否已有相容的 B。若尚缺 B，列出 A 的阻礙；若兩者必須共同生效或產物無法安全拆開，整組延後。共用 workflow、同一個 Epic 或同一個 Sprint 都不足以判定部署相依。部署所需的前置工作和「執行這次部署」的 workflow 分別判定，避免互等。[交付判斷例](github-v1-examples.md#交付判斷表)
+
+**參考專案的用途**：AICF 提供「已有規劃欄位及工作階層」的情境，ArchPrecept 提供「只有 Issues，部分 Feature 可分批交付」的情境。兩者的命名、欄位與 AI 工作慣例均可演進。所有開發展示、整合及 E2E 使用新編的產品、工作與證據；AICF、ArchPrecept 和 Workflow Board 自身的工作資料、程式與 GitHub 資源均不得充當測試資料來源或目標。Board 可照常以自身 Issues 管理開發，連結僅用於規劃對照。[驗收環境與資料邊界](github-v1-examples.md)
 
 ## 產品目的與使用者
 
@@ -31,7 +50,13 @@ Workflow Board 的核心價值是讓人類與外部 AI Agent 圍繞同一份工�
 
 ## Board 範圍
 
-### 近期目標
+### 近期優先順序（2026-11-22）
+
+1. 完成產品首頁、產品內兩種看板及可操作的領域流程。使用合成案例讓 owner 先檢視導航、狀態語意與跨卡接手。
+2. 完成 GitHub Issues／Projects 的 UI、讀寫回報及隔離驗收；包含只有 Issues 的使用方式、稍後補連、部分成功與重試。
+3. 用明確的交付範圍與環境證據完成交付檢視。地端 Azure DevOps 與 Azure DevOps Services 都排在 GitHub 版 UI 與相關操作完成之後，另行選擇首個場景。
+
+### 既有協作工作（2026-10-22 提出，延續追蹤）
 
 - 保留已交付的可攜核心、線上 MCP／API、Windows CLI 與跨介面接手。
 - 補足可靠性及完整退出能力的證據與缺口（#6），沿用既有 CAS／receipt 機制。

@@ -1,6 +1,14 @@
-# Workflow Board 產品演進初期設計
+# Workflow Board 產品演進設計
 
-整理日期：2026-10-22。討論期間：2026-10-20 至 2026-10-22。
+## 目前從這裡開始（2026-11-22）
+
+先開啟[產品總覽互動樣稿](github-v1-demo.html)，選一個產品、查看 PBI、接手 workflow。樣稿使用虛構資料，可以重設。接著閱讀[產品範圍](product-scope.md)、[第一版 PBI、順序與現有 Issues 對照](board-roadmap.md)及[合成驗收範例](github-v1-examples.md)。首個里程碑是可以操作的畫面與領域行為；GitHub Issues／Projects 的整合及寫回接在其後。
+
+本輪承接四段歷史討論：保留 Board 的進度與交接職責、各入口共用的領域規則、協作優先於執行管理，以及交付與實際部署各自的證據。2026-11-22 的範圍修訂取代早期只保存外部 PBI 引用的決定。[設計與 Issues](codex://threads/01a1695f-9b8f-7791-83d2-45a5b2096306) · [核心與展現層](codex://threads/01a163de-8baf-71a3-8616-5432296b47e2) · [本機 APP 與 ADE](codex://threads/01a15947-03ec-7380-b1e2-94ae5c77f5b5) · [來源架構與部署](codex://threads/01a11682-b2ec-7823-9596-57f3d51696e2)
+
+產品研究參考了兩種實務：AICF 用 GitHub Project 及工作階層來規劃，ArchPrecept 從 repository Issues 拆出可交付的工作。兩組虛構範例各自重建其中一種作業條件，測試程式只開啟本地樣稿。[AICF Project](https://github.com/users/YuChia-Wei/projects/3) · [ArchPrecept Issues](https://github.com/YuChia-Wei/ArchPrecept/issues)
+
+## 初期設計背景（2026-10-20 至 2026-10-22）
 
 這組文件完整整理本次討論形成的產品定位、技術限制、架構取捨、記憶構想、既有工作對應與未決事項，供初期設計及後續回查。採主題式整理，合併重複內容並修正後續已查明的差異，不是逐字對話稿。使用者已接受整體方向，並指定保存於 `.dev/`、分開 Board 與 Framework 的工作，以及在 Framework 建立記憶提案。
 
@@ -15,7 +23,7 @@
 | [研究與討論依據](research-and-discussion.md) | 外部產品的授權、現行架構與研究證據支持哪些結論？哪些推論已被修正？ |
 | [方向與待決事項](decisions-and-questions.md) | 哪些是 owner 已選定方向、哪些只是候選？下一步需收斂哪些決策？ |
 
-## 文件效力與證據
+## 2026-10-22 初期文件的效力與證據
 
 - **已接受方向**：本次對話的產品定位、責任分工、語言偏好、階段取捨與文件保存方式。這不是所有細部設計或候選工具的採用決定。
 - **目前事實**：2026-10-22 逐筆讀取的 GitHub Issue 狀態與最終交付紀錄，以及當前專案文件。Board 本機與遠端 `main` 均核對為 `dee43c9e7ee91138fe3b15276468236385222981`；接續 owner 搬移 Lessons 並 force push 後的基線。

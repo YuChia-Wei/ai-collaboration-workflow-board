@@ -9,6 +9,15 @@ import {createProjectRepository} from '../../Infrastructure/Persistence/D1/proje
 import {createProjectServices,PROJECT_PROFILE} from '../../Core/Workflows/Application/projects.mjs';
 import {systemClock} from '../../Infrastructure/Runtime/clock.mjs';
 import {demand} from '../../Core/Workflows/Domain/errors.mjs';
+import {createPortfolio} from '../../Core/Workflows/Application/portfolio.mjs';
+import {createPortfolioRepository} from '../../Infrastructure/Persistence/D1/portfolio-repository.mjs';
+
+export function createPortfolioServices(env){
+ demand(env.DB&&env.COLLABORATION_STORE_ID,'storage_unavailable','unavailable');
+ const db=env.DB.withSession?.('first-primary')??env.DB;
+ return createPortfolio({storeId:env.COLLABORATION_STORE_ID,projects:createProjectRepository(db),
+  portfolio:createPortfolioRepository(db),workflowRepository:id=>createCollaborationRepository(db,id),clock:systemClock});
+}
 
 export function createCollaborationServices(env){
  demand(env.DB,'storage_unavailable','unavailable');
