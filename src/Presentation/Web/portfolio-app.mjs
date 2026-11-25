@@ -1,6 +1,7 @@
 import {createProjectClient} from './project-client.mjs';
 import {createCollaborationClient} from './collaboration-client.mjs';
 import {createPortfolioPages, pbiKey} from './portfolio-pages.mjs';
+import {updateSprintDates} from './sprint-planning.mjs';
 import {availablePbis, kindFields, nativeItems} from './native-backlog.mjs';
 import {lifecycleChange, lifecycleClick, lifecycleCommand} from './pbi-lifecycle.mjs';
 import {deliveryCommand} from './delivery-view.mjs';
@@ -95,12 +96,16 @@ function commandFor(form, submitter){
   const base={command,project_id:product,store_id:store,operation_id:crypto.randomUUID()};
   if (command==='backlog.transition' || command==='lifecycle.configure') return lifecycleCommand(base,form,current);
   if (command.startsWith('delivery.')) return deliveryCommand(base,form,values,current);
+  if(command==='backlog.configure_sprints')return {...base,expected_revision:current.backlog.revision,
+    duration_weeks:Number(values.get('duration_weeks')),start_weekday:Number(values.get('start_weekday'))};
+  if(command==='backlog.create_sprint')return {...base,expected_revision:current.backlog.revision,
+    sprint_id:'sprint-'+crypto.randomUUID(),name:values.get('name').trim(),start_date:values.get('start_date')};
   if (command.startsWith('backlog.')) {
     const editing=command==='backlog.edit';
     const item_id=form.dataset.item || 'pbi-'+crypto.randomUUID();
     const scope={...base,item_id,expected_revision:current.backlog.revision};
     if (command==='backlog.move') return {...scope,before_id:submitter.value || null};
-    const fields={title:values.get('title').trim(), description:values.get('description'),
+    const fields={title:values.get('title').trim(), description:values.get('description'),sprint_id:values.get('sprint_id')||null,
       related_story_id:values.get('related_story_id') || null,
       expected_behavior:values.get('expected_behavior') ?? '', actual_behavior:values.get('actual_behavior') ?? ''};
     return editing ? {...scope,...fields,status:values.get('status')} :
@@ -149,7 +154,11 @@ async function submit(command) {
     recordMessage('服務已接受變更。');
     await load();
   }catch(error){
-    if(error.receipt || error.definitive && !retrying){pending=null;recordMessage(`服務拒絕變更：${error.message}。請重新讀取後確認。`);}
+    if(error.receipt || error.definitive && !retrying){
+      pending=null;
+      if(error.message==='sprint_overlap')recordMessage('這段日期與現有 Sprint 重疊。請選擇不同的開始日期。');
+      else recordMessage(`服務拒絕變更：${error.message}。請重新讀取後確認。`);
+    }
     else{
       recordMessage(`結果尚未確認：${error.message}。`);
       const retry=document.createElement('button');
@@ -169,6 +178,9 @@ main.addEventListener('change',event=>{
   if(select.matches('form[data-command="backlog.create"] select[name="kind"]')){
     select.form.querySelector('[data-kind-fields]').innerHTML=kindFields(select.value,nativeItems(current));
   }
+});
+main.addEventListener('input',event=>{
+  if(event.target.matches('form[data-command="backlog.create_sprint"] [name=start_date]'))updateSprintDates(event.target);
 });
 main.addEventListener('submit',event=>{
   if(event.target.matches('[data-stage-filters]')){

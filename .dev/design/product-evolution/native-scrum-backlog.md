@@ -20,7 +20,15 @@ Epic、Feature、User Story、Task 和 Bug 是本產品選用的規劃語言。�
 
 採用固定層級後，一張新 User Story 需要先有 Epic 和 Feature，換來一條能從產品成果查到具體工作的路徑。Bug 則可能先由使用者回報，當時連受影響的故事都不知道。將 Bug 放根層能讓團隊立即登錄及排序。後來發現影響哪張 Story，可以更新關聯，Bug 原有的識別與順序仍可追查。第一片只表達一個受影響的 Story。
 
-每個產品的根層有一個順序，每一個父項也各自擁有其直屬子項的順序。新項目放在同層末端，可移到指定同層項目之前或末端。例如根層可把急需修復的 Bug 排到 Epic 前面。兩個不同 Feature 下的 Story 可能都排第一，這只表示各自在其 Feature 內的先後。跨父項的全產品平面排序、跨產品優先順序及 Sprint 排程屬後續規劃選擇。
+每個產品的根層有一個順序，每一個父項也各自擁有其直屬子項的順序。新項目放在同層末端，可移到指定同層項目之前或末端。例如根層可把急需修復的 Bug 排到 Epic 前面。兩個不同 Feature 下的 Story 可能都排第一，這只表示各自在其 Feature 內的先後。團隊另以 Sprint 指定某張卡的規劃期間。跨父項的全產品平面排序及跨產品優先順序留待後續選擇。
+
+## Sprint 節奏與工作歸屬
+
+Scrum Guide 規定 Sprint 是固定長度、最長一個月的事件，前一個結束後下一個便開始。在 Sprint Planning，Developers 與 Product Owner 討論並挑選工作，Sprint Backlog 還包括 Sprint Goal 與實現計畫。Azure Boards 也可以在專案定義具名的 iteration 及日期，讓團隊選用，再把工作指派到某一期。這些概念提供了「產品行事曆」與「此期選了哪些工作」的分工依據。[Scrum Guide，The Sprint](https://scrumguides.org/scrum-guide.html#the-sprint) · [Sprint Planning](https://scrumguides.org/scrum-guide.html#sprint-planning) · [Microsoft Learn，Iteration Paths 與團隊 Sprints](https://learn.microsoft.com/en-us/azure/devops/organizations/settings/set-iteration-paths-sprints?view=azure-devops)
+
+Board 將節奏設在產品層。起始預設是每兩週一期、星期一開始，團隊可改成 1 至 4 個整週及任一星期幾起始。這是新建 Sprint 的預設規則。規劃者逐期命名並選定符合設定的開始日，系統算出包含首尾兩天的期間。已建立的期間固定，能讓人事後解讀當時選擇哪一期。漏建幾期時允許留下空白，因此 Board 上僅列使用者實際登記的期間。每個產品的期間不可重疊。
+
+原生 Epic、Feature、User Story、Task 和 Bug 都有一個可留空的 Sprint 選擇。這讓團隊可以先登記一張未排期的 Bug，也可以將父卡與各子卡分配到不同 Sprint。Sprint 只表達該項目的規劃歸屬。進度、同層順序、交付證據與部署紀錄均有獨立的操作。這個模式將 Azure Boards 的具名期間概念用於 Board 私有產品。設定與配卡直接保存於 Board。[項目及 Sprint 的行為規格](../../specs/portfolio/backlog/native-backlog.spec.md#產品的-sprint-規劃)
 
 ## 誰保存什麼
 

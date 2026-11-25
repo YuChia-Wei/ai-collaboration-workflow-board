@@ -100,3 +100,14 @@ export const portfolioDeliveryRecords=sqliteTable('portfolio_delivery_records',{
  owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),
  kind:text('kind').notNull(),id:text('id').notNull(),revision:integer('revision').notNull(),body:text('body').notNull()
 },t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId,t.kind,t.id]})]);
+
+export const portfolioSprintSettings=sqliteTable('portfolio_sprint_settings',{
+ owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),
+ durationWeeks:integer('duration_weeks').notNull(),startWeekday:integer('start_weekday').notNull(),revision:integer('revision').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId]})]);
+
+export const portfolioSprints=sqliteTable('portfolio_sprints',{
+ owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),
+ sprintId:text('sprint_id').notNull(),name:text('name').notNull(),startDate:text('start_date').notNull(),
+ endDate:text('end_date').notNull(),revision:integer('revision').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId,t.sprintId]})]);

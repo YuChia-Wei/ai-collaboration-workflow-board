@@ -1,5 +1,6 @@
 import {escapeContent as esc} from './content-view.mjs';
 import {stateLabel,itemLifecycle,lifecycleSetup} from './pbi-lifecycle.mjs';
+import {sprintField,sprintLabel,sprintPlanning} from './sprint-planning.mjs';
 
 const kinds = {
   epic: 'Epic', feature: 'Feature', user_story: 'User Story', task: 'Task', bug: 'Bug'
@@ -30,7 +31,8 @@ export function kindFields(kind, items, item) {
   return `<label>上層 ${kinds[parentKind[kind]]}<select name="parent_id" required><option value="">選擇上層項目</option>${options(parents)}</select></label>`;
 }
 
-export function itemForm(items, item) {
+export function itemForm(data, item) {
+  const items=nativeItems(data);
   const creating = !item;
   const kind = item?.kind ?? 'epic';
   const kindOptions = Object.entries(kinds).map(([value, label]) => {
@@ -45,6 +47,7 @@ export function itemForm(items, item) {
     <form class="edit-form" data-command="backlog.${creating ? 'create' : 'edit'}"${creating ? '' : ' data-item="'+esc(item.item_id)+'"'}>
       ${kindInput}<label>標題<input name="title" required maxlength="300" value="${esc(item?.title)}"></label>
       <label>說明<textarea name="description" maxlength="4000" rows="3">${esc(item?.description)}</textarea></label>
+      ${sprintField(data.backlog.sprints,item?.sprint_id)}
       <div data-kind-fields>${kindFields(kind, items, item)}</div>${status}
       <button class="primary">${creating ? '建立 PBI' : '儲存變更'}</button>
     </form></details>`;
@@ -52,6 +55,7 @@ export function itemForm(items, item) {
 
 export function nativeBoard(data, pbiLink, linkCounts, pbiKey) {
   const items = nativeItems(data);
+  const sprints=new Map(data.backlog.sprints.map(s=>[s.sprint_id,s]));
   const children = new Map();
   for (const item of items) {
     if (!children.has(item.parent_id)) children.set(item.parent_id, []);
@@ -69,12 +73,12 @@ export function nativeBoard(data, pbiLink, linkCounts, pbiKey) {
       const linked = linkCounts.get(pbiKey(item)) || 0;
       return `<li data-item-id="${esc(item.item_id)}"><div class="backlog-row">
         <span class="item-kind">${kindName(item)}</span><div class="item-summary">${pbiLink(data.product.project_id,item)}
-        <small>${esc(stateLabel(item,data))}${linked ? ' · 關聯 '+linked+' 個流程' : ''}</small></div>
+        <small>${esc(stateLabel(item,data))}${sprints.has(item.sprint_id)?' · '+esc(sprints.get(item.sprint_id).name):''}${linked ? ' · 關聯 '+linked+' 個流程' : ''}</small></div>
         ${moves(siblings,i)}</div>${children.has(item.item_id) ? tree(children.get(item.item_id)) : ''}</li>`;
     }).join('')}</ol>`;
   }
   const list = items.length ? tree(children.get(null) ?? []) : '<p class="empty">目前沒有自建 PBI。</p>';
-  return `<section class="section"><h2>自建產品待辦</h2>${list}${data.can_plan ? itemForm(items) : ''}${lifecycleSetup(data)}</section>`;
+  return `<section class="section"><h2>自建產品待辦</h2>${sprintPlanning(data)}${list}${data.can_plan ? itemForm(data) : ''}${lifecycleSetup(data)}</section>`;
 }
 
 export function nativeDetail(item, data, pbiLink) {
@@ -85,6 +89,8 @@ export function nativeDetail(item, data, pbiLink) {
     return target ? pbiLink(data.product.project_id,target) : esc(id);
   };
   const facts = [];
+  const sprint=data.backlog.sprints.find(s=>s.sprint_id===item.sprint_id);
+  facts.push(['Sprint',esc(sprint?sprintLabel(sprint):(item.sprint_id||'尚未排入 Sprint'))]);
   if (item.parent_id) facts.push(['上層項目', itemLink(item.parent_id)]);
   if (item.description) facts.push(['說明', esc(item.description)]);
   if (item.kind === 'bug') {

@@ -4,7 +4,7 @@ import {verifyDeliveryBrowser} from './portfolio-delivery-browser.mjs';
 async function expand(page, selector) {
   const details = page.locator(selector);
   if (await details.getAttribute('open') === null) {
-    await details.locator('summary').click();
+    await details.locator(':scope > summary').click();
   }
 }
 
@@ -18,11 +18,52 @@ export async function verifyPrivateScrumBoard(openSession) {
   await page.getByRole('heading', {level:1, name:'林徑巡查'}).waitFor();
   const boardUrl = page.url();
   const boardLink = () => page.getByRole('navigation', {name:'產品看板'}).getByRole('link', {name:'Scrum Board'});
-  async function add(kind, title, parent = null) {
+  async function sprintForm(selector){
+    await expand(page,'[data-sprint-planning]');
+    await expand(page,selector);
+    return page.locator(selector+' form');
+  }
+  async function saveSprintForm(form){
+    const submitted=form.getByRole('button');
+    const [write]=await Promise.all([
+      page.waitForResponse(r=>r.url().endsWith('/api/portfolio/v1/command')),
+      page.waitForResponse(r=>r.url().endsWith('/api/portfolio/v1/query')),
+      submitted.click()
+    ]);
+    assert.equal(write.status(),200,await write.text());
+    await page.locator('#page:not([aria-busy]) h1').waitFor();
+  }
+  const first='春季檢查（2027-02-03 ～ 2027-02-16）';
+  const second='修正複查（2027-02-19 ～ 2027-02-25）';
+  const initialSettings=await sprintForm('[data-sprint-settings]');
+  assert.equal(await initialSettings.locator('[name=duration_weeks]').inputValue(),'2');
+  assert.equal(await initialSettings.locator('[name=start_weekday]').inputValue(),'1');
+  await initialSettings.locator('[name=start_weekday]').selectOption('3');
+  await saveSprintForm(initialSettings);
+  const firstForm=await sprintForm('[data-new-sprint]');
+  await firstForm.getByLabel('Sprint 名稱').fill('春季檢查');
+  await firstForm.getByLabel('開始日期').fill('2027-02-03');
+  assert.equal(await firstForm.locator('[data-sprint-end]').innerText(),'2027-02-16');
+  await saveSprintForm(firstForm);
+  assert.equal(await (await sprintForm('[data-new-sprint]')).getByLabel('開始日期').inputValue(),'2027-02-17');
+  const laterSettings=await sprintForm('[data-sprint-settings]');
+  await laterSettings.locator('[name=start_weekday]').selectOption('5');
+  await laterSettings.locator('[name=duration_weeks]').selectOption('1');
+  await saveSprintForm(laterSettings);
+  const secondForm=await sprintForm('[data-new-sprint]');
+  assert.equal(await secondForm.getByLabel('開始日期').inputValue(),'2027-02-19');
+  assert.equal(await secondForm.locator('[data-sprint-end]').innerText(),'2027-02-25');
+  await secondForm.getByLabel('Sprint 名稱').fill('修正複查');
+  await saveSprintForm(secondForm);
+  async function add(kind, title, parent = null, sprint=null) {
     await expand(page, '[data-new-item]');
     const form = page.locator('form[data-command="backlog.create"]');
     await form.getByLabel('類型').selectOption(kind);
     await form.getByLabel('標題').fill(title);
+    const plan=form.locator('[name=sprint_id]');
+    assert.equal(await plan.inputValue(),'','New items must always start unscheduled');
+    assert.deepEqual(await plan.locator('option').allTextContents(),['尚未排入 Sprint',first,second]);
+    if(sprint)await plan.selectOption({label:sprint});
     if (parent) await form.locator('[name="parent_id"]').selectOption(parent);
     if (kind === 'bug') {
       await form.getByLabel('預期行為').fill('封閉路線應顯示停用');
@@ -30,14 +71,23 @@ export async function verifyPrivateScrumBoard(openSession) {
     }
     await form.getByRole('button', {name:'建立 PBI'}).click();
     await page.getByRole('heading', {level:1, name:title}).waitFor();
+    await page.locator('dl.facts').getByText(sprint??'尚未排入 Sprint',{exact:true}).waitFor();
     const id = new URL(page.url()).searchParams.get('item');
     assert.ok(id, 'Native details use a stable item link');
+    if(sprint){
+      await expand(page,'[data-edit-item]');
+      const edit=page.locator('form[data-command="backlog.edit"]');
+      assert.equal(await edit.locator('[name=sprint_id] option:checked').innerText(),sprint);
+      await edit.locator('[name=sprint_id]').selectOption('');
+      await saveSprintForm(edit);
+      await page.locator('dl.facts').getByText('尚未排入 Sprint',{exact:true}).waitFor();
+    }
     await boardLink().click();
     return id;
   }
   const bug = await add('bug', '封閉路線可預約');
   const epic = await add('epic', '路線資訊');
-  const feature = await add('feature', '路線狀態', epic);
+  const feature = await add('feature', '路線狀態', epic, second);
   const story = await add('user_story', '查看通行狀態', feature);
   const task = await add('task', '標示封閉路段', story);
   const roots = page.locator('section > ol.backlog-tree > li');
@@ -83,6 +133,7 @@ export async function verifyPrivateScrumBoard(openSession) {
   await expand(page, '[data-edit-item]');
   const edit = page.locator('form[data-command="backlog.edit"]');
   await edit.getByLabel('受影響的 User Story').selectOption(story);
+  await edit.locator('[name=sprint_id]').selectOption({label:first});
   await edit.getByRole('button', {name:'儲存變更'}).click();
   await page.locator('dl.facts').getByRole('link', {name:'查看通行狀態'}).waitFor();
   await goToState('triaged','Triaged');
@@ -105,11 +156,13 @@ export async function verifyPrivateScrumBoard(openSession) {
   const storyRow = top.first().locator('li[data-item-id="'+feature+'"] > ol > li[data-item-id="'+story+'"]');
   await storyRow.locator('li[data-item-id="'+task+'"]').waitFor();
   assert.match(await top.last().innerText(), /Retesting/);
+  assert.match(await top.last().innerText(), /春季檢查/);
   assert.match(await storyRow.innerText(), /Code Review/);
   await top.last().getByRole('link').click();
+  await other.locator('dl.facts').getByText(first,{exact:true}).waitFor();
   await other.locator('[data-item-lifecycle]').getByText('Active → Retesting',{exact:true}).waitFor();
   await other.getByRole('link', {name:'核對路線資料'}).click();
   await other.getByRole('heading', {level:1, name:'核對路線資料'}).waitFor();
   await reader.context.close();
-  console.log('PASS private Scrum Board across browser sessions: manual hierarchy and ordering, product-specific custom states, drag intent and explicit transition, Bug retest history and its linked workflow');
+  console.log('PASS private Scrum Board across browser sessions: Sprint cadence and fixed dates, optional PBI assignment and removal, manual hierarchy and ordering, custom states, drag intent and explicit transition, Bug retest history and its linked workflow');
 }

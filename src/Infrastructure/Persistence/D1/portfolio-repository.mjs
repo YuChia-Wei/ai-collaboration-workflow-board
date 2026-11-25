@@ -1,6 +1,7 @@
 import {canonicalJson} from '../../../Core/Workflows/Domain/collaboration-values.mjs';
 import {workflowAttention} from '../../../Core/Workflows/Domain/portfolio.mjs';
 import {defaultFlows} from '../../../Core/Workflows/Domain/pbi-lifecycle.mjs';
+import {defaultSprintSettings} from '../../../Core/Workflows/Domain/sprint-planning.mjs';
 import {createDeliveryRepository} from './delivery-repository.mjs';
 
 export function createPortfolioRepository(db) {
@@ -12,22 +13,29 @@ export function createPortfolioRepository(db) {
  }
  async function backlog(owner,store,project,withHistory=false){
   const args=[owner,store,project];
-  // Pin the flow configuration, ordered cards and their history to one read.
+  // Pin the planning settings, sprint dates, ordered cards and their history to one read.
   const unionHistory=withHistory?` UNION ALL SELECT 'history',revision,item_id,0,body FROM portfolio_item_transitions WHERE ${scope}`:'';
   const {results}=await stmt(`SELECT 'item' AS kind,revision,item_id,position,body FROM portfolio_backlog_items WHERE ${scope}
    UNION ALL SELECT 'config',revision,'',0,body FROM portfolio_lifecycles WHERE ${scope}
-   ${unionHistory} ORDER BY kind,position,item_id,revision`,...args,...args,...(withHistory?args:[])).all();
-  const children=new Map(),histories=new Map();
-  let revision=0,flows=defaultFlows();
+   UNION ALL SELECT 'settings',revision,'',0,json_object('duration_weeks',duration_weeks,'start_weekday',start_weekday)
+    FROM portfolio_sprint_settings WHERE ${scope}
+   UNION ALL SELECT 'sprint',revision,start_date,0,json_object('sprint_id',sprint_id,'name',name,'start_date',start_date,'end_date',end_date)
+    FROM portfolio_sprints WHERE ${scope}
+   ${unionHistory} ORDER BY kind,position,item_id,revision`,...args,...args,...args,...args,...(withHistory?args:[])).all();
+  const children=new Map(),histories=new Map(),sprints=[];
+  let revision=0,flows=defaultFlows(),sprint_settings=defaultSprintSettings;
   for(const row of results){
    revision=Math.max(revision,row.revision);
    const item=JSON.parse(row.body);
    if(row.kind==='config'){flows=item;continue;}
+   if(row.kind==='settings'){sprint_settings=item;continue;}
+   if(row.kind==='sprint'){sprints.push(item);continue;}
    if(row.kind==='history'){
     if(!histories.has(row.item_id))histories.set(row.item_id,[]);
     histories.get(row.item_id).push(item);continue;
    }
    item.state_id??=null;
+   item.sprint_id??=null;
    if(withHistory)item.state_history=histories.get(row.item_id)??[];
    if(!children.has(item.parent_id))children.set(item.parent_id,[]);
    children.get(item.parent_id).push(item);
@@ -37,13 +45,17 @@ export function createPortfolioRepository(db) {
    for(const child of children.get(parent)??[]){items.push(child);visit(child.item_id);}
   }
   visit(null);
-  return {revision,items,flows};
+  return {revision,items,flows,sprint_settings,sprints};
  }
  async function selectedBacklogItems(owner,store,project,ids){
   if(!ids.length)return [];
   const {results}=await stmt(`SELECT body FROM portfolio_backlog_items WHERE ${scope}
    AND item_id IN (SELECT value FROM json_each(?))`,owner,store,project,JSON.stringify(ids)).all();
-  return results.map(row=>JSON.parse(row.body));
+  return results.map(row=>{
+   const item=JSON.parse(row.body);
+   item.sprint_id??=null;
+   return item;
+  });
  }
  async function saveBacklog(owner,c,digest,change,failure){
   const args=[owner,c.store_id,c.project_id];
@@ -61,12 +73,26 @@ export function createPortfolioRepository(db) {
   const fence=[key,attempt];
   const statements=[stmt(`WITH head AS (SELECT MAX(
    COALESCE((SELECT MAX(revision) FROM portfolio_backlog_items WHERE ${scope}),0),
-   COALESCE((SELECT revision FROM portfolio_lifecycles WHERE ${scope}),0)) AS revision)
+   COALESCE((SELECT revision FROM portfolio_lifecycles WHERE ${scope}),0),
+   COALESCE((SELECT revision FROM portfolio_sprint_settings WHERE ${scope}),0),
+   COALESCE((SELECT MAX(revision) FROM portfolio_sprints WHERE ${scope}),0)) AS revision)
    INSERT INTO project_collaboration_operations(key,owner,store_id,project_id,workflow_id,operation_id,digest,attempt,outcome,receipt)
    SELECT ?,?,?,?,'',?,?,?,CASE WHEN revision=? THEN ? ELSE 'rejected' END,
     CASE WHEN revision=? THEN ? ELSE json_set(?,'$.revision',revision,'$.failure.details.current_revision',revision) END
    FROM head WHERE 1 ON CONFLICT(key) DO NOTHING`,
-   ...args,...args,key,...args,c.operation_id,digest,attempt,preparedAt,failure?'rejected':'accepted',preparedAt,JSON.stringify(receipt),JSON.stringify(conflict))];
+   ...args,...args,...args,...args,key,...args,c.operation_id,digest,attempt,preparedAt,failure?'rejected':'accepted',preparedAt,JSON.stringify(receipt),JSON.stringify(conflict))];
+  if(change?.sprint_settings){
+   const {duration_weeks,start_weekday}=change.sprint_settings;
+   statements.push(stmt(`INSERT INTO portfolio_sprint_settings(owner,store_id,project_id,duration_weeks,start_weekday,revision)
+    SELECT ?,?,?,?,?,? WHERE ${gate} ON CONFLICT(owner,store_id,project_id) DO UPDATE SET
+    duration_weeks=excluded.duration_weeks,start_weekday=excluded.start_weekday,revision=excluded.revision`,
+    ...args,duration_weeks,start_weekday,next,...fence));
+  }
+  if(change?.sprint){
+   const {sprint_id,name,start_date,end_date}=change.sprint;
+   statements.push(stmt(`INSERT INTO portfolio_sprints(owner,store_id,project_id,sprint_id,name,start_date,end_date,revision)
+    SELECT ?,?,?,?,?,?,?,? WHERE ${gate}`,...args,sprint_id,name,start_date,end_date,next,...fence));
+  }
   if(change?.flows){
    statements.push(stmt(`INSERT INTO portfolio_lifecycles(owner,store_id,project_id,revision,body) SELECT ?,?,?,?,? WHERE ${gate}
     ON CONFLICT(owner,store_id,project_id) DO UPDATE SET revision=excluded.revision,body=excluded.body`,

@@ -10,7 +10,7 @@
 
 - `catalog` 保存 revision、coverage、observed_at、pbis。首次未載入的 revision 為 0，coverage 為 unknown，時間為 null。complete 且空陣列表示已觀察到零筆。partial 表示僅取得部分項目，stale 表示展示先前取得的觀察。
 - 外部 PBI 在指定產品用 `repository_id`、`issue_id` 定位，另保存顯示用的 number、title、source_version、observed_at、issue_state（open／closed）與可空的 project_status。ID 與版本是來源提供的不透明字串。
-- `backlog` 包含 `revision` 和 `items`。新產品讀回 `{"revision":0,"items":[]}`。即使清單仍空，成功變更流程設定也會推進此修訂。無論外部 catalog 的 coverage 為何，均可讀取本產品原生項目的內容與同層順序。項目的 `parent_id` 決定層級，根層為 null。
+- `backlog` 包含 `revision`、`items`、`sprint_settings` 和 `sprints`。新產品的 revision 為 0，items 與 sprints 為空陣列，sprint_settings 為 `{"duration_weeks":2,"start_weekday":1}`。即使項目清單仍空，成功設定流程或 Sprint 節奏、建立 Sprint 也會推進待辦修訂。無論外部 catalog 的 coverage 為何，均可讀取本產品原生項目的內容與同層順序。項目的 `parent_id` 決定層級，根層為 null。
 - 每一原生項目含 `source: "native"`、穩定的 `item_id`、不透明字串 `source_version`、`updated_at`、`kind`、`title`、`description`、`parent_id`、`related_story_id`、`expected_behavior`、`actual_behavior` 與 `status`（open／closed）。在該產品內，以來源和 item_id 查找原生卡。
 - workflow 的 status、updated_at、pending_decisions、blocked_tasks 取自原生工作狀態。evidence、checkpoints、latest_handoff 保留原生欄位；最後一筆交接的下一步為 `latest_handoff.handoff.next_step`。workflow 狀態只表示已記錄的生命週期。
 - `workflows[].pbis` 保存目前關聯所選取的版本。由外部卡的 repository_id 和 issue_id、或原生卡的 native 來源和 item_id 均可查回支援它的 workflow。`history[]` 依 revision 排序，每一筆帶 action（created／linked／unlinked）、at、pbis。既有 workflow 的原始外部引用可從建立歷史的 external_work_refs 查回，任意文字引用不會自動比對成產品卡。
@@ -25,6 +25,8 @@
 | backlog.edit | item_id、title、description、related_story_id、expected_behavior、actual_behavior、status | 更新內容。採用詳細流程的卡須傳其既有開關分類。尚未對應的舊列可依原有 open／closed 契約編輯。 |
 | backlog.move | item_id、before_id | 移到同層目標項目之前。before_id 為 null 時移到該層末端。 |
 | backlog.transition | item_id、to_state、reason、resolution、original_id | 依該類型流程轉換，或將舊列明確對應至同分類的階段。 |
+| backlog.configure_sprints | duration_weeks、start_weekday | 設定本產品之後新建 Sprint 的週數與起始星期。 |
+| backlog.create_sprint | sprint_id、name、start_date | 建立具名期間，依當前設定計算結束日期。 |
 | lifecycle.configure | kind、flow | 完整取代此產品的一種流程範本。已使用的階段受保護。 |
 | catalog.replace | catalog（coverage、observed_at、pbis） | 保存整份提供的觀察，expected_revision 指 catalog revision。維護者或受控來源負責傳入正確的涵蓋範圍與觀察時間。 |
 | workflow.create | workflow_id、title、goal、pbis | expected_revision 為 0；一次建立原生協作 workflow、建立事件與所選 PBI 的來源快照。pbis 可空。goal 成為初始工作範圍；skill.id 的 unassigned 表示尚未指定。 |
@@ -51,6 +53,25 @@ backlog 命令及 lifecycle.configure 的 `expected_revision` 均為該產品最
 ```
 
 重送同一個 operation_id、命令及已驗證 principal 可取回原結果。已使用的 ID 綁定不同內容時回報 operation_payload_conflict。遇到競爭修改或來源版本不符應重新讀取；如果要基於最新內容採取另一個動作，使用新 operation_id。若提交後回應遺失，應保留原請求並原樣重送。成功為 HTTP 200 與 accepted=true；衝突為 409、找不到目標為 404、未認證或權限不足為 401／403、結構驗證失敗為 422。缺少儲存服務時為 503。
+
+## Sprint 期間與配卡
+
+完整查詢中，`backlog.sprint_settings.duration_weeks` 為 1 至 4 的整數，`start_weekday` 採 ISO 星期數，1 為週一、7 為週日。`backlog.sprints` 依開始日遞增，每列為 `{sprint_id,name,start_date,end_date}`。日期為無時區的 `YYYY-MM-DD`，開始日及結束日皆包含。結束日由服務依建立時的節奏算出。之後更改節奏時，各既有期間保留原名稱、識別及日期。
+
+每一原生項目另含可為 null 的 `sprint_id`。backlog.create 和 backlog.edit 在表列必填欄位之外可選填 sprint_id，適用五種類型。建立時省略或傳 null 皆為未排期，編輯時省略表示保留，傳 null 才會清空。舊列無此欄位時讀回 null。指定值須為目前產品內存在的 Sprint。父子、Bug 所關聯的 Story 與 workflow 均各自維持原來的規劃及狀態。
+
+下例在採用預設節奏的空產品建立 2026-12-28 到 2027-01-10 的一期。sprint_id 使用產品內穩定識別，name 為最長 160 字元的非空白名稱。兩個 Sprint 命令和配卡均使用 backlog.revision 作為 expected_revision。
+
+```json
+{
+  "store_id": "demo", "project_id": "rice-booking",
+  "operation_id": "plan-year-end", "expected_revision": 0,
+  "command": "backlog.create_sprint", "sprint_id": "year-end",
+  "name": "年末整理", "start_date": "2026-12-28"
+}
+```
+
+若要改為每週三開始的一週，backlog.configure_sprints 的額外欄位為 `{"duration_weeks":1,"start_weekday":3}`。超出週數或星期的整數範圍回應 422 invalid_sprint_settings。同產品日期重疊回應 409 sprint_overlap，重複 sprint_id 回應 409 sprint_exists。起訖日均須介於 0001-01-01 和 9999-12-31 且為有效日曆日，超出回應 422 invalid_sprint_date。起始星期不符為 422 sprint_weekday_mismatch。配卡時找不到該產品內的 Sprint 回應 404 sprint_not_found。重新送出相同操作仍採用既有回條規則。
 
 ## 詳細工作狀態
 

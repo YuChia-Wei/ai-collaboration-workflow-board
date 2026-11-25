@@ -64,6 +64,13 @@
       "when": 1795591036737,
       "tag": "0008_awesome_roulette",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1795621799251,
+      "tag": "0009_great_oracle",
+      "breakpoints": true
     }
   ]
 }

@@ -1,10 +1,13 @@
 import {demand} from './errors.mjs';
 import {initialHistory,legacyHistory,transitionItem} from './pbi-lifecycle.mjs';
+import {createSprint} from './sprint-planning.mjs';
 
 const parentKind={epic:null,feature:'epic',user_story:'feature',task:'user_story',bug:null};
 
 // Each sibling list is independently ordered. A move keeps the item's parent.
 export function changeBacklog(backlog,command,time,actor,flows){
+ if(command.command==='backlog.configure_sprints')return {sprint_settings:{duration_weeks:command.duration_weeks,start_weekday:command.start_weekday}};
+ if(command.command==='backlog.create_sprint')return {sprint:createSprint(backlog,command)};
  const byId=new Map(backlog.items.map(item=>[item.item_id,item]));
  const previous=byId.get(command.item_id);
  const create=command.command==='backlog.create';
@@ -31,6 +34,8 @@ export function changeBacklog(backlog,command,time,actor,flows){
   return {item:{...previous,...itemVersion},position,from};
  }
  const kind=create?command.kind:previous.kind;
+ const sprintId=Object.hasOwn(command,'sprint_id')?command.sprint_id:previous?.sprint_id??null;
+ demand(sprintId===null||backlog.sprints.some(sprint=>sprint.sprint_id===sprintId),'sprint_not_found','not_found');
  if(create){
   const required=parentKind[kind];
   if(required===null)demand(parentId===null,'invalid_parent');
@@ -46,7 +51,7 @@ export function changeBacklog(backlog,command,time,actor,flows){
   demand(!previous.state_id,'lifecycle_transition_required','conflict');
   history=legacyHistory(previous.status,command.status,time,actor,backlog.revision+1);
  }
- const item={source:'native',item_id:command.item_id,kind,parent_id:parentId,title:command.title,description:command.description,
+ const item={source:'native',item_id:command.item_id,kind,parent_id:parentId,sprint_id:sprintId,title:command.title,description:command.description,
   related_story_id:command.related_story_id,expected_behavior:command.expected_behavior,actual_behavior:command.actual_behavior,
   status:create?'open':command.status,state_id:create?history.to.id:previous.state_id??null,...itemVersion};
  return {item,position:create?siblings.length:from,from,history};

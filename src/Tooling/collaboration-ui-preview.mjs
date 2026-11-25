@@ -11,7 +11,7 @@ const root=fileURLToPath(new URL('../../',import.meta.url));
 const previewCommands = new Map([
   ['/api/collaboration/v2/commands', ['project.create']],
   ['/api/portfolio/v1/command', [
-    'backlog.create', 'backlog.edit', 'backlog.move', 'backlog.transition', 'lifecycle.configure',
+    'backlog.create', 'backlog.edit', 'backlog.move', 'backlog.transition', 'backlog.configure_sprints', 'backlog.create_sprint', 'lifecycle.configure',
     'delivery.environment', 'delivery.policy', 'delivery.draft', 'delivery.record', 'delivery.attempt', 'delivery.observe',
     'delivery.applicability', 'workflow.create', 'workflow.link', 'workflow.unlink'
   ]]

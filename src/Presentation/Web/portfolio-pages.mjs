@@ -1,5 +1,5 @@
 import {escapeContent as esc, structuredMarkup} from './content-view.mjs';
-import {availablePbis, itemForm, kindName, nativeBoard, nativeDetail, nativeItems} from './native-backlog.mjs';
+import {availablePbis, itemForm, kindName, nativeBoard, nativeDetail} from './native-backlog.mjs';
 import {deliveryBoard, deliveryCard} from './delivery-view.mjs';
 import {descendantDelivery, layoutNav, statusBoard} from './pbi-status-board.mjs';
 
@@ -186,7 +186,7 @@ export function createPortfolioPages(url) {
     let body;
     if (p.source==='native') {
       body=nativeDetail(p,data,pbiLink);
-      if (can_plan && observed) body+=itemForm(nativeItems(data),p);
+      if (can_plan && observed) body+=itemForm(data,p);
       if (observed) body+=deliveryCard(data,p)+descendantDelivery(data,p,url);
     } else {
       body=`<div class="detail-meta">${pill(issueState(p.issue_state))}${p.project_status ? pill(p.project_status):''}<span>${esc(p.repository_id)}</span></div>${catalogNote(catalog)}`;

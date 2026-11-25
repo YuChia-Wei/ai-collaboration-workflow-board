@@ -37,7 +37,8 @@ export async function verifyNativeBacklog({post, request, query, command, scope,
   const ref = item => ({source:'native', item_id:item.item_id, source_version:item.source_version});
   const itemById = async id => (await read()).backlog.items.find(item => item.item_id === id);
 
-  assert.deepEqual((await read()).backlog, {revision:0, items:[]});
+  const emptyBacklog = {revision:0, items:[], sprint_settings:{duration_weeks:2,start_weekday:1}, sprints:[]};
+  assert.deepEqual((await read()).backlog, emptyBacklog);
   const epic = create('map', 'epic');
   await post(command, epic, {environment:readonly, status:403});
   await post(command, {...epic, project_id:'legacy-personal'}, {status:403});
@@ -73,13 +74,13 @@ export async function verifyNativeBacklog({post, request, query, command, scope,
   assert.deepEqual(await post(command, epic), first);
   await post(command, {...epic, title:'different'}, {status:409});
   await post(command, epic, {environment:readonly, status:403});
-  assert.deepEqual((await read({owner:'neighbor'})).backlog, {revision:0, items:[]});
+  assert.deepEqual((await read({owner:'neighbor'})).backlog, emptyBacklog);
   const elsewhere = {...scope, project_id:'sea'};
-  assert.deepEqual((await post(query, elsewhere)).backlog, {revision:0, items:[]});
+  assert.deepEqual((await post(query, elsewhere)).backlog, emptyBacklog);
   const foreignStory = create('other-task', 'task', 'legend');
   const foreignResponse = await request(command, {...foreignStory, ...elsewhere, expected_revision:0});
   assert.ok([404, 409, 422].includes(foreignResponse.status));
-  assert.deepEqual((await post(query, elsewhere)).backlog, {revision:0, items:[]});
+  assert.deepEqual((await post(query, elsewhere)).backlog, emptyBacklog);
 
   const bug = await itemById('north');
   const story = await itemById('legend');
@@ -174,10 +175,12 @@ export async function verifyNativeBacklog({post, request, query, command, scope,
   // A pre-lifecycle record genuinely has neither a typed state nor an event.
   const old={...bugSnapshot,item_id:'old-report',source_version:String(++revision),status:'closed'};
   delete old.state_id;
+  delete old.sprint_id;
   await db.batch([db.prepare('INSERT INTO portfolio_backlog_items(owner,store_id,project_id,item_id,parent_id,position,revision,body) VALUES(?,?,?,?,?,?,?,?)')
     .bind('owner',scope.store_id,scope.project_id,old.item_id,null,3,revision,JSON.stringify(old))]);
   const readOld=await itemById(old.item_id);
   assert.equal(readOld.state_id,null);
+  assert.equal(readOld.sprint_id,null);
   assert.deepEqual(readOld.state_history,[]);
   await refused(transition(old.item_id,'active'));
   await accept(edit(readOld,{status:'open'}));
@@ -187,6 +190,38 @@ export async function verifyNativeBacklog({post, request, query, command, scope,
   await accept(transition(old.item_id,'triaged'));
   assert.deepEqual((await itemById(old.item_id)).state_history.at(-1).from,{id:null,label:'open',category:'open'});
   await accept(transition(old.item_id,'done',{reason:'Feature retired',resolution:'wont_fix'}));
+  const sprint = (sprint_id,start_date) => mutation('backlog.create_sprint',{sprint_id,name:sprint_id,start_date});
+  const cadence = (duration_weeks,start_weekday) => mutation('backlog.configure_sprints',{duration_weeks,start_weekday});
+  const yearEnd = {sprint_id:'year-end',name:'year-end',start_date:'2026-12-28',end_date:'2027-01-10'};
+  const firstSprint = sprint(yearEnd.sprint_id,yearEnd.start_date);
+  await post(command,firstSprint,{environment:readonly,status:403});
+  const sprintReceipt = await accept(firstSprint);
+  assert.deepEqual(await post(command,firstSprint),sprintReceipt);
+  assert.equal((await itemById('north')).sprint_id,null);
+  // Serialize a cadence change against a competing creation at the same revision.
+  const competing = sprint('competing','2027-02-01');
+  await accept(cadence(1,7));
+  await post(command,competing,{status:409});
+  for(const date of ['2027-01-10','2027-01-11','2027-02-29']) await refused(sprint('invalid',date));
+  await refused(cadence(0,1));
+  await refused(cadence(2,8));
+  await accept(sprint('january','2027-01-17'));
+  const calendar = (await read()).backlog;
+  assert.deepEqual(calendar.sprint_settings,{duration_weeks:1,start_weekday:7});
+  assert.deepEqual(calendar.sprints,[yearEnd,{sprint_id:'january',name:'january',start_date:'2027-01-17',end_date:'2027-01-23'}]);
+  assert.deepEqual((await read({owner:'neighbor'})).backlog,emptyBacklog);
+  const planned = create('planned','epic',null,{sprint_id:'year-end'});
+  await post(command,{...planned,...elsewhere,expected_revision:0},{status:404});
+  await accept(planned);
+  await accept(create('unplanned-child','feature','planned'));
+  assert.equal((await itemById('unplanned-child')).sprint_id,null);
+  await accept(edit(await itemById('planned'),{title:'Renamed by an older client'}));
+  assert.equal((await itemById('planned')).sprint_id,'year-end');
+  await accept(edit(await itemById('planned'),{sprint_id:'january'}));
+  assert.equal((await itemById('planned')).sprint_id,'january');
+  await accept(edit(await itemById('planned'),{sprint_id:null}));
+  assert.equal((await itemById('planned')).sprint_id,null);
+  console.log('PASS sprint planning: dated periods, inclusive overlap, cadence revisions, scoped assignments, unassigned defaults and compatible edits');
   console.log('PASS PBI lifecycle: custom transitions, immutable history, Bug dispositions and explicit legacy adoption');
   console.log('PASS private Scrum backlog: hierarchy, separate Bug, sibling ordering, owner isolation, independent revisions, retries and workflow snapshots');
 }

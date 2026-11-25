@@ -32,6 +32,15 @@ export function validatePortfolio(input,kind){
  base.push('operation_id','expected_revision','command');
  demand(typeof input.command==='string'&&identifier(input.operation_id)&&Number.isSafeInteger(input.expected_revision)&&input.expected_revision>=0&&input.expected_revision<Number.MAX_SAFE_INTEGER,'invalid_command');
  if(input.command.startsWith('delivery.'))return validateDelivery(input);
+ if(input.command==='backlog.configure_sprints'){
+  demand(keys(input,[...base,'duration_weeks','start_weekday'])&&Number.isInteger(input.duration_weeks)&&input.duration_weeks>=1&&input.duration_weeks<=4&&
+   Number.isInteger(input.start_weekday)&&input.start_weekday>=1&&input.start_weekday<=7,'invalid_sprint_settings');
+  return;
+ }
+ if(input.command==='backlog.create_sprint'){
+  demand(keys(input,[...base,'sprint_id','name','start_date'])&&identifier(input.sprint_id)&&text(input.name,160)&&typeof input.start_date==='string','invalid_sprint');
+  return;
+ }
  if(input.command==='lifecycle.configure'){
   demand(keys(input,[...base,'kind','flow'])&&itemKinds.includes(input.kind)&&object(input.flow),'invalid_lifecycle');
   return;
@@ -54,6 +63,10 @@ export function validatePortfolio(input,kind){
   if(input.command==='backlog.move'){
    demand(keys(input,[...base,'item_id','before_id'])&&identifier(input.item_id)&&(input.before_id===null||identifier(input.before_id)),'invalid_command');
    return;
+  }
+  if(Object.hasOwn(input,'sprint_id')){
+   fields.push('sprint_id');
+   demand(input.sprint_id===null||identifier(input.sprint_id),'invalid_sprint_id');
   }
   demand(keys(input,[...base,'item_id',...fields,...(create?['kind','parent_id']:['status'])]),'invalid_command');
   demand(identifier(input.item_id)&&text(input.title,300)&&

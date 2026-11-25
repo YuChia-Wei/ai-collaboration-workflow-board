@@ -27,7 +27,8 @@ export function createPortfolio({storeId,projects,portfolio,workflowRepository,c
   const [catalog,backlog,records,delivery]=await Promise.all([
    portfolio.catalog(owner,storeId,id),portfolio.backlog(owner,storeId,id,true),portfolio.workflows(owner,storeId,id,id===LEGACY_PROJECT),portfolio.delivery(owner,storeId,id)
   ]);
-  return {...header,catalog,backlog:{revision:backlog.revision,items:backlog.items},lifecycle:{revision:backlog.revision,flows:backlog.flows},delivery,workflows:records.map(portfolioWorkflow)};
+  const {flows,...productBacklog}=backlog;
+  return {...header,catalog,backlog:productBacklog,lifecycle:{revision:backlog.revision,flows},delivery,workflows:records.map(portfolioWorkflow)};
  }
  async function command(access,c){
   await authorize(access,c,'command');
