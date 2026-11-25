@@ -72,4 +72,8 @@ collaboration HTTP 的新增服務認證 adapter 以 server-side token digest �
 
 ## 同 owner 的 project scope
 
+私有 Scrum Board 以產品的 Product Backlog 管理待辦項目的階層、同層順序與 Bug 關聯。每個產品在既有 owner 與 store 範圍內有自己的待辦修訂。Portfolio 應用層以已驗證的規劃權限處理變更，另以來源及穩定識別把選定版本的項目連回 Workflow。這讓規劃用的 Task 和 Agent 可認領的 workflow task 各自演進。外部 catalog 保存來源觀察，可與原生待辦同時讀取。[領域設計](.dev/design/product-evolution/native-scrum-backlog.md) · [Portfolio HTTP 契約](src/Contracts/PortfolioV1/README.md)
+
+原生工作狀態的轉換與產品內各類型的流程使用同一待辦修訂，避免設定剛改變時仍用舊規則更新工作。轉換歷史記錄操作者、伺服器時間與當時的階段名稱。舊列讀取保留 open／closed，使用者可明確選擇同分類階段。交付、嘗試與觀察使用同產品下獨立的交付修訂和原有操作回條機制。交付範圍擷取原生工作的識別、當時的標題與版本，部署關聯確切產物與環境，另保存環境觀察的發生時間。Web 的欄位判讀使用這些伺服器回傳的事實。[生命週期與交付規格](.dev/specs/portfolio/backlog/lifecycle-and-delivery.spec.md)
+
 collaboration/2 保留 Workflow 聚合與 domain reducers，project registry 由 application 管理，D1 adapter 以 owner/store/project/workflow 與 owner/store/project/operation 隔離。Project 管理與 workflow 共用 operation ID 空間及原子 receipt 協定；project 不是 ACL。版本分流留在 HTTP／MCP 與入口組裝；Web／CLI 核對完整 reference。新增資料表不改 collaboration/1 的原 rows、digest 或 receipt。契約、legacy mapping 與 #6 恢復缺口見 [CollaborationV2](src/Contracts/CollaborationV2/README.md)。

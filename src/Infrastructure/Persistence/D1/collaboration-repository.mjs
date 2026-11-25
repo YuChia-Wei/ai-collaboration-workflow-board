@@ -63,6 +63,17 @@ export function createCollaborationRepository(db,projectId=null){
     SELECT ?,${slots},?,?,?,CASE WHEN COALESCE(${current},0)=? THEN 'accepted' ELSE 'rejected' END,
      CASE WHEN COALESCE(${current},0)=? THEN ? ELSE json_set(?,'$.current_revision',${current},'$.failure.details.current_revision',${current}) END
     ON CONFLICT(key) DO NOTHING`,key,...args,receipt.operation_id,digest,attempt,...args,before,...args,before,JSON.stringify(receipt),JSON.stringify(rejection),...args,...args)];
+   // A native PBI can be edited after selection. Recheck the chosen versions
+   // inside the workflow commit, before any effects pass the receipt gate.
+   if(change.selectedNative?.length){
+    const stale={...rejection,current_revision:before||null,failure:{error:'pbi_version_conflict',category:'conflict',details:{}}};
+    statements.push(statement(`UPDATE ${names.operations} SET outcome='rejected',receipt=?
+     WHERE key=? AND attempt=? AND outcome='accepted' AND ?<>(
+      SELECT count(*) FROM portfolio_backlog_items i JOIN json_each(?) selected
+       ON i.item_id=json_extract(selected.value,'$.item_id') AND CAST(i.revision AS TEXT)=json_extract(selected.value,'$.source_version')
+      WHERE i.owner=? AND i.store_id=? AND i.project_id=?)`,
+     JSON.stringify(stale),...gateArgs,change.selectedNative.length,JSON.stringify(change.selectedNative),owner,ref.store_id,ref.project_id));
+   }
    if(before===0)statements.push(statement(`INSERT INTO ${names.heads}(${columns},revision,last_attempt) SELECT ${slots},?,? WHERE EXISTS(${gate})`,...args,state.revision,attempt,...gateArgs));
    else statements.push(statement(`UPDATE ${names.heads} SET revision=?,last_attempt=? WHERE ${where} AND revision=? AND EXISTS(${gate})`,state.revision,attempt,...args,before,...gateArgs));
    // A zero-row CAS must roll back the operation too, even if an adapter silently

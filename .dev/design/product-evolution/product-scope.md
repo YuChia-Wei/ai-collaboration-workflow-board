@@ -2,6 +2,12 @@
 
 初稿 2026-10-22，GitHub 第一版範圍修訂於 2026-11-22。已確認產品方向；以下畫面、PBI 拆分與驗收例是開發設計。可從[離線樣稿](github-v1-demo.html)體驗基本用法。
 
+## 沒有外部來源的使用方式（2026-11-25）
+
+每種原生項目有自己的工作流程。產品可設定允許的轉換與顯示名，也可指定主要追蹤的部署環境和交付政策。卡片的工作狀態、交付給誰的哪些成果，以及各環境的版本分開查閱。登記部署失敗、重試及回復時，較早的紀錄仍可追查。[狀態與交付規格](../../specs/portfolio/backlog/lifecycle-and-delivery.spec.md)
+
+產品可以從空白的 Scrum Board 開始。Board 保存手動建立的 Epic、Feature、User Story、Task 及 Bug，包括同層順序、狀態與版本。使用者可以先回報獨立 Bug，知道受影響的 User Story 時再連結。上述項目都能連到同一產品的 workflow。外部來源若提供 Issues 或規劃欄位，其資料另外標示來源與觀察狀態。[原生待辦設計](native-scrum-backlog.md) · [領域規格與驗收情境](../../specs/portfolio/backlog/native-backlog.spec.md)
+
 ## GitHub 第一版的使用方式
 
 打開 Board 先看到自己有哪些產品、哪些 workflow 進行中或受阻、哪件事待決，以及最後一次取得狀態的時間。第一版一個產品對應一個明確的 Board 專案。每個產品都有平行的 Scrum Board（產品待辦看板）與 Workflow Board（執行看板）。前者從 PBI 找到實作，後者從工作流程查看它支援的 PBI。首頁也能直接接手一個產品的 workflow。GitHub 整合階段，有 Project 的產品可沿用欄位與排序，只有 repository Issues 的產品也能開始工作。

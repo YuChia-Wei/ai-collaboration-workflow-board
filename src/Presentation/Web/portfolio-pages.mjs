@@ -1,7 +1,11 @@
 import {escapeContent as esc, structuredMarkup} from './content-view.mjs';
+import {availablePbis, itemForm, kindName, nativeBoard, nativeDetail, nativeItems} from './native-backlog.mjs';
+import {deliveryBoard, deliveryCard} from './delivery-view.mjs';
+import {descendantDelivery, layoutNav, statusBoard} from './pbi-status-board.mjs';
 
-export const pbiKey = p => JSON.stringify([p.repository_id, p.issue_id]);
-const pbiTitle = p => `#${p.number} ${p.title}`;
+export const pbiKey = p => JSON.stringify(p.source === 'native' ? {native:p.item_id} : [p.repository_id, p.issue_id]);
+const pbiTitle = p => p.source === 'native' ? p.title : `#${p.number} ${p.title}`;
+const pbiSource = p => p.source === 'native' ? '自建 · '+kindName(p) : p.repository_id;
 const lifecycle = new Map([
   ['draft','草稿'], ['active','執行中'], ['paused','暫停'], ['completed','已完成'], ['cancelled','已取消']
 ]);
@@ -21,10 +25,10 @@ function when(value) {
   return Number.isNaN(date.getTime()) ? esc(value) : `<time datetime="${esc(value)}" title="${esc(value)}">${esc(clock.format(date))}</time>`;
 }
 function catalogNote(catalog) {
-  return `<p class="hint">PBI 來源：${esc(coverage[catalog.coverage] || catalog.coverage)}${catalog.observed_at ? ' · 觀察時間 '+when(catalog.observed_at) : ''}</p>`;
+  return `<p class="hint">外部 PBI 來源：${esc(coverage[catalog.coverage] || catalog.coverage)}${catalog.observed_at ? ' · 觀察時間 '+when(catalog.observed_at) : ''}</p>`;
 }
 function choices(pbis, selected) {
-  return pbis.map(p => `<label class="choice"><input type="checkbox" name="pbi" value="${esc(pbiKey(p))}" ${selected === pbiKey(p) ? 'checked' : ''}><span>${esc(pbiTitle(p))} <small>${esc(p.repository_id)}</small></span></label>`).join('') || hint('目前沒有可選的 PBI。');
+  return pbis.map(p => `<label class="choice"><input type="checkbox" name="pbi" value="${esc(pbiKey(p))}" ${selected === pbiKey(p) ? 'checked' : ''}><span>${esc(pbiTitle(p))} <small>${esc(pbiSource(p))}</small></span></label>`).join('') || hint('目前沒有可選的 PBI。');
 }
 function createForm(pbis, selected) {
   return `<form class="edit-form" data-command="workflow.create"><label>名稱<input name="title" required maxlength="160"></label>
@@ -78,7 +82,8 @@ export function createPortfolioPages(url) {
   function link(label, values, className='', active=false) {
     return `<a href="${esc(url(values))}"${className ? ' class="'+className+'"' : ''}${active ? ' aria-current="page"' : ''}>${esc(label)}</a>`;
   }
-  const pbiLink = (id,p) => link(pbiTitle(p),{product:id,repo:p.repository_id,pbi:p.issue_id});
+  const pbiLink = (id,p) => link(pbiTitle(p), p.source === 'native'
+    ? {product:id,item:p.item_id} : {product:id,repo:p.repository_id,pbi:p.issue_id});
   const flowLink = (id,w) => link(w.title,{product:id,flow:w.workflow_id});
   function header() {
     return `<header class="masthead"><div class="mast-inner"><a class="brand" href="${esc(url())}" aria-label="返回產品總覽"><span class="board-mark" aria-hidden="true"><i></i><i></i><i></i></span>Workflow Board</a></div></header>`;
@@ -103,7 +108,7 @@ export function createPortfolioPages(url) {
   function connection(store) {
     return `<form class="connect" method="get"><label>資料空間（store ID）<input name="store" required value="${esc(store)}"></label><button>讀取資料空間</button></form>`;
   }
-  function overview(projects, results) {
+  function overview(projects, results, canCreate) {
     const active = [];
     let unread = 0;
     const list = projects.map((project,i) => {
@@ -124,11 +129,13 @@ export function createPortfolioPages(url) {
     active.sort((a,b)=>String(b.w.updated_at||'').localeCompare(String(a.w.updated_at||'')));
     const totals = `<dl class="totals"><div><dt>產品數</dt><dd>${projects.length}</dd></div><div><dt>${unread?'已讀取產品執行中':'執行中流程'}</dt><dd>${active.length}</dd></div></dl>`;
     const running = active.length ? cards(active.map(({id,name,w})=>flowCard(id,w,name))) : empty(unread ? '已讀取的產品中沒有進行中的工作。':'目前沒有進行中的工作。');
-    return title('產品總覽',totals)+'<div class="overview">'+section('產品',list.length ? `<div class="directory">${list.join('')}</div>` : empty('目前沒有可見產品。'))+
+    const create = canCreate ? `<details class="item-editor" data-new-product${projects.length ? '' : ' open'}><summary>新增私人產品</summary>
+      <form class="edit-form" data-command="project.create"><label>產品名稱<input name="name" required maxlength="160"></label><button class="primary">建立產品</button></form></details>` : '';
+    return title('產品總覽',totals)+'<div class="overview">'+section('產品',(list.length ? `<div class="directory">${list.join('')}</div>` : empty('目前沒有可見產品。'))+create)+
       section('進行中的工作',(unread ? hint('部分產品讀取失敗，以下只列已讀取的工作。'):'')+running)+
       `</div><footer class="tools">${reload}</footer>`;
   }
-  function productBoard(data, workflows) {
+  function productBoard(data, workflows, params=new URLSearchParams()) {
     const {product,catalog}=data;
     const id=product.project_id;
     let body;
@@ -136,7 +143,7 @@ export function createPortfolioPages(url) {
       const groups = groupBy(data.workflows,w=>w.status);
       const states = [...new Set([...lifecycle.keys(), ...groups.keys()])].filter(s=>groups.has(s));
       body=section('工作流程',states.length ? boardLanes(states.map(s=>[lifecycle.get(s)||s,groups.get(s)]),w=>flowCard(id,w,'','h4')) : empty('目前沒有工作流程。'));
-      if (data.can_plan) body+=section('建立工作流程',createForm(catalog.pbis));
+      if (data.can_plan) body+=section('建立工作流程',createForm(availablePbis(data)));
     } else {
       const hasProject=catalog.pbis.some(p=>p.project_status);
       const group=p=>hasProject?(p.project_status || '未指定 Project 狀態'):issueState(p.issue_state);
@@ -151,41 +158,54 @@ export function createPortfolioPages(url) {
         return `<article class="work-card"><div class="card-meta"><span>${esc(p.repository_id)}</span></div><h4>${pbiLink(id,p)}</h4>
           <p class="card-foot">${issueState(p.issue_state)} · ${linked ? '關聯 '+linked+' 個流程' : '尚無關聯工作流程'}</p></article>`;
       };
-      let noItems='目前沒有可顯示的 PBI。';
-      if (catalog.coverage==='complete') noItems='此產品有 0 筆 PBI。';
-      if (catalog.coverage==='unknown') noItems='尚未載入這個產品的 PBI。'+(data.can_plan?'可先到 Workflow Board 建立工作，之後再補連 PBI。':'');
-      body=section('產品待辦項目',catalogNote(catalog)+(groups.size ? boardLanes([...groups],issueCard) : empty(noItems)));
+      const stages=params.get('layout')==='stages';
+      body=layoutNav(data,url,stages);
+      if(stages) return crumbs(product)+title(product.name)+boardNav(id,false)+body+statusBoard(data,params,url)+reload;
+      body+=nativeBoard(data,pbiLink,linkCounts,pbiKey)+deliveryBoard(data);
+      if (catalog.coverage!=='unknown' || groups.size) {
+        const noItems=catalog.coverage==='complete' ? '外部來源有 0 筆 PBI。' : '目前沒有可顯示的外部 PBI。';
+        body+=section('產品待辦項目',catalogNote(catalog)+(groups.size ? boardLanes([...groups],issueCard) : empty(noItems)));
+      } else {
+        body+=hint('尚未載入外部來源的 PBI。');
+      }
     }
     return crumbs(product)+title(product.name)+boardNav(id,workflows)+body+(data.can_plan?'':hint('目前為唯讀權限。'))+reload;
   }
   function detailShell(product, board, name, body) {
     return crumbs(product,board)+title(name)+boardNav(product.project_id,board==='Workflow Board')+body+reload;
   }
-  function pbiPage(data, repo, issue) {
+  function pbiPage(data, repo, issue, nativeId=null) {
     const {product,catalog,workflows,can_plan}=data;
     const id=product.project_id;
-    const matches=p=>p.repository_id===repo && p.issue_id===issue;
-    const observed=catalog.pbis.find(matches);
+    const matches=p=>nativeId !== null ? p.source==='native' && p.item_id===nativeId : p.source!=='native' && p.repository_id===repo && p.issue_id===issue;
+    const observed=availablePbis(data).find(matches);
     const p=observed || workflows.flatMap(w=>w.history.flatMap(event=>event.pbis)).find(matches);
-    if (!p) return detailShell(product,'Scrum Board','此產品目前的來源查無該 PBI',catalogNote(catalog));
+    if (!p) return detailShell(product,'Scrum Board','此產品目前的來源查無該 PBI',nativeId===null ? catalogNote(catalog) : '');
     const linked=workflows.filter(w=>w.pbis.some(matches));
     const candidates=workflows.filter(w=>!linked.includes(w));
-    let body=`<div class="detail-meta">${pill(issueState(p.issue_state))}${p.project_status ? pill(p.project_status):''}<span>${esc(p.repository_id)}</span></div>${catalogNote(catalog)}`;
+    let body;
+    if (p.source==='native') {
+      body=nativeDetail(p,data,pbiLink);
+      if (can_plan && observed) body+=itemForm(nativeItems(data),p);
+      if (observed) body+=deliveryCard(data,p)+descendantDelivery(data,p,url);
+    } else {
+      body=`<div class="detail-meta">${pill(issueState(p.issue_state))}${p.project_status ? pill(p.project_status):''}<span>${esc(p.repository_id)}</span></div>${catalogNote(catalog)}`;
+    }
     body+=section('關聯工作流程',linked.length ? cards(linked.map(w=>`<div>${flowCard(id,w)}${can_plan?unlinkForm(p,w.workflow_id):''}</div>`)) : empty('尚無關聯工作流程。'));
     if (can_plan && observed && candidates.length) {
       body+=section('補連既有工作流程',`<form class="edit-form" data-command="workflow.link"><input type="hidden" name="pbi" value="${esc(pbiKey(p))}"><label>工作流程<select name="flow">${candidates.map(w=>`<option value="${esc(w.workflow_id)}">${esc(w.title)} · ${esc(w.workflow_id)}</option>`).join('')}</select></label><button>補連工作流程</button></form>`);
     }
     if (!observed) body+=hint('此項目已不在目前來源，顯示已保存的 PBI 版本。');
-    else if (can_plan) body+=section('從 PBI 建立工作流程',createForm(catalog.pbis,pbiKey(p)));
+    else if (can_plan) body+=section('從 PBI 建立工作流程',createForm(availablePbis(data),pbiKey(p)));
     else body+=hint('目前為唯讀權限。');
     return detailShell(product,'Scrum Board',pbiTitle(p),body);
   }
   function workflowPage(data, workflowId) {
-    const {product,catalog,workflows,can_plan}=data;
+    const {product,workflows,can_plan}=data;
     const w=workflows.find(w=>w.workflow_id===workflowId);
     if (!w) return detailShell(product,'Workflow Board','此產品查無該工作流程','');
     const linkedKeys=new Set(w.pbis.map(pbiKey));
-    const candidates=catalog.pbis.filter(p=>!linkedKeys.has(pbiKey(p)));
+    const candidates=availablePbis(data).filter(p=>!linkedKeys.has(pbiKey(p)));
     const origin=w.history.find(h=>h.action==='created');
     const initialPbis=origin?.pbis||[];
     const inherited=origin?.external_work_refs||[];
@@ -195,7 +215,7 @@ export function createPortfolioPages(url) {
     body+=section('原始工作範圍',`<div class="panel"><p class="goal">${esc(w.goal)}</p>${scopeFields(w.scope)}
       <h3>建立時的 PBI</h3>${initialPbis.length?initialPbis.map(p=>esc(pbiTitle(p))+' · '+esc(p.source_version)).join('、'):hint('建立時未關聯 PBI。')}
       ${inherited.length ? '<h3>建立時的外部參照</h3>'+structuredMarkup(inherited):''}</div>`);
-    body+=section('關聯 PBI',w.pbis.length ? cards(w.pbis.map(p=>`<article class="work-card"><h3>${pbiLink(product.project_id,p)}</h3>${hint(p.repository_id)}${can_plan?unlinkForm(p,workflowId):''}</article>`)) : empty('尚未關聯 PBI'));
+    body+=section('關聯 PBI',w.pbis.length ? cards(w.pbis.map(p=>`<article class="work-card"><h3>${pbiLink(product.project_id,p)}</h3>${hint(pbiSource(p))}${can_plan?unlinkForm(p,workflowId):''}</article>`)) : empty('尚未關聯 PBI'));
     if (can_plan && candidates.length) body+=section('補連 PBI',`<form class="edit-form" data-command="workflow.link"><fieldset><legend>選擇 PBI</legend>${choices(candidates)}</fieldset><button>補連 PBI</button></form>`);
     if (!can_plan) body+=hint('目前為唯讀權限。');
     body+=section('交接與下一步',handoffView(w.latest_handoff))+section('工作證據',evidenceView(w));

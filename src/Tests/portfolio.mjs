@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {handle} from '../Presentation/WebApi/entry.mjs';
 import {sqliteCollaboration} from './Fixtures/collaboration-sqlite.mjs';
+import {verifyNativeBacklog} from './portfolio-native.mjs';
 
 const {sqlite, db, faults} = sqliteCollaboration();
 const store = 'observatory-test';
@@ -118,6 +119,7 @@ try {
   assert.equal(state.history.at(-1).pbis[0].source_version,'v1');
   assert.equal((await post(query,scope,{owner:'neighbor'})).workflows.length,0);
   console.log('PASS portfolio SQL/HTTP: scoped catalogs, authorization, frozen origin, revision race, unlink and durable replay');
+  await verifyNativeBacklog({post, request, query, command, scope, readonly, faults, db});
 } finally {
   sqlite.close();
 }

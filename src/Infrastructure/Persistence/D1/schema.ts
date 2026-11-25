@@ -78,3 +78,25 @@ export const portfolioCatalogs=sqliteTable('portfolio_catalogs',{
  owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),
  revision:integer('revision').notNull(),body:text('body').notNull()
 },t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId]})]);
+
+export const portfolioBacklogItems=sqliteTable('portfolio_backlog_items',{
+ owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),
+ itemId:text('item_id').notNull(),parentId:text('parent_id'),position:integer('position').notNull(),
+ revision:integer('revision').notNull(),body:text('body').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId,t.itemId]}),
+ index('idx_portfolio_backlog_revision').on(t.owner,t.storeId,t.projectId,t.revision)]);
+
+export const portfolioLifecycles=sqliteTable('portfolio_lifecycles',{
+ owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),
+ revision:integer('revision').notNull(),body:text('body').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId]})]);
+
+export const portfolioItemTransitions=sqliteTable('portfolio_item_transitions',{
+ owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),
+ itemId:text('item_id').notNull(),revision:integer('revision').notNull(),body:text('body').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId,t.itemId,t.revision]})]);
+
+export const portfolioDeliveryRecords=sqliteTable('portfolio_delivery_records',{
+ owner:text('owner').notNull(),storeId:text('store_id').notNull(),projectId:text('project_id').notNull(),
+ kind:text('kind').notNull(),id:text('id').notNull(),revision:integer('revision').notNull(),body:text('body').notNull()
+},t=>[primaryKey({columns:[t.owner,t.storeId,t.projectId,t.kind,t.id]})]);

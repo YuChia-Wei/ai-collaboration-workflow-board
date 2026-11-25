@@ -1,5 +1,11 @@
 # Workflow Board Roadmap
 
+## 原生 Scrum 待辦（2026-11-25）
+
+原生規劃進一步涵蓋按類型管理工作狀態、產品級設定、部分交付與多環境追溯。團隊可以手動記錄交付、重試與讀回。07 所列的外部驗收或 pipeline 整合，仍以選定來源及可信證據為準。[產品決策](pbi-lifecycle-and-delivery.md) · [驗收情境](../../specs/portfolio/backlog/lifecycle-and-delivery.spec.md)
+
+01／02 提供產品雙看板和工作關聯後，先讓沒有外部工作系統的團隊建立自己的待辦。這一片涵蓋四層產品工作、獨立 Bug、同層排序、關閉／重開和雙向 workflow 關聯。可用虛構產品驗收，從空清單建立工作，再由另一個 session 讀回同一份結果。03–06 各自保留外部讀取、寫回及 Project 規劃的目標，可沿用相同產品入口。[原生待辦設計](native-scrum-backlog.md) · [可觀察的完成條件](../../specs/portfolio/backlog/native-backlog.spec.md) · [Portfolio 契約](../../../src/Contracts/PortfolioV1/README.md)
+
 ## GitHub 第一版（2026-11-22）
 
 第一個里程碑是 **owner 看得到、點得動、能判斷是否符合日常工作的產品與執行看板**。先以合成資料走通正常入口和領域行為，再接入 GitHub adapter。以下「01–07」是本地規劃順序，可以交付的成果各有自己的查驗方式；GitHub 尚未建立這些新 Issue。這裡的「第一版」指 Workflow Board 的產品範圍。[產品範圍](product-scope.md) · [互動樣稿](github-v1-demo.html) · [案例與驗收方式](github-v1-examples.md)

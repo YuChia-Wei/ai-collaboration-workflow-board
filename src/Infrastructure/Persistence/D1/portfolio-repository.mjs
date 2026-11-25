@@ -1,5 +1,7 @@
 import {canonicalJson} from '../../../Core/Workflows/Domain/collaboration-values.mjs';
 import {workflowAttention} from '../../../Core/Workflows/Domain/portfolio.mjs';
+import {defaultFlows} from '../../../Core/Workflows/Domain/pbi-lifecycle.mjs';
+import {createDeliveryRepository} from './delivery-repository.mjs';
 
 export function createPortfolioRepository(db) {
  const stmt=(sql,...args)=>db.prepare(sql).bind(...args);
@@ -7,6 +9,90 @@ export function createPortfolioRepository(db) {
  async function catalog(owner,store,project){
   const row=await stmt('SELECT revision,body FROM portfolio_catalogs WHERE '+scope,owner,store,project).first();
   return row?{...JSON.parse(row.body),revision:row.revision}:{revision:0,coverage:'unknown',observed_at:null,pbis:[]};
+ }
+ async function backlog(owner,store,project,withHistory=false){
+  const args=[owner,store,project];
+  // Pin the flow configuration, ordered cards and their history to one read.
+  const unionHistory=withHistory?` UNION ALL SELECT 'history',revision,item_id,0,body FROM portfolio_item_transitions WHERE ${scope}`:'';
+  const {results}=await stmt(`SELECT 'item' AS kind,revision,item_id,position,body FROM portfolio_backlog_items WHERE ${scope}
+   UNION ALL SELECT 'config',revision,'',0,body FROM portfolio_lifecycles WHERE ${scope}
+   ${unionHistory} ORDER BY kind,position,item_id,revision`,...args,...args,...(withHistory?args:[])).all();
+  const children=new Map(),histories=new Map();
+  let revision=0,flows=defaultFlows();
+  for(const row of results){
+   revision=Math.max(revision,row.revision);
+   const item=JSON.parse(row.body);
+   if(row.kind==='config'){flows=item;continue;}
+   if(row.kind==='history'){
+    if(!histories.has(row.item_id))histories.set(row.item_id,[]);
+    histories.get(row.item_id).push(item);continue;
+   }
+   item.state_id??=null;
+   if(withHistory)item.state_history=histories.get(row.item_id)??[];
+   if(!children.has(item.parent_id))children.set(item.parent_id,[]);
+   children.get(item.parent_id).push(item);
+  }
+  const items=[];
+  function visit(parent){
+   for(const child of children.get(parent)??[]){items.push(child);visit(child.item_id);}
+  }
+  visit(null);
+  return {revision,items,flows};
+ }
+ async function selectedBacklogItems(owner,store,project,ids){
+  if(!ids.length)return [];
+  const {results}=await stmt(`SELECT body FROM portfolio_backlog_items WHERE ${scope}
+   AND item_id IN (SELECT value FROM json_each(?))`,owner,store,project,JSON.stringify(ids)).all();
+  return results.map(row=>JSON.parse(row.body));
+ }
+ async function saveBacklog(owner,c,digest,change,failure){
+  const args=[owner,c.store_id,c.project_id];
+  const key=canonicalJson([...args,c.operation_id]),attempt=crypto.randomUUID();
+  const base={operation_id:c.operation_id,store_id:c.store_id,project_id:c.project_id,request_digest:digest};
+  const next=c.expected_revision+1;
+  const receipt=failure
+   ? {...base,accepted:false,revision:c.expected_revision,error:failure.error,failure}
+   : {...base,accepted:true,revision:next};
+  const conflict={...base,accepted:false,error:'revision_conflict',failure:{error:'revision_conflict',category:'conflict',details:{}}};
+  // A command prepared against a different head has no applicable change,
+  // even if another writer reaches the requested version before this batch.
+  const preparedAt=failure?.error==='revision_conflict'?null:c.expected_revision;
+  const gate="EXISTS(SELECT 1 FROM project_collaboration_operations WHERE key=? AND attempt=? AND outcome='accepted')";
+  const fence=[key,attempt];
+  const statements=[stmt(`WITH head AS (SELECT MAX(
+   COALESCE((SELECT MAX(revision) FROM portfolio_backlog_items WHERE ${scope}),0),
+   COALESCE((SELECT revision FROM portfolio_lifecycles WHERE ${scope}),0)) AS revision)
+   INSERT INTO project_collaboration_operations(key,owner,store_id,project_id,workflow_id,operation_id,digest,attempt,outcome,receipt)
+   SELECT ?,?,?,?,'',?,?,?,CASE WHEN revision=? THEN ? ELSE 'rejected' END,
+    CASE WHEN revision=? THEN ? ELSE json_set(?,'$.revision',revision,'$.failure.details.current_revision',revision) END
+   FROM head WHERE 1 ON CONFLICT(key) DO NOTHING`,
+   ...args,...args,key,...args,c.operation_id,digest,attempt,preparedAt,failure?'rejected':'accepted',preparedAt,JSON.stringify(receipt),JSON.stringify(conflict))];
+  if(change?.flows){
+   statements.push(stmt(`INSERT INTO portfolio_lifecycles(owner,store_id,project_id,revision,body) SELECT ?,?,?,?,? WHERE ${gate}
+    ON CONFLICT(owner,store_id,project_id) DO UPDATE SET revision=excluded.revision,body=excluded.body`,
+    ...args,next,JSON.stringify(change.flows),...fence));
+  }
+  if(change?.item){
+   const {item,from,position}=change;
+   if(c.command==='backlog.move'&&from!==position){
+    const earlier=position<from,low=earlier?position:from+1,high=earlier?from-1:position;
+    statements.push(stmt(`UPDATE portfolio_backlog_items SET position=position+? WHERE ${scope}
+     AND parent_id IS ? AND position BETWEEN ? AND ? AND ${gate}`,earlier?1:-1,...args,item.parent_id,low,high,...fence));
+   }
+   statements.push(stmt(`INSERT INTO portfolio_backlog_items(owner,store_id,project_id,item_id,parent_id,position,revision,body)
+    SELECT ?,?,?,?,?,?,?,? WHERE ${gate} ON CONFLICT(owner,store_id,project_id,item_id)
+    DO UPDATE SET position=excluded.position,revision=excluded.revision,body=excluded.body`,
+    ...args,item.item_id,item.parent_id,position,next,JSON.stringify(item),...fence));
+   statements.push(stmt(`INSERT INTO mutation_guard(id,ok) VALUES(?,CASE WHEN NOT ${gate} OR EXISTS(
+    SELECT 1 FROM portfolio_backlog_items WHERE ${scope} AND item_id=? AND revision=?) THEN 1 ELSE 0 END)`,
+    attempt,...fence,...args,item.item_id,next));
+   statements.push(stmt('DELETE FROM mutation_guard WHERE id=?',attempt));
+   if(change.history){
+    statements.push(stmt(`INSERT INTO portfolio_item_transitions(owner,store_id,project_id,item_id,revision,body)
+     SELECT ?,?,?,?,?,? WHERE ${gate}`,...args,item.item_id,next,JSON.stringify(change.history),...fence));
+   }
+  }
+  await db.batch(statements);
  }
  async function overview(owner,store,project,legacy){
   const prefix=legacy?'collaboration_':'project_collaboration_';
@@ -77,5 +163,5 @@ export function createPortfolioRepository(db) {
   }
   return [...groups.values()].map(({chunks,...facts})=>({state:JSON.parse(chunks.join('')),...facts}));
  }
- return {catalog,replace,workflows,overview};
+ return {catalog,replace,backlog,selectedBacklogItems,saveBacklog,workflows,overview,...createDeliveryRepository(db)};
 }

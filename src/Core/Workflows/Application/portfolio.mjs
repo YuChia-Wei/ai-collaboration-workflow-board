@@ -1,7 +1,10 @@
 import {demand,Fault} from '../Domain/errors.mjs';
 import {applyCollaborationCommand,requireCapability} from '../Domain/collaboration-workflow.mjs';
 import {operationKey,valueDigest} from '../Domain/collaboration-values.mjs';
-import {currentLinks,portfolioWorkflow,selectLinks,validatePortfolio} from '../Domain/portfolio.mjs';
+import {currentLinks,portfolioWorkflow,selectLinks,validatePortfolio,workflowOrigin} from '../Domain/portfolio.mjs';
+import {changeBacklog} from '../Domain/native-backlog.mjs';
+import {configureFlow} from '../Domain/pbi-lifecycle.mjs';
+import {executeDelivery} from './delivery.mjs';
 import {LEGACY_PROJECT,legacyProject,PROJECT_PROFILE} from './projects.mjs';
 
 export function createPortfolio({storeId,projects,portfolio,workflowRepository,clock}){
@@ -21,8 +24,10 @@ export function createPortfolio({storeId,projects,portfolio,workflowRepository,c
   const project=await authorize(access,input,'query'),id=input.project_id,owner=access.owner_id;
   const header={product:{project_id:id,name:project.name},can_plan:id!==LEGACY_PROJECT&&access.capabilities.includes('plan')};
   if(input.view==='overview')return {...header,...await portfolio.overview(owner,storeId,id,id===LEGACY_PROJECT)};
-  const [catalog,records]=await Promise.all([portfolio.catalog(owner,storeId,id),portfolio.workflows(owner,storeId,id,id===LEGACY_PROJECT)]);
-  return {...header,catalog,workflows:records.map(portfolioWorkflow)};
+  const [catalog,backlog,records,delivery]=await Promise.all([
+   portfolio.catalog(owner,storeId,id),portfolio.backlog(owner,storeId,id,true),portfolio.workflows(owner,storeId,id,id===LEGACY_PROJECT),portfolio.delivery(owner,storeId,id)
+  ]);
+  return {...header,catalog,backlog:{revision:backlog.revision,items:backlog.items},lifecycle:{revision:backlog.revision,flows:backlog.flows},delivery,workflows:records.map(portfolioWorkflow)};
  }
  async function command(access,c){
   await authorize(access,c,'command');
@@ -35,8 +40,26 @@ export function createPortfolio({storeId,projects,portfolio,workflowRepository,c
    return result.receipt;
   };
   const previous=await lookup();if(previous)return previous;
+  if(c.command.startsWith('delivery.')){
+   await executeDelivery({owner,c,digest,portfolio,clock});
+   return lookup();
+  }
   if(c.command==='catalog.replace'){
    await portfolio.replace(owner,c,digest);
+   return lookup();
+  }
+  if(c.command.startsWith('backlog.')||c.command==='lifecycle.configure'){
+   const current=await portfolio.backlog(owner,storeId,project);
+   let change=null,failure=null;
+   try{
+    demand(current.revision===c.expected_revision,'revision_conflict','conflict',{current_revision:current.revision});
+    change=c.command==='lifecycle.configure'?{flows:configureFlow(current.flows,c.kind,c.flow,current.items)}:
+     changeBacklog(current,c,clock.now(),access.actor,current.flows);
+   }catch(error){
+    if(!(error instanceof Fault))throw error;
+    failure={error:error.error,category:error.category,details:error.details};
+   }
+   await portfolio.saveBacklog(owner,c,digest,change,failure);
    return lookup();
   }
   const ref={store_id:storeId,namespace:'personal',project_id:project,workflow_id:c.workflow_id,record_kind:'collaboration'};
@@ -44,18 +67,23 @@ export function createPortfolio({storeId,projects,portfolio,workflowRepository,c
   const time=clock.now();
   const base={service_contract_version:PROJECT_PROFILE,schema_version:'2.0',workflow_ref:ref,operation_id:c.operation_id,request_digest:digest,actor:access.actor};
   const state=await repo.snapshot(owner,ref);
+  const adding=c.command!=='workflow.unlink';
+  const selectedNative=adding?c.pbis.filter(item=>item.source==='native'):[];
   let change,eventName;
   try{
    const create=c.command==='workflow.create',before=state?.revision??0;
    demand(create?!state:state,create?'workflow_exists':'workflow_not_found',create?'conflict':'not_found');
    demand(before===c.expected_revision,'revision_conflict','conflict',{current_revision:before});
    const history=state?await repo.facts(owner,ref,before,'portfolio_links'):[];
-   const snapshots=selectLinks(c,await portfolio.catalog(owner,storeId,project),currentLinks(history));
+   const needsCatalog=adding&&c.pbis.some(item=>item.source!=='native');
+   const [catalog,nativeItems]=await Promise.all([needsCatalog?portfolio.catalog(owner,storeId,project):{pbis:[]},
+    portfolio.selectedBacklogItems(owner,storeId,project,selectedNative.map(item=>item.item_id))]);
+   const snapshots=selectLinks(c,catalog,currentLinks(history),nativeItems);
    const action=create?'created':c.command==='workflow.link'?'linked':'unlinked';
    const fact={action,at:time,pbis:snapshots};
    if(create){
     const payload={title:c.title,goal:c.goal,scope:{included:c.goal,excluded:''},skill:{id:'unassigned',version:null},
-     external_work_refs:snapshots.map(p=>({original:p.title,provider:'board-catalog',scope:p.repository_id,work_id:p.issue_id,url:null,observed_at:p.observed_at,source_version:p.source_version,availability:'available'}))};
+     external_work_refs:snapshots.map(p=>workflowOrigin(p,project))};
     change=await applyCollaborationCommand(null,{command:'workflow.create',workflow_ref:ref,expected_revision:0,payload},{access,time});
     eventName='WorkflowCreated';
    }else{
@@ -72,7 +100,7 @@ export function createPortfolio({storeId,projects,portfolio,workflowRepository,c
   }
   const receipt={...base,accepted:true,before_revision:change.before_revision,revision:change.state.revision,accepted_at:time,effects:change.effects};
   const event={service_contract_version:PROJECT_PROFILE,schema_version:'2.0',workflow_ref:ref,operation_id:c.operation_id,revision:receipt.revision,actor:access.actor,occurred_at:time,name:eventName,effects:change.effects};
-  await repo.accept({owner_id:owner,ref,expected_revision:c.expected_revision,operation_key:key,digest,next_state:change.state,receipt,facts:change.facts,events:[event]});
+  await repo.accept({owner_id:owner,ref,expected_revision:c.expected_revision,operation_key:key,digest,next_state:change.state,receipt,facts:change.facts,events:[event],selectedNative});
   return lookup();
  }
  return {query,command};

@@ -1,6 +1,8 @@
 # AI Collaboration Workflow Board
 
-Workflow Board 讓人從首頁看到有哪些產品、哪些 workflow 正在進行。選一個產品，在 **Scrum Board** 查看產品工作項目（PBI），在 **Workflow Board** 查看實作進度。從 PBI 可找到共用的工作流程，也能將調查中的 workflow 補連回適當的 PBI，讓下一個 session 從原工作繼續。[網頁使用方式](src/Presentation/Web/README.md)
+Workflow Board 讓人從首頁看到自己的產品與正在進行的工作。建立產品後，即可在 **Scrum Board** 手動建立 Epic、Feature、User Story 與 Task，排列同層待辦，也能獨立登記 Bug。私有待辦由 Board 保存，無須設定外部服務。從任一項待辦可以建立或連結 workflow，之後在 **Workflow Board** 查閱實作進度、證據與交接。[網頁使用方式](src/Presentation/Web/README.md)
+
+Scrum Board 可按類型推進工作，在狀態看板選擇交付對象及目標環境。例如 Bug 仍在重驗時，可以分別看到測試環境已讀回修正版本、客戶尚待交付。每個產品可調整流程、登記交付範圍、部署嘗試與環境讀回。這些紀錄保存於 Board，實際部署由原有發布工具執行。[工作狀態與交付規格](.dev/specs/portfolio/backlog/lifecycle-and-delivery.spec.md)
 
 開發協作選配 Framework v0.23.1 的 16 個 skills 與 `engineering-common@0.4.3`。原架構 skill 的用途由 `domain-model-designer` 與 `software-architect` 接續。精確清單與驗證見 [FRAMEWORK-INSTALLATION.md](FRAMEWORK-INSTALLATION.md)，Agent 入口見 [AGENTS.md](AGENTS.md)，開始方式見 [第一個有界任務](.dev/guides/first-task.md)。
 
@@ -62,6 +64,10 @@ npm run preview:portfolio
 ```
 
 首頁顯示虛構的「澄河」和「石庭」。進入澄河的 Scrum Board，沿 #11 或 #12 都可打開「整理時段資料」。在首頁選「調查時區差異」並補連澄河 #11，接著可從另一個瀏覽器工作階段進入同一網址，由 #11 讀回調查的證據與下一步。預覽執行正常的 Web UI 與 Worker，本機伺服器使用獨立的記憶體 SQLite；停止預覽後，再啟動即還原初始情境。
+
+要試用空白的私有看板，可以從首頁建立一個產品，在 Scrum Board 依序新增 Epic、Feature、User Story 和 Task。登記 Bug 時填寫預期與實際行為，也可指出受影響的 User Story。回到待辦清單即可調整同層順序，在項目詳情可編輯、關閉或重開。[私有 Scrum Board 領域設計](.dev/design/product-evolution/native-scrum-backlog.md)
+
+要試用交付追溯，可先建立一張 Bug，將其移到 Retesting，在產品新增 QA 環境後，分別登記修正版的部署嘗試及 QA 讀回。再建立一筆列出該 Bug 的交付草案，填入確切產物、受領對象與依據。從該 Bug 詳情和產品看板確認工作狀態、交付範圍及 QA 最後觀察版本。[操作指引](src/Presentation/Web/README.md)
 
 `npm run test:portfolio-browser` 在組建後啟動自己的預覽，透過兩個獨立的瀏覽器工作階段自動驗收。Windows 預設使用已安裝的 Edge，其他平台使用 Chrome，也可以用環境變數 `BOARD_BROWSER_PATH` 指定本機 Chromium 執行檔。[合成情境與驗收方式](.dev/design/product-evolution/github-v1-examples.md)
 

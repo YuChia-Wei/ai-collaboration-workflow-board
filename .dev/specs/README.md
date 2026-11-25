@@ -8,6 +8,8 @@
 
 | 需要 | 入口 |
 | --- | --- |
+| 重建無外部來源的 Scrum Board 待辦 | [原生項目、操作與驗收情境](portfolio/backlog/native-backlog.spec.md)（2026-11-25 新增） |
+| 重建工作狀態、部分交付與多環境追溯 | [狀態轉換、交付證據與部署讀回](portfolio/backlog/lifecycle-and-delivery.spec.md) |
 | 理解產品邊界、共同語言與不同紀錄類型 | [領域地圖](domain-map.md) |
 | 重建新協作聚合 | [Workflow 實體規格](collaboration/workflow/entity/workflow.spec.md) |
 | 實作新協作命令 | [命令接受協定](collaboration/workflow/behaviors/command-acceptance.spec.md)，再從下表選 19 個使用案例 |

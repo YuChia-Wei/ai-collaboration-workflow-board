@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {isAbsolute} from 'node:path';
 import {startPortfolioPreview} from '../Tooling/collaboration-ui-preview.mjs';
+import {verifyPrivateScrumBoard} from './portfolio-native-browser.mjs';
 
 // The only server is a loopback preview of the built Worker, backed by a new
 // in-memory database. The driver uses an installed Chromium browser.
@@ -21,10 +22,10 @@ let browser;
 try {
   browser = await chromium.launch({...launch, headless:true});
   const faults = [];
-  async function openSession() {
+  async function openSession(target = preview) {
     const context = await browser.newContext({serviceWorkers:'block'});
     await context.route('**/*', route => {
-      if (new URL(route.request().url()).origin === preview.origin) return route.continue();
+      if (new URL(route.request().url()).origin === target.origin) return route.continue();
       faults.push('Unexpected external request: '+route.request().url());
       return route.abort();
     });
@@ -39,7 +40,7 @@ try {
         faults.push('The product UI requested a virtual personal workspace.');
       }
     });
-    await page.goto(preview.url);
+    await page.goto(target.url);
     return {page, context};
   }
   const first = '#11 列出可預約時段', second = '#12 匯出預約明細';
@@ -142,6 +143,12 @@ try {
   await link(section(other,'關聯 PBI'),'#11 產生範例目錄').click();
   await expectLinks(section(other,'關聯工作流程'),['覆核目錄範例']);
   await reader.context.close();
+  const emptyProductStore = await startPortfolioPreview({seed:false});
+  try {
+    await verifyPrivateScrumBoard(() => openSession(emptyProductStore));
+  } finally {
+    await emptyProductStore.close();
+  }
   assert.deepEqual(faults,[]);
   console.log('PASS: product overview and active work, retired entry points, mobile board navigation, scoped Scrum and Workflow Boards, shared PBI links, cross-session evidence and handoff, unlink and create from a PBI.');
 } finally {

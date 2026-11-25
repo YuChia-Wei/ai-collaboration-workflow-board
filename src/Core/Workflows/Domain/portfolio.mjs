@@ -1,4 +1,6 @@
 import {demand} from './errors.mjs';
+import {itemKinds} from './pbi-lifecycle.mjs';
+import {validateDelivery} from './delivery.mjs';
 
 const identifier=value=>typeof value==='string'&&/^[A-Za-z0-9][A-Za-z0-9._-]{0,159}$/.test(value)&&!['__proto__','prototype','constructor'].includes(value);
 const text=(value,max)=>typeof value==='string'&&value.trim().length>0&&value.length<=max;
@@ -11,8 +13,12 @@ function timestamp(value){
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const keys=(value,names)=>object(value)&&Object.keys(value).every(k=>names.includes(k))&&names.every(k=>Object.hasOwn(value,k));
 const identity=['repository_id','issue_id','source_version'];
-export const pbiKey=p=>JSON.stringify([p.repository_id,p.issue_id]);
+const nativeIdentity=['source','item_id','source_version'];
+export const pbiKey=p=>JSON.stringify(p.source==='native'?['native',p.item_id]:['catalog',p.repository_id,p.issue_id]);
 const selection=p=>object(p)&&identity.every(k=>text(p[k],160));
+const validSelection=p=>keys(p,nativeIdentity)
+ ? p.source==='native'&&identifier(p.item_id)&&text(p.source_version,160)
+ : selection(p)&&keys(p,identity);
 const pbiFields=[...identity,'number','title','observed_at','issue_state','project_status'];
 const validPbi=p=>selection(p)&&keys(p,pbiFields)&&Number.isSafeInteger(p.number)&&p.number>0&&text(p.title,300)&&timestamp(p.observed_at)&&['open','closed'].includes(p.issue_state)&&(p.project_status===null||text(p.project_status,160));
 const validList=(items,limit,validate)=>Array.isArray(items)&&items.length<=limit&&items.every(validate)&&new Set(items.map(pbiKey)).size===items.length;
@@ -24,16 +30,42 @@ export function validatePortfolio(input,kind){
   return;
  }
  base.push('operation_id','expected_revision','command');
- demand(identifier(input.operation_id)&&Number.isSafeInteger(input.expected_revision)&&input.expected_revision>=0&&input.expected_revision<Number.MAX_SAFE_INTEGER,'invalid_command');
+ demand(typeof input.command==='string'&&identifier(input.operation_id)&&Number.isSafeInteger(input.expected_revision)&&input.expected_revision>=0&&input.expected_revision<Number.MAX_SAFE_INTEGER,'invalid_command');
+ if(input.command.startsWith('delivery.'))return validateDelivery(input);
+ if(input.command==='lifecycle.configure'){
+  demand(keys(input,[...base,'kind','flow'])&&itemKinds.includes(input.kind)&&object(input.flow),'invalid_lifecycle');
+  return;
+ }
+ if(input.command==='backlog.transition'){
+  demand(keys(input,[...base,'item_id','to_state','reason','resolution','original_id'])&&identifier(input.item_id)&&identifier(input.to_state)&&
+   typeof input.reason==='string'&&input.reason.length<=4000&&[null,'duplicate','wont_fix'].includes(input.resolution)&&
+   (input.original_id===null||identifier(input.original_id)),'invalid_transition');
+  return;
+ }
  if(input.command==='catalog.replace'){
   const catalog=input.catalog;
   demand(keys(input,[...base,'catalog'])&&keys(catalog,['coverage','observed_at','pbis']),'invalid_catalog');
   demand(['complete','partial','unknown','stale'].includes(catalog.coverage)&&(timestamp(catalog.observed_at)||(catalog.coverage==='unknown'&&catalog.observed_at===null))&&validList(catalog.pbis,2000,validPbi),'invalid_catalog');
   return;
  }
+ if(['backlog.create','backlog.edit','backlog.move'].includes(input.command)){
+  const create=input.command==='backlog.create';
+  const fields=['title','description','related_story_id','expected_behavior','actual_behavior'];
+  if(input.command==='backlog.move'){
+   demand(keys(input,[...base,'item_id','before_id'])&&identifier(input.item_id)&&(input.before_id===null||identifier(input.before_id)),'invalid_command');
+   return;
+  }
+  demand(keys(input,[...base,'item_id',...fields,...(create?['kind','parent_id']:['status'])]),'invalid_command');
+  demand(identifier(input.item_id)&&text(input.title,300)&&
+   [input.description,input.expected_behavior,input.actual_behavior].every(v=>typeof v==='string'&&v.length<=4000)&&
+   (input.related_story_id===null||identifier(input.related_story_id)),'invalid_backlog_item');
+  if(create)demand(['epic','feature','user_story','task','bug'].includes(input.kind)&&(input.parent_id===null||identifier(input.parent_id)),'invalid_backlog_item');
+  else demand(['open','closed'].includes(input.status),'invalid_backlog_item');
+  return;
+ }
  const creating=input.command==='workflow.create';
  demand(creating||['workflow.link','workflow.unlink'].includes(input.command),'unsupported_command','unsupported');
- demand(keys(input,[...base,'workflow_id','pbis',...(creating?['title','goal']:[])])&&identifier(input.workflow_id)&&validList(input.pbis,30,p=>selection(p)&&keys(p,identity)),'invalid_command');
+ demand(keys(input,[...base,'workflow_id','pbis',...(creating?['title','goal']:[])])&&identifier(input.workflow_id)&&validList(input.pbis,30,validSelection),'invalid_command');
  if(creating)demand(input.expected_revision===0&&text(input.title,160)&&text(input.goal,4000),'invalid_workflow');
  else demand(input.pbis.length>0,'empty_selection');
 }
@@ -45,8 +77,8 @@ export function currentLinks(history){
  }
  return links;
 }
-export function selectLinks(command,catalog,current){
- const available=new Map(catalog.pbis.map(item=>[pbiKey(item),item]));
+export function selectLinks(command,catalog,current,nativeItems=[]){
+ const available=new Map([...catalog.pbis,...nativeItems].map(item=>[pbiKey(item),item]));
  return command.pbis.map(selection=>{
   const key=pbiKey(selection);
   const removing=command.command==='workflow.unlink';
@@ -56,6 +88,12 @@ export function selectLinks(command,catalog,current){
   demand(removing||!current.has(key),'pbi_already_linked','conflict');
   return item;
  });
+}
+
+export function workflowOrigin(item,project){
+ const native=item.source==='native';
+ return {original:item.title,provider:native?'board-native':'board-catalog',scope:native?project:item.repository_id,
+  work_id:native?item.item_id:item.issue_id,url:null,observed_at:native?item.updated_at:item.observed_at,source_version:item.source_version,availability:'available'};
 }
 export function workflowAttention(state){
  return {updated_at:state.updated_at,

@@ -5,6 +5,8 @@
 | 入口 | 用途 |
 | --- | --- |
 | [產品演進設計](design/product-evolution/README.md) | 目前的產品範圍、GitHub 第一版 Roadmap 與 Issue 對照，也保留早期架構、部署與 Framework 記憶提案 |
+| [原生 Scrum 待辦設計](design/product-evolution/native-scrum-backlog.md) · [項目與操作規格](specs/portfolio/backlog/native-backlog.spec.md) | 無外部來源時，手動建立及排列產品工作、登錄 Bug，並連到 workflow |
+| [PBI 生命週期與交付設計](design/product-evolution/pbi-lifecycle-and-delivery.md) · [狀態及追溯規格](specs/portfolio/backlog/lifecycle-and-delivery.spec.md) | 產品可配置各類型工作狀態，記錄部分交付、部署與獨立的環境讀回 |
 | [離線互動樣稿](design/product-evolution/github-v1-demo.html) · [示範與驗收情境](design/product-evolution/github-v1-examples.md) | 用兩個虛構產品走過首頁、PBI 與 workflow；查看交付取捨，以及如何在隔離環境驗收 GitHub 操作 |
 | [既有規格集](specs/README.md) | 2026-10-13 基線的 production／entity／adapter／test 規格；保留各文件自己的時間與證據邊界 |
 | [第一個有界任務](guides/first-task.md) | 從現行 Issue 與專案契約開始工作 |

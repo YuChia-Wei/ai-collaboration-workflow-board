@@ -50,6 +50,20 @@
       "when": 1795279031488,
       "tag": "0006_flippant_changeling",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1795589705280,
+      "tag": "0007_fluffy_kree",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1795591036737,
+      "tag": "0008_awesome_roulette",
+      "breakpoints": true
     }
   ]
 }

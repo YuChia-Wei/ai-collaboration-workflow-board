@@ -1,6 +1,10 @@
 # 已接受方向與待決事項
 
-2026-11-22 更新。11 月的產品決定及其影響列於最前面，10 月的初期設計保留供回查。
+## 私有 Scrum Board 優先（2026-11-25）
+
+Owner 採用按型別配置工作生命週期，並將交付範圍、受領對象、部署嘗試和環境讀回設為分開的事實。產品可先採預設流程，團隊再選擇主要環境及交付證據。外部 provider 與可信簽核的接入另待相應工作。[設計與取捨](pbi-lifecycle-and-delivery.md) · [行為規格](../../specs/portfolio/backlog/lifecycle-and-delivery.spec.md)
+
+Owner 指定先交付零外部串接的私有 Scrum Board，產品待辦採 Epic → Feature → User Story → Task 四層。Bug 的設計由本次工作決定，採根層獨立缺陷單，可連到一張受影響的 User Story。GitHub 與 Azure DevOps 的產品整合順序接在這個切片之後。[領域知識與取捨](native-scrum-backlog.md) · [規格與驗收情境](../../specs/portfolio/backlog/native-backlog.spec.md)
 
 ## GitHub 第一版的決定（2026-11-22）
 

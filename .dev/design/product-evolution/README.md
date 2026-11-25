@@ -1,6 +1,10 @@
 # Workflow Board 產品演進設計
 
-## 目前從這裡開始（2026-11-22）
+## 目前從這裡開始（2026-11-25）
+
+若要了解工作完成後是否已交付、在哪個環境生效，請從各類型預設流程、產品級設定及獨立的交付追溯開始。舊項目沿用既有分類，另可明確對應至詳細狀態。[生命週期與交付設計](pbi-lifecycle-and-delivery.md) · [實體行為與驗收規格](../../specs/portfolio/backlog/lifecycle-and-delivery.spec.md)
+
+沒有串接外部系統的產品，可直接以 Board 原生項目管理待辦。從 Epic 拆到 Task，或先回報獨立 Bug，均可在同一產品內選取工作流程。設計說明了 Scrum 的排序與責任，以及本產品選定的階層和缺陷規則。[領域設計](native-scrum-backlog.md) · [操作與驗收規格](../../specs/portfolio/backlog/native-backlog.spec.md)
 
 先啟動[實際 Web UI 的合成預覽](../../../README.md#試用產品總覽與兩種看板)，從產品總覽選一個產品，在 Scrum Board 查看 PBI、在 Workflow Board 接手工作。兩者共用同一份工作關聯。接著閱讀[產品範圍](product-scope.md)、[第一版 PBI、順序與現有 Issues 對照](board-roadmap.md)及[合成驗收範例](github-v1-examples.md)。GitHub Issues／Projects 的整合及寫回接在畫面驗收之後。[初期離線樣稿](github-v1-demo.html)
 

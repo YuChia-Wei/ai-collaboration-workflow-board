@@ -8,7 +8,15 @@ import {sqliteCollaboration} from '../Tests/Fixtures/collaboration-sqlite.mjs';
 import {seedPortfolioPreview} from './portfolio-fixture.mjs';
 
 const root=fileURLToPath(new URL('../../',import.meta.url));
-export async function startPortfolioPreview({port=0,output=null}={}) {
+const previewCommands = new Map([
+  ['/api/collaboration/v2/commands', ['project.create']],
+  ['/api/portfolio/v1/command', [
+    'backlog.create', 'backlog.edit', 'backlog.move', 'backlog.transition', 'lifecycle.configure',
+    'delivery.environment', 'delivery.policy', 'delivery.draft', 'delivery.record', 'delivery.attempt', 'delivery.observe',
+    'delivery.applicability', 'workflow.create', 'workflow.link', 'workflow.unlink'
+  ]]
+]);
+export async function startPortfolioPreview({port=0,output=null,seed=true}={}) {
   const workerPath=resolve(root,'dist/server/index.js');
   const worker=(await import(pathToFileURL(workerPath).href)).default;
   const {sqlite,db}=sqliteCollaboration();
@@ -20,7 +28,7 @@ export async function startPortfolioPreview({port=0,output=null}={}) {
     const data=await response.json();if(!response.ok||data.accepted===false)throw Error('Preview setup failed: '+JSON.stringify(data));return data;
   }
   try{
-    await seedPortfolioPreview(call,store);
+    if(seed) await seedPortfolioPreview(call,store);
     env.COLLABORATION_BINDINGS=JSON.stringify({[owner]:{...binding,capabilities:['read','plan']}});
     let origin;
     const server=createServer(async(req,res)=>{
@@ -28,14 +36,17 @@ export async function startPortfolioPreview({port=0,output=null}={}) {
       if(req.headers.host!==new URL(origin).host)return reject(403);
       const path=new URL(req.url,origin).pathname;
       const isPage=req.method==='GET'&&path==='/';
-      const queryRoute = ['/api/collaboration/v2/queries','/api/portfolio/v1/query'].includes(path);
-      const commandRoute = path==='/api/portfolio/v1/command';
-      if(!isPage && !(req.method==='POST'&&(queryRoute||commandRoute)))return reject(403);
+      const capabilityRoute = path==='/api/collaboration/v1/queries';
+      const queryRoute = capabilityRoute || ['/api/collaboration/v2/queries','/api/portfolio/v1/query'].includes(path);
+      const allowedCommands = previewCommands.get(path);
+      if(!isPage && !(req.method==='POST'&&(queryRoute||allowedCommands)))return reject(403);
       if(req.method==='POST' && req.headers.origin!==origin)return reject(403);
       try{
         const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>300000)return reject(413);chunks.push(chunk);}
-        if(commandRoute && !['workflow.create','workflow.link','workflow.unlink'].includes(JSON.parse(Buffer.concat(chunks).toString()).command))return reject(403);
-        const response=await worker.fetch(new Request(origin+req.url,{method:req.method,headers:{'content-type':'application/json','oai-authenticated-user-id':owner,...(req.method==='POST'?{origin}:{})},...(req.method==='POST'?{body:Buffer.concat(chunks)}:{})}),env);
+        const body=Buffer.concat(chunks);
+        if(capabilityRoute && JSON.parse(body.toString()).query!=='capabilities')return reject(403);
+        if(allowedCommands && !allowedCommands.includes(JSON.parse(body.toString()).command))return reject(403);
+        const response=await worker.fetch(new Request(origin+req.url,{method:req.method,headers:{'content-type':'application/json','oai-authenticated-user-id':owner,...(req.method==='POST'?{origin}:{})},...(req.method==='POST'?{body}:{})}),env);
         const headers=Object.fromEntries(response.headers);headers['cache-control']='no-store';
         res.writeHead(response.status,headers);
         res.end(isPage?(await response.text()).replace('</head>','<meta name="collaboration-preview" content="synthetic-local"></head>'):Buffer.from(await response.arrayBuffer()));

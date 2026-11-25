@@ -48,6 +48,13 @@ main {padding-top: clamp(1.5rem,3vw,2.75rem); padding-bottom: 4rem}
 .totals dt {color: var(--muted); font-size: .85rem}
 .totals dd {font-size: 1.65rem; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums}
 .section {margin-bottom: 2rem; min-width: 0}
+.layout-nav, .stage-filters {display:flex; align-items:end; gap:1rem; flex-wrap:wrap; margin:1rem 0 1.5rem}
+.layout-nav a[aria-current] {font-weight:700; text-decoration-thickness:2px; text-underline-offset:.3em}
+.stage-filters label {display:grid; gap:.2rem; min-width:9rem; flex:1 1 9rem}
+.stage-filters select {width:100%}
+.stage-lane {min-height:7.5rem}
+.stage-card[draggable=true] {cursor:grab}
+.milestone-lanes {display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr)); gap:1rem}
 .section > h2 {font-size: 1.3rem; margin-bottom: .9rem; letter-spacing: -.025em}
 .overview {display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(18rem,1fr); gap: 1.75rem; border-top: 1px solid var(--line); padding-top: 1.75rem}
 .directory, .overview .cards {display: grid; grid-template-columns: 1fr; gap: .7rem}
@@ -108,6 +115,21 @@ legend {font-size: .9rem; font-weight: 600}
 input[type="checkbox"] {width: auto; accent-color: var(--teal)}
 .inline-form {margin: .55rem 0}
 .inline-form button {font-size: .85rem; padding: .35rem .65rem}
+.item-editor {margin: .9rem 0 1.5rem}
+.item-editor > summary {width: fit-content; padding: .5rem 0}
+.item-editor[open] > summary {margin-bottom: .35rem}
+[data-kind-fields] {width: 100%; display: grid; gap: 1rem}
+[data-kind-fields]:empty {display: none}
+.backlog-tree {list-style: none; margin: 0; padding: 0}
+.backlog-tree .backlog-tree {margin-left: clamp(.45rem,2vw,1.5rem); padding-left: .45rem; border-left: 2px solid var(--line)}
+.backlog-row {display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; background: var(--paper); border: 1px solid var(--line); border-radius: .5rem; margin-bottom: .4rem; padding: .65rem .8rem}
+.item-kind {display: inline-block; background: #edf3ef; border-radius: .35rem; padding: .15rem .45rem; color: #34594f; font-size: .8rem; font-weight: 650}
+.item-summary {flex: 1 1 8rem; min-width: 0}
+.item-summary a {font-weight: 650}
+.item-summary small {display: block; color: var(--muted)}
+.item-moves {display: flex; flex-wrap: wrap; gap: .3rem}
+.item-moves button {font-size: .8rem; padding: .35rem .55rem}
+.facts ul {margin: 0; padding-left: 1.25rem}
 .timeline {list-style: none}
 .timeline li + li {padding-top: .75rem; margin-top: .75rem; border-top: 1px solid var(--line)}
 .timeline p {margin: .35rem 0}
